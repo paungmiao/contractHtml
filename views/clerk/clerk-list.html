@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+	<head>
+
+		<th:block th:include="common/include::header"></th:block>
+		<th:block th:include="common/include::footer"></th:block>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="">
+		<div class="x-nav">
+			
+			<span class="layui-breadcrumb" lay-separator="|">
+			  <a href="clerk-list.html">行员信息</a>
+			  <a href="statistic/statistic-view.html">行员结构分析</a>
+			  <a href="statistic/cadreAllocation.html">干部配备情况</a>
+			  <a href="statistic/fundamental-status.html">干部基本情况</a>
+			  <a href="">提任领导</a>
+			  <a href="">年度评价</a>
+			  <a href=""></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<form class="layui-form layui-col-md12 x-so">
+					<div class="layui-input-inline">
+						<input type="text" name="parma" placeholder="请输入查询条件" autocomplete="off" class="layui-input">
+						<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+					</div>
+					<div class="layui-form-mid layui-word-aux">
+						<span class="x-red">*支持输入姓名，部门，性别，年龄等</span>
+					</div>
+				</form>
+			</div>
+			<table class="layui-table" lay-data="{url:'json/user.json',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+				<thead>
+					<tr>
+						<th lay-data="{type:'radio'}" rowspan="3">选择框</th>
+						<th lay-data="{field:'id', sort: true}" rowspan="3">ID</th>
+						<th lay-data="{field:'dept'}" rowspan="3">部门</th>
+						<th lay-data="{field:'username', sort: true, templet: '#usernameTpl'}" rowspan="3">姓名</th>
+						<th lay-data="{field:'idCard'}" rowspan="3">身份证号码</th>
+						<th lay-data="{field:'sex',templet: '#switchTpl'}" rowspan="3">性别</th>
+						<th lay-data="{field:'nation'}" rowspan="3">民族</th>
+						<th lay-data="{field:'entryTime'}" rowspan="3">入行时间</th>
+						<th lay-data="{field:'duty', sort: true}" rowspan="3">现任职务</th>
+						<th lay-data="{field:'timeInJob'}" rowspan="3">现任职时间</th>
+						<th lay-data="{field:'timeOfTenure'}" rowspan="3">现同级时间</th>
+						<th lay-data="{field:'tenureOfleadership'}" rowspan="3">任领导职务时间</th>
+						<th lay-data="{field:'skillJob'}" rowspan="3">技术职务</th>
+						<th lay-data="{align:'center'}" colspan="8">学历学位</th>
+						<th lay-data="{field:'topEducation'}" rowspan="3">最高学历</th>
+						<th lay-data="{field:'topDegree'}" rowspan="3">最高学位</th>
+						<th lay-data="{field:'academy'}" rowspan="3">毕业院校及专业</th>
+						<th lay-data="{field:'graduateTime'}" rowspan="3">毕业时间</th>
+						<th lay-data="{field:'birth'}" rowspan="3">出生年月</th>
+						<th lay-data="{field:'age'}" rowspan="3">年龄</th>
+						<th lay-data="{field:'workTime'}" rowspan="3">工作时间</th>
+						<th lay-data="{field:'native'}" rowspan="3">籍贯</th>
+						<th lay-data="{field:'politicsStatus'}" rowspan="3">政治面貌</th>
+						<th lay-data="{field:'assessCase'}" rowspan="3">近三年的考核情况</th>
+						<th lay-data="{field:'OrganizationTime'}" rowspan="3">参加组织时间</th>
+						<th lay-data="{field:'positive' , templet: '#positive'}" rowspan="3">正面清单</th>
+						<th lay-data="{field:'negative' , templet: '#negative'}" rowspan="3">负面清单</th>
+						<th lay-data="{field:'train' , templet: '#train'}" rowspan="3">培训情况</th>
+						<th lay-data="{field:'exchange' , templet: '#exchange'}" rowspan="3">交流情况</th>
+						<th lay-data="{field:'research', templet: '#research'}" rowspan="3">受调研情况</th>
+						<th lay-data="{type:'appiont', templet: '#appiont'}" rowspan="3">任免情况</th>
+						<th lay-data="{align:'center'}" colspan="4">全日制</th>
+						<th lay-data="{align:'center'}" colspan="4">在职</th>
+					</tr>
+					<tr>
+						<th lay-data="{field:'education'}">学历</th>
+						<th lay-data="{field:'degree'}">学位</th>
+						<th lay-data="{field:'oldacademy'}">院校</th>
+						<th lay-data="{field:'major'}">专业</th>
+						<th lay-data="{field:'newEducation'}">学历</th>
+						<th lay-data="{field:'newDegree'}">学位</th>
+						<th lay-data="{field:'newAcademy'}">院校</th>
+						<th lay-data="{field:'newMajor'}">专业</th>
+					</tr>
+				</thead>
+			</table>
+
+		</div>
+
+		<div id="content" class="layui-layer-tab"></div>
+
+		<!-- 正面清单-->
+		<script type="text/html" id="positive">
+
+		 {{#  if(d.positive == 1){ }}
+		 <a href="positive/positive-view.html?id={{d.id}}">查看详情</a>
+		    <!-- <a onclick="x_admin_show('正面清单详情','positive/positive-view.html?id={{d.id}}',900,545)">查看详情</a> -->
+		  {{#  } else { }}
+		   <div>暂无</div>
+		  {{#  } }}
+		
+	</script>
+		<!-- 负面清单-->
+		<script type="text/html" id="negative">
+
+		 {{#  if(d.negative == 1){ }}
+		    <a onclick="x_admin_show('负面清单详情','negative/negative-view.html?id={{d.id}}',900,545)">查看详情</a>
+		  {{#  } else { }}
+		   <div>暂无</div>
+		  {{#  } }}
+	</script>
+		<!-- 培训情况-->
+		<script type="text/html" id="train">
+
+		{{#  if(d.train === 1){ }}
+		   <a onclick="x_admin_show('培训情况详情','../../../static/order-add.html?id={{d.id}}')">查看详情</a>
+		 {{#  } else { }}
+		  <div>暂无</div>
+		 {{#  } }}
+	</script>
+		<!-- 受调研情况-->
+		<script type="text/html" id="exchange">
+
+	{{#  if(d.exchange === 1){ }}
+	   <a onclick="x_admin_show('交流情况详情','../../../static/order-add.html?id={{d.id}}')">查看详情</a>
+	 {{#  } else { }}
+	  <div>暂无</div>
+	 {{#  } }}
+	</script>
+		<!-- 任免情况 -->
+		<script type="text/html" id="research">
+		{{#  if(d.research === 1){ }}
+		   <a onclick="x_admin_show('任免情况','../../../static/order-add.html?id={{d.id}}')">查看详情</a>
+		 {{#  } else { }}
+		  <div>暂无</div>
+		 {{#  } }}
+	</script>
+		<script type="text/html" id="appiont"></script>
+		<script type="text/html" id="usernameTpl">
+			<a onclick="showUser({{d.id}});" href="javascript:;"  class="layui-table-link" target="_blank">{{ d.username }}</a>
+	</script>
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+	    <button class="layui-btn" onclick="x_admin_show('添加行员','clerk-add.html')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="importFile"><i class="layui-icon">&#xe655;</i>批量导入</button>
+		<button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon">&#xe640;</i>导出</button>
+        <button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>修改</button>
+		<button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+      </div>
+    </script>
+		<script type="text/html" id="switchTpl">
+	  <div>{{d.sex}}</div>
+      <!-- <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id == 10003 ? 'checked' : '' }}> -->
+    </script>
+		<script >
+			
+			function showUser(id){
+				layui.use('layer', function() {
+					var $ = layui.jquery,
+						layer = layui.layer;
+						layer.open({
+							type: 2,
+							title: '用户详细信息',
+							area: ['700px', '600px'],
+							shade: 0,
+							maxmix: true,
+							content: 'clerk-del.html',
+							btn: ['显示123', '全部关闭'],
+							yes: function() {
+								alert("123");
+							},
+							btn2: function() {
+								layer.close();
+							},
+							success: function(layero) {
+								var body = layer.getChildFrame('body', index);
+								body.find("#content").append('clerk-add.html');
+							}
+						});
+					})
+			}
+			
+			layui.use(['laydate','layer'], function() {
+				var laydate = layui.laydate;
+				var $ = layui.jquery,
+					layer = layui.layer;
+				//弹出层触发事件
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#start' //指定元素
+				});
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#end' //指定元素
+				});
+			});
+		</script>
+		<script>
+			layui.use(['table', 'jquery', 'form', 'layer'], function() {
+				var table = layui.table;
+				var $ = layui.jquery,
+					layer = layui.layer,
+					form = layui.form;
+				//监听单元格编辑
+				table.on('edit(test)', function(obj) {
+					var value = obj.value //得到修改后的值
+						,
+						data = obj.data //得到所在行所有键值
+						,
+						field = obj.field; //得到字段
+					layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+				});
+
+				//头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch (obj.event) {
+						case 'importFile':
+							var data = checkStatus.data;
+							x_admin_show("批量导入", 'clerk-file.html', 420, 228);
+							break;
+						case 'update':
+							var datas = checkStatus.data;
+							var data = datas[0];
+							if(data==null||data==undefined){
+								break;
+							}
+							if(datas!=1){
+								break;
+							}
+							var w = ($(window).width() * 0.7);
+							var h = ($(window).height() - 50);
+							layer.open({
+								//rasize: false,
+								title: '修改行员信息',
+								area: [w + 'px', h + 'px'],
+								type: 2,
+								content: 'clerk-add.html',
+								success: function(layero, index) {
+									var body = layer.getChildFrame('body', index);
+									body.find("#content").append('clerk-add.html');
+									body.find("#dept").val(data.dept);
+									body.find("#username").val(data.username);
+									body.find("#idCard").val(data.idCard);
+									body.find("#nation").val(data.nation);
+									body.find("#entryTime").val(data.entryTime);
+									body.find("#duty").val(data.duty);
+									body.find("#timeInJob").val(data.timeInJob);
+									body.find("#timeOfTenure").val(data.timeOfTenure);
+									body.find("#tenureOfleadership").val(data.tenureOfleadership);
+									body.find("#skillJob").val(data.skillJob);
+									body.find("#education").val(data.education);
+									body.find("#degree").val(data.degree);
+									body.find("#oldacademy").val(data.oldacademy);
+									body.find("#major").val(data.major);
+									body.find("#center").val(data.newEducation + ',' + data.newDegree);
+									body.find("#graduateTime").val(data.graduateTime);
+									body.find("#birth").val(data.birth);
+									body.find("#age").val(data.age);
+									body.find("#workTime").val(data.workTime);
+									body.find("#native").val(data.native);
+									body.find("#academy").val(data.newAcademy + ',' + data.newMajor)
+									body.find("#politicsStatus").val(data.politicsStatus);
+									body.find("#assessCase").val(data.assessCase);
+									body.find("#topDegree").val(data.topDegree);
+									body.find("#topEducation").val(data.topEducation);
+								}
+							});
+							//layer.msg('选中了：' + JSON.stringify(data).id + ' 个');
+							break;
+						case 'delete':
+							//获取选择信息
+							var datas = checkStatus.data;
+							var data = datas[0];
+
+							layer.confirm('去掉要删除' + data.username + '的正面记录信息吗？', {
+								btn: ['确定', '取消'] //按钮
+							}, function() {
+								//$(obj).parent("tr").remove();
+								layer.msg('删除成功', {
+									icon: 1
+								});
+							}, function() {
+								layer.msg('关闭窗口', {
+									time: 1000, //1s后自动关闭
+
+								});
+							});
+							break;
+					};
+				});
+			});
+		</script>
+
+	</body>
+
+</html>

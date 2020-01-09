@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>批量导入</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="../../css/font.css">
+		<link rel="stylesheet" href="../../css/xadmin.css">
+		<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/xadmin.js"></script>
+		<script type="text/javascript" src="../../js/cookie.js"></script>
+		<script type="text/javascript" src="../../js/common/verify.js"></script>
+		<script type="text/jscript" src="../../js/common/formOff.js"></script>
+	</head>
+	<body>
+		<div class="x-body">
+				
+			<div class="layui-input-inline">
+				<div class="layui-input-inline">
+					<input type="text" name="fileName" id="fileName" readonly="readonly" placeholder="文件名称" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-input-inline">
+				<div class="layui-upload">
+					<button type="button" class="layui-btn layui-btn-normal" id="file">选择文件</button>
+				</div>
+				</div>
+				<div class="layui-form-mid layui-word-aux">
+									<span class="x-red">*</span>只支持EXCEL的.xls与.xlsx两种格式的文件
+								</div>
+			</div>
+			<br />
+			<br />
+			<div class="layui-input-inline" style="margin-left: 50px;">
+				<a class="layui-btn" id="fileUpload">
+					<i class="layui-icon">&#xe62f;</i>开始上传
+				</a>
+			</div>
+			<div class="layui-input-inline" style="margin-left: 90px;">
+			
+				<a class="layui-btn" onclick="off()">
+					<i class="layui-icon">&#x1007;</i>取消
+				</a>
+			</div>
+
+		</div>
+	</body>
+
+	<script>
+		layui.use('upload', function() {
+			var $ = layui.jquery,
+				upload = layui.upload;
+
+			//选完文件后不自动上传
+			upload.render({
+				elem: '#file',
+				url: '/upload/',
+				auto: false,
+				accept: 'file', //所有文件
+				//,multiple: true,
+				exts: 'xls|xlsx', //只允许上传压缩文件
+				//size: 500*1028 //限制文件大小，单位 KB
+				bindAction: '#fileUpload',
+				done: function(res) {
+					layer.alert("上传成功");
+				},
+				choose: function(obj) {
+					var files = obj.pushFile
+					obj.preview(function(index, file, result) {
+						$("#fileName").val(file.name);
+					})
+				}
+			});
+		});
+	</script>
+</html>

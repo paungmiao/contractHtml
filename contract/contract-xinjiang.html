@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+	<title>新疆维吾尔自治区</title>
+</head>
+<body>
+
+<div class="layadmin-tabsbody-item layui-show">
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        项目数量
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">199,666</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        已完成
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">21334</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        审改中
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">1233</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                       延期处理
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">2242</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm12">
+        <div class="layui-row">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                        <div id="main" style="width: 800px;height:400px;" class="layui-col-sm8"></div>
+                        <div class="layui-col-sm4">
+                            <div class="layui-card">
+                                <div class="layui-card-header">项目类型排名</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                        <tbody>
+                                        <tr>
+                                            <td><span>1</span></td>
+                                            <td><i class="layui-icon"> 桥梁类</i></td>
+                                            <td><span>12123123</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="second">2</span></td>
+                                            <td><i class="layui-icon"> 政府类</i></td>
+                                            <td><span>123123123</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="second">3</span></td>
+                                            <td><i class="layui-icon"> 政府类</i></td>
+                                            <td><span>123123123</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="second">4</span></td>
+                                            <td><i class="layui-icon"> 政府类</i></td>
+                                            <td><span>123123123</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="second">5</span></td>
+                                            <td><i class="layui-icon"> 政府类</i></td>
+                                            <td><span>123123123</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="second">6</span></td>
+                                            <td><i class="layui-icon"> 政府类</i></td>
+                                            <td><span>123123123</span></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-sm6">
+                <div id="map" style="width:650px;height: 500px;" onclick="toProgram()"></div>
+            </div>
+            <div id="pings" style="width: 500px;height:260px;" class="layui-col-sm4"></div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+<script src="../js/echarts/highmaps.js"></script>
+<script src="../js/echarts/xinjiang.js"></script>
+<script src="../js/echarts/echarts.min.js"></script>
+<script>
+    
+    function toProgram() {
+        window.location.href='../contract/ledger-list.html'; // 跳转到B目录
+    }
+</script>
+<script>
+// 随机数据
+var data = [{"name":"乌鲁木齐","value":39},{"name":"克拉玛依","value":55},{"name":"吐鲁番","value":70},{"name":"哈密","value":82},{"name":"昌吉","value":57},{"name":"博尔塔拉","value":53},{"name":"巴音郭楞","value":14},{"name":"阿克苏","value":85},{"name":"克孜勒苏柯尔克孜","value":29},{"name":"喀什","value":96},{"name":"和田","value":92},{"name":"伊犁哈萨克","value":47},{"name":"塔城","value":27},{"name":"阿勒泰","value":28},{"name":"石河子","value":66},{"name":"阿拉尔","value":36},{"name":"图木舒克","value":62},{"name":"五家渠","value":12},{"name":"北屯","value":98},{"name":"铁门关","value":31},{"name":"双河","value":69},{"name":"可克达拉","value":55},{"name":"昆玉","value":38}];
+// 初始化图表
+var map = new Highcharts.Map('map', {
+  title: {
+    text: '新疆维吾尔自治区'
+  },
+  colorAxis: {
+    min: 0,
+    minColor: 'rgb(163,255,250)',
+    maxColor: 'rgba(9,32,102,0.99)'
+  },
+  series: [{
+    data: data,
+    name: '随机数据',
+    mapData: Highcharts.maps['cn/xinjiang'],
+    joinBy: 'name' // 根据 name 属性进行关联
+  }]
+});
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        color: ['#3398DB'],
+        title: {
+            text: '项目情况'
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : ['7月', '8月', '9月', '10月', '11月', '12月', '1月', '2月', '3月', '4月', '5月', '6月'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:[10, 52, 200, 334, 390, 330, 220, 200, 334, 390, 330, 220]
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script><script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('pings'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        dataset: {
+            source: [
+                ['score', 'amount', 'product'],
+                [89.3, 58212, 'Matcha Latte'],
+                [57.1, 78254, 'Milk Tea'],
+                [74.4, 41032, 'Cheese Cocoa'],
+                [50.1, 12755, 'Cheese Brownie'],
+                [89.7, 20145, 'Matcha Cocoa'],
+                [68.1, 79146, 'Tea']
+            ]
+        },
+        grid: {containLabel: true},
+        xAxis: {name: 'amount'},
+        yAxis: {type: 'category'},
+        visualMap: {
+            orient: 'horizontal',
+            left: 'center',
+            min: 10,
+            max: 100,
+            text: ['High Score', 'Low Score'],
+            // Map the score column to color
+            dimension: 0,
+            inRange: {
+                color: ['#9dcada', '#1d314a']
+            }
+        },
+        series: [
+            {
+                type: 'bar',
+                encode: {
+                    // Map the "amount" column to X axis.
+                    x: 'amount',
+                    // Map the "product" column to Y axis
+                    y: 'product'
+                }
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</html>

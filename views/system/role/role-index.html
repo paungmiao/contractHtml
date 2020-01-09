@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+  
+  <head>
+    <th:block th:include="common/include::header"></th:block>
+    <th:block th:include="common/include::footer"></th:block>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        <div class="demoTable">
+          角色名:
+          <div class="layui-inline">
+            <input class="layui-input" lay-verify="required"  name="name" id="username" autocomplete="off">
+          </div>
+          &nbsp
+          创建时间段:
+          <div class="layui-inline">
+            <input class="layui-input" name="startTime" id="start" autocomplete="off">
+          </div>
+          -
+          <div class="layui-inline">
+            <input class="layui-input" name="endTime" id="end" autocomplete="off">
+          </div>
+          <button class="layui-btn" id="search" data-type="reload">搜索</button>
+          <div class="layui-inline">
+            <button class="layui-btn" id="reset" onclick="resetSearch(this)">重置</button>
+          </div>
+        </div>
+      </div>
+     <!-- <xblock>
+        <button class="layui-btn layui-btn-sm" onclick=""><i class="layui-icon">&#xe65f;</i>其他操作</button>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','../../../admin-add.html')"><i class="layui-icon"></i>添加</button>
+        <span class="x-right" style="line-height:40px" id="total">共有数据：88 条</span>
+      </xblock>-->
+      <xblock>
+        <span class="x-left" style="line-height:40px" id="total">共有数据：88 条</span>
+      </xblock>
+      <table class="layui-hide" id="roleList" lay-filter="roleList"></table>
+
+      </table>
+      <div class="page">
+        <div>
+          <a class="prev" href="">&lt;&lt;</a>
+          <a class="num" href="">1</a>
+          <span class="current">2</span>
+          <a class="num" href="">3</a>
+          <a class="num" href="">489</a>
+          <a class="next" href="">&gt;&gt;</a>
+        </div>
+      </div>
+    </div>
+    <!-- js部分-->
+    <!--状态显示-->
+  <script type="text/html" id="roleStatus" th:inline="none">
+    <div class="td-status">
+      <span class="layui-btn layui-btn-normal layui-btn-mini">{{d.valid == 1 ? '启用中':'禁用中'}}</span>
+    </div>
+
+    </script>
+    <!--操作栏显示-->
+    <script type="text/html" id="handle">
+      <a onclick="member_stop(this,'{{d.roleId}}')" href="javascript:;"  title="启用">
+        <i class="layui-icon">&#xe601;</i>
+      </a>
+        <!--开发时将1改为{{d.userId}}}-->
+      <a title="编辑"  onclick="x_admin_show('编辑','./editRole?roleId={{d.roleId}}',450,270)" href="javascript:;">
+        <i class="layui-icon">&#xe642;</i>
+      </a>
+      <a title="删除" onclick="member_del(this,'{{d.userId}}')" href="javascript:;">
+        <i class="layui-icon">&#xe640;</i>
+      </a>
+    </script>
+    <!--表格头部工具栏-->
+    <script type="text/html" id="userToolbar">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addRole">添加角色</button>
+        <button class="layui-btn layui-btn-sm" lay-event="allotPimiss">分配权限</button>
+        <button class="layui-btn layui-btn-danger" lay-event="deleteAll"><i class="layui-icon"></i>批量删除</button>
+
+      </div>
+    </script>
+
+
+
+
+    <script th:inline="none">
+      layui.use('table',function () {
+         var table = layui.table;
+
+         //渲染表格
+          table.render({
+              elem: '#roleList'
+              ,url:'./json/role.json'
+              ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+              ,toolbar:'#userToolbar'
+              ,defaultToolbar:['filter',{
+                  title:'导出',layEvent:'export',icon: 'layui-icon-download-circle'
+              },{
+                  title:'打印',layEvent:'printer',icon: 'layui-icon-more-vertical'
+              }]
+              ,cols: [[
+                  {type:'checkbox'}
+                  ,{field:'roleId', title: '编号', sort: true}
+                  ,{field:'name', title: '角色名称'} //width 支持：数字、百分比和不填写。你还可以通过 minWidth 参数局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                  ,{field:'note', title: '备注', sort: true}
+
+                  ,{field:'createdTime', title: '创建时间',templet:function (data) {
+                          var time = data.createdTime;
+                          if (time){
+                              return '<div>'+time+'</div>';
+                          }else {
+                              return '暂无';
+                          }
+
+                      }}
+                  ,{field:'createdUser', title: '创建用户', align: 'center',templet:function (data) {
+                          var user = data.createdUser;
+                          if (user){
+                              return '<div>'+user+'</div>';
+                          }else {
+                              return '暂无';
+                          }
+                      }} //单元格内容水平居中
+                  ,{field:'modifiedTime', title: '修改时间', sort: true, align: 'right',templet:function (data) {
+                          var time = data.modifiedTime;
+                          if (time){
+                              return '<div>'+time+'</div>';
+                          }else {
+                              return '暂无';
+                          }
+
+                      }} //单元格内容水平居中
+                  ,{field:'modifiedUser', title: '修改用户', sort: true, align: 'right',templet:function (data) {
+                          var user = data.modifiedUser;
+                          if (user){
+                              return '<div>'+user+'</div>';
+                          }else {
+                              return '暂无';
+                          }
+                      }}
+                  ,{field:'roleStatus', title: '状态', sort: true, align: 'right',templet:'#roleStatus'}
+                  ,{templet:'#handle'}
+              ]]
+              ,id:'userReload'
+              ,page:true
+              ,done: function (res,curr,count) {
+                  $('#total').text('共有数据：'+count+' 条')
+              }
+          });
+
+          //头工具栏事件
+          table.on('toolbar(roleList)', function(obj){
+              var checkStatus = table.checkStatus(obj.config.id);
+              switch(obj.event){
+                  case 'addRole':
+                      var data = checkStatus.data;
+                      x_admin_show('创建角色','./addRole',450,270);
+                      break;
+                  case 'allotPimiss':
+                      var data = checkStatus.data;
+                       if(data.length<=0){
+                           layer.msg('请选择用户！');
+                           break;
+                       }
+                       if(data.length!=1){
+                           layer.msg('不能选择多个用户');
+                           break;
+                       }
+                      x_admin_show('分配权限','./goAddRole?userId=1',500,500);
+                      break;
+                  case 'deleteAll':
+                      var data = checkStatus.data; //选中的所有数据
+                      //发送ajax请求
+
+                      layer.msg(checkStatus.isAll ? '全选': '未全选');
+                      break;
+
+                  //导出
+                  case 'export':
+                      layer.alert('这是工具栏右侧自定义的一个导出按钮');
+                      break;
+                  case 'printer':
+                      layer.alert('这是工具栏右侧自定义的一个导出按钮');
+                      break;
+              };
+          });
+
+
+
+          //表格重载
+          var $ = layui.$, active = {
+              reload: function(){
+                  var start = $('#start');
+                  var end = $('#end');
+
+                  //执行重载
+                  table.reload('userReload', {
+                      page: {
+                          curr: 1 //重新从第 1 页开始
+                      }
+                      ,where: {
+                         start: start.val(),
+                          end:end.val()
+                      }
+                  }, 'data');
+              }
+          };
+
+          $('#search').on('click', function(){
+
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+
+      });
+    </script>
+
+
+    <script>
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        var now = new Date().Format('yyyy-MM-dd HH:mm:ss');
+        var StartMin = new Date(new Date().getFullYear()-20).Format('yyyy-MM-dd HH:mm:ss');
+        var month = new Date().setMonth(new Date().getMonth()-1);
+         var valDate = new Date(month).Format('yyyy-MM-dd HH:mm:ss');
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+          ,type:'datetime'
+           ,format:'yyyy-MM-dd HH:mm:ss'
+            ,min:StartMin
+            ,max: $("#end").val()
+            ,trigger: 'click'
+            ,value:valDate
+            ,isInitValue: false
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+            ,type:'datetime'
+            ,format:'yyyy-MM-dd HH:mm:ss'
+            ,max:now
+            ,trigger: 'click'
+
+        });
+      });
+
+       /*用户-停用*/
+      /*用户-停用*/
+      function member_stop(obj,id){
+
+          layer.confirm('确认要操作吗？',function(index){
+
+
+              if($(obj).attr('title')=='启用'){
+
+                  //发异步把用户状态进行更改
+                  $(obj).attr('title','停用')
+                  $(obj).find('i').html('&#xe601;');
+                  $(obj).parents("tr").find('div.td-status').find('span').addClass('layui-btn-disabled').html('禁用中');
+                  layer.msg('已停用!',{icon: 5,time:1000});
+
+              }else{
+
+                  $(obj).attr('title','启用')
+                  $(obj).find('i').html('&#xe62f;');
+                  $(obj).parents("tr").find('div.td-status').find('span').removeClass('layui-btn-disabled').html('启用中');
+                  layer.msg('已启用!',{icon: 1,time:1000});
+              }
+
+          });
+      }
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+               $(obj).parents("tr").remove();
+
+              layer.msg('已删除!',{icon:1,time:1000});
+          });
+      }
+
+
+
+      function delAll (argument) {
+        var data = tableCheck.getData();
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(obj).parents('div').parent('tr').remove();
+        });
+      }
+    </script>
+
+  </body>
+
+</html>

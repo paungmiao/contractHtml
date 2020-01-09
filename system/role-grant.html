@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="../js/JCheck.js"></script>
+</head>
+
+<body>
+    <div class="x-body">
+        <form class="layui-form" id="userAddForm">
+
+        
+            <div class="layui-form-item">
+                <label for="username" class="layui-form-label">
+                    <span class="x-red">*</span>所有权限:
+                </label>
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option value="">请选择一个权限</option>
+                        <option>用户管理</option>
+                        <option>角色管理</option>
+                        <option>部门管理</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-input-inline">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    <i class="layui-icon">&#xe605;</i>提交
+                </button>
+            </div>
+
+
+        </form>
+    </div>
+    <script>
+
+   
+    </script>
+
+</body>
+
+</html>

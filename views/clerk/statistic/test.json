@@ -1,0 +1,32 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 3000000,
+	"data": [{
+			"id": "10002",
+			"typeName": "25-30岁",
+			"number": 123,
+			"percentage": "15%"
+
+		}, {
+			"id": "10003",
+			"typeName": "30-40岁",
+			"number": 1230,
+			"percentage": "55%"
+
+		}, {
+			"id": "10004",
+			"typeName": "40-45岁",
+			"number": 800,
+			"percentage": "20%"
+
+		},
+		{
+				"id": "10001",
+				"typeName": "50岁以上",
+				"number": 90,
+				"percentage": "10%"
+		
+			}
+	]
+}

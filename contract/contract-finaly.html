@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎页面-X-admin2.1</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+
+<body>
+  <div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">合同台账管理</a>
+      <a>
+        <cite>最终合同维护</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+      href="javascript:location.replace(location.href);" title="刷新">
+      <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+  </div>
+  <div class="x-body">
+    <div class="layui-row">
+      <form class="layui-form layui-col-md12 x-so">
+
+        合同编号：<input type="text" placeholder="请输入合同编号" autocomplete="off" class="layui-input">
+        合同名称：<input type="text" placeholder="请输入合同名称" autocomplete="off" class="layui-input">
+        经办人：<input type="text" placeholder="请输入经办人" autocomplete="off" class="layui-input">
+        经办部门：<div class="layui-input-inline" id="select2">
+          <select id="select2" lay-verify="required">
+            <option value="">请选择经办部门</option>
+            <option>办公室</option>
+            <option>财务部</option>
+            <option>销售部</option>
+            <option>后勤部</option>
+          </select>
+        </div> 起草时间：<input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+        —<input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+
+        <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+      </form>
+    </div>
+    <xblock>
+      <button class="layui-btn" onclick="downLoadFile()"><i class="layui-icon"></i>下载</button>
+      <button class="layui-btn layui-btn-normal" onclick="contract_more()"><i class="layui-icon"></i>查看详情</button>
+      <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+ 
+    </table>
+
+  </div>
+
+  <script>
+ 
+ var count = 0;
+			layui.use(['table'], function() {
+				var table = layui.table;
+				table.render({
+					elem: '#test',
+					url: '../json/ledger.json',
+					xhrFields: {
+						withCredentials: true
+					},
+					cols: [
+						[{
+							field: 'empno',
+							title: '合同编号',
+							width: 150
+						}, {
+							field: 'ZT',
+							title: '合同主体',
+							width: 200,
+						}, {
+							field: 'type',
+							title: '合同类型',
+							width: 150,
+							sort: true
+						}, {
+							field: 'deptname',
+							title: '合同经办部门',
+							width: 100
+						}, {
+							field: 'person',
+							title: '经办人',
+              width: 100
+						}, {
+							field: 'date',
+							title: '合同签订时间',
+							width: 150,
+							sort: true
+						}, {
+							field: 'money',
+							title: '合同金额',
+							width: 120
+						}, {
+							field: 'pay',
+							title: '付款方式',
+							width: 100,
+							sort: true
+						}, {
+							field: 'paydate',
+							title: '付款时间',
+							width: 120,
+
+						},{
+							field: 'fp',
+							title: '发票类型',
+							width: 120,
+
+
+						},{
+							field: 'fpdate',
+							title: '发票开具时间',
+							width: 120,
+        
+
+						},{
+							field: 'jhdate',
+							title: '交货时间',
+							width: 120,
+      
+
+						},{
+							field: 'ysdate',
+							title: '验收时间',
+							width: 120,
+
+						},{
+							field: 'time',
+							title: '合同期限',
+							width: 120,
+
+						},{
+							field: 'audit',
+							title: '审核意见',
+							width: 120,
+
+						},{
+							field: 'audit2',
+							title: '复合意见',
+							width: 120,
+
+						},{
+							field: 'state',
+							title: '合同变更状态',
+							width: 120,
+              templet: function (res) {
+							var temp = ``;
+							if (res.state == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已变更</span> `
+							} 
+							return temp;
+						}
+
+						},{
+							field: 'jc',
+							title: '合同解除',
+							width: 120,
+              templet: function (res) {
+							var temp = ``;
+							if (res.state == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已解除</span> `
+							} 
+							return temp;
+						}
+
+						},
+            
+            ]
+					],
+					page: true
+				});
+    
+				//监听行单击事件（双击事件为：rowDouble）
+				table.on('row(test)', function(obj) {
+					var data = obj.data;
+					count = data.ID;
+				//	var checkStatus = table.checkStatus(obj.config.id);
+						console.log("data:" + JSON.stringify(data.id))
+						//标注选中样式
+						obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        	});   
+  
+			});
+
+
+
+    /*合同-下载*/
+    function downLoadFile() {
+      const ele = document.createElement('a');
+      ele.setAttribute('href', "C:/Users/Administrator/Desktop/我的文件夹/合同示范文本/5-其他类/软件开发合同.doc"); //设置下载文件的url地址
+      ele.setAttribute('download', 'download');//用于设置下载文件的文件名
+      ele.click();
+      layer.msg('已下载!', { icon: 1, time: 1000 });
+    }
+
+    /*合同-详情*/
+    function contract_more() {
+			location.href = "WebOffice://|Officectrl|file:///F:/contractHtml/system/more.html"
+    }
+
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#start' //指定元素
+      });
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#end' //指定元素
+      });
+    });
+  </script>
+</body>
+
+</html>

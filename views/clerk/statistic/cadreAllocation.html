@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.1</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="../../../css/font.css">
+		<link rel="stylesheet" href="../../../css/xadmin.css">
+		<script type="text/javascript" src="../../../js/jqery/jquery-3.4.1.js"></script>
+		<script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/xadmin.js"></script>
+		<script type="text/javascript" src="../../../js/cookie.js"></script>
+		<script type="text/jscript" src="../../../js/echarts.min.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="">
+		<div class="x-nav" id="bar">
+
+			<span class="layui-breadcrumb" lay-separator="|">
+				<a href="../clerk-list.html">行员信息</a>
+				<a href="statistic-view.html">行员结构分析</a>
+				<a href="test.html">干部配备情况</a>
+				<a href="">干部基本情况</a>
+				<a href="">提任领导</a>
+				<a href="">年度评价</a>
+				<a href="">综艺</a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<!-- 表格区域 -->
+		<div class="x-body">
+			<!-- 查询条件-->
+			
+				<div class="layui-row">
+					<form class="layui-form layui-col-md12 x-so">
+						<!-- 选择类型 -->
+						<div class="layui-inline">
+							<label class="layui-form-label">类型</label>
+							<div class="layui-input-inline">
+								<select name="modules"  lay-search="">
+									<option value="">请选择</option>
+									<option value="1">乌中支</option>
+									<option value="2">地州支行</option>
+									<option value="3">全疆</option>
+								</select>
+							</div>
+						</div>
+						<!-- 查询按钮 -->
+						<div class="layui-inline">
+							<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i>查询</button>
+						</div>
+					</form>
+				</div>
+
+		
+			<table class="layui-hide" id="demo" lay-filter="dome"></table>
+		</div>
+
+<div id ="compile"></div>
+		
+		
+		<!-- 图表区域 -->
+		<div class="x-body">
+			
+			<div id="columnar" style="height:450px;">
+			</div>
+
+			<!-- js部分 -->
+			<script type="text/html" id="toolbarDemo">
+				<button class="layui-btn layui-btn-sm" lay-event="update">导出干部配备情况表</button>
+		  <button class="layui-btn layui-btn-sm" lay-event="show">查看设定编制</button>
+		    <button class="layui-btn layui-btn-sm" lay-event="set">设定编制</button>
+			</script>
+			<script type="text/html" id="total">
+				<!-- 这里的 checked 的状态只是演示 -->
+				<div>{{d.president+d.vPresident+d.discipline+d.director+d.investigator+d.vInvestigator}}</div>
+    </script>
+			<!-- 图表JS -->
+			<script type="text/jscript">
+				// 基于准备好的dom，初始化echarts实例 柱状
+				var myChart = echarts.init(document.getElementById('columnar'));
+
+				// 指定图表的配置项和数据
+				var option = {
+					title: {
+						text: '地州支行\t领导干部配额表',
+
+					},
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: { // 坐标轴指示器，坐标轴触发有效
+							type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+						}
+					},
+					legend: {
+						data: ["处级", "副处级", "纪委书记", "工会主任", "调研员", "副调研员"],
+
+					},
+					xAxis: {
+						data: ["哈密支行", "伊犁支行", "奎屯支行", "阿克苏支行"],
+					},
+					yAxis: [{
+						type: 'value',
+						data: '人数'
+
+					}],
+					series: [{
+							name: '处级',
+							type: 'bar',
+							data: [1, 2, 1, 3]
+						},
+						{
+							name: '副处级',
+							type: 'bar',
+							data: [2, 1, 3, 1]
+						},
+						{
+							name: '纪委书记',
+							type: 'bar',
+							data: [1, 3, 2, 1]
+						},
+						{
+							name: '工会主任',
+							type: 'bar',
+							data: [3, 2, 1, 3]
+						},
+						{
+							name: '调研员',
+							type: 'bar',
+							data: [2, 3, 1, 3]
+						}, {
+							name: '副调研员',
+							type: 'bar',
+							data: [4, 6, 2, 6]
+						}
+					]
+				};
+
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+			</script>
+
+
+
+
+			<script>
+				layui.use('laydate', function() {
+					var laydate = layui.laydate;
+
+					//执行一个laydate实例
+					laydate.render({
+						elem: '#start', //指定元素
+						trigger: 'click'
+					});
+
+					//执行一个laydate实例
+					laydate.render({
+						elem: '#end', //指定元素
+						trigger: 'click'
+					});
+					//执行一个laydate实例
+					laydate.render({
+						elem: '#start1', //指定元素
+						trigger: 'click'
+					});
+
+					//执行一个laydate实例
+					laydate.render({
+						elem: '#end1', //指定元素
+						trigger: 'click'
+					});
+
+				});
+			</script>
+			<script>
+				layui.use('table', function() {
+					var table = layui.table;
+
+					//执行一个 table 实例
+					table.render({
+						id: 'test',
+						elem: '#demo',
+						url: 'personNumber.json' //数据接口
+							,
+						title: '各地州干部配备表',
+						defaultToolbar: ['filter', 'print'],
+						page: true //开启分页
+							,
+						toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+							,
+						totalRow: true //开启合计行
+							,
+						cols: [
+							[ //表头
+								{
+									type: 'radio',
+									field: 'id',
+									fixed: 'left',
+									totalRowText: '合计：',
+								
+								}, {
+									field: 'dept',
+									title: '机构/部门',
+									sort: true,
+									fixed: 'left'
+								}, {
+									field: 'president',
+									title: '处级',
+									totalRow: true,
+										edit:true
+								}, {
+									field: 'vPresident',
+									title: '副处级',
+									sort: true,
+									totalRow: true,
+										edit:true
+								}, {
+									field: 'discipline',
+									title: '纪委书记',
+									sort: true,
+									totalRow: true,
+										edit:true
+								}, {
+									field: 'director',
+									title: '工会主任',
+									sort: true,
+									totalRow: true,
+										edit:true
+								}, {
+									field: 'investigator',
+									title: '调研员',
+									totalRow: true,
+										edit:true
+								}, {
+									field: 'vInvestigator',
+									title: '副调研员',
+									totalRow: true,
+										edit:true
+								}, {
+									templet: '#total',
+									title: '合计',
+									totalRow: true
+								}
+							]
+						],
+						done: function(res) {
+							var onwanceTotal = 0; //统计各地州的总干部配备人数 
+							layui.each(res.data, function(index, d) {
+								onwanceTotal += d.president + d.vPresident + d.discipline + d.director + d.investigator + d.vInvestigator;
+							})
+							//修改 统计单元格文本
+							this.elem.next().find('.layui-table-total td[data-field="8"] .layui-table-cell').text(onwanceTotal)
+						}
+					});
+
+					//监听单元格编辑
+					table.on('edit(dome)', function(obj) {
+						var value = obj.value //得到修改后的值
+							,
+							data = obj.data //得到所在行所有键值
+							,
+							field = obj.field; //得到字段
+						layer.msg(8 - 11);
+						layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+					});
+
+					//头工具栏事件
+					table.on('toolbar(dome)', function(obj) {
+						var checkStatus = table.checkStatus(obj.config.id);
+						switch (obj.event) {
+							case 'update':
+								var data = checkStatus.data;
+								layer.alert(JSON.stringify(data));
+								break;
+							case 'show':
+								var datas = checkStatus.data;
+								 var data = datas[0];
+								 if(data==null||data==undefined){
+									 layer.msg('未选中机构/部门！');
+									 break;
+								 }
+								var w = 500;
+								var h = 400;
+								layer.open({
+									//rasize: false,
+									title: '修改行员信息',
+									area: [w + 'px', h + 'px'],
+									type: 2,
+									content: 'compile/compile-bank.html',
+									success: function(layero, index) {
+										var body = layer.getChildFrame('body', index);
+										body.find("#content").append('cpmpile/compile-bank.html');
+										body.find("#dept").val(data.dept);
+										body.find("#president").val(data.president);
+										body.find("#vPresident").val(data.vPresident);
+										body.find("#discipline").val(data.discipline);
+										body.find("#director").val(data.director);
+										body.find("#investigator").val(data.investigator);
+										body.find("#vInvestigator").val(data.vInvestigator);
+										body.find("#submit").hide();
+								
+									}
+								});
+								break;
+							case 'set':
+								var data = checkStatus.data;
+								var w = 500;
+								var h = 450;
+								layer.open({
+									//rasize: false,
+									title: '修改行员信息',
+									area: [w + 'px', h + 'px'],
+									type: 2,
+									content: 'compile/compile-bank.html',
+									success: function(layero, index) {
+										var body = layer.getChildFrame('body', index);
+										body.find("#compile").append('cpmpile/compile-bank.html');
+										body.find("#submit").show();
+								
+									}
+								});
+								break;
+						};
+					});
+				});
+			</script>
+
+	</body>
+
+</html>

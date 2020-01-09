@@ -1,0 +1,97 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 3000000,
+  "data": [
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    },
+    {
+      "deptempno": "BGS",
+      "deptname": "办公室",
+      "deptperson": "许强",
+      "deptduty": "办公",
+      "createtime": "2010-05-25 08:56:23",
+      "remark": "办公信息",
+      "deptstate": "0"
+    }
+  ]
+}

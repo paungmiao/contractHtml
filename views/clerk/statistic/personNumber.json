@@ -1,0 +1,48 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 3000000,
+	"data": [{
+			"id": "10001",
+			"dept": "伊犁支行",
+			"president": 1,
+			"vPresident": 2,
+			"discipline": 2,
+			"director": 1,
+			"investigator":1,
+			"vInvestigator": 3
+
+		},{
+			"id": "10002",
+			"dept": "哈密支行",
+			"president": 1,
+			"vPresident": 3,
+			"discipline": 1,
+			"director": 1,
+			"investigator":2,
+			"vInvestigator": 4
+
+		}, {
+			"id": "10003",
+			"dept": "奎屯支行",
+			"president": 1,
+			"vPresident": 1,
+			"discipline": 1,
+			"director": 2,
+			"investigator":2,
+			"vInvestigator": 3
+
+		},
+		{
+				"id": "10004",
+				"dept": "阿克苏中支",
+				"president": 1,
+				"vPresident": 2,
+				"discipline": 2,
+				"director": 1,
+				"investigator":1,
+				"vInvestigator": 3
+		
+			}
+	]
+}

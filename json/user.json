@@ -1,0 +1,78 @@
+{
+	"code": 0
+	,"msg": ""
+	,"count": 3000000
+	,"data": [{
+		"username": "处长"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	}, {
+		"username": "副处长"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "0"
+	}, {
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "0"
+	},{
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "0"
+	}, {
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	},{
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	},{
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	}, {
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	},{
+		"username": "一般用户"
+		,"fullname": "汤姆"
+		,"deptname": "反洗钱处"
+		,"time": "20189-12-01 08:56:23"
+		,"phone": "18246921863"
+		,"email": "2469228864@163.com"
+		,"userstate": "1"
+	}]
+}  

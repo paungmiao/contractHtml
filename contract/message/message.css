@@ -1,0 +1,93 @@
+.title{
+    padding: 15px;
+}
+.title >span{
+    line-height: 50px;
+    font-size: 20px;
+    font-family: SimHei;
+    font-weight: 400;
+    color: rgba(0,0,0,1);
+}
+.msgContent{
+    background: #F7F7F7;
+    min-height: 100px;
+    margin: 0 15px 0 15px;
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.msgContent > div{
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+}
+.msgContent > div > .circle{
+    width: 5px;
+    height: 5px;
+    background: #f90606;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 3px;
+
+}
+.msgContent > div  > span{
+    font-size: 16px;
+    font-family: SimHei;
+    font-weight: 400;
+    color: #999;
+    line-height: 50px;
+}
+.msgContent > div > .toggle{
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+}
+.msgContent   > div > .toggle >.msgTime{
+    line-height: 50px;
+    font-size:15px;
+    font-family:SimHei;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    padding-right: 5px;
+}
+.open .msgTime , .down > .msgItem{
+    line-height: 50px;
+    font-size:15px;
+    font-family:SimHei;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    padding-right: 5px;
+}
+.down .msgTime , .down > .msgItem{
+    line-height: 50px;
+    font-size:15px;
+    font-family:SimHei;
+    font-weight:400;
+    color:rgb(0, 0, 0) !important;
+    padding-right: 5px;
+}
+.msgContent > div > .toggle >img{
+    width:8px;
+    margin-bottom: 3px;
+}
+.msgContent > div  > hr{
+    background: rgba(0,0,0,1);
+    opacity: 0.1;
+}
+.spread{
+    display: none;
+    padding-left: 9px;
+    line-height: 30px;
+}
+.toggleNew{
+    cursor: pointer;
+}
+.down{
+    background:white;
+    color:#000;
+}
+.down msgTime{
+    background:none;
+    color:#000;
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+  
+  <head>
+
+      <th:block th:include="common/include::header"></th:block>
+      <th:block th:include="common/include::footer"></th:block>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form" id="userAddForm">
+          <div class="layui-form-item">
+              <label for="name" class="layui-form-label">
+                  <span class="x-red">*</span>角色名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="name" name="name"
+                          th:value="${role?.name}" value="" required="" lay-verify="required"
+                  autocomplete="off" class="layui-input">
+                  <input type="hidden" th:value="${role?.roleId}">
+              </div>
+
+          </div>
+          <div class="layui-form-item">
+              <label for="mobile" class="layui-form-label">
+                  <span class="x-red">*</span>备注
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text"
+                          th:value="${role?.note}"
+                         id="mobile" name="mobile" required="" lay-verify="required"
+                  autocomplete="off" class="layui-input">
+              </div>
+
+          </div>
+            <div class="layui-form-item">
+                <label for="mobile" class="layui-form-label">
+                    <span class="x-red">*</span>授权
+                </label>
+                <div class="layui-input-inline">
+                    <div class="zTreeDemoBackground left" >
+                        <ul id="treeDemo" class="ztree" ></ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="layui-form-item" style="margin-left: 150px">
+
+                <button  class="layui-btn"   onclick="reset('userAddForm')">
+                    重置
+                </button>
+                  &nbsp;
+                <button  class="layui-btn" lay-filter="addUser" lay-submit="">
+                    增加
+                </button>
+                &nbsp;
+                <button  class="layui-btn"  onclick="off()">
+                    取消
+                </button>
+            </div>
+      </form>
+        <button  class="layui-btn"   onclick="getAllCheckByStr('treeDemo','name')">
+            显示被选中的节点信息
+        </button>
+    </div>
+
+
+    <!--ztree树形组件-->
+    <script>
+   //处室加载树
+    $(function () {
+
+         var roleId =$("#roleId").val();
+
+         if (roleId==null||roleId==undefined||roleId==""){
+             showzTree('./json/pimiss.json','#treeDemo','id','pid');
+         }
+         //点击编辑时的请求
+        //showzTree('./json/pimiss.json','#treeDemo','id','pid','路径？roleId='+roleId);
+        showzTree('./json/pimiss.json','#treeDemo','id','pid','./json/checkZtree.json');
+    })
+    </script>
+
+
+    <!-- layui form表单-->
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+
+          //自定义验证规则
+          form.verify({
+            nikename: function(value){
+              if(value.length < 5){
+                return '昵称至少得5个字符啊';
+              }
+            }
+            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+            ,repass: function(value){
+                if($('#L_pass').val()!=$('#L_repass').val()){
+                    return '两次密码不一致';
+                }
+            }
+          });
+
+          //监听提交
+          form.on('submit(adduSER)', function(data){
+            console.log(data);
+            //发异步，把数据提交给php
+            layer.alert("增加成功", {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                // 可以对父窗口进行刷新
+                x_admin_father_reload();
+            });
+            return false;
+          });
+
+
+        });
+    </script>
+
+  </body>
+
+</html>

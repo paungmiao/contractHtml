@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+
+
+  <link rel="stylesheet" href="../css/font.css">
+  <link rel="stylesheet" href="../css/xadmin.css">
+  <link rel="stylesheet" href="../layui/css/layui.css">
+  <link rel="stylesheet" href="../css/JCheck.css">
+  <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="../js/xadmin.js"></script>
+  <script type="text/javascript" src="../js/cookie.js"></script>
+  <script src="/js/JCheck.js"></script>
+</head>
+
+<body>
+  <div class="x-body">
+    <form class="layui-form" id="userAddForm">
+
+
+      <div class="layui-form-item">
+        <label for="deptId" class="layui-form-label">
+          <span class="x-red">*</span>标准合同模板类型：
+        </label>
+        <div class="layui-input-inline" id="select">
+
+          <select id="select" lay-verify="required">
+            <option value="">请选择标准合同模板类型</option>
+            <option>基建类</option>
+            <option>劳动用工类</option>
+            <option>采购类</option>
+            <option>服务类</option>
+            <option>其他类</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="deptId" class="layui-form-label">
+          <span class="x-red">*</span>标准合同模板子类型：
+        </label>
+        <div class="layui-input-inline" id="select2">
+
+          <select id="select2" lay-verify="required">
+            <option value="">请选择标准合同模板子类型</option>
+            <option>建设工程设计合同</option>
+            <option>建设工程施工合同</option>
+            <option>专业工程建设改造合同</option>
+            <option>装修改造合同</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="layui-input-inline">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button class="layui-btn" lay-filter="add" lay-submit="">
+          <i class="layui-icon">&#xe605;</i>提交
+        </button>
+      </div>
+      <div class="layui-input-inline">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <a class="layui-btn" onclick="off()">
+          <i class="layui-icon">&#x1007;</i>取消
+        </a>
+      </div>
+    </form>
+  </div>
+  <script>
+    layui.use(['form', 'layer'], function () {
+      $ = layui.jquery;
+      var form = layui.form
+        , layer = layui.layer;
+
+
+      //监听提交
+      form.on('submit(adduSER)', function (data) {
+        console.log(data);
+        //发异步，把数据提交给php
+        layer.alert("增加成功", { icon: 6 }, function () {
+          // 获得frame索引
+          var index = parent.layer.getFrameIndex(window.name);
+          //关闭当前frame
+          parent.layer.close(index);
+          // 可以对父窗口进行刷新 
+          x_admin_father_reload();
+        });
+        return false;
+      });
+
+
+    });
+
+  </script>
+
+</body>
+
+</html>

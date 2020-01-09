@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎页面-X-admin2.1</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+</head>
+
+
+<body>
+  <div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">合同台账管理</a>
+      <a>
+        <cite>确定合同维护</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+      href="javascript:location.replace(location.href);" title="刷新">
+      <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+  </div>
+  <div class="x-body">
+    <div class="layui-row">
+      <form class="layui-form layui-col-md12 x-so" style="margin-left: 100px">
+        <div style="margin-left: 200px">
+          合同编号：<input type="text" placeholder="请输入合同编号" autocomplete="off" class="layui-input">
+          合同名称：<input type="text" placeholder="请输入合同名称" autocomplete="off" class="layui-input">
+          部门：<div class="layui-input-inline" id="select2">
+            <select id="select2" lay-verify="required">
+              <option value="">请选择部门</option>
+              <option>办公室</option>
+              <option>财务部</option>
+              <option>销售部</option>
+              <option>后勤部</option>
+            </select>
+          </div>
+        </div><br><br>
+        货物验收时间：<input class="layui-input" autocomplete="off" placeholder="请输入货物验收时间" name="start" id="hwys">
+        付款时间：<input class="layui-input" autocomplete="off" placeholder="请输入付款时间" name="start" id="fk">
+        发票开具时间：<input class="layui-input" autocomplete="off" placeholder="请输入发票开具时间" name="start" id="fpkj">
+        合同订立时间：<input class="layui-input" autocomplete="off" placeholder="请输入合同订立时间" name="start" id="htdl">
+
+        <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+      </form>
+    </div>
+    <xblock>
+      <button class="layui-btn"><i class="layui-icon"></i>确定交付</button>
+      <button class="layui-btn"><i class="layui-icon"></i>确定验收</button>
+      <button class="layui-btn"><i class="layui-icon"></i>开具发票</button>
+      <button class="layui-btn"><i class="layui-icon"></i>确定付款</button>
+      <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+     
+         
+     
+    </table>
+    
+  </div>
+  <script>
+  		var count = 0;
+			layui.use(['table'], function() {
+				var table = layui.table;
+				table.render({
+					elem: '#test',
+					url: '../json/confirm.json',
+					xhrFields: {
+						withCredentials: true
+					},
+					cols: [
+						[{
+							field: 'empno',
+							title: '合同编号',
+							width: 120
+						}, {
+							field: 'name',
+							title: '合同名称',
+							width: 150,
+						}, {
+							field: 'jddate',
+							title: '交代时间',
+							width: 100,
+							sort: true
+						}, {
+							field: 'ysdate',
+							title: '验收时间',
+							width: 100
+						}, {
+							field: 'fpdate',
+							title: '发票开具时间',
+							width: 100,
+
+						}, {
+							field: 'paydate',
+							title: '付款时间',
+							width: 100,
+							sort: true
+						}, {
+							field: 'deptname',
+							title: '部门',
+							width: 120
+						}, {
+							field: 'dldate',
+							title: '合同订立时间',
+							width: 100,
+							sort: true
+						}, {
+							field: 'ysstate',
+							title: '验收状态',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.ysstate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已验收</span> `
+							}
+							return temp;
+						}
+						},{
+							field: 'fpstate',
+							title: '发票开具状态',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.fpstate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已开具</span> `
+							}
+							return temp;
+						}
+						},{
+							field: 'paystate',
+							title: '付款状态',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.paystate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已付款</span> `
+							}
+							return temp;
+						}
+						},{
+							field: 'zxstate',
+							title: '合同执行状态',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.zxstate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已执行</span> `
+							} 
+							return temp;
+						}
+						},{
+							field: 'bgstate',
+							title: '合同变更',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.bgstate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已变更</span> `
+							} 
+							return temp;
+						}
+						},{
+							field: 'jcstate',
+							title: '合同解除',
+							width: 120,
+							templet: function (res) {
+							var temp = ``;
+							if (res.jcstate == 0) {
+								temp = `<span name="user" class="layui-btn layui-btn-normal layui-btn-mini">已解除</span> `
+							} 
+							return temp;
+						}
+						},
+            
+            ]
+					],
+					page: true
+				});
+				//监听行单击事件（双击事件为：rowDouble）
+				table.on('row(test)', function(obj) {
+					var data = obj.data;
+					count = data.ID;
+				//	var checkStatus = table.checkStatus(obj.config.id);
+						console.log("data:" + JSON.stringify(data.id))
+						//标注选中样式
+						obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        	});   
+  
+			});
+
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#hwys' //指定元素
+      });
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#fk' //指定元素
+      });
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#fpkj' //指定元素
+      });
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#htdl' //指定元素
+      });
+    });
+  </script>
+
+</body>
+
+</html>

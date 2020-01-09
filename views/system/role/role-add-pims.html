@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+
+    <th:block th:include="common/include::header"></th:block>
+    <th:block th:include="common/include::footer"></th:block>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form" id="userAddForm">
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                用户名:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="username"  th:value="${user.username}" name="userId" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+                <input type="hidden" name="userId" th:value="${user.userId}">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>已分配角色</label>
+            <div class="layui-input-block"  >
+                <input type="checkbox" th:value="${role.roleId}"
+                       th:each="role,roleStat:${roles}"   th:title="${role.name}" name="roleId"  lay-skin="primary" checked="">
+                <!--<input type="checkbox" name="roleId[${role.roleId}]" lay-skin="primary" th:text="${role1.name}" checked="">-->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>未分配角色</label>
+            <div class="layui-input-block"  >
+                <input type="checkbox" th:value="${role.roleId}"
+                       th:each="role,roleStat:${roleList}"     th:title="${role.name}" name="roleId"  lay-skin="primary" >
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-left: 150px">
+
+            <button  class="layui-btn"   onclick="reset('userAddForm')">
+                重置
+            </button>
+            &nbsp;
+            <button  class="layui-btn" lay-filter="eidtRole" lay-submit="">
+                增加
+            </button>
+            &nbsp;
+            <button  class="layui-btn"  onclick="off()">
+                取消
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

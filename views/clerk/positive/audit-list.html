@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.1</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../../../css/font.css">
+		<link rel="stylesheet" href="../../../css/xadmin.css">
+		<script type="text/javascript" src="../../../js/jqery/jquery-3.4.1.js"></script>
+		<script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/xadmin.js"></script>
+		<script type="text/javascript" src="../../../js/cookie.js"></script>
+		<script type="text/jscript" src="../../../js/common/cache.js"></script>
+		<script type="text/jscript" src="../../../js/common/echo.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="">
+		<div class="x-nav">
+			<span class="layui-breadcrumb">
+
+				<a>
+					<cite>审核列表</cite></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<form class="layui-form layui-col-md12 x-so">
+					<div class="layui-input-inline" style="width: 800px; ">
+						<input type="text" name="parma" placeholder="请输入查询条件" autocomplete="off" class="layui-input">
+						<div class="layui-input-inline">
+							<select name="interest" lay-filter="aihao">
+								<option value="">审核状态</option>
+								<option value="2">未通过</option>
+								<option value="0">待审核</option>
+
+							</select>
+						</div>
+
+						<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+					</div>
+
+				</form>
+			</div>
+			<table class="layui-table" lay-data="{url:'../positive/audit.json',page:true,toolbar: '#toolbarDemo',id:'audit'}" lay-filter="audit">
+				<thead>
+					<tr>
+						<th lay-data="{type:'radio'}">选择框</th>
+						<th lay-data="{field:'id', sort: true}">ID</th>
+						<th lay-data="{field:'dept'}">部门</th>
+						<th lay-data="{field:'username', sort: true}">姓名</th>
+						<th lay-data="{field:'idCard'}">身份证号码</th>
+						<th lay-data="{field:'bonusTime'}">记录事件</th>
+						<th lay-data="{field:'positiveType'}">类型</th>
+						<th lay-data="{field:'synopsis'}">简要描述</th>
+						<th lay-data="{field:'particularCase'}">具体情况描述</th>
+						<th lay-data="{field:'positiveGrades'}">等次</th>
+						<th lay-data="{field:'positiveType'}">类型</th>
+						<th lay-data="{field:'fileNumber'}">文件编号</th>
+						<th lay-data="{field:'remarks',templet: '#remarks'}">备注</th>
+						<th lay-data="{field:'upload' ,templet: '#upload'}">下载</th>
+						<th lay-data="{field:'status' ,templet: '#status'}">审核状态</th>
+						<th lay-data="{ templet: '#operate'}">审核操作</th>
+					</tr>
+
+				</thead>
+			</table>
+			<input type="text" id="clserId" hidden="hidden" />
+			<input type="text" id="username" hidden="hidden" />
+		</div>
+
+		<!-- 自定义变革单元格-->
+		<script type="text/html" id="remarks">
+			<div>{{d.remarks == null ? '暂无':d.remarks}}</div>
+		</script>
+		<script type="text/html" id="status">
+			{{#  if(d.status == 0){ }}
+			   <div>待审核</div>
+			 {{#  } else if(d.status == 2){ }}
+			  <div>未通过</div>
+			 {{#  } }}
+		</script>
+		<script type="text/html" id="upload">
+			<!-- 正面清单-->
+			{{#  if(d.upload == 1){ }}
+			   <a onclick="x_admin_show('正面清单详情','positive/positive-view.html?id={{d.id}}')"><i class="layui-icon">&#xe64c;</i>下载附件</a>
+			 {{#  } else { }}
+			  <div>暂无</div>
+			 {{#  } }}
+	</script>
+		<script type="text/html" id="operate">
+			<a onclick="audit({{d.id}});" href="javascript:;"  class="layui-table-link" target="_blank"><i class="layui-icon">&#xe6b2;</i>
+						审核</a>
+	</script>
+		<script type="text/html" id="toolbarDemo">
+			<button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>修改</button>
+		</script>
+	</body>
+	<script type="text/jscript">
+		function audit(id) {
+			layui.use('layer', function() { //独立版的layer无需执行这一句
+				var $ = layui.jquery,
+					layer = layui.layer; //独立版的layer无需执行这一句
+					layer.confirm('请点击一下按钮确认审核', {
+					  btn: ['通过', '不通过', '取消'] //可以无限个按钮
+					  ,btn3: function(index, layero){
+					    //按钮【按钮三】的回调
+					  }
+					}, function(index, layero){
+						layer.alert("审核通过",{
+							icon:1})
+					  //按钮【按钮一】的回调
+					}, function(index){
+					  //按钮【按钮二】的回调
+					});
+
+			});
+		}
+	</script>
+
+	<script>
+		layui.use(['table', 'jquery', 'form', 'layer'], function() {
+			var table = layui.table;
+			var $ = layui.jquery,
+				layer = layui.layer,
+				form = layui.form;
+			//监听单元格编辑
+			table.on('edit(audit)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+				layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+			});
+
+			//头工具栏事件
+			table.on('toolbar(test)', function(obj) {
+				var checkStatus = table.checkStatus(obj.config.id);
+				switch (obj.event) {
+					case 'update':
+						var datas = checkStatus.data;
+						var data = datas[0];
+						if (data == null || data == undefined) {
+							break;
+						}
+						var w = 700;
+						var h = 500;
+						layer.open({
+							//rasize: false,
+							title: '修改行员信息',
+							area: [w + 'px', h + 'px'],
+							type: 2,
+							content: 'positive-save.html',
+							success: function(layero, index) {
+								var body = layer.getChildFrame('body', index);
+								body.find("#content").append('positive-save.html');
+								body.find("#dept").val(data.dept);
+								body.find("#username").val(data.username);
+								body.find("#idCard").val(data.idCard);
+								body.find("#bonusTime").val(data.bonusTime);
+								body.find("#positiveType").val(data.positiveType);
+								body.find("#synopsis").val(data.synopsis);
+								body.find("#particularCase").val(data.particularCase);
+								body.find("#positiveGrades").find("option[value=" + data.positiveGrades + "]").prop("selected", true);
+								form.render('select');
+								form.render();
+								body.find("#fileNumber").val(data.fileNumber);
+								body.find("#remarks").val(data.remarks);
+								body.find("#fileName").val(data.fileName);
+							}
+						});
+						//layer.msg('选中了：' + JSON.stringify(data).id + ' 个');
+						break;
+				}
+			});
+		});
+	</script>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+  <meta charset="UTF-8">
+  <title>欢迎页面-X-admin2.1</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+  <link rel="stylesheet" href="../css/font.css">
+  <link rel="stylesheet" href="../css/xadmin.css">
+  <link rel="stylesheet" href="../layui/css/layui.css">
+  <link rel="stylesheet" href="../css/JCheck.css">
+  <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="../js/xadmin.js"></script>
+  <script type="text/javascript" src="../js/cookie.js"></script>
+  <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">问题管理</a>
+      <a>
+        <cite>问题整理</cite></a>
+    </span>
+  <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+     href="javascript:location.replace(location.href);" title="刷新">
+    <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+  <div class="layui-row">
+    <form class="layui-form layui-col-md12 x-so" style="">
+
+      项目名称：
+      <div class="layui-input-inline" id="select1">
+
+        <select lay-verify="required">
+          <option value="">请选择项目名称</option>
+          <option>项目一</option>
+          <option>项目二</option>
+          <option>项目三</option>
+        </select>
+      </div>
+      审核状态：
+      <div class="layui-input-inline" id="select2">
+
+        <select lay-verify="required">
+          <option value="">请选择审核状态</option>
+          <option>审核通过</option>
+          <option>驳回</option>
+          <option>未审核</option>
+        </select>
+      </div>
+
+      <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+    </form>
+  </div>
+<!--  <xblock>-->
+<!--    <button class="layui-btn" onclick="x_admin_show('添加基础配置信息','baseConfig-add.html','600','500')"><i class="layui-icon" ></i>新建</button>-->
+<!--    <button class="layui-btn" onclick="x_admin_show('项目详情','temp-add.html','600','500')"><i class="layui-icon" ></i>上传导入</button>-->
+<!--    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>批量删除</button>-->
+<!--    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>下载模板</button>-->
+
+<!--  </xblock>-->
+  <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+  </table>
+
+
+</div>
+<script>
+  var count = 0;
+  layui.use(['table'], function () {
+    var table = layui.table;
+
+    table.render({
+      elem: '#test',
+      url: '../json/rectify.json',
+      xhrFields: {
+        withCredentials: true
+      },
+      cols: [
+        [{
+          field: 'empno',
+          title: '项目编号',
+          width: 200
+        }, {
+          field: 'name',
+          title: '项目名称',
+          width: 120,
+        }, {
+          field: 'type',
+          title: '审计类型',
+          width: 120,
+        }, {
+          field: 'behavior',
+          title: '审计部门',
+          width: 120,
+        }, {
+          field: 'advice',
+          title: '开始时间',
+          width: 180,
+        }, {
+          field: 'date',
+          title: '预计时长',
+          width:80,
+        }, {
+          field: 'costDate',
+          title: '花费时长',
+          width:80,
+        }, {
+          field: 'status',
+          title: '审核状态',
+          width:150,
+        }, {
+          field: 'uploadMsg',
+          title: '操作',
+          width: 180,
+          templet: function (res) {
+            var temp = ``;
+            temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show('项目详情','temp-add.html','600','500')">待提审</span>
+                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="">查看</span> `
+            return temp;
+          }
+          // sort: true
+        }, ]
+      ],
+      page: true
+    });
+    //监听行单击事件（双击事件为：rowDouble）
+    table.on('row(test)', function (obj) {
+      var data = obj.data;
+      count = data.ID;
+      //	var checkStatus = table.checkStatus(obj.config.id);
+      console.log("data:" + JSON.stringify(data.id))
+      //标注选中样式
+      obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    });
+
+  });
+
+
+
+</script>
+
+<script>
+  function delete_() {
+    layer.confirm('确认要删除吗？', function (index) {
+      //捉到所有被选中的，发异步进行删除
+      layer.msg('删除成功', {
+        icon: 1
+      });
+    });
+  }
+
+  layui.use('laydate', function () {
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#start' //指定元素
+    });
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#end' //指定元素
+    });
+  });
+</script>
+</body>
+
+</html>

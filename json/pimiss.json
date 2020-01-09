@@ -1,0 +1,99 @@
+[
+  {
+    "id":1
+  ,"name":"系统菜单"
+  ,"type":1
+  ,"note":"系统菜单"
+  ,"pid":0
+  ,"permission":"sys:menu"
+  ,"valib":1
+  ,"createdTime":"2019-03-04 15:33:34"
+    ,"modified_time":""
+    ,"created_user":"admin"
+    ,"modified_user":""
+  },{
+  "id":2
+,"name":"系统管理"
+,"type":1
+,"note":"测试用"
+,"pid":1
+,"permission":"sys:system"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":"admin"
+,"modified_user":""
+},{
+  "id":3
+,"name":"干部管理"
+,"type":1
+,"note":"测试用"
+,"pid":1
+,"permission":"sys:leader"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":"admin"
+,"modified_user":""
+},{
+  "id":4
+,"name":"行员信息"
+,"type":1
+,"note":"测试用"
+,"pid":3
+,"permission":"sys:clerk"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":""
+,"modified_user":""
+},{
+  "id":5
+,"name":"培训管理"
+,"type":1
+,"note":"测试用"
+,"pid":1
+,"permission":"sys:peix"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":"admin"
+,"modified_user":""
+},{
+  "id":6
+,"name":"培训资源"
+,"type":1
+,"note":"测试用"
+,"pid":5
+,"permission":"sys:ziyuan"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":""
+,"modified_user":""
+},{
+  "id":7
+,"name":"任务管理"
+,"type":1
+,"note":"测试用"
+,"pid":1
+,"permission":"sys:resource"
+,"valib":""
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":"admin"
+,"modified_user":""
+},{
+  "id":7
+,"name":"信息管理"
+,"type":1
+,"note":"测试用"
+,"pid":1
+,"permission":"sys:xinxi"
+,"valib":1
+,"createdTime":"2019-03-04 15:33:34"
+,"modified_time":""
+,"created_user":"admin"
+,"modified_user":""
+}
+]

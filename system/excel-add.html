@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+
+  <th:block th:include="common/include::header"></th:block>
+  <th:block th:include="common/include::footer"></th:block>
+
+  <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="css/xadmin.css">
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <script type="text/javascript" src="js/jqery/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="layui/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/xadmin.js"></script>
+  <script type="text/javascript" src="js/cookie.js"></script>
+</head>
+
+<body>
+  <div class="x-body">
+    <form class="layui-form" id="userAddForm">
+
+      合同签订时间:<input class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入合同签订时间" id="start">
+      <br>
+      发票类型:<input type="text" style="width:200px" placeholder="请输入发票类型" autocomplete="off" class="layui-input">
+      <br>
+      <div>
+        发票开具时间:<input class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入发票开具时间" id="start2">
+      </div>
+      <br>
+      <br>
+
+      <div class="layui-input-inline">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button class="layui-btn" lay-filter="add" lay-submit="">
+          <i class="layui-icon">&#xe605;</i>提交
+        </button>
+      </div>
+      <div class="layui-input-inline">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <a class="layui-btn" onclick="off()">
+          <i class="layui-icon">&#x1007;</i>取消
+        </a>
+      </div>
+
+    </form>
+  </div>
+  <script>
+    layui.use(['form', 'layer'], function () {
+      $ = layui.jquery;
+      var form = layui.form
+        , layer = layui.layer;
+
+
+      //监听提交
+      form.on('submit(adduSER)', function (data) {
+        console.log(data);
+        //发异步，把数据提交给php
+        layer.alert("增加成功", { icon: 6 }, function () {
+          // 获得frame索引
+          var index = parent.layer.getFrameIndex(window.name);
+          //关闭当前frame
+          parent.layer.close(index);
+          // 可以对父窗口进行刷新 
+          x_admin_father_reload();
+        });
+        return false;
+      });
+
+
+    });
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#start' //指定元素
+      });
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#start2' //指定元素
+      });
+    });
+  </script>
+
+</body>
+
+</html>

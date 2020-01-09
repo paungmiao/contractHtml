@@ -1,0 +1,37 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 300,
+  "data": [
+    {
+      "rolename": "超级管理员",
+      "roledesc": "admin",
+      "createdtime": "2019-03-04 15:33:34",
+      "rolestate": 1
+    },
+    {
+      "rolename": "超级管理员",
+      "roledesc": "admin",
+      "createdtime": "2019-03-04 15:33:34",
+      "rolestate": 1
+    },
+    {
+      "rolename": "超级管理员",
+      "roledesc": "admin",
+      "createdtime": "2019-03-04 15:33:34",
+      "rolestate": 1
+    },
+    {
+      "rolename": "超级管理员",
+      "roledesc": "admin",
+      "createdtime": "2019-03-04 15:33:34",
+      "rolestate": 0
+    },
+    {
+      "rolename": "超级管理员",
+      "roledesc": "admin",
+      "createdtime": "2019-03-04 15:33:34",
+      "rolestate": 0
+    }
+  ]
+}

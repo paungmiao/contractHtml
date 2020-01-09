@@ -1,0 +1,47 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 3000000,
+	"data": [{
+			"id": "10002",
+			"title":"数量",
+			"politicsStatusSum": 1220,
+			"manSum": 1476,
+			"womanSum": 932,
+			"minoritySum":873,
+			"averageAge":38,
+			"fourAgeUnder":1433,
+			"fourToFourFive":487,
+			"fourSixToFive":398,
+			"fiveToFiveFive":287,
+			"fiveSixAbove":223,
+			"graduateAbove":321,
+			"regular":1398,
+			"juniorCollege":883,
+			"advancedRank":467,
+			"middleRank":543,
+			"primaryRank":955,
+			"noRank":863
+		}, {
+			"id": "10003",
+			"title":"比例",
+			"politicsStatusSum": "60.34%",
+			"manSum": "60.34%",
+			"womanSum": "60.34%",
+			"minoritySum":"60.34%",
+			"averageAge":"60.34%",
+			"fourAgeUnder":"60.34%",
+			"fourToFourFive":"60.34%",
+			"fourSixToFive":"60.34%",
+			"fiveToFiveFive":"60.34%",
+			"fiveSixAbove":"60.34%",
+			"graduateAbove":"60.34%",
+			"regular":"60.34%",
+			"juniorCollege":"60.34%",
+			"advancedRank":"60.34%",
+			"middleRank":"60.34%",
+			"primaryRank":"60.34%",
+			"noRank":"60.34%"
+		}
+	]
+}

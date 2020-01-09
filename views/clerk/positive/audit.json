@@ -1,0 +1,51 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 3000000,
+	"data": [{
+		"id": "10001",
+		"dept": "人事处",
+		"username": "杜甫",
+		"idCard": "430123199302050451",
+		"bonusTime": "2019-03-04",
+		"positiveType": "奖励",
+		"synopsis": "XX年获得XX奖励",
+		"particularCase": "因在XX事件中突出表现特予以XX奖励",
+		"positiveGrades": "一等功",
+		"fileNumber": "WZH-RSC-JL-1DG",
+		"remarks": "",
+		"fileNanme":"XXX在XX事件奖励证书",
+		"upload":1,
+		"status": 0
+	}, {
+		"id": "10002",
+		"dept": "人事处",
+		"username": "杜甫",
+		"idCard": "430123199302050451",
+		"bonusTime": "2019-03-04",
+		"positiveType": "巡视",
+		"synopsis": "XX年获得XX巡视中优秀评价",
+		"particularCase": "因在XX地区巡视中突出表现予以优秀评价",
+		"positiveGrades": "优秀",
+		"fileNumber": "WZH-RSC-XS-Y",
+		"remarks": "",
+		"fileNanme":"XXX在XX事件奖励证书",
+		"upload":1,
+		"status": 0
+	}, {
+		"id": "10003",
+		"dept": "人事处",
+		"username": "杜甫",
+		"idCard": "430123199302050451",
+		"bonusTime": "2019-03-04",
+		"positiveType": "交流",
+		"synopsis": "XX年XX交流会中优秀评价",
+		"particularCase": "因在XX交流会议中突出表现予以优秀评价",
+		"positiveGrades": "优秀",
+		"fileNumber": "WZH-RSC-JL-Y",
+		"remarks": "",
+		"fileNanme":"XXX在XX事件奖励证书",
+		"upload":0,
+		"status": 0
+	}]
+}

@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+
+</head>
+
+<body>
+    <script language="JavaScript">
+        function OpenDoc() {
+            //取得WebOffice对象
+            var WebOffice1 = document.getElementById("WebOffice");
+            //通过对象WebOffice的Open方法打开个一个服务器文档
+            //此处服务器文档地址为：http://www.officectrl.com/officecs/temp/file1.doc
+            WebOffice1.Open("C:/Users/Administrator/Desktop/我的文件夹/合同示范文本/2-劳动用工类/退休人员聘用合同.doc", false, "Word.Document");
+
+        }
+        function OpenSave() {
+            WebOffice.Save('http://localhost/wordDemo/save.jsp');
+        }
+
+    </script>
+    <div><input type="button" onclick="OpenDoc()" value="打开"><input type="button" onclick="OpenSave()" value="保存"></div>
+
+    <script language="JavaScript">
+        if (!!window.ActiveXObject || "ActiveXObject" in window) {
+            document.write('<object classid="clsid:FF09E4FA-BFAA-486E-ACB4-86EB0AE875D5" codebase="WebOffice.ocx#Version=2019,1,7,3" id="WebOffice" width="1500" height="800" >')
+            document.write('<object>')
+        } else {
+            document.write('<object id="WebOffice" CLSID="{FF09E4FA-BFAA-486E-ACB4-86EB0AE875D5}" TYPE="application/x-itst-activex"  width=100% height=900></object>');
+        }
+    </script>
+</body>
+
+</html>

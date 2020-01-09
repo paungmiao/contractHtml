@@ -1,0 +1,74 @@
+{
+  "code": 0
+,"msg": ""
+,"count": 3000000
+,"data": [
+  {
+    "userId":1001
+    ,"username":"admin"
+    ,"mobile":"13312341234"
+    ,"dept":{
+    "deptId":101
+    ,"deptName":"人事处"
+  }
+    ,"createdTime":"2019-03-04 15:33:34"
+    ,"createdUser":"admin"
+    ,"modifiedTime":""
+    ,"modifiedUser":""
+    ,"valid":1
+  }
+  ,{
+    "userId":1001
+  ,"username":"admin"
+  ,"mobile":"13312341234"
+  ,"dept":{
+      "deptId":101
+    ,"deptName":"人事处"
+    }
+  ,"createdTime":"2019-03-04 15:33:34"
+  ,"createdUser":"admin"
+  ,"modifiedTime":""
+  ,"modifiedUser":""
+  ,"valid":1
+  },{
+    "userId":1001
+  ,"username":"admin"
+  ,"mobile":"13312341234"
+  ,"dept":{
+      "deptId":101
+    ,"deptName":"人事处"
+    }
+  ,"createdTime":"2019-03-04 15:33:34"
+  ,"createdUser":"admin"
+  ,"modifiedTime":""
+  ,"modifiedUser":""
+  ,"valid":1
+  },{
+    "userId":1001
+  ,"username":"admin"
+  ,"mobile":"13312341234"
+  ,"dept":{
+      "deptId":101
+    ,"deptName":"人事处"
+    }
+  ,"createdTime":"2019-03-04 15:33:34"
+  ,"createdUser":"admin"
+  ,"modifiedTime":""
+  ,"modifiedUser":""
+  ,"valid":1
+  },{
+    "userId":1001
+  ,"username":"admin"
+  ,"mobile":"13312341234"
+  ,"dept":{
+      "deptId":101
+    ,"deptName":"人事处"
+    }
+  ,"createdTime":"2019-03-04 15:33:34"
+  ,"createdUser":"admin"
+  ,"modifiedTime":""
+  ,"modifiedUser":""
+  ,"valid":1
+  }
+]
+}

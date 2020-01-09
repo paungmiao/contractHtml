@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.1</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="../../../css/font.css">
+		<link rel="stylesheet" href="../../../css/xadmin.css">
+		<script type="text/javascript" src="../../../js/jqery/jquery-3.4.1.js"></script>
+		<script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/xadmin.js"></script>
+		<script type="text/javascript" src="../../../js/cookie.js"></script>
+		<script type="text/jscript" src="../../../js/echarts.min.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="">
+		<div class="x-nav" id="bar">
+
+			<span class="layui-breadcrumb" lay-separator="|">
+				<a href="../clerk-list.html">行员信息</a>
+				<a href="statistic-view.html">行员结构分析</a>
+				<a href="cadreAllocation.html">干部配备情况</a>
+				<a href="fundamental-status.html">干部基本情况</a>
+				<a href="">提任领导</a>
+				<a href="">年度评价</a>
+				<a href="">综艺</a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<!-- 图表区域-->
+		<div class="x-body">
+			<div class="layui-row">
+				<form class="layui-form layui-col-md12 x-so">
+					<div class="layui-inline">
+
+
+						<!-- 选择类型 -->
+						<div class="layui-inline">
+							<label class="layui-form-label">类型</label>
+							<div class="layui-input-inline">
+								<select name="modules" lay-verify="required" lay-search="">
+									<option value="">直接选择或搜索选择</option>
+									<option value="1">全疆行级</option>
+									<option value="2">乌中支</option>
+									<option value="3">地州中支</option>
+									<option value="4">乌中支处室</option>
+								</select>
+							</div>
+						</div>
+						<!-- 查询按钮 -->
+						<div class="layui-input-inline">
+							<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i>生成图表</button>
+						</div>
+					</div>
+				</form>
+			</div>
+<!-- 显示具体数据 -->
+						<table class="layui-table" id="fundan" lay-filter="fundan"></table>
+			</div>
+			<div id="pie" style="width:100%;height:450px;"></div>
+		</div>
+
+
+	<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+	    <button class="layui-btn" onclick="x_admin_show('添加行员','positive-save.html',700,500)"><i class="layui-icon"></i>录入</button>
+	    <button class="layui-btn layui-btn-sm" lay-event="importFile"><i class="layui-icon">	&#xe601;</i>导出</button>
+	    <button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>修改</button>
+		<button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+		 <button class="layui-btn layui-btn-sm" lay-event="audit"><i class="layui-icon">&#xe612;</i>审核</button>
+	  </div>
+	</script>
+	
+
+		<!-- JS部分 -->
+		<script type="text/jscript">
+		
+				var myChar = echarts.init(document.getElementById('pie'));
+
+				//默认初始数据
+				var option = {
+					type: 'pie',
+					name: '',
+					//color : [ 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple' ],
+					title: {
+						text: '全疆行员统计分析图',
+						left: 'center'
+					},
+					tooltip: {
+						show: true,
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					legend: {},
+					series: []
+				};
+
+				myChar.setOption(option);
+				
+			// 渲染完成后执行then()方法的操作代码 
+				$.get('fundan.json',function(data){
+					myChar.setOption({
+						 legend:{
+						// orient: 'vertical',
+						// top: 'middle',
+						top: 20,
+						left: 'left',
+						data: data.data.type,
+						show:false
+						}, 
+						series:[{
+							type: 'pie',
+							name:'年龄段',
+							borderType :"dashed",
+							radius: '35%',
+							selectedMode: 'single',
+							 center: ["18%", "35%"],
+							data: data.data.age,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						},{
+							type: 'pie',
+							name:'按党员',
+							radius: '35%',
+							 center: ['48%', '35%'],
+							selectedMode: 'single',
+							data: data.data.party,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						},{
+							type: 'pie',
+							name:'性别比例',
+							radius: '35%',
+							 center: ['78%', '35%'],
+							selectedMode: 'single',
+							data: data.data.sex,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						},{
+							type: 'pie',
+							name:'按民族',
+							radius: '35%',
+							 center: ['18%', '80%'],
+							selectedMode: 'single',
+							data: data.data.nation,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						},{
+							type: 'pie',
+							name:'按学历',
+							radius: '35%',
+							 center: ['48%', '80%'],
+							selectedMode: 'single',
+							data: data.data.education,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						},{
+							type: 'pie',
+							name:'按职称',
+							radius: '35%',
+							 center: ['78%', '80%'],
+							selectedMode: 'single',
+							data: data.data.professional,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						}]
+					});
+				})
+		</script>
+		
+		<script>
+			layui.use('table', function() {
+						var table = layui.table;
+
+
+						layui.use('table', function() {
+							var table = layui.table;
+
+							//执行一个 table 实例
+							table.render({
+								id: 'test',
+								elem: '#fundan',
+								url: 'bingzhuang.json' //数据接口
+									,
+								title: '各地州干部配备表',
+								defaultToolbar: ['filter', 'print'],
+								page: true //开启分页
+									,
+									height:300,
+								toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+									,
+								cols: [
+									[ //表头
+										{
+											type: 'radio',
+											field: 'id',
+											fixed: 'left',
+
+										}, {
+											field:'title',
+											
+										},{
+											field: 'politicsStatusSum',
+											title: '党员',
+										}, {
+											field: 'manSum',
+											title: '男性',
+											edit: true
+										}, {
+											field: 'womanSum',
+											title: '女性',
+										}, {
+											field: 'minoritySum',
+											title: '少数民族',
+										}, {
+											field: 'averageAge',
+											title: '平均年龄',
+										}, {
+											field: 'fourAgeUnder',
+											title: '40岁以下',
+										}, {
+											field: 'fourToFourFive',
+											title: '40-45岁',
+											edit: true
+										}, {
+											field: 'fourSixToFive',
+											title: '46-50岁',
+										},
+										{
+											field: 'fiveToFiveFive',
+											title: '50-55岁',
+										},
+										{
+											field: 'fiveSixAbove',
+											title: '56岁以上',
+										},
+										{
+											field: 'graduateAbove',
+											title: '硕士研究生以上学历',
+										},
+										{
+											field: 'regular',
+											title: '大学本科学历',
+										},
+										{
+											field: 'juniorCollege',
+											title: '大专学历',
+										},
+										{
+											field: 'advancedRank',
+											title: '高级职称',
+										},
+										{
+											field: 'middleRank',
+											title: '中级职称',
+										},
+										{
+											field: 'primaryRank',
+											title: '初级职称',
+										},
+										{
+											field: 'noRank',
+											title: '无职称',
+										}
+									]
+								],
+								done: function(res) {
+									var onwanceTotal = 0; //统计各地州的总干部配备人数 
+									layui.each(res.data, function(index, d) {
+										onwanceTotal += d.president + d.vPresident + d.discipline + d.director + d.investigator + d.vInvestigator;
+									})
+									//修改 统计单元格文本
+									this.elem.next().find('.layui-table-total td[data-field="8"] .layui-table-cell').text(onwanceTotal)
+								}
+							});
+
+
+
+							//监听单元格编辑
+							table.on('edit(fundan)', function(obj) {
+								var value = obj.value //得到修改后的值
+									,
+									data = obj.data //得到所在行所有键值
+									,
+									field = obj.field; //得到字段
+								layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+							});
+
+							//头工具栏事件
+							table.on('toolbar(fundan)', function(obj) {
+								var checkStatus = table.checkStatus(obj.config.id);
+								switch (obj.event) {
+									case 'getCheckData':
+										var data = checkStatus.data;
+										layer.alert(JSON.stringify(data));
+										break;
+									case 'getCheckLength':
+										var data = checkStatus.data;
+										layer.msg('选中了：' + data.length + ' 个');
+										break;
+									case 'isAll':
+										layer.msg(checkStatus.isAll ? '全选' : '未全选');
+										break;
+								};
+							});
+						});
+						});
+		</script>
+
+	</body>
+
+</html>

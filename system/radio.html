@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+    <meta name="keyword" content="">
+    <meta name="description" content="">
+
+ 
+    <!-- css -->
+    <link rel="stylesheet" href="css/JCheck.css">
+
+    <!-- script -->
+    <script type="text/javascript" src="js/jqery/jquery-3.4.1.js"></script>
+    <script src="js/JCheck.js"></script>
+
+    <style>
+        *,
+        *:before,
+        *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        [class*="radio-group-"],
+        [class*="checkbox-group-"]{
+            padding-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        [class*="radio-group-"] > h3,
+        [class*="checkbox-group-"] > h3 {
+            margin-bottom: 10px;
+        }
+
+        .u-radio,
+        .u-checkbox {
+            line-height: 24px;
+        }
+
+        .u-radio .icon,
+        .u-checkbox .icon {
+            display: inline-block;
+            *zoom: 1;
+            *display: inline;
+            position: relative;
+            top: -2px;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+        }
+
+        .u-radio .icon {
+            background: url("images/icon_radio.png") center no-repeat;
+            -webkit-background-size: contain;
+            background-size: contain;
+        }
+
+        .u-radio.z-checked .icon {
+            background-image: url("images/icon_radio_chekced.png");;
+        }
+
+        .u-checkbox .icon {
+            background: url("images/icon_checkbox.png") center no-repeat;
+            -webkit-background-size: contain;
+            background-size: contain;
+        }
+
+        .u-checkbox.z-checked .icon {
+            background-image: url("images/icon_checkbox_checked.png");
+        }
+    </style>
+</head>
+<body>
+<div class="radio-group-1">
+    <label class="u-radio" data-name="radio1">
+        <input name="radio1" type="radio">
+        <i class="icon"></i>
+    </label>
+    
+</div>
+<label class="u-radio" data-name="radio1">
+        <input name="radio1" type="radio">
+        <i class="icon"></i>
+    </label>
+    <label class="u-radio" data-name="radio1">
+        <input name="radio1" type="radio" checked>
+        <i class="icon"></i>
+    </label>
+<script>
+    $(function () {
+        $('.u-radio').jRadio();
+        $('.u-checkbox').jCheckbox();
+    });
+</script>
+</body>
+</html>

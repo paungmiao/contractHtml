@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.1</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="../../../css/font.css">
+		<link rel="stylesheet" href="../../../css/xadmin.css">
+		<script type="text/javascript" src="../../../js/jqery/jquery-3.4.1.js"></script>
+		<script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/xadmin.js"></script>
+		<script type="text/javascript" src="../../../js/cookie.js"></script>
+		<script type="text/jscript" src="../../../js/common/cache.js"></script>
+		<script type="text/jscript" src="../../../js/common/echo.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body class="">
+		<div class="x-nav">
+			<span class="layui-breadcrumb" lay-separator="|">
+			  <a href="clerk-list.html">行员信息</a>
+			  <a href="positive-view.html">正面清单</a>
+			  <a href="../negative/negative-view.html">负面清单</a>
+			  <a href="statistic/cadreAllocation.html">培训情况</a>
+			  <a href="">交流情况</a>
+			  <a href="">受调研情况</a>
+			  <a href="">任免情况</a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<form class="layui-form layui-col-md12 x-so">
+					<div class="layui-input-inline">
+						<input type="text" name="parma" placeholder="请输入查询条件" autocomplete="off" class="layui-input">
+						<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+					</div>
+					<div class="layui-form-mid layui-word-aux">
+						<span class="x-red"></span>
+					</div>
+				</form>
+			</div>
+			<table class="layui-table" lay-data="{url:'positive.json',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+				<thead>
+					<tr>
+						<th lay-data="{type:'radio'}">选择框</th>
+						<th lay-data="{field:'id', sort: true}">ID</th>
+						<th lay-data="{field:'dept'}">部门</th>
+						<th lay-data="{field:'username', sort: true}">姓名</th>
+						<th lay-data="{field:'idCard'}">身份证号码</th>
+						<th lay-data="{field:'bonusTime'}">记录事件</th>
+						<th lay-data="{field:'positiveType'}">类型</th>
+						<th lay-data="{field:'synopsis'}">简要描述</th>
+						<th lay-data="{field:'particularCase'}">具体情况描述</th>
+						<th lay-data="{field:'positiveGrades'}">等次</th>
+						<th lay-data="{field:'positiveType'}">类型</th>
+						<th lay-data="{field:'fileNumber'}">文件编号</th>
+						<th lay-data="{field:'remarks',templet: '#remarks'}">备注</th>
+						<th lay-data="{field:'upload' ,templet: '#upload'}">下载</th>
+
+					</tr>
+
+				</thead>
+			</table>
+			<input type="text" id="clserId" hidden="hidden" />
+			<input type="text" id="username" hidden="hidden" />
+		</div>
+		<script type="text/html" id="remarks">
+			<div>{{d.remarks == null ? '暂无':d.remarks}}</div>
+		</script>
+		<script type="text/html" id="upload">
+			<!-- 正面清单-->
+			{{#  if(d.upload == 1){ }}
+			   <a onclick="x_admin_show('正面清单详情','positive/positive-view.html?id={{d.id}}')"><i class="layui-icon">&#xe64c;</i>下载附件</a>
+			 {{#  } else { }}
+			  <div>暂无</div>
+			 {{#  } }}
+	</script>
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+	    <button class="layui-btn" onclick="x_admin_show('添加行员','positive-save.html',700,500)"><i class="layui-icon"></i>录入</button>
+        <button class="layui-btn layui-btn-sm" lay-event="importFile"><i class="layui-icon">	&#xe601;</i>导出</button>
+        <button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>修改</button>
+		<button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+		 <button class="layui-btn layui-btn-sm" lay-event="audit"><i class="layui-icon">&#xe612;</i>审核</button>
+      </div>
+    </script>
+		<script type="text/html" id="switchTpl">
+			<!-- 这里的 checked 的状态只是演示 -->
+	  <div>{{d.sex}}</div>
+      <!c-- <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id == 10003 ? 'checked' : '' }}> -->
+    </script>
+		<script>
+			layui.use('{laydate,layer}', function() {
+				var laydate = layui.laydate;
+				var $ = layui.jquery,
+					layer = layui.layer;
+				//弹出层触发事件
+				var active = {
+					//多窗口模式
+					setTop: function() {
+						var that = this;
+						layer.open({
+							type: 2,
+							title: '用户详细信息',
+							area: ['700px', '600px'],
+							shade: 0,
+							maxmix: true,
+							offset: [
+								Math.random() * ($(window).height() - 300), Math.random() * ($(window).width() - 390)
+							],
+							content: 'clerk-del.html',
+							btn: ['显示123', '全部关闭'],
+							yes: function() {
+								alert("123");
+							},
+							btn2: function() {
+								layer.close();
+							},
+							zIndex: layer.zIndex,
+							success: function(layero) {
+								layer.setTop(layero);
+							}
+						});
+					}
+				}
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#start' //指定元素
+				});
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#end' //指定元素
+				});
+
+
+			});
+		</script>
+		<script>
+			layui.use(['table', 'jquery', 'form', 'layer', 'element'], function() {
+				var table = layui.table;
+				var $ = layui.jquery,
+					element =layui.element;
+				layer = layui.layer,
+					form = layui.form;
+				//监听单元格编辑
+				table.on('edit(test)', function(obj) {
+					var value = obj.value //得到修改后的值
+						,
+						data = obj.data //得到所在行所有键值
+						,
+						field = obj.field; //得到字段
+					layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+				});
+
+				//头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch (obj.event) {
+						case 'importFile':
+							var datas = checkStatus.data;
+							var data = datas[0];
+
+							break;
+						case 'update':
+							var datas = checkStatus.data;
+							var data = datas[0];
+							if (data == null || data == undefined) {
+								break;
+							}
+							var w = 700;
+							var h = 500;
+							layer.open({
+								//rasize: false,
+								title: '修改行员信息',
+								area: [w + 'px', h + 'px'],
+								type: 2,
+								content: 'positive-save.html',
+								success: function(layero, index) {
+									var body = layer.getChildFrame('body', index);
+									body.find("#content").append('positive-save.html');
+									body.find("#dept").val(data.dept);
+									body.find("#username").val(data.username);
+									body.find("#idCard").val(data.idCard);
+									body.find("#bonusTime").val(data.bonusTime);
+									body.find("#positiveType").val(data.positiveType);
+									body.find("#synopsis").val(data.synopsis);
+									body.find("#particularCase").val(data.particularCase);
+									body.find("#positiveGrades").find("option[value=" + data.positiveGrades + "]").prop("selected", true);
+									form.render('select');
+									form.render();
+									body.find("#fileNumber").val(data.fileNumber);
+									body.find("#remarks").val(data.remarks);
+									body.find("#fileName").val(data.fileName);
+
+								}
+							});
+							//layer.msg('选中了：' + JSON.stringify(data).id + ' 个');
+							break;
+						case 'delete':
+							//获取选择信息
+							var datas = checkStatus.data;
+							var data = datas[0];
+
+							layer.confirm('去掉要删除' + data.username + '的信息么？', {
+								btn: ['确定', '取消'] //按钮
+							}, function() {
+								//$(obj).parent("tr").remove();
+								layer.msg('删除成功', {
+									icon: 1
+								});
+							}, function() {
+								layer.msg('关闭窗口', {
+									time: 1000, //1s后自动关闭
+
+								});
+							});
+							break;
+						case 'audit':
+							//获取选择信息
+							var name = $("#username").val();
+							var id = $("#clserId").val();
+							var datas = checkStatus.data;
+							var data = datas[0];
+							if (data == null || data == undefined) {
+								x_admin_show(name + '的正面审核列表', 'audit-list.html?id=' + id);
+							} else {
+								layer.alert("不能选择数据!");
+							}
+							break;
+
+					};
+				});
+			});
+		</script>
+
+	</body>
+
+</html>
