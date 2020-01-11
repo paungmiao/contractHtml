@@ -35,6 +35,12 @@
 <div class="x-body">
   <div class="layui-row">
     <form class="layui-form layui-col-md12 x-so" style="">
+      项目名称：<input type="text" placeholder="请输入问题定性" id="projectName" autocomplete="off" class="layui-input">
+      状态：
+      <div class="layui-input-inline">
+        <select id="stateSelect">
+        </select>
+      </div>
       问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
       问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
 
@@ -42,7 +48,7 @@
     </form>
   </div>
   <xblock>
-    <button class="layui-btn" onclick="x_admin_show('添加基础配置信息','plan-management-add.html','600','500')"><i class="layui-icon" ></i>新增</button>
+    <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','600','460')"><i class="layui-icon" ></i>新增</button>
     <button class="layui-btn" onclick=""><i class="layui-icon" ></i>修改</button>
     <button class="layui-btn" onclick=""><i class="layui-icon" ></i>删除</button>
     <button class="layui-btn" onclick=""><i class="layui-icon" ></i>上报计划</button>
@@ -59,7 +65,25 @@
   layui.use(['table','form'], function () {
     let table = layui.table;
     let form =layui.form
-
+    $.ajax({
+      url: "/audit-api/state/list",
+      dataType: "json",
+      type: "get",
+      async:false,
+      success: function (resp) {
+        if(resp && 0==resp.code){
+          let data = resp.data;
+          let options = [];
+          options.push('<option value="" >请选择状态</option>')
+          data.forEach((Obj,index)=>{
+            let option = '<option value="'+Obj.code+'" >'+Obj.name+'</option>';
+            options.push(option);
+          })
+          $("#stateSelect").empty().append(options.join(""));
+        }
+      }
+    })
+    form.render("select")
     table.render({
       elem: '#test',
       url: '/audit-api/planManage/page',
@@ -119,19 +143,25 @@
         };
       },
       page:1,
-      limit:15,
+      limit:10,
       request: {
         pageName: 'current', //页码的参数名称，默认：page
         limitName: 'size' //每页数据量的参数名，默认：limit
       },
       where:{
-        problemCharacterization: $("#problemCharacterization").val()
+        projectName: $("#projectName").val(),
+        status: $("#stateSelect").val(),
+        problemCharacterization: $("#problemCharacterization").val(),
+        problemDescription: $("#problemDescription").val()
       }
     });
     form.on("submit()",function () {
       table.reload('test',{
         where:{
+          projectName:$("#projectName").val(),
+          status: $("#stateSelect").val(),
           problemCharacterization:$("#problemCharacterization").val(),
+          problemDescription:$("#problemDescription").val(),
         },
         page:1
       });

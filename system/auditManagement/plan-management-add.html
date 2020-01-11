@@ -14,32 +14,14 @@
 </head>
 
 <body>
-  <div class="x-body">
-    <form class="layui-form" id="userAddForm">
+<div class="x-body">
+  <form class="layui-form" lay-filter="planAddForm">
       <div class="layui-form-item">
         <label  class="layui-form-label">
-          <span class="x-red">*</span>项目名称:
+          <span class="x-red">*</span>审计年度:
         </label>
         <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>项目类型:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
+          <input name="auditYear" class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">
         </div>
       </div>
       <div class="layui-form-item">
@@ -47,172 +29,261 @@
           <span class="x-red">*</span>实施机构:
         </label>
         <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
+          <select id="implementingAgencySelect" name="implementingAgencyId">
           </select>
         </div>
       </div>
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>审计对象:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>项目类型:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>审计性质:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>问题词条:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>问题严重程度:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>整改情况:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="layui-form-item">
         <label  class="layui-form-label">
-          <span class="x-red">*</span>审计年度:
+          <span class="x-red">*</span>项目名称:
         </label>
         <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
+          <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"
+                 autocomplete="off" class="layui-input" value="">
         </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>审计对象:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>审计性质:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>问题类型:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>问题定性:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>问题词条:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>整改情况:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>问题严重情况:
-        </label>
-        <div class="layui-input-inline">
-          <select name="contrller">
-            <option value="">请选择一个角色</option>
-            <option>系统管理员</option>
-            <option>管理员</option>
-            <option>审核人员</option>
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>整改建议:
-        </label>
-        <div class="layui-input-inline">
-          <input type="text" style="width:200px" placeholder="请输入问题名称" autocomplete="off" class="layui-input" value="">
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>问题描述:
-        </label>
-        <div class="layui-input-inline">
-          <textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <a>文件上传</a>
-        </label>
       </div>
 
+<!--      项目名称:<input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"-->
+<!--                  autocomplete="off" class="layui-input" value="">-->
+
+
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>问题定性:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>问题描述:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>可能影响:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="layui-form-item layui-form-text">-->
+<!--        <label for="desc" class="layui-form-label">-->
+<!--          <span class="x-red">*</span>整改建议:-->
+<!--        </label>-->
+<!--        <div class="layui-input-block">-->
+<!--          <textarea placeholder="整改建议" id="desc" name="desc" class="layui-textarea"></textarea>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>审计依据:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>审计分类:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>审计经验:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>风险评估:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <select name="contrller">-->
+<!--            <option value="">请选择一个角色</option>-->
+<!--            <option>系统管理员</option>-->
+<!--            <option>管理员</option>-->
+<!--            <option>审核人员</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
       <div class="layui-input-inline">
-        <label class="layui-form-label">
+        <label for="L_repass" class="layui-form-label">
         </label>
-        <button class="layui-btn" lay-filter="add" lay-submit="">
-          <i class="layui-icon">&#xe605;</i>提交
+        <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+          <i class="layui-icon">&#xe605;</i>添加
         </button>
+      </div>
+      <div class="layui-input-inline">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <a class="layui-btn" onclick="off()">
+          <i class="layui-icon">&#x1007;</i>取消
+        </a>
       </div>
 
     </form>
   </div>
   <script>
     layui.use(['form', 'layer'], function () {
-      $ = layui.jquery;
       var form = layui.form
-        , layer = layui.layer;
-
-
+              , layer = layui.layer;
+      $.ajax({
+        url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=1",
+        dataType: "json",
+        type: "get",
+        async: false,
+        success: function (resp) {
+          if (resp && 0 == resp.code) {
+            let data = resp.data;
+            let options = [];
+            options.push('<option value="" >请选择实施机构</option>')
+            data.forEach((Obj) => {
+              let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+              options.push(option);
+            })
+            $("#implementingAgencySelect").empty().append(options.join(""));
+          }
+        }
+      });
+      form.verify({
+        projectName: function (value, dom) {
+          if (value.length > 128) {
+            return '项目名称不能超过128个字符！'
+          }
+        }
+      })
+      form.render("select")
       //监听提交
-      form.on('submit(adduSER)', function (data) {
-        console.log(data);
-        //发异步，把数据提交给php
-        layer.alert("增加成功", { icon: 6 }, function () {
-          // 获得frame索引
-          var index = parent.layer.getFrameIndex(window.name);
-          //关闭当前frame
-          parent.layer.close(index);
-          // 可以对父窗口进行刷新 
-          x_admin_father_reload();
-        });
+      form.on('submit(addPlanCheckList)', function (data) {
+        let formData = form.val("planAddForm");
+        debugger
+        $.ajax({
+          url: '/audit-api/planManage/saveAndEditPlan',
+          type: 'POST',
+          dataType: "json",
+          data: formData,
+          success: function (resp) {
+            //发异步，把数据提交给php
+            if(0 == resp.code){
+              layer.alert("增加成功", {icon: 6}, function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                // 可以对父窗口进行刷新
+                x_admin_father_reload();
+              });
+            }else {
+              layer.alert("操作失败 "+resp.msg,{icon:2},function () {
+
+              })
+            }
+
+          },
+          error:function (error) {
+            layer.alert(error)
+          }
+        })
+
         return false;
       });
-
 
     });
     layui.use('laydate', function () {
@@ -223,10 +294,6 @@
         elem: '#start' //指定元素
       });
 
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start2' //指定元素
-      });
     });
   </script>
 <script>

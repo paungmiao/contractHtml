@@ -17,13 +17,13 @@
 <div class="x-body">
     <form class="layui-form" lay-filter="userAddForm">
 
-        问题分类:
+        问题词条:
         <div style="width:200px">
             <select name="categoryFk" lay-verify="required" lay-search lay-filter="categoryList" id="categorySelect">
             </select>
         </div>
         <br>
-        问题名称:<input name="name" type="text" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
+       词条名称:<input name="name" type="text" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
                     autocomplete="off" class="layui-input" value="">
         <br>
         增添说明:<textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea"></textarea>
@@ -85,6 +85,7 @@
         //监听提交
         form.on('submit(addEntry)', function (data) {
             let formData = form.val("userAddForm");
+            debugger
             $.ajax({
                 url: '/audit-api/entry/entries',
                 type: 'post',
@@ -124,11 +125,6 @@
         //执行一个laydate实例
         laydate.render({
             elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start2' //指定元素
         });
     });
 </script>
