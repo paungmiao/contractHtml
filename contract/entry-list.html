@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../layui/css/layui.css">
     <link rel="stylesheet" href="../css/JCheck.css">
     <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../js/common/dateFormat.js"></script>
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
@@ -110,6 +111,9 @@
                     field: 'createdTime',
                     title: '创建时间',
                     width: 200,
+                    templet:(data)=>{
+                        return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
+                    }
                 }, {
                     field: 'uploadMsg',
                     title: '操作',
