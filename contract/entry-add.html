@@ -2,98 +2,142 @@
 <html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
 
 <head>
-  <link rel="stylesheet" href="../css/font.css">
-  <link rel="stylesheet" href="../css/xadmin.css">
-  <link rel="stylesheet" href="../layui/css/layui.css">
-  <link rel="stylesheet" href="../css/JCheck.css">
-  <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
-  <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
-  <script type="text/javascript" src="../js/xadmin.js"></script>
-  <script type="text/javascript" src="../js/cookie.js"></script>
-  <script src="../js/JCheck.js"></script>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="../js/JCheck.js"></script>
 </head>
 
 <body>
-  <div class="x-body">
-    <form class="layui-form" id="userAddForm">
+<div class="x-body">
+    <form class="layui-form" lay-filter="userAddForm">
 
-      问题分类:
-      <div style="width:200px">
-        <select name="city" lay-verify="" lay-search>
-          <option value="">请选择一个类别</option>
-          <option value="010">项目类型</option>
-          <option value="021">项目名称</option>
-          <option value="0571">问题定性</option>
-        </select>
-      </div>
-      <br>
-      问题名称:<input type="text" style="width:200px" placeholder="请输入问题名称" autocomplete="off" class="layui-input" value="">
-      <br>
-      增添说明:<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
-      <br>
-      <br>
+        问题分类:
+        <div style="width:200px">
+            <select name="categoryFk" lay-verify="required" lay-search lay-filter="categoryList" id="categorySelect">
+            </select>
+        </div>
+        <br>
+        问题名称:<input name="name" type="text" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
+                    autocomplete="off" class="layui-input" value="">
+        <br>
+        增添说明:<textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea"></textarea>
+        <br>
+        <br>
 
-      <div class="layui-input-inline">
-        <label for="L_repass" class="layui-form-label">
-        </label>
-        <button class="layui-btn" lay-filter="add" lay-submit="">
-          <i class="layui-icon">&#xe605;</i>添加
-        </button>
-      </div>
-      <div class="layui-input-inline">
-        <label for="L_repass" class="layui-form-label">
-        </label>
-        <a class="layui-btn" onclick="off()">
-          <i class="layui-icon">&#x1007;</i>取消
-        </a>
-      </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-submit lay-filter="addEntry">
+                <i class="layui-icon">&#xe605;</i>添加
+            </button>
+        </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <a class="layui-btn" onclick="off()">
+                <i class="layui-icon">&#x1007;</i>取消
+            </a>
+        </div>
 
     </form>
-  </div>
-  <script>
+</div>
+<script>
     layui.use(['form', 'layer'], function () {
-      $ = layui.jquery;
-      var form = layui.form
-        , layer = layui.layer;
+        var form = layui.form
+            , layer = layui.layer;
+        $.ajax({
+            url: "/audit-api/entry/category/list",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择词条类型</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '"  level="' + Obj.level + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#categorySelect").empty().append(options.join(""));
+                }
+            }
+        })
+        form.verify({
+            remarks: function (value, dom) {
+                if (value.length > 128) {
+                    return '词条说明不能超过128个字符！'
+                }
+            },
+            name: function (value, dom) {
+                if (value.length > 32) {
+                    return '词条名称不能超过32个字符！'
+                }
+            }
+        })
+        form.render("select")
+        //监听提交
+        form.on('submit(addEntry)', function (data) {
+            let formData = form.val("userAddForm");
+            $.ajax({
+                url: '/audit-api/entry/entries',
+                type: 'post',
+                dataType: "json",
+                data: formData,
+                success: function (resp) {
+                    //发异步，把数据提交给php
+                    if(0 == resp.code){
+                        layer.alert("增加成功", {icon: 6}, function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            // 可以对父窗口进行刷新
+                            x_admin_father_reload();
+                        });
+                    }else {
+                        layer.alert("操作失败 "+resp.msg,{icon:2},function () {
 
+                        })
+                    }
 
-      //监听提交
-      form.on('submit(adduSER)', function (data) {
-        console.log(data);
-        //发异步，把数据提交给php
-        layer.alert("增加成功", { icon: 6 }, function () {
-          // 获得frame索引
-          var index = parent.layer.getFrameIndex(window.name);
-          //关闭当前frame
-          parent.layer.close(index);
-          // 可以对父窗口进行刷新 
-          x_admin_father_reload();
+                },
+                error:function (error) {
+                    layer.alert(error)
+                }
+            })
+
+            return false;
         });
-        return false;
-      });
 
 
     });
     layui.use('laydate', function () {
-      var laydate = layui.laydate;
+        var laydate = layui.laydate;
 
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start' //指定元素
-      });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
 
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start2' //指定元素
-      });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start2' //指定元素
+        });
     });
-  </script>
+</script>
 <script>
 
-  function off() {
-    var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-    parent.layer.close(index);		//关闭窗口
-  }
+    function off() {
+        var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        parent.layer.close(index);		//关闭窗口
+    }
 
 </script>
 

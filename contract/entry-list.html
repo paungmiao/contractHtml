@@ -43,7 +43,7 @@
                 </select>
             </div>
             词条名称：<input type="text" placeholder="请输入词条名称" id="entryName" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
@@ -137,16 +137,12 @@
             request: {
                 pageName: 'current' //页码的参数名称，默认：page
                 ,limitName: 'size' //每页数据量的参数名，默认：limit
-            },
-            where:{
-                categoryId:$("#categorySelect").val(),
-                name:$("#entryName").val()
             }
         });
-        form.on("submit()",function () {
+        form.on("submit(search)",function () {
             table.reload('test',{
                 where:{
-                    categoryId:$("#categorySelect").val(),
+                    categoryFk:$("#categorySelect").val(),
                     name:$("#entryName").val()
                 },
                 page:1
