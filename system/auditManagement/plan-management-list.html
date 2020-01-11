@@ -35,27 +35,8 @@
 <div class="x-body">
   <div class="layui-row">
     <form class="layui-form layui-col-md12 x-so" style="">
-
-      项目名称：
-      <div class="layui-input-inline" id="select1">
-
-        <select lay-verify="required">
-          <option value="">请选择项目名称</option>
-          <option>项目一</option>
-          <option>项目二</option>
-          <option>项目三</option>
-        </select>
-      </div>
-      审核状态：
-      <div class="layui-input-inline" id="select2">
-
-        <select lay-verify="required">
-          <option value="">请选择审核状态</option>
-          <option>审核通过</option>
-          <option>驳回</option>
-          <option>未审核</option>
-        </select>
-      </div>
+      问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
+      问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
 
       <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
     </form>
@@ -75,12 +56,13 @@
 </div>
 <script>
   var count = 0;
-  layui.use(['table'], function () {
-    var table = layui.table;
+  layui.use(['table','form'], function () {
+    let table = layui.table;
+    let form =layui.form
 
     table.render({
       elem: '#test',
-      url: '/audit-api/planManage/list',
+      url: '/audit-api/planManage/page',
       xhrFields: {
         withCredentials: true
       },
@@ -125,19 +107,46 @@
             return temp;
           }
           // sort: true
-        }, ]
+        },]
       ],
-      page: true
+      page: true,
+      parseData: function (res) { //res 即为原始返回的数据
+        return {
+          "code": res.code, //解析接口状态
+          "msg": res.msg, //解析提示文本
+          "count": res.data.total, //解析数据长度
+          "data": res.data.records //解析数据列表
+        };
+      },
+      page:1,
+      limit:15,
+      request: {
+        pageName: 'current', //页码的参数名称，默认：page
+        limitName: 'size' //每页数据量的参数名，默认：limit
+      },
+      where:{
+        problemCharacterization: $("#problemCharacterization").val()
+      }
     });
-    //监听行单击事件（双击事件为：rowDouble）
-    table.on('row(test)', function (obj) {
-      var data = obj.data;
-      count = data.ID;
-      //	var checkStatus = table.checkStatus(obj.config.id);
-      console.log("data:" + JSON.stringify(data.id))
-      //标注选中样式
-      obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-    });
+    form.on("submit()",function () {
+      table.reload('test',{
+        where:{
+          problemCharacterization:$("#problemCharacterization").val(),
+        },
+        page:1
+      });
+      return false;
+    })
+
+    // //监听行单击事件（双击事件为：rowDouble）
+    // table.on('row(test)', function (obj) {
+    //   var data = obj.data;
+    //   count = data.ID;
+    //   //	var checkStatus = table.checkStatus(obj.config.id);
+    //   console.log("data:" + JSON.stringify(data.id))
+    //   //标注选中样式
+    //   obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    // });
 
   });
 
