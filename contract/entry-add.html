@@ -15,9 +15,9 @@
 
 <body>
 <div class="x-body">
-    <form class="layui-form" lay-filter="userAddForm">
+    <form class="layui-form" lay-filter="entryAddForm">
 
-        问题词条:
+        词条类型:
         <div style="width:200px">
             <select name="categoryFk" lay-verify="required" lay-search lay-filter="categoryList" id="categorySelect">
             </select>
@@ -84,7 +84,7 @@
         form.render("select")
         //监听提交
         form.on('submit(addEntry)', function (data) {
-            let formData = form.val("userAddForm");
+            let formData = form.val("entryAddForm");
             debugger
             $.ajax({
                 url: '/audit-api/entry/entries',
