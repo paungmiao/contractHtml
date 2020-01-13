@@ -5,6 +5,8 @@
 //     }
 
 // };
+var role = 1;
+var username = "审计用户";
 
 $(function () {
 

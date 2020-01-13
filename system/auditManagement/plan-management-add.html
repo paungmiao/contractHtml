@@ -255,7 +255,7 @@
         let formData = form.val("planAddForm");
         debugger
         $.ajax({
-          url: '/audit-api/planManage/saveAndEditPlan',
+          url: '/audit-api/planManage/saveOrEditPlan',
           type: 'POST',
           dataType: "json",
           data: formData,
