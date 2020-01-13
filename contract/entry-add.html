@@ -15,7 +15,7 @@
 
 <body>
 <div class="x-body">
-    <form class="layui-form" lay-filter="entryAddForm">
+    <form class="layui-form" lay-filter="entryFlowAddForm">
 
         词条类型:
         <div style="width:200px">
@@ -23,7 +23,7 @@
             </select>
         </div>
         <br>
-       词条名称:<input name="name" type="text" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
+        词条名称:<input name="name" type="text" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
                     autocomplete="off" class="layui-input" value="">
         <br>
         增添说明:<textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea"></textarea>
@@ -33,7 +33,7 @@
         <div class="layui-input-inline">
             <label for="L_repass" class="layui-form-label">
             </label>
-            <button class="layui-btn" lay-submit lay-filter="addEntry">
+            <button class="layui-btn" lay-submit lay-filter="addEntryFlow">
                 <i class="layui-icon">&#xe605;</i>添加
             </button>
         </div>
@@ -69,6 +69,9 @@
                 }
             }
         })
+        form.on('input(test)', function (data) {
+            console.log(data);
+        });
         form.verify({
             remarks: function (value, dom) {
                 if (value.length > 128) {
@@ -76,24 +79,47 @@
                 }
             },
             name: function (value, dom) {
+                let result = '';
                 if (value.length > 32) {
-                    return '词条名称不能超过32个字符！'
+                    result = '词条名称不能超过32个字符！'
+                } else if (value.length > 0) {
+                    $.ajax({
+                        url: "/audit-api/entry/flow/checkName",
+                        type: "get",
+                        dataType: 'json',
+                        async: false,
+                        data: form.val('entryFlowAddForm'),
+                        success: function (resp) {
+                            if(0 == resp.code){
+                                if (resp.data) {
+                                    result = '词条名称重复！'
+                                }
+                            }else {
+                                result = resp.msg
+                            }
+
+                        }, error: function () {
+                            result = ("请求失败，请检查网络连接", {icon: 2})
+                        }
+                    })
+                }
+                if (result.length > 0) {
+                    return result
                 }
             }
         })
         form.render("select")
         //监听提交
-        form.on('submit(addEntry)', function (data) {
-            let formData = form.val("entryAddForm");
-            debugger
+        form.on('submit(addEntryFlow)', function (data) {
+            let formData = form.val("entryFlowAddForm");
             $.ajax({
-                url: '/audit-api/entry/entries',
+                url: '/audit-api/entry/flow/add',
                 type: 'post',
                 dataType: "json",
                 data: formData,
                 success: function (resp) {
                     //发异步，把数据提交给php
-                    if(0 == resp.code){
+                    if (0 == resp.code && resp.data) {
                         layer.alert("增加成功", {icon: 6}, function () {
                             // 获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
@@ -102,14 +128,14 @@
                             // 可以对父窗口进行刷新
                             x_admin_father_reload();
                         });
-                    }else {
-                        layer.alert("操作失败 "+resp.msg,{icon:2},function () {
+                    } else {
+                        layer.alert("操作失败 " + resp.msg, {icon: 2}, function () {
 
                         })
                     }
 
                 },
-                error:function (error) {
+                error: function (error) {
                     layer.alert(error)
                 }
             })

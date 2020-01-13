@@ -61,21 +61,21 @@
 </div>
 <script>
     var count = 0;
-    layui.use(['table','form'], function () {
+    layui.use(['table', 'form'], function () {
         let table = layui.table;
-        let form =layui.form
+        let form = layui.form
         $.ajax({
             url: "/audit-api/entry/category/list",
             dataType: "json",
             type: "get",
-            async:false,
+            async: false,
             success: function (resp) {
-                if(resp && 0==resp.code){
+                if (resp && 0 == resp.code) {
                     let data = resp.data;
                     let options = [];
                     options.push('<option value="" >请选择词条类型</option>')
-                    data.forEach((Obj,index)=>{
-                        let option = '<option value="'+Obj.id+'" >'+Obj.name+'</option>';
+                    data.forEach((Obj, index) => {
+                        let option = '<option value="' + Obj.id + '" >' + Obj.name + '</option>';
                         options.push(option);
                     })
                     $("#categorySelect").empty().append(options.join(""));
@@ -85,7 +85,7 @@
         form.render("select")
         table.render({
             elem: '#test',
-            url: '/audit-api/entry/page',
+            url: '/audit-api/entry/flow/page',
             xhrFields: {
                 withCredentials: true
             },
@@ -111,8 +111,25 @@
                     field: 'createdTime',
                     title: '创建时间',
                     width: 200,
-                    templet:(data)=>{
+                    templet: (data) => {
                         return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
+                    }
+                }, {
+                    field: 'auditStatus',
+                    title: '审核状态',
+                    width: 200,
+                    templet: (data) => {
+                        let temp ;
+                        let text ;
+                        if (undefined == data.auditStatus || data.auditStatus == 0) {
+                            text = '<span>待审核</span>';
+                        } else if (data.auditStatus == 1) {
+                            text = '<span style="color: #00FF00">通过</span>';
+                        } else if (data.auditStatus == 2){
+                            text = '<span style="color: red">拒绝</span>';
+                        }
+                        temp = '<div>' + text + '</div>'
+                        return temp;
                     }
                 }, {
                     field: 'uploadMsg',
@@ -120,8 +137,8 @@
                     width: 200,
                     templet: function (res) {
                         var temp = ``;
-                        temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','500','`+res.id+`')" >编辑</span>
-                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('`+res.id+`')">删除</span> `
+                        temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','500','` + res.id + `')" >编辑</span>
+                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
                         return temp;
                     }
                     // sort: true
@@ -136,20 +153,20 @@
                     "data": res.data.records //解析数据列表
                 };
             },
-            page:1,
-            limit:15,
+            page: 1,
+            limit: 15,
             request: {
                 pageName: 'current' //页码的参数名称，默认：page
-                ,limitName: 'size' //每页数据量的参数名，默认：limit
+                , limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
-        form.on("submit(search)",function () {
-            table.reload('test',{
-                where:{
-                    categoryFk:$("#categorySelect").val(),
-                    name:$("#entryName").val()
+        form.on("submit(search)", function () {
+            table.reload('test', {
+                where: {
+                    categoryFk: $("#categorySelect").val(),
+                    name: $("#entryName").val()
                 },
-                page:1
+                page: 1
             });
             return false;
         })
@@ -172,52 +189,69 @@
     function delete_(id) {
         layer.confirm('确认要删除吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功:'+id, {
-                icon: 1
-            });
+            $.ajax({
+                url: "/audit-api/entry/flow/" + id,
+                type: "delete",
+                dataType: 'json',
+                async: false,
+                success: function (resp) {
+                    if (resp.data) {
+                        layer.msg("删除成功", {icon: 1, duration: 1500})
+                        layui.use("table", function () {
+                            layui.table.reload('test')
+                        })
+                    }
+                }, error: function () {
+                    layer.msg("操作失败，请检查网络连接", {icon: 2})
+                }
+            })
         });
     }
 
-    function editPage_(title,url,w,h,id) {
-            if (title == null || title == '') {
-                title=false;
-            };
-            if (url == null || url == '') {
-                url="404.html";
-            };
-            if (w == null || w == '') {
-                w=($(window).width()*0.9);
-            };
-            if (h == null || h == '') {
-                h=($(window).height() - 50);
-            };
-            layer.open({
-                type: 2,
-                area: [w+'px', h +'px'],
-                fix: false, //不固定
-                maxmin: true,
-                shadeClose: true,
-                shade:0.4,
-                title: title,
-                content: url,
-                success: function(layero, index){
-                    //窗口加载成功刷新frame
-                    // location.replace(location.href);
-                    let body = layer.getChildFrame('body', index);
-                    let iframeWin = layero.find('iframe')[0];
-                    let inputData = body.find('#inputData');
-                    inputData.val(id);
-                    iframeWin.contentWindow.initEntryInfo();
-                },
-                cancel:function(){
-                    //关闭窗口之后刷新frame
-                    // location.replace(location.href);
-                },
-                end:function(){
-                    //窗口销毁之后刷新frame
-                    // location.replace(location.href);
-                }
-            });
+    function editPage_(title, url, w, h, id) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        ;
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        ;
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        ;
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        ;
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let iframeWin = layero.find('iframe')[0];
+                let inputData = body.find('#inputData');
+                inputData.val(id);
+                iframeWin.contentWindow.initEntryInfo();
+            },
+            cancel: function () {
+                //关闭窗口之后刷新frame
+                // location.replace(location.href);
+            },
+            end: function () {
+                //窗口销毁之后刷新frame
+                // location.replace(location.href);
+            }
+        });
     }
 </script>
 </body>

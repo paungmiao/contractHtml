@@ -39,15 +39,15 @@
       词条类型：
       <div class="layui-input-inline" id="select2">
 
-        <select id="" lay-verify="required">
+        <select id="" name="" lay-verify="required">
           <option value="">请选择用户行为</option>
-          <option>新增</option>
-          <option>修改</option>
-          <option>删除</option>
+          <option value="1">新增</option>
+          <option value="2">修改</option>
+          <option value="0">删除</option>
         </select>
       </div>
-      创建时间：<input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
-      —<input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+      创建时间：<input class="layui-input"  autocomplete="off" placeholder="开始日" name="startTime" id="start">
+      —<input class="layui-input" autocomplete="off" placeholder="截止日" name="endTime" id="end">
 
       <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
     </form>
@@ -150,13 +150,17 @@
     var laydate = layui.laydate;
 
     //执行一个laydate实例
-    laydate.render({
-      elem: '#start' //指定元素
+    let ins1 = laydate.render({
+      elem: '#start'
+      ,change: function(value, date, endDate){
+        ins1.hint(value); //在控件上弹出value值
+      }
     });
 
     //执行一个laydate实例
     laydate.render({
-      elem: '#end' //指定元素
+      elem: '#end' ,//指定元素
+      min: $("#start").val()
     });
   });
 </script>

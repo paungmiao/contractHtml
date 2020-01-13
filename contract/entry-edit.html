@@ -17,6 +17,7 @@
   <div class="x-body">
     <form class="layui-form" lay-filter="entryEditForm"  id="entryEditForm">
       <input id="inputData" name ="id" type="hidden">
+      <input id="revision" name ="revision" type="hidden">
       词条类型:
       <div style="width:200px">
         <select name="categoryFk" lay-verify="" lay-filter="categoryFilter" lay-search id="categorySelect">
@@ -77,8 +78,27 @@
           }
         },
         name: function (value, dom) {
+          let result = '';
           if (value.length > 32) {
-            return '词条名称不能超过32个字符！'
+            result = '词条名称不能超过32个字符！'
+          } else if (value.length > 0) {
+            $.ajax({
+              url: "/audit-api/entry/flow/checkName",
+              type: "get",
+              dataType: 'json',
+              async: false,
+              data: form.val('entryEditForm'),
+              success: function (resp) {
+                if (resp.data) {
+                  result = '词条名称重复！'
+                }
+              }, error: function () {
+                result = ("请求失败，请检查网络连接", {icon: 2})
+              }
+            })
+          }
+          if (result.length > 0) {
+            return result
           }
         }
       })
@@ -87,9 +107,8 @@
       //监听提交
       form.on('submit(update)', function (data) {
         console.log(data);
-        debugger
         $.ajax({
-          url: "/audit-api/entry/update",
+          url: "/audit-api/entry/flow/update",
           dataType: "json",
           type: "put",
           data:form.val("entryEditForm"),
@@ -141,7 +160,7 @@
   function initEntryInfo() {
     // 数据回显渲染
     $.ajax({
-      url: "/audit-api/entry/"+$("#inputData").val(),
+      url: "/audit-api/entry/flow/"+$("#inputData").val(),
       dataType: "json",
       type: "get",
       async: true,
