@@ -34,22 +34,22 @@
 </div>
 <div class="x-body">
   <div class="layui-row">
-    <form class="layui-form layui-col-md12 x-so" style="">
+    <form class="layui-form layui-col-md12 x-so" style="" lay-filter="auditEntrySearch">
 
       词条类型：
       <div class="layui-input-inline" id="select2">
 
-        <select id="" name="" lay-verify="required">
+        <select id="userOpt" name="userOpt" lay-verify="required">
           <option value="">请选择用户行为</option>
           <option value="1">新增</option>
           <option value="2">修改</option>
           <option value="0">删除</option>
         </select>
       </div>
-      创建时间：<input class="layui-input"  autocomplete="off" placeholder="开始日" name="startTime" id="start">
-      —<input class="layui-input" autocomplete="off" placeholder="截止日" name="endTime" id="end">
+      创建时间：<input class="layui-input"  autocomplete="off" placeholder="开始日" name="createdStart" id="start">
+      —<input class="layui-input" autocomplete="off" placeholder="截止日" name="createdEnd" id="end">
 
-      <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+      <button class="layui-btn" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
     </form>
   </div>
   <xblock>
@@ -66,42 +66,69 @@
 </div>
 <script>
   var count = 0;
-  layui.use(['table'], function () {
-    var table = layui.table;
-
+  layui.use(['table','form'], function () {
+    let table = layui.table;
+    let form = layui.form;
+    form.render();
     table.render({
       elem: '#test',
-      url: '../json/flow.json',
+      url: '/audit-api/entry/flow/page',
       xhrFields: {
         withCredentials: true
       },
       cols: [
         [{
-          field: 'empno',
-          title: '序号',
+          field: 'typeCode',
+          title: '类型编码',
           width: 200
         }, {
-          field: 'name',
+          field: 'categoryName',
           title: '词条类型',
           width: 120,
         }, {
-          field: 'type',
+          field: 'name',
           title: '词条名称',
           width: 120,
         }, {
-          field: 'behavior',
+          field: 'userOpt',
           title: '用户行为',
           width: 120,
+          templet: (data) => {
+            let temp ;
+            let text ;
+            if (undefined == data.userOpt || data.userOpt == 0) {
+              text = '<span style="color: red">删除</span>';
+            } else if (data.userOpt == 1) {
+              text = '<span style="color: #00FF00">新增</span>';
+            } else if (data.userOpt == 2){
+              text = '<span >修改</span>';
+            }
+            temp = '<div>' + text + '</div>'
+            return temp;
+          }
         }, {
-          field: 'status',
+          field: 'auditStatus',
           title: '审核状态',
-          width:150,
+          width: 150,
+          templet: (data) => {
+            let temp ;
+            let text ;
+            if (undefined == data.auditStatus || data.auditStatus == 0) {
+              text = '<span>待审核</span>';
+            } else if (data.auditStatus == 1) {
+              text = '<span style="color: #00FF00">通过</span>';
+            } else if (data.auditStatus == 2){
+              text = '<span style="color: red">拒绝</span>';
+            }
+            temp = '<div>' + text + '</div>'
+            return temp;
+          }
         },{
-          field: 'wps',
+          field: 'createdBy',
           title: '创建人',
           width: 120
         }, {
-          field: 'date',
+          field: 'createdTime',
           title: '创建时间',
           width:200,
         }, {
@@ -118,8 +145,42 @@
           // sort: true
         }, ]
       ],
-      page: true
+      page: true,
+      where: {
+        userOpt: $("#entryName").val(),
+        createdStart: $("#start").val(),
+        createdEnd: $("#end").val(),
+        auditStatus: 0,
+        userOpt:$("#userOpt").val()
+      },
+      page: true,
+      parseData: function (res) { //res 即为原始返回的数据
+        return {
+          "code": res.code, //解析接口状态
+          "msg": res.msg, //解析提示文本
+          "count": res.data.total, //解析数据长度
+          "data": res.data.records //解析数据列表
+        };
+      },
+      request: {
+        pageName: 'current' //页码的参数名称，默认：page
+        , limitName: 'size' //每页数据量的参数名，默认：limit
+      }
     });
+    form.on("submit(sreach)", function () {
+      table.reload('test', {
+        where: {
+          userOpt: $("#entryName").val(),
+          createdStart: $("#start").val(),
+          createdEnd: $("#end").val(),
+          auditStatus: 0,
+          userOpt:$("#userOpt").val()
+        },
+        page: 1
+      });
+      return false;
+    })
+
     //监听行单击事件（双击事件为：rowDouble）
     table.on('row(test)', function (obj) {
       var data = obj.data;

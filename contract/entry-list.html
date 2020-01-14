@@ -131,7 +131,25 @@
                         temp = '<div>' + text + '</div>'
                         return temp;
                     }
-                }, {
+                },  {
+                    field: 'userOpt',
+                    title: '用户行为',
+                    width: 200,
+                    templet: (data) => {
+                        let temp ;
+                        let text ;
+                        if (undefined == data.userOpt || data.userOpt == 0) {
+                            text = '<span style="color: red">删除</span>';
+                        } else if (data.userOpt == 1) {
+                            text = '<span style="color: #00FF00">新增</span>';
+                        } else if (data.userOpt == 2){
+                            text = '<span >修改</span>';
+                        }
+                        temp = '<div>' + text + '</div>'
+                        return temp;
+                    }
+                },
+                    {
                     field: 'uploadMsg',
                     title: '操作',
                     width: 200,
@@ -154,7 +172,6 @@
                 };
             },
             page: 1,
-            limit: 15,
             request: {
                 pageName: 'current' //页码的参数名称，默认：page
                 , limitName: 'size' //每页数据量的参数名，默认：limit
@@ -190,7 +207,7 @@
         layer.confirm('确认要删除吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/entry/flow/" + id,
+                url: "/audit-api/entry/flow/user_delete/" + id,
                 type: "delete",
                 dataType: 'json',
                 async: false,
@@ -200,8 +217,12 @@
                         layui.use("table", function () {
                             layui.table.reload('test')
                         })
+                    }else{
+                        debugger
+                        layer.msg(resp.msg, {icon: 2})
                     }
-                }, error: function () {
+                }, error: function (resp) {
+                    debugger
                     layer.msg("操作失败，请检查网络连接", {icon: 2})
                 }
             })
