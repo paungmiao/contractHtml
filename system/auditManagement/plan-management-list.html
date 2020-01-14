@@ -49,8 +49,6 @@
   </div>
   <xblock>
     <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','600','460')"><i class="layui-icon" ></i>新增</button>
-    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>修改</button>
-    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>删除</button>
     <button class="layui-btn" onclick=""><i class="layui-icon" ></i>上报计划</button>
 
   </xblock>
@@ -105,11 +103,11 @@
           title: '实施机构',
           width: 120,
         }, {
-          field: 'auditObject',
+          field: 'auditObjectId',
           title: '审计对象',
           width: 120,
         }, {
-          field: 'auditNature',
+          field: 'auditNatureId',
           title: '审计性质',
           width: 180,
         }, {
@@ -127,7 +125,7 @@
           templet: function (res) {
             debugger;
             var temp = ``;
-            temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="" >详情</span>
+            temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','`+res.id+`', 'readOnly')" >详情</span>
                     <span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','`+res.id+`')" >编辑</span>
                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('`+res.id+`')">删除</span> `
             return temp;
@@ -207,7 +205,7 @@
     });
   }
 
-  function editPage_(title,url,w,h,id) {
+  function editPage_(title,url,w,h,id,readOnly) {
     if (title == null || title == '') {
       title=false;
     };
@@ -234,7 +232,9 @@
         // location.replace(location.href);
         let body = layer.getChildFrame('body', index);
         let iframeWin = layero.find('iframe')[0];
+        let readOnlyData = body.find('#readOnlyData');
         let inputData = body.find('#inputData');
+        readOnlyData.val(readOnly);
         inputData.val(id);
         iframeWin.contentWindow.initEntryInfo();
       },
