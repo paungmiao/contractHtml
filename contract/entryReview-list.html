@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../layui/css/layui.css">
   <link rel="stylesheet" href="../css/JCheck.css">
   <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="../js/common/dateFormat.js"></script>
   <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
   <script type="text/javascript" src="../js/xadmin.js"></script>
   <script type="text/javascript" src="../js/cookie.js"></script>
@@ -39,7 +40,7 @@
       词条类型：
       <div class="layui-input-inline" id="select2">
 
-        <select id="userOpt" name="userOpt" lay-verify="required">
+        <select id="userOpt" name="userOpt">
           <option value="">请选择用户行为</option>
           <option value="1">新增</option>
           <option value="2">修改</option>
@@ -53,9 +54,9 @@
     </form>
   </div>
   <xblock>
-    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>待审核</button>
-    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>驳回</button>
-    <button class="layui-btn" onclick=""><i class="layui-icon" ></i>审核通过</button>
+    <button class="layui-btn" onclick="searchByAuditStatus(0)"><i class="layui-icon" ></i>待审核</button>
+    <button class="layui-btn" onclick="searchByAuditStatus(2)"><i class="layui-icon" ></i>驳回</button>
+    <button class="layui-btn" onclick="searchByAuditStatus(1)"><i class="layui-icon" ></i>审核通过</button>
 
   </xblock>
   <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
@@ -97,9 +98,9 @@
             let temp ;
             let text ;
             if (undefined == data.userOpt || data.userOpt == 0) {
-              text = '<span style="color: red">删除</span>';
+              text = '<span >删除</span>';
             } else if (data.userOpt == 1) {
-              text = '<span style="color: #00FF00">新增</span>';
+              text = '<span >新增</span>';
             } else if (data.userOpt == 2){
               text = '<span >修改</span>';
             }
@@ -116,7 +117,7 @@
             if (undefined == data.auditStatus || data.auditStatus == 0) {
               text = '<span>待审核</span>';
             } else if (data.auditStatus == 1) {
-              text = '<span style="color: #00FF00">通过</span>';
+              text = '<span style="color: #1E9FFF">通过</span>';
             } else if (data.auditStatus == 2){
               text = '<span style="color: red">拒绝</span>';
             }
@@ -131,15 +132,18 @@
           field: 'createdTime',
           title: '创建时间',
           width:200,
+          templet: (data) => {
+            return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
+          }
         }, {
           field: 'uploadMsg',
           title: '操作',
           width: 260,
           templet: function (res) {
             var temp = ``;
-            temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="" >审核通过</span>
-                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="">驳回</span>
-                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="">详情</span> `
+            temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="pass_(\''+res.instanceId+'\' )">审核通过</span>' +
+                    '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="reject_(\''+res.instanceId+'\')">驳回</span>' +
+                    '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="">详情</span> '
             return temp;
           }
           // sort: true
@@ -150,7 +154,6 @@
         userOpt: $("#entryName").val(),
         createdStart: $("#start").val(),
         createdEnd: $("#end").val(),
-        auditStatus: 0,
         userOpt:$("#userOpt").val()
       },
       page: true,
@@ -173,7 +176,6 @@
           userOpt: $("#entryName").val(),
           createdStart: $("#start").val(),
           createdEnd: $("#end").val(),
-          auditStatus: 0,
           userOpt:$("#userOpt").val()
         },
         page: 1
@@ -198,30 +200,70 @@
 </script>
 
 <script>
-  function delete_() {
-    layer.confirm('确认要删除吗？', function (index) {
-      //捉到所有被选中的，发异步进行删除
-      layer.msg('删除成功', {
-        icon: 1
+  function pass_(instanceId) {
+    if(!instanceId){
+      return layer.msg("参数错误！",{icon:2})
+    }
+    $.ajax({
+      url: "/audit-api/entry/flow/pass/"+instanceId,
+      dataType: "json",
+      type: "put",
+      async: false,
+      success: function (resp) {
+        if (resp && 0 == resp.code) {
+          searchByAuditStatus();
+        }else {
+          layer.msg("办理失败 "+resp.msg,{icon:6})
+        }
+      }
+    })
+  }
+  function reject_(instanceId) {
+    if(!instanceId){
+      return layer.msg("参数错误！",{icon:2})
+    }
+    $.ajax({
+      url: "/audit-api/entry/flow/reject/"+instanceId,
+      dataType: "json",
+      type: "put",
+      async: false,
+      success: function (resp) {
+        if (resp && 0 == resp.code) {
+          searchByAuditStatus();
+        }else {
+          layer.msg("办理失败 "+resp.msg,{icon:6})
+        }
+      }
+    })
+  }
+  // 根据审核状态查询
+  function searchByAuditStatus(auditStatus) {
+    layui.use("table",function () {
+      layui.table.reload('test', {
+        where: {
+          userOpt: $("#entryName").val(),
+          createdStart: $("#start").val(),
+          createdEnd: $("#end").val(),
+          auditStatus: auditStatus,
+          userOpt:$("#userOpt").val()
+        },
+        page: 1
       });
-    });
+    })
   }
 
   layui.use('laydate', function () {
     var laydate = layui.laydate;
+    var layer = layui.layer;
 
     //执行一个laydate实例
     let ins1 = laydate.render({
-      elem: '#start'
-      ,change: function(value, date, endDate){
-        ins1.hint(value); //在控件上弹出value值
-      }
+      elem: '#start',
     });
 
     //执行一个laydate实例
-    laydate.render({
-      elem: '#end' ,//指定元素
-      min: $("#start").val()
+    let ins2 =laydate.render({
+      elem: '#end' ,//指定元素,
     });
   });
 </script>

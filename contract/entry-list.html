@@ -124,26 +124,9 @@
                         if (undefined == data.auditStatus || data.auditStatus == 0) {
                             text = '<span>待审核</span>';
                         } else if (data.auditStatus == 1) {
-                            text = '<span style="color: #00FF00">通过</span>';
+                            text = '<span style="color: #1E9FFF">通过</span>';
                         } else if (data.auditStatus == 2){
                             text = '<span style="color: red">拒绝</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
-                    }
-                },  {
-                    field: 'userOpt',
-                    title: '用户行为',
-                    width: 200,
-                    templet: (data) => {
-                        let temp ;
-                        let text ;
-                        if (undefined == data.userOpt || data.userOpt == 0) {
-                            text = '<span style="color: red">删除</span>';
-                        } else if (data.userOpt == 1) {
-                            text = '<span style="color: #00FF00">新增</span>';
-                        } else if (data.userOpt == 2){
-                            text = '<span >修改</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
