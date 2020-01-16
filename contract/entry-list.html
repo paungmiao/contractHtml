@@ -114,6 +114,23 @@
                     templet: (data) => {
                         return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
                     }
+                },{
+                    field: 'userOpt',
+                    title: '用户行为',
+                    width: 120,
+                    templet: (data) => {
+                        let temp ;
+                        let text ;
+                        if (undefined == data.userOpt || data.userOpt == 0) {
+                            text = '<span >删除</span>';
+                        } else if (data.userOpt == 1) {
+                            text = '<span >新增</span>';
+                        } else if (data.userOpt == 2){
+                            text = '<span >修改</span>';
+                        }
+                        temp = '<div>' + text + '</div>'
+                        return temp;
+                    }
                 }, {
                     field: 'auditStatus',
                     title: '审核状态',
