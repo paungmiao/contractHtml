@@ -49,7 +49,7 @@
     </div>
     <xblock>
         <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
-        <button class="layui-btn" onclick=""><i class="layui-icon"></i>上报计划</button>
+        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
@@ -62,22 +62,6 @@
 
     var count = 0;
     layui.use(['table', 'form'], function () {
-        debugger;
-        //查询条件
-        var where = {};
-        //根据角色屏蔽菜单
-        if (role != 1) {
-            $("xblock").css('display','none');
-            where = {projectName: $("#projectName").val(),
-                leaderStatus: $("#stateSelect").val(),
-                problemCharacterization: $("#problemCharacterization").val(),
-                problemDescription: $("#problemDescription").val()}
-        } else {
-            where = {projectName: $("#projectName").val(),
-                normalStatus: $("#stateSelect").val(),
-                problemCharacterization: $("#problemCharacterization").val(),
-                problemDescription: $("#problemDescription").val()}
-        }
 
         let table = layui.table;
         let form = layui.form
@@ -103,11 +87,14 @@
         table.render({
             elem: '#test',
             url: '/audit-api/auditPlan/page',
+            id: 'queryList',
             xhrFields: {
                 withCredentials: true
             },
             cols: [
-                [{
+                [
+                {type: 'checkbox', fixed: 'left'},
+                {
                     field: 'planCheckList.projectCode',
                     title: '项目编号',
                     width: 200,
@@ -160,34 +147,13 @@
                         return temp;
                     }
                 }, {
-                    field: 'leaderStatus',
-                    title: '状态',
-                    width: 80,
-                    templet: (data) => {
-                        let temp ;
-                        let text ;
-                        if (undefined == data.leaderStatus) {
-                            text = '<span>看不了</span>';
-                        } else if (data.leaderStatus == 1005){
-                            text = '<span style="color: red">待审核</span>';
-                        } else if (data.leaderStatus == 1006){
-                            text = '<span style="color: red">被驳回</span>';
-                        } else if (data.leaderStatus == 1007){
-                            text = '<span style="color: red">已批准</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
-                    }
-                }, {
                     field: '',
                     title: '操作',
                     width: 240,
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        if (role == 1) {
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `')" >编辑</span>
                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
-                        }
                         return temp;
                     }
                     // sort: true
@@ -208,16 +174,9 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {projectName: $("#projectName").val(),
-                normalStatus: $("#stateSelect").val(),
-                problemCharacterization: $("#problemCharacterization").val(),
-                problemDescription: $("#problemDescription").val()},
+            where: {roleId: '1'},
+
             done: function (res, curr, count) {
-                if (role == 1) {
-                    $("[data-field='leaderStatus']").css('display','none'); //关键代码
-                } else {
-                    $("[data-field='normalStatus']").css('display','none'); //关键代码
-                }
 
             }
         });
@@ -253,6 +212,36 @@
 
         });
     }
+
+    function reportPlan() {
+        layer.confirm('确认要上报计划吗？', function (index) {
+            let table = layui.table;
+            var checkStatus = table.checkStatus('queryList');
+            var ids = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            ids = ids.join(",");
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/audit-api/auditPlan/reportPlan",
+                type: 'POST',
+                dataType: "json",
+                data: {ids: ids, roleId: "1"},
+                success: function (resp) {
+                    layer.alert("上报计划成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
+        });
+    }
+
 
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
