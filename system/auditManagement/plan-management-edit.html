@@ -15,8 +15,11 @@
 
 <body>
 <div class="x-body">
+
+    <form class="layui-form" lay-filter="editForm">
+        <input id="inputData" name ="id" type="hidden">
+    </form>
   <form class="layui-form" lay-filter="planEditForm">
-      <input id="inputData" name ="id" type="hidden">
       <input id="readOnlyData" type="hidden">
       <div class="layui-form-item">
         <label  class="layui-form-label">
@@ -35,126 +38,126 @@
           </select>
         </div>
       </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>审计对象:
-          </label>
-          <div class="layui-input-inline">
-              <select id="auditObjectIdSelect" name="auditObjectId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>审计性质:
-          </label>
-          <div class="layui-input-inline">
-              <select id="auditNatureIdSelect" name="auditNatureId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>问题词条:
-          </label>
-          <div class="layui-input-inline">
-              <select id="questionEntryIdSelect" name="questionEntryId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>问题严重程度:
-          </label>
-          <div class="layui-input-inline">
-              <select id="problemSeverityIdSelect" name="problemSeverityId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>整改情况:
-          </label>
-          <div class="layui-input-inline">
-              <select id="rectifySituationIdSelect" name="rectifySituationId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>项目名称:
-        </label>
-        <div class="layui-input-inline">
-          <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"
-                 autocomplete="off" class="layui-input" value="">
-        </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>问题定性:
-          </label>
-          <div class="layui-input-inline">
-              <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" value="">
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>问题描述:
-          </label>
-          <div class="layui-input-inline">
-              <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="">
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>可能影响:
-          </label>
-          <div class="layui-input-inline">
-              <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="">
-          </div>
-      </div>
-      <div class="layui-form-item layui-form-text">
-          <label class="layui-form-label">
-              <span class="x-red">*</span>整改建议:
-          </label>
-          <div class="layui-input-block">
-              <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>审计依据:
-          </label>
-          <div class="layui-input-inline">
-              <input name="auditBasis" type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>审计分类:
-          </label>
-          <div class="layui-input-inline">
-              <select id="auditClassificationIdSelect" name="auditClassificationId">
-              </select>
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>审计经验:
-          </label>
-          <div class="layui-input-inline">
-              <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
-          </div>
-      </div>
-      <div class="layui-form-item">
-          <label  class="layui-form-label">
-              <span class="x-red">*</span>风险评估:
-          </label>
-          <div class="layui-input-inline">
-              <select id="riskAssessmentIdSelect" name="riskAssessmentId">
-              </select>
-          </div>
-      </div>
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>审计对象:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="auditObjectIdSelect" name="auditObjectId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>审计性质:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="auditNatureIdSelect" name="auditNatureId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>问题词条:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="questionEntryIdSelect" name="questionEntryId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>问题严重程度:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="problemSeverityIdSelect" name="problemSeverityId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>整改情况:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="rectifySituationIdSelect" name="rectifySituationId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--        <label  class="layui-form-label">-->
+<!--          <span class="x-red">*</span>项目名称:-->
+<!--        </label>-->
+<!--        <div class="layui-input-inline">-->
+<!--          <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"-->
+<!--                 autocomplete="off" class="layui-input" value="">-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>问题定性:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" value="">-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>问题描述:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="">-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>可能影响:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="">-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item layui-form-text">-->
+<!--          <label class="layui-form-label">-->
+<!--              <span class="x-red">*</span>整改建议:-->
+<!--          </label>-->
+<!--          <div class="layui-input-block">-->
+<!--              <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>审计依据:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <input name="auditBasis" type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>审计分类:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="auditClassificationIdSelect" name="auditClassificationId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>审计经验:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="layui-form-item">-->
+<!--          <label  class="layui-form-label">-->
+<!--              <span class="x-red">*</span>风险评估:-->
+<!--          </label>-->
+<!--          <div class="layui-input-inline">-->
+<!--              <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
+<!--              </select>-->
+<!--          </div>-->
+<!--      </div>-->
 
 
       <div class="layui-input-inline">
@@ -325,12 +328,17 @@
 
       //监听提交
       form.on('submit(addPlanCheckList)', function (data) {
-          let formData = form.val("planEditForm");
+          var EditForm = form.val("editForm");
+          var planEditForm = form.val("planEditForm");
+          EditForm.planCheckList = planEditForm;
+          var json = JSON.stringify(EditForm);
+          var obj = JSON.parse(json);
+          debugger;
           $.ajax({
-              url: '/audit-api/planManage/saveOrEditPlan',
+              url: '/audit-api/auditPlan/saveOrUpdate',
               type: 'POST',
               dataType: "json",
-              data: formData,
+              data: obj,
               success: function (resp) {
                   //发异步，把数据提交给php
                   if(0 == resp.code){
@@ -376,13 +384,15 @@
   function initEntryInfo() {
     // 数据回显渲染
     $.ajax({
-      url: "/audit-api/planManage/"+$("#inputData").val(),
+      url: "/audit-api/auditPlan/"+$("#inputData").val()+"?roleId=1",
       dataType: "json",
       type: "get",
       async: true,
       success: function (resp) {
+          debugger;
         layui.use('form',function () {
-          layui.form.val('planEditForm',resp.data)
+          layui.form.val('editForm',resp.data)
+          layui.form.val('planEditForm',resp.data.planCheckList)
         })
 
       }

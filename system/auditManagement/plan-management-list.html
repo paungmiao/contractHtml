@@ -102,23 +102,32 @@
         form.render("select")
         table.render({
             elem: '#test',
-            url: '/audit-api/planManage/page',
+            url: '/audit-api/auditPlan/page',
             xhrFields: {
                 withCredentials: true
             },
             cols: [
                 [{
-                    field: 'projectCode',
+                    field: 'planCheckList.projectCode',
                     title: '项目编号',
-                    width: 200
+                    width: 200,
+                    templet: (data) => {
+                        return data.planCheckList.projectCode;
+                    }
                 }, {
-                    field: 'projectName',
+                    field: 'planCheckList.projectName',
                     title: '项目名称',
                     width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.projectName;
+                    }
                 }, {
-                    field: 'implementingAgencyId',
+                    field: 'planCheckList.implementingAgencyId',
                     title: '实施机构',
                     width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.implementingAgencyId;
+                    }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
@@ -132,19 +141,19 @@
                     title: '年度',
                     width: 120,
                 }, {
-                    field: 'normalStatus',
+                    field: 'status',
                     title: '状态',
                     width: 80,
                     templet: (data) => {
                         let temp ;
                         let text ;
-                        if (undefined == data.normalStatus || data.normalStatus == 1001) {
+                        if (undefined == data.status || data.status == 1001) {
                             text = '<span>未呈批</span>';
-                        } else if (data.normalStatus == 1002) {
+                        } else if (data.status == 1002) {
                             text = '<span style="color: #28ff34">待审核</span>';
-                        } else if (data.normalStatus == 1003){
+                        } else if (data.status == 1003){
                             text = '<span style="color: red">已批准</span>';
-                        } else if (data.normalStatus == 1004){
+                        } else if (data.status == 1004){
                             text = '<span style="color: red">被驳回</span>';
                         }
                         temp = '<div>' + text + '</div>'
@@ -199,7 +208,10 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: where,
+            where: {projectName: $("#projectName").val(),
+                normalStatus: $("#stateSelect").val(),
+                problemCharacterization: $("#problemCharacterization").val(),
+                problemDescription: $("#problemDescription").val()},
             done: function (res, curr, count) {
                 if (role == 1) {
                     $("[data-field='leaderStatus']").css('display','none'); //关键代码
@@ -211,7 +223,10 @@
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: where,
+                where: {projectName: $("#projectName").val(),
+                    normalStatus: $("#stateSelect").val(),
+                    problemCharacterization: $("#problemCharacterization").val(),
+                    problemDescription: $("#problemDescription").val()},
                 page: 1
             });
             return false;
