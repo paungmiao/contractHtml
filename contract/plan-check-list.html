@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../js/common/dateFormat.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">审计分析</a>
+      <a>
+        <cite>审计统计分析</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so" style="" id="filterForm" action="/audit-api/export/exportExcel"  method="post" ENCTYPE="application/vnd.ms-excel">
+            项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" name="projectName" autocomplete="off" class="layui-input">
+            问题清单：<input type="text" placeholder="请输入问题清单" id="problemDescription" name="problemDescription" autocomplete="off" class="layui-input">
+            <div class="layui-collapse" lay-filter="test">
+                <div class="layui-colla-item">
+                    <h5 class="layui-colla-title">更多查询条件</h5>
+                    <div class="layui-colla-content">
+                        审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off" class="layui-input">
+                        实施机构：
+                        <div class="layui-input-inline">
+                            <select id="implementingAgencySelect" name="implementingAgencyId" >
+                            </select>
+                        </div>
+                        项目类型：<input type="text" placeholder="请输入项目类型" id="projectName3" name="projectName3" autocomplete="off" class="layui-input">
+                        审计性质：
+                        <div class="layui-input-inline">
+                            <select id="auditNatureSelect" name="auditNatureId" >
+                            </select>
+                        </div>
+                        审计对象：
+                        <div class="layui-input-inline">
+                            <select id="auditObjectSelect" name="auditObjectId" >
+                            </select>
+                        </div>
+                        <br/>
+                        问题词条：<input type="text" placeholder="请输入问题词条" id="projectName6" name="projectName6" autocomplete="off" class="layui-input">
+                        严重程度：
+                        <div class="layui-input-inline">
+                            <select id="problemSeveritySelect" name="problemSeverityId" >
+                            </select>
+                        </div>
+                        整改情况：
+                        <div class="layui-input-inline">
+                            <select id="rectifySituationSelect" name="rectifySituationId" >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+        <button class="layui-btn" onclick="exportData()">
+            <i class="layui-icon"></i>导出
+        </button>
+
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+    </table>
+
+
+</div>
+<script>
+    function exportData() {
+        $("#filterForm").submit();
+    };
+    function findEntryByCategory(categoryId,eleId){
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId="+categoryId,
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计性质</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#"+eleId).empty().append(options.join(""));
+                }
+            }
+        });
+    }
+    layui.use(['table', 'form'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        findEntryByCategory(1,"implementingAgencySelect");
+        findEntryByCategory(2,"auditObjectSelect");
+        findEntryByCategory(4,"auditNatureSelect");
+        findEntryByCategory(5,"problemSeveritySelect");
+        findEntryByCategory(6,"rectifySituationSelect");
+        form.render("select")
+        table.render({
+            elem: '#test',
+            url: '/audit-api/planManage/planList',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [{
+                    field: 'project_name',
+                    title: '项目名称',
+                    width: 200
+                }, {
+                    field: 'problem_characterization',
+                    title: '问题定性',
+                    width: 150,
+                }, {
+                    field: 'problem_description',
+                    title: '问题描述',
+                    width: 200,
+                }, {
+                    field: 'problem_severity_name',
+                    title: '严重程度',
+                    width: 120,
+                }, {
+                    field: 'agency_name',
+                    title: '机构名称',
+                    width: 120,
+                }, {
+                    field: 'audit_object_name',
+                    title: '审计对象',
+                    width: 120,
+                }, {
+                    field: 'audit_nature_name',
+                    title: '审计性质',
+                    width: 180,
+                }, {
+                    field: 'audit_year',
+                    title: '年度',
+                    width: 120,
+                }, {
+                    field: 'agency_name',
+                    title: '机构名称',
+                    width: 120,
+                }, {
+                    field: 'rectify_situation_name',
+                    title: '整改方案',
+                    width: 120,
+                }, {
+                    field: 'risk_assessment_name',
+                    title: '风险评估',
+                    width: 120,
+                }/*, {
+                    field: 'createdBy',
+                    title: '创建人',
+                    width: 150
+                }, {
+                    field: 'createdTime',
+                    title: '创建时间',
+                    width: 200,
+                    templet: (data) => {
+                        return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
+                    }
+                }*/]
+            ],
+            page: true,
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            },
+            page: 1,
+            request: {
+                pageName: 'current' //页码的参数名称，默认：page
+                , limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+        });
+        form.on("submit(search)", function () {
+            table.reload('test', {
+                where: {
+                    projectName: $("#projectName").val(),
+                    problemDescription: $("#problemDescription").val(),
+                    auditYear: $("#auditYear").val(),
+                    implementingAgencyId: $("#implementingAgencySelect").val(),
+                    auditNatureId: $("#auditNatureSelect").val(),
+                    auditObjectId: $("#auditObjectSelect").val(),
+                    problemSeverityId: $("#problemSeveritySelect").val(),
+                    rectifySituationId: $("#rectifySituationSelect").val()
+                },
+                page: 1
+            });
+            return false;
+        })
+
+
+    });
+
+
+</script>
+</body>
+
+</html>
