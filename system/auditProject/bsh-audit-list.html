@@ -125,12 +125,18 @@
                     templet: (data) => {
                         let temp;
                         let text;
-                        if (undefined == data.status || data.status == 1026) {
-                            text = '<span>待审核</span>';
-                        } else if (data.status == 1027) {
+                        if (undefined == data.status || data.status == 1004) {
+                            text = '<span>待完善</span>';
+                        } else if (data.status == 1001) {
+                            text = '<span style="color: #28ff34">待审核</span>';
+                        } else if (data.status == 1002) {
                             text = '<span style="color: #28ff34">已驳回</span>';
-                        } else if (data.status == 1028) {
+                        } else if (data.status == 1003) {
                             text = '<span style="color: red">已批准</span>';
+                        } else if (data.status == 1005) {
+                            text = '<span style="color: red">批准待整改</span>';
+                        } else if (data.status == 1006) {
+                            text = '<span style="color: red">待归档</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -141,8 +147,16 @@
                     width: 240,
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
+                        if (undefined == res.status || res.status == 1004) {
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="improvePlan('` + res.id + `')" >完善问题</span>`
+                        } else if (res.status == 1005) {
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >提审</span>`
+                        } else if (res.status == 1001) {
+
+                        } else {
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
                         <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
+                        }
                         return temp;
                     }
                     // sort: true
@@ -181,14 +195,32 @@
 
 <script>
 
-    function approvalPlan(id) {
+    function improvePlan(id) {
+        layer.confirm('确认要批准计划吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/audit-api/auditProject/improvePlan",
+                type: 'POST',
+                dataType: "json",
+                data: {id: id, roleId: "4"},
+                success: function (resp) {
+                    layer.alert("批准计划成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
+        });
+    }
+
+    function approvalPlan(id, status) {
         layer.confirm('确认要批准计划吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
                 url: "/audit-api/auditProject/approvalPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: "4", status: status},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);

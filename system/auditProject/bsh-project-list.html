@@ -125,16 +125,18 @@
                     templet: (data) => {
                         let temp;
                         let text;
-                        if (undefined == data.status || data.status == 1021) {
-                            text = '<span>待整改</span>';
-                        } else if (data.status == 1022) {
-                            text = '<span style="color: #28ff34">待审批</span>';
-                        } else if (data.status == 1023) {
+                        if (undefined == data.status || data.status == 1006) {
+                            text = '<span>待完善</span>';
+                        } else if (data.status == 1001) {
+                            text = '<span style="color: #28ff34">整改中</span>';
+                        } else if (data.status == 1003) {
                             text = '<span style="color: red">被驳回</span>';
-                        } else if (data.status == 1024) {
+                        } else if (data.status == 1004) {
                             text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1025) {
+                        } else if (data.status == 1005) {
                             text = '<span style="color: red">已完成</span>';
+                        } else if (data.status == 1002) {
+                            text = '<span style="color: red">整改完成待审核</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -145,8 +147,11 @@
                     width: 240,
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
+                        if (undefined == res.status || res.status == 1006) {
+
+                        } else if (res.status == 1001) {
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >整改完成提审</span>`
+                        }
                         return temp;
                     }
                     // sort: true
@@ -185,14 +190,14 @@
 
 <script>
 
-    function approvalPlan(id) {
+    function approvalPlan(id, status) {
         layer.confirm('确认要批准计划吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
                 url: "/audit-api/auditProject/approvalPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: "3", status: status},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
