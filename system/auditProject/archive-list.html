@@ -86,17 +86,26 @@
             },
             cols: [
                 [{
-                    field: 'projectCode',
+                    field: 'planCheckList.projectCode',
                     title: '项目编号',
-                    width: 200
+                    width: 200,
+                    templet: (data) => {
+                        return data.planCheckList.projectCode;
+                    }
                 }, {
-                    field: 'projectName',
+                    field: 'planCheckList.projectName',
                     title: '项目名称',
-                    width: 120
+                    width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.projectName;
+                    }
                 }, {
-                    field: 'implementingAgencyId',
+                    field: 'planCheckList.implementingAgencyId',
                     title: '实施机构',
-                    width: 120
+                    width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.implementingAgencyId;
+                    }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
