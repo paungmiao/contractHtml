@@ -139,6 +139,10 @@
                             text = '<span style="color: red">待整改</span>';
                         } else if (data.status == 1007) {
                             text = '<span style="color: red">待归档</span>';
+                        } else if (data.status == 1008) {
+                            text = '<span style="color: red">整改中</span>';
+                        } else if (data.status == 1009) {
+                            text = '<span style="color: red">已完成</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -153,9 +157,10 @@
                         } else if (res.status == 1005) {
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >批准</span>
                         <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
+                        } else if (res.status == 1008) { //整改中
+                        } else if (res.status == 1007) { //待归档
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >归档</span>`
                         } else {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
                         }
                         return temp;
                     }

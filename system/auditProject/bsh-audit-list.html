@@ -132,11 +132,13 @@
                         } else if (data.status == 1002) {
                             text = '<span style="color: #28ff34">已驳回</span>';
                         } else if (data.status == 1003) {
-                            text = '<span style="color: red">已批准</span>';
+                            text = '<span style="color: red">已完成</span>';
                         } else if (data.status == 1005) {
                             text = '<span style="color: red">批准待整改</span>';
                         } else if (data.status == 1006) {
                             text = '<span style="color: red">待归档</span>';
+                        } else if (data.status == 1007) {
+                            text = '<span style="color: red">整改中</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -150,12 +152,14 @@
                         if (undefined == res.status || res.status == 1004) {
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="improvePlan('` + res.id + `')" >完善问题</span>`
                         } else if (res.status == 1005) {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >提审</span>`
+                            // temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >提审</span>`
                         } else if (res.status == 1001) {
 
+                        } else if (res.status == 1007) { // 整改中
+
+                        } else if (res.status == 1006) { // 待归档
+
                         } else {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
                         }
                         return temp;
                     }
