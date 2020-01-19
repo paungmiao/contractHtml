@@ -8,9 +8,9 @@
 	<link rel="stylesheet" href="../layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../css/JCheck.css">
     <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
-    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../js/xadmin.js"></script>
-    <script type="text/javascript" src="../js/cookie.js"></script>
+	<script type="text/javascript" src="../js/cookie.js"></script>
+	<script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../js/xadmin.js"></script>
     <script src="../js/JCheck.js"></script>
 </head>
 
@@ -24,7 +24,7 @@
 
 		<ul class="layui-nav right" lay-filter="">
 			<li class="layui-nav-item">
-				<a href=" ">admin</a>
+				<a href=" " id="userName"></a>
 			<dl class="layui-nav-child">
 				<!-- 二级菜单 -->
 				<dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
@@ -91,63 +91,44 @@
 						<i class="iconfont nav_right">&#xe697;</i>
 					</a>
 					<ul class="sub-menu">
-						<li>
-							<a href="javascript:;">
-								<i class="iconfont">&#xe6b8;</i>
-								<cite>审计计划管理</cite>
-								<i class="iconfont nav_right">&#xe697;</i>
+						<li class="layui-hide" id="plan_pro">
+						<a _href="../system/auditManagement/plan-management-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>计划清单</cite>
 							</a>
-							<ul class="sub-menu">
-								<li>
-									<a _href="../system/auditManagement/plan-management-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>计划清单</cite>
-									</a>
-								</li>
-								<li>
-									<a _href="../system/auditManagement/audit-management-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>审核清单</cite>
-									</a>
-								</li>
-							</ul>
-
+						</li>
+						<li class="layui-hide" id="plan_aud">
+							<a _href="../system/auditManagement/audit-management-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核清单</cite>
+							</a>
+						</li>
+						<li class="layui-hide" id="pro">
+							<a _href="../system/auditProject/project-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>项目清单</cite>
+							</a>
+						</li>
+						<li class="layui-hide" id="aud">
+							<a _href="../system/auditProject/audit-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审计清单</cite>
+							</a>
+						</li>
+						<li class="layui-hide" id="bsh_pro">
+							<a _href="../system/auditProject/bsh-project-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>被审核项目清单</cite>
+							</a>
+						</li>
+						<li class="layui-hide" id="bsh_aud">
+							<a _href="../system/auditProject/bsh-audit-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>被审核审计清单</cite>
+							</a>
 						</li>
 						<li>
-							<a href="javascript:;">
-								<i class="iconfont">&#xe6b8;</i>
-								<cite>审计项目管理</cite>
-								<i class="iconfont nav_right">&#xe697;</i>
-							</a>
-							<ul class="sub-menu">
-								<li>
-									<a _href="../system/auditProject/project-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>项目清单</cite>
-									</a>
-								</li>
-								<li>
-									<a _href="../system/auditProject/audit-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>审计清单</cite>
-									</a>
-								</li>
-								<li>
-									<a _href="../system/auditProject/bsh-project-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>被审核项目清单</cite>
-									</a>
-								</li>
-								<li>
-									<a _href="../system/auditProject/bsh-audit-list.html">
-										<i class="iconfont">&#xe6a7;</i>
-										<cite>被审核审计清单</cite>
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a _href="../contract/rectify-list.html">
+							<a _href="../system/auditProject/archive-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审计归档</cite>
 							</a>
@@ -262,6 +243,36 @@
 
 </body>
 <script>
+
+	/**
+	 * /system/index.html?role=1   请求条件
+	 * /system/index.html?role=   行长
+	 */
+
+	if (role == 1) {
+		userName = "审计员工";
+		$("#pro").removeClass("layui-hide");
+		$("#plan_pro").removeClass("layui-hide");
+	} else if (role == 2) {
+		userName = "审计领导";
+		$("#aud").removeClass("layui-hide");
+		$("#plan_aud").removeClass("layui-hide");
+	} else if (role == 3) {
+		userName = "被审计员工";
+		$("#bsh_pro").removeClass("layui-hide");
+	} else if (role == 4) {
+		userName = "被审计领导";
+		$("#bsh_aud").removeClass("layui-hide");
+	} else {
+		$("#pro").removeClass("layui-hide");
+		$("#plan_pro").removeClass("layui-hide");
+		$("#aud").removeClass("layui-hide");
+		$("#plan_aud").removeClass("layui-hide");
+		$("#bsh_pro").removeClass("layui-hide");
+		$("#bsh_aud").removeClass("layui-hide");
+	}
+
+	$("#userName").text(userName);
 
 	function ding() {
 		layer.open({

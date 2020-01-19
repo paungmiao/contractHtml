@@ -54,7 +54,7 @@
 
 </div>
 <script>
-
+    var role = getCookie("role")==undefined?4:getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
         let table = layui.table;
@@ -132,11 +132,13 @@
                         } else if (data.status == 1002) {
                             text = '<span style="color: #28ff34">已驳回</span>';
                         } else if (data.status == 1003) {
-                            text = '<span style="color: red">已批准</span>';
+                            text = '<span style="color: red">已完成</span>';
                         } else if (data.status == 1005) {
                             text = '<span style="color: red">批准待整改</span>';
                         } else if (data.status == 1006) {
                             text = '<span style="color: red">待归档</span>';
+                        } else if (data.status == 1007) {
+                            text = '<span style="color: red">整改中</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -150,12 +152,14 @@
                         if (undefined == res.status || res.status == 1004) {
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="improvePlan('` + res.id + `')" >完善问题</span>`
                         } else if (res.status == 1005) {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >提审</span>`
+                            // temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >提审</span>`
                         } else if (res.status == 1001) {
 
+                        } else if (res.status == 1007) { // 整改中
+
+                        } else if (res.status == 1006) { // 待归档
+
                         } else {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
                         }
                         return temp;
                     }
@@ -177,13 +181,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '4'},
+            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: '2'},
+                where: {roleId: role},
                 page: 1
             });
             return false;
@@ -202,7 +206,7 @@
                 url: "/audit-api/auditProject/improvePlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "4"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
@@ -213,41 +217,6 @@
         });
     }
 
-    function approvalPlan(id, status) {
-        layer.confirm('确认要批准计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/approvalPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: "4", status: status},
-                success: function (resp) {
-                    layer.alert("批准计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function rejectPlan(id) {
-        layer.confirm('确认要驳回计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/rejectPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: "2"},
-                success: function (resp) {
-                    layer.alert("驳回计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
 
     function delete_(id) {
         layer.confirm('确认要删除吗？', function (index) {

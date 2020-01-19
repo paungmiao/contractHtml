@@ -54,7 +54,7 @@
 
 </div>
 <script>
-
+    var role = getCookie("role")==undefined?3:getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
         let table = layui.table;
@@ -137,6 +137,8 @@
                             text = '<span style="color: red">已完成</span>';
                         } else if (data.status == 1002) {
                             text = '<span style="color: red">整改完成待审核</span>';
+                        } else if (data.status == 1007) {
+                            text = '<span style="color: red">待整改</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
@@ -149,8 +151,13 @@
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
                         if (undefined == res.status || res.status == 1006) {
 
+                        } else if (res.status == 1007) {
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="RectifyPlan('` + res.id + `', '` + res.status + `')" >确认整改</span>`
                         } else if (res.status == 1001) {
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >整改完成提审</span>`
+                        } else if (res.status == 1004) {
+                        } else {
+
                         }
                         return temp;
                     }
@@ -172,13 +179,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '3'},
+            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: '2'},
+                where: {roleId: role},
                 page: 1
             });
             return false;
@@ -197,7 +204,7 @@
                 url: "/audit-api/auditProject/approvalPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "3", status: status},
+                data: {id: id, roleId: role, status: status},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
@@ -208,16 +215,16 @@
         });
     }
 
-    function rejectPlan(id) {
-        layer.confirm('确认要驳回计划吗？', function (index) {
+    function RectifyPlan(id) {
+        layer.confirm('确认要整改项目吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/auditProject/rejectPlan",
+                url: "/audit-api/auditProject/RectifyPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
-                    layer.alert("驳回计划成功", {icon: 1}, function () {
+                    layer.alert("整改项目成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
