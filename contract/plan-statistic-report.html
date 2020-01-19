@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">审计分析</a>
+      <a>
+        <cite>汇总报告</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i>删除</button>
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+    </table>
+</div>
+<script>
+    var count = 0;
+    layui.use(['table', 'form', 'element'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let element = layui.element;
+
+        form.render("select")
+        table.render({
+            elem: '#test',
+            url: '/audit-api/planStatistic/report',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [
+                   {
+                    field: 'id',
+                    hide:true
+                },{
+                    field: 'name',
+                    title: '审计机构',
+                    width: 200
+                }, {
+                    field: 'projectCount',
+                    title: '总项目数',
+                    width: 120
+                }, {
+                    field: 'finishCount',
+                    title: '已完成',
+                    width: 120
+                }, {
+                    field: 'noFinishCount',
+                    title: '未完成',
+                    width: 120,
+                }, {
+                    field: 'timeoutCount',
+                    title: '延期项目',
+                    width: 180,
+                }, {
+                    field: '',
+                    title: '操作',
+                    width: 240,
+                    templet: function (res) {
+                        return `<span class="layui-btn layui-btn-normal layui-btn-mini site-demo-active" data-type="tabAdd" id="viewReport" >查看</span>`
+                    }
+                },]
+            ],
+            page: true,
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            },
+            page: 1,
+            limit: 10,
+            request: {
+                pageName: 'current', //页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            where: {roleId: '2'},
+            done: function (res, curr, count) {
+            }
+        });
+        $(document).on('click', '#viewReport', function(data) {
+            element.tabAdd('demo', {
+                title: '新选项'+ (Math.random()*1000|0) //用于演示
+                ,content: '内容'+ (Math.random()*1000|0)
+                ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+            // var id = $(this).attr('data-id');
+
+        });
+        //监听头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data; //获取选中的数据
+            switch(obj.event){
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if(data.length === 0){
+                        layer.msg('请选择一行');
+                    } else if(data.length > 1){
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+                    }
+                    break;
+                case 'delete':
+                    if(data.length === 0){
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.msg('删除');
+                    }
+                    break;
+            };
+        });
+        form.on("submit()", function () {
+            table.reload('test', {
+                where: {roleId: '2'},
+                page: 1
+            });
+            return false;
+        })
+
+    });
+
+
+</script>
+
+<script>
+    function delete_(id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/audit-api/planManage/user_delete/" + id,
+                dataType: "json",
+                type: "delete",
+                success: function (resp) {
+                    layer.alert("删除成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
+        });
+    }
+    function viewReport(id){
+        var Urlss = '{:U("plan-statitic-report-view.html")}&mer_id='+id;
+        top.layui.index.openTabsPage(Urlss, $(t).attr("title-data"));
+    }
+</script>
+</body>
+
+</html>
