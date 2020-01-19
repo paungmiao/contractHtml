@@ -389,10 +389,11 @@
       type: "get",
       async: true,
       success: function (resp) {
-          debugger;
         layui.use('form',function () {
           layui.form.val('editForm',resp.data)
           layui.form.val('planEditForm',resp.data.planCheckList)
+            //渲染
+          layui.form.render("select");
         })
 
       }
