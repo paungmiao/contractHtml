@@ -202,7 +202,7 @@
 <script>
 
     function approvalPlan(id, status) {
-        layer.confirm('确认要批准计划吗？', function (index) {
+        layer.confirm('确认要归档吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
                 url: "/audit-api/auditProject/approvalPlan",
@@ -210,7 +210,7 @@
                 dataType: "json",
                 data: {id: id, roleId: role, status: status},
                 success: function (resp) {
-                    layer.alert("批准计划成功", {icon: 1}, function () {
+                    layer.alert("归档成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
