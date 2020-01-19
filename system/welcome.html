@@ -16,8 +16,8 @@
 
 <body th:fragment="pagination">
     <div class="x-body">
-        <blockquote class="layui-elem-quote">欢迎管理员：
-            <span class="x-red">test</span>！当前时间:2018-04-25 20:50:53</blockquote>
+<!--        <blockquote class="layui-elem-quote">欢迎管理员：-->
+<!--            <span class="x-red">test</span>！当前时间:2018-04-25 20:50:53</blockquote>-->
         <fieldset class="layui-elem-field">
             <legend>数据统计</legend>
             <div class="layui-field-box">
@@ -30,44 +30,26 @@
                                     <ul class="layui-row layui-col-space10 layui-this">
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>66</cite></p>
+                                                <h5 style="font-size: large;">总项目</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite>66</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>会员数</h3>
-                                                <p>
-                                                    <cite>12</cite></p>
+                                                <h5 style="font-size: large;">已完成</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite>12</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>回复数</h3>
-                                                <p>
-                                                    <cite>99</cite></p>
+                                                <h5 style="font-size: large;">未完成</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite>99</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>商品数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>6766</cite></p>
+                                                <h5 style="font-size: large;">延期项目</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite>67</cite></p>
                                             </a>
                                         </li>
                                     </ul>
@@ -77,8 +59,44 @@
                     </div>
                 </div>
             </div>
+            <div class="layui-col-xs6 layui-col-md12">
+                <div id="echarts-xinjiang" style="background-color:#ffffff;min-height:550px;padding: 10px"></div>
+            </div>
         </fieldset>
         <fieldset class="layui-elem-field">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-size: 16px;font-weight:bold">整改情况</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;"
+                            id="rectifySituation">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-size: 16px;font-weight:bold">项目类型</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-size: 16px;font-weight:bold">超时项目</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;"
+                                 id="timeoutProject">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <!--<fieldset class="layui-elem-field">
             <legend>系统通知</legend>
             <div class="layui-field-box">
 
@@ -97,9 +115,9 @@
                     </tbody>
                 </table>
             </div>
-        </fieldset>
+        </fieldset>-->
 
-        <fieldset class="layui-elem-field">
+        <!--<fieldset class="layui-elem-field">
             <legend>新疆全图</legend>
             <div class="layui-field-box">
                 <div class="layui-row layui-col-space15">
@@ -108,9 +126,9 @@
                     </div>
                 </div>
             </div>
-        </fieldset>
+        </fieldset>-->
 
-        <fieldset class="layui-elem-field">
+        <!--<fieldset class="layui-elem-field">
             <legend>系统信息</legend>
             <div class="layui-field-box">
                 <table class="layui-table">
@@ -182,7 +200,7 @@
                 </table>
             </div>
         </fieldset>
-        <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>
+        <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>-->
     </div>
 
 </body>
@@ -191,7 +209,6 @@
 
     var myChart = echarts.init(document.getElementById('echarts-xinjiang'));
     myChart.showLoading();
-
     $.get('../json/xinjiang.json', function (geoJson) {
 
         myChart.hideLoading();
@@ -200,7 +217,7 @@
 
         myChart.setOption(option = {
             title: {
-                text: '新疆相关'
+                // text: '新疆相关'
             },
             tooltip: {
                 trigger: 'item',
@@ -208,9 +225,9 @@
             },
             toolbox: {
                 show: true,
-                orient: 'vertical',
-                left: 'right',
-                top: 'center',
+                // orient: 'vertical',
+                // left: 'right',
+                // top: 'center',
                 feature: {
                     dataView: {readOnly: false},
                     restore: {},
@@ -229,11 +246,15 @@
             },
             series: [
                 {
-                    name: '新疆相关',
+                    // name: '新疆相关',
                     type: 'map',
                     mapType: 'XJ', // 自定义扩展图表类型
                     label: {
                         show: true
+                    },
+                    // selectedMode : 'multiple',
+                    mapLocation : {
+                        x : 'left'
                     },
                     data: [
                         {name: '巴音郭楞蒙古自治州', value: 20057.34},
@@ -258,7 +279,119 @@
                 }
             ]
         });
+        myChart.on('click', function(params){
+            alert(params.name);
+            console.log(params);//此处写点击事件内容
+        });
     });
+    PercentPie.prototype.init = function () {
+        var _that = this;
+        var option = {
+            backgroundColor: _that.backgroundColor,
+            color: _that.color,
+            legend: {
+                data: ['水水水', '火火火'],
+                icon: 'rect',
+                top: 100,
+                right: '14.17004%',
+                itemGap: 35,
+                itemWidth: 10,
+                itemHeight: 10,
+                orient: 'vertical',
+                textStyle: {
+                    padding: [0, 0, 0, 5],
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b} : <br>{c}({d}%)",
+                backgroundColor: 'rgba(0,0,0,0.3)', // 背景
+                padding: [8, 10], //内边距
+                extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.87);', //添加阴影
+            },
+            series: [{
+                type: 'pie',
+                radius: ['60%', '75%'],
+                center: ['40%', '60%'],
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center',
+                        textStyle: {
+                            fontSize: _that.fontSize,
+                            fontWeight: 'bold'
+                        },
+                        formatter: '{b}\n{c}%'
+                    }
+                },
+                data:_that.data
+            }]
+        };
+        echarts.init(_that.domEle).setOption(option);
+    };
+
+    /* 全省蓄水占比 */
+    var option1 = {
+            value: 38, //百分比,必填
+            name: '', //必填
+            title: '',
+            backgroundColor: null,
+            color: ['#289df5', '#ff5050'],
+            fontSize: 16,
+            domEle: document.getElementById("rectifySituation"), //必填
+            data :[{
+                value: "55",
+                name: "水水水",
+                label: {
+                    normal: {
+                        show: true
+                    }
+                }
+            },
+                {
+                    value: 45,
+                    name: '火火火'
+                }
+            ]
+    },
+
+    percentPie1 = new PercentPie(option1);
+    percentPie1.init();
+    var option2 = {
+            value: 20, //百分比,必填
+            name: '123', //必填
+            title: '',
+            backgroundColor: null,
+            color: ['#EAEAEA', '#6CAEE8'],
+            fontSize: 16,
+            domEle: document.getElementById("timeoutProject"), //必填
+            data :[{
+                value: "25",
+                name: "水水水",
+                label: {
+                    normal: {
+                        show: true
+                    }
+                }
+            },
+                {
+                    value: 45,
+                    name: '火火火'
+                }
+            ]
+        },
+    percentPie2 = new PercentPie(option2);
+    percentPie2.init();
+
+    function PercentPie(option) {
+        this.backgroundColor = option.backgroundColor || '#fff';
+        this.color = option.color || ['#EAEAEA', '#6CAEE8'];
+        this.fontSize = option.fontSize || 12;
+        this.domEle = option.domEle;
+        this.value = option.value;
+        this.name = option.name;
+        this.data = option.data;
+    }
 </script>
 
 </html>
