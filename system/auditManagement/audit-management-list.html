@@ -54,7 +54,7 @@
 
 </div>
 <script>
-
+    var role = getCookie("role")==undefined?2:getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
         let table = layui.table;
@@ -141,8 +141,16 @@
                     width: 240,
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
+                        if (undefined == res.status || res.status == 1005) { //待审核
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `')" >批准</span>
                         <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
+                        } else if (res.status == 1006) { //已驳回
+
+                        } else if (res.status == 1007) { //已配准
+
+                        }
+
+
                         return temp;
                     }
                     // sort: true
@@ -163,13 +171,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '2'},
+            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: '2'},
+                where: {roleId: role},
                 page: 1
             });
             return false;
@@ -188,7 +196,7 @@
                 url: "/audit-api/auditPlan/approvalPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
@@ -206,7 +214,7 @@
                 url: "/audit-api/auditPlan/rejectPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
                     layer.alert("驳回计划成功", {icon: 1}, function () {
                         location.replace(location.href);

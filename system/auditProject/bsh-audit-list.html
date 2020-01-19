@@ -54,7 +54,7 @@
 
 </div>
 <script>
-
+    var role = getCookie("role")==undefined?4:getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
         let table = layui.table;
@@ -181,13 +181,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '4'},
+            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: '2'},
+                where: {roleId: role},
                 page: 1
             });
             return false;
@@ -206,7 +206,7 @@
                 url: "/audit-api/auditProject/improvePlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "4"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
@@ -217,41 +217,6 @@
         });
     }
 
-    function approvalPlan(id, status) {
-        layer.confirm('确认要批准计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/approvalPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: "4", status: status},
-                success: function (resp) {
-                    layer.alert("批准计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function rejectPlan(id) {
-        layer.confirm('确认要驳回计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/rejectPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: "2"},
-                success: function (resp) {
-                    layer.alert("驳回计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
 
     function delete_(id) {
         layer.confirm('确认要删除吗？', function (index) {

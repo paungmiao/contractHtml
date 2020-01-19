@@ -54,6 +54,7 @@
 
 </div>
 <script>
+    var role = getCookie("role")==undefined?2:getCookie("role");
 
     var count = 0;
     layui.use(['table', 'form'], function () {
@@ -182,13 +183,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '2'},
+            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: '2'},
+                where: {roleId: role},
                 page: 1
             });
             return false;
@@ -207,7 +208,7 @@
                 url: "/audit-api/auditProject/approvalPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2", status: status},
+                data: {id: id, roleId: role, status: status},
                 success: function (resp) {
                     layer.alert("批准计划成功", {icon: 1}, function () {
                         location.replace(location.href);
@@ -225,7 +226,7 @@
                 url: "/audit-api/auditProject/rejectPlan",
                 type: 'POST',
                 dataType: "json",
-                data: {id: id, roleId: "2"},
+                data: {id: id, roleId: role},
                 success: function (resp) {
                     layer.alert("驳回计划成功", {icon: 1}, function () {
                         location.replace(location.href);
