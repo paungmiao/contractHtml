@@ -17,6 +17,8 @@
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/echarts/echarts.js"></script>
+    <script type="text/javascript" src="../js/xm-select.js"></script>
     <script src="/js/JCheck.js"></script>
 
 </head>
@@ -44,9 +46,7 @@
                     <div class="layui-colla-content">
                         审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off" class="layui-input">
                         实施机构：
-                        <div class="layui-input-inline">
-                            <select id="implementingAgencySelect" name="implementingAgencyId" >
-                            </select>
+                        <div class="layui-input-inline "  style="width:300px" id = "implementingAgencySelect">
                         </div>
                         项目类型：<input type="text" placeholder="请输入项目类型" id="projectName3" name="projectName3" autocomplete="off" class="layui-input">
                         审计性质：
@@ -54,12 +54,12 @@
                             <select id="auditNatureSelect" name="auditNatureId" >
                             </select>
                         </div>
+                        <br/>
                         审计对象：
                         <div class="layui-input-inline">
                             <select id="auditObjectSelect" name="auditObjectId" >
                             </select>
                         </div>
-                        <br/>
                         问题词条：<input type="text" placeholder="请输入问题词条" id="projectName6" name="projectName6" autocomplete="off" class="layui-input">
                         严重程度：
                         <div class="layui-input-inline">
@@ -81,18 +81,110 @@
         <button class="layui-btn" onclick="exportData()">
             <i class="layui-icon"></i>导出
         </button>
-
+        <!--<button class="layui-btn" onclick="generateEchars()">
+            <i class="layui-icon"></i>生成图表
+        </button>-->
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
     </table>
-
+    <div class="layui-card">
+         <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>报表统计</div>
+         <div class="layui-card-body">
+             <div id="echarts-records" style="width: 100%;min-height:500px"></div>
+         </div>
+     </div>
 
 </div>
 <script>
+    var echarts;
     function exportData() {
         $("#filterForm").submit();
     };
+    function generateEchars(){
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatistic",
+            dataType: "json",
+            type: "post",
+            data:$("#filterForm").serialize(),
+            success: function (res) {
+                if(JSON.stringify(res.data) == "{}"){
+                    return;
+                }
+                var type = res.data.type;
+                var title = res.data.title;
+                var subtitle = res.data.subtitle;
+                if(subtitle){
+                    subtitle = "按"+subtitle+"分析";
+                }else{
+                    subtitle = "";
+                }
+                var legendData = res.data.legendData;
+                var xData = res.data.xData;
+                var statisticData = res.data.statisticData;
+
+                var echartsApp = [],
+                    options = [{
+                        title: {
+                            text: "问题分析图",
+                            subtext: subtitle, //副标题
+                            x: 'center' //标题居中
+                        },
+                        tooltip: {
+                            trigger: 'item' //悬浮显示对比
+                        },
+                        legend: {
+                            orient: 'vertical', //类型垂直,默认水平
+                            left: 'left', //类型区分在左 默认居中
+                            data: legendData//['单价', '总价', '销量', '产量']
+                        },
+                        series: [{
+                            type: 'pie', //饼状
+                            radius: '60%', //圆的大小
+                            center: ['50%', '50%'], //居中
+                            label:{            //饼图图形上的文本标签
+                                normal:{
+                                    show:true,
+                                    position:'outer', //标签的位置
+                                    textStyle : {
+                                        fontWeight : 300 ,
+                                        fontSize : 16    //文字的字体大小
+                                    },
+                                    // formatter:'{d}%'
+                                    formatter: function(a){
+                                        return a.name+"："+a.percent+"%";
+                                    }
+                                }
+                            },
+                            data: statisticData,
+                            calculable : true
+                        }]
+                    },{
+                        title: {
+                            // text: '商品订单'
+                        },
+                        tooltip: {},
+                        legend: {
+                            data: legendData//['销量','产量']
+                        },
+                        xAxis: {
+                            data: xData//['周一', '周二', '周三', '周四', '周五', '周六', '周天']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: statisticData
+                    }]
+                    ,renderDataView = function(index){
+                        echartsApp[index] = echarts.init(document.getElementById('echarts-records'));
+                        // echartsApp[index].setOption(options[index]);
+                        setTimeout(echartsApp[index].setOption(options[index]), 500);
+                        // window.onresize = echartsApp[index].resize;
+                    };
+                renderDataView(type);
+            }
+        });
+    }
     function findEntryByCategory(categoryId,eleId){
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId="+categoryId,
@@ -103,7 +195,8 @@
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
                     let options = [];
-                    options.push('<option value="" >请选择审计性质</option>')
+                    options.push('<option value="" >全部</option>')
+                    options.push('<option value="all" >全部条件</option>')
                     data.forEach((Obj) => {
                         let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
                         options.push(option);
@@ -113,10 +206,46 @@
             }
         });
     }
-    layui.use(['table', 'form'], function () {
+    layui.config({
+        version: 1,
+        base: '../js/echarts/'
+    }).use(['table', 'form', 'echarts'], function () {
         let table = layui.table;
         let form = layui.form;
-        findEntryByCategory(1,"implementingAgencySelect");
+        echarts = layui.echarts;
+        var demo1 = xmSelect.render({
+            name: 'implementingAgencyId',
+            el: '#implementingAgencySelect',
+            language: 'zn',
+            data: [
+            ]
+        })
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=1",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    var voteall = {};
+                    voteall.name = "全部条件";
+                    voteall.value = "all";
+                    options.push(voteall);
+                    data.forEach((Obj) => {
+                        var option = {};
+                        option.name=Obj.name;
+                        option.value=Obj.id;
+                        options.push(option);
+                    })
+                    demo1.update({
+                        data: options,
+                    })
+                }
+            }
+        });
+        // findEntryByCategory(1,"implementingAgencySelect");
         findEntryByCategory(2,"auditObjectSelect");
         findEntryByCategory(4,"auditNatureSelect");
         findEntryByCategory(5,"problemSeveritySelect");
@@ -207,7 +336,7 @@
                     projectName: $("#projectName").val(),
                     problemDescription: $("#problemDescription").val(),
                     auditYear: $("#auditYear").val(),
-                    implementingAgencyId: $("#implementingAgencySelect").val(),
+                    implementingAgencyId: demo1.getValue("valueStr"),
                     auditNatureId: $("#auditNatureSelect").val(),
                     auditObjectId: $("#auditObjectSelect").val(),
                     problemSeverityId: $("#problemSeveritySelect").val(),
@@ -215,10 +344,9 @@
                 },
                 page: 1
             });
+            generateEchars();
             return false;
         })
-
-
     });
 
 
