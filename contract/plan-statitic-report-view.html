@@ -28,7 +28,7 @@
     <div class="layui-btn-container ">
         <button class="layui-btn layui-btn-lg layui-btn-normal" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>
         <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon"></i>删除</button>
-        <button class="layui-btn layui-btn-lg layui-btn-normal" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">提交报告</button>
+        <button class="layui-btn layui-btn-lg layui-btn-normal" lay-event="editContent">提交报告</button>
     </div>
 </script>
 <body th:fragment="pagination">
@@ -294,10 +294,10 @@
         }
         return null;
     }
-
+    var gid;
     layui.use(['table'], function () {
         let table = layui.table;
-        var gid = getQueryString("gid");
+        gid = getQueryString("gid");
         table.render({
             elem: '#test',
             url: '/audit-api/planManage/planList?implementingAgencyId='+gid,
@@ -435,6 +435,9 @@
                         });
                         layer.msg('删除');
                     }
+                    break;
+                case 'editContent':
+                    x_admin_show('提交汇总报告','plan-statistic-report-content.html?gid='+gid,'600','460');
                     break;
             };
         });

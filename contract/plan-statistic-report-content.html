@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="../js/JCheck.js"></script>
+</head>
+<body>
+<form class="layui-form" lay-filter="contentForm">
+    <div class="layui-form-item">
+        <input type="hidden" id="gid" name="gid"/>
+        <textarea id="demo" name="content" lay-verify="required|article_desc" style="display: none;" ></textarea>
+    </div>
+</form>
+<div style="text-align: center">
+<div class="layui-input-inline">
+    <button class="layui-btn" lay-submit lay-filter="saveContent">
+        <i class="layui-icon">&#xe605;</i>保存
+    </button>
+</div>
+<div class="layui-input-inline" style="margin-left: 20px">
+    <a class="layui-btn" onclick="off()">
+        <i class="layui-icon">&#x1007;</i>取消
+    </a>
+</div>
+</div>
+</body>
+<script>
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+    layui.use(['layedit','form','layer'], function(){
+        $("#gid").val(getQueryString("gid"));
+        var form = layui.form,layedit = layui.layedit;;
+        var index = layedit.build('demo',{
+            tool: ['strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+                ,'|' //分割线
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink'] //清除链接]
+        }); //建立编辑器
+        form.render();
+        form.verify({
+            article_desc: function (value) {
+                console.log(value);
+                console.log("同步");
+                layedit.sync(index);
+            }
+        });
+        // layedit.setContent(index, "cdfsdfsdfsdfsdfsd", false);
+        //监听提交
+        form.on('submit(saveContent)', function (data) {
+            let formData = form.val("contentForm");
+            formData.content=layedit.getContent(index);
+            $.ajax({
+                url: '/audit-api/planManage/saveOrEditPlan',
+                type: 'POST',
+                dataType: "json",
+                data: formData,
+                success: function (resp) {
+                    //发异步，把数据提交给php
+                    if(0 == resp.code){
+                        layer.alert("保存成功", {icon: 6}, function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            // 可以对父窗口进行刷新
+                            x_admin_father_reload();
+                        });
+                    }else {
+                        layer.alert("操作失败 "+resp.msg,{icon:2},function () {
+                        })
+                    }
+
+                },
+                error:function (error) {
+                    layer.alert(error)
+                }
+            })
+            return false;
+        });
+
+    });
+    $(document).ready(function() {
+        $.ajax({
+            url: '../json/loadContent',
+            type: 'post',
+            data: {"gid":getQueryString("gid")}, //入参
+            dataType: 'json',
+            timeout: 6000,
+            async: false,
+            success: function(retData) {
+                //console.log(retData);
+                $("#demo").text("dsdsdasdsadasdasd");
+            },
+            error: function(request,testStatus,errorThrown){
+                //执行错误的方法
+                if(testStatus == "timeout"){
+                    alert("请求超时！");
+                }
+            }
+        })
+    });
+    function off() {
+        var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        parent.layer.close(index);		//关闭窗口
+    }
+</script>
+</html>
