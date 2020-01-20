@@ -12,18 +12,29 @@
     <script type="text/javascript" src="../js/cookie.js"></script>
     <script src="../js/JCheck.js"></script>
     <script src="../js/echarts/echarts.min.js?v=1.0.4" charset="utf-8"></script>
-    <style>body{overflow-y: scroll;}</style>
+    <style>
+        body{overflow-y: scroll;}
+        .layadmin-homepage-pad-hor {
+            padding-left: 15px;
+            padding-right: 15px;
+            border-bottom: 15px;
+            color: #999;
+            text-indent: 20px;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-        <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
-        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon"></i>删除</button>
+    <div class="layui-btn-container ">
+        <button class="layui-btn layui-btn-lg layui-btn-normal" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>
+        <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon"></i>删除</button>
+        <button class="layui-btn layui-btn-lg layui-btn-normal" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">提交报告</button>
     </div>
 </script>
 <body th:fragment="pagination">
     <div class="x-body">
         <fieldset class="layui-elem-field">
-            <legend>数据统计</legend>
+            <legend style="font-size: 16px;font-weight:bold">整体概况</legend>
             <div class="layui-field-box">
                 <div class="layui-col-md12">
                     <div class="layui-card">
@@ -63,12 +74,10 @@
                     </div>
                 </div>
             </div>
-        </fieldset>
-        <fieldset class="layui-elem-field">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md4">
                     <div class="layui-card">
-                        <div class="layui-card-header" style="font-size: 16px;font-weight:bold">整改情况</div>
+                        <div class="layui-card-header" >整改情况</div>
                         <div class="layui-card-body">
                             <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;"
                             id="rectifySituation">
@@ -78,9 +87,35 @@
                 </div>
                 <div class="layui-col-md4">
                     <div class="layui-card">
-                        <div class="layui-card-header" style="font-size: 16px;font-weight:bold">项目类型</div>
+                        <div class="layui-card-header" >项目类型</div>
                         <div class="layui-card-body">
                             <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+                                <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                    <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>类型</th>
+                                        <th>项目数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>类型3</td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>类型2</td>
+                                        <td>9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>类型3</td>
+                                        <td>8</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -97,14 +132,18 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset class="layui-elem-field">
-            <!--<xblock>
-                <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
-                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" onclick="delete_()"><i class="layui-icon"></i>删除</button>
-            </xblock>-->
+        <fieldset class="layui-elem-field" >
+            <legend style="font-size: 16px;font-weight:bold">关注问题</legend>
             <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
             </table>
+        </fieldset>
+        <fieldset class="layui-elem-field" >
+            <legend style="font-size: 16px;font-weight:bold">汇总报告</legend>
+            <div id="reportContent" class="layadmin-homepage-pad-hor">
+                fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看
+                    fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看
+            </div>
         </fieldset>
     </div>
 
@@ -216,12 +255,12 @@
             name: '123', //必填
             title: '',
             backgroundColor: null,
-            color: ['#EAEAEA', '#6CAEE8'],
+            color: ['#289df5', '#ff5050'],
             fontSize: 16,
             domEle: document.getElementById("timeoutProject"), //必填
             data :[{
-                value: "25",
-                name: "水水水",
+                value: "5",
+                name: "已超时",
                 label: {
                     normal: {
                         show: true
@@ -229,10 +268,11 @@
                 }
             },
                 {
-                    value: 45,
-                    name: '火火火'
+                    value: 10,
+                    name: '未超时'
                 }
-            ]
+            ],
+            legendData:["已超时","未超时"],
         },
     percentPie2 = new PercentPie(option2);
     percentPie2.init();
@@ -329,8 +369,8 @@
                     title: '操作',
                     width: 240,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../system/auditManagement/plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        return temp;
+                        // var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../system/auditManagement/plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
+                        // return temp;
                     }
                     // sort: true
                 },]
