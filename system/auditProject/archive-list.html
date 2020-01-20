@@ -26,7 +26,7 @@
       <a href="">首页</a>
       <a href="">审计管理</a>
       <a>
-        <cite>项目清单</cite></a>
+        <cite>项目归档</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -54,14 +54,13 @@
 
 </div>
 <script>
-    var role = getCookie("role")==undefined?2:getCookie("role");
 
     var count = 0;
     layui.use(['table', 'form'], function () {
         let table = layui.table;
         let form = layui.form
         $.ajax({
-            url: "/audit-api/state/list/" + role,
+            url: "/audit-api/state/list/1",
             dataType: "json",
             type: "get",
             async: false,
@@ -81,7 +80,7 @@
         form.render("select")
         table.render({
             elem: '#test',
-            url: '/audit-api/auditProject/page',
+            url: '/audit-api/planInfo/page',
             xhrFields: {
                 withCredentials: true
             },
@@ -126,47 +125,17 @@
                     templet: (data) => {
                         let temp;
                         let text;
-                        if (undefined == data.status || data.status == 1004) {
-                            text = '<span>待完善</span>';
-                        } else if (data.status == 1005) {
-                            text = '<span style="color: #28ff34">完善待审核</span>';
-                        } else if (data.status == 1001) {
-                            text = '<span style="color: #28ff34">待审核</span>';
+                        if (undefined == data.status || data.status == 1001) {
+                            text = '<span>正在实施</span>';
                         } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">已驳回</span>';
+                            text = '<span style="color: #28ff34">实施结束</span>';
                         } else if (data.status == 1003) {
-                            text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1006) {
-                            text = '<span style="color: red">待整改</span>';
-                        } else if (data.status == 1007) {
-                            text = '<span style="color: red">待归档</span>';
-                        } else if (data.status == 1008) {
-                            text = '<span style="color: red">整改中</span>';
-                        } else if (data.status == 1009) {
-                            text = '<span style="color: red">已完成</span>';
+                            text = '<span style="color: #28ff34">归档</span>';
                         }
                         temp = '<div>' + text + '</div>'
                         return temp;
                     }
-                }, {
-                    field: '',
-                    title: '操作',
-                    width: 240,
-                    templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        if (undefined == res.status || res.status == 1004) {
-                        } else if (res.status == 1005) {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
-                        } else if (res.status == 1008) { //整改中
-                        } else if (res.status == 1007) { //待归档
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >归档</span>`
-                        } else {
-                        }
-                        return temp;
-                    }
-                    // sort: true
-                },]
+                }]
             ],
             page: true,
             parseData: function (res) { //res 即为原始返回的数据
@@ -183,13 +152,13 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: role},
+            where: {},
             done: function (res, curr, count) {
             }
         });
         form.on("submit()", function () {
             table.reload('test', {
-                where: {roleId: role},
+                where: {},
                 page: 1
             });
             return false;
@@ -200,107 +169,6 @@
 </script>
 
 <script>
-
-    function approvalPlan(id, status) {
-        layer.confirm('确认要归档吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/approvalPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: role, status: status},
-                success: function (resp) {
-                    layer.alert("归档成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function rejectPlan(id) {
-        layer.confirm('确认要驳回计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/rejectPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: role},
-                success: function (resp) {
-                    layer.alert("驳回计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function delete_(id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/planManage/user_delete/" + id,
-                dataType: "json",
-                type: "delete",
-                success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function editPage_(title, url, w, h, id, readOnly) {
-        if (title == null || title == '') {
-            title = false;
-        }
-        ;
-        if (url == null || url == '') {
-            url = "404.html";
-        }
-        ;
-        if (w == null || w == '') {
-            w = ($(window).width() * 0.9);
-        }
-        ;
-        if (h == null || h == '') {
-            h = ($(window).height() - 50);
-        }
-        ;
-        layer.open({
-            type: 2,
-            area: [w + 'px', h + 'px'],
-            fix: false, //不固定
-            maxmin: true,
-            shadeClose: true,
-            shade: 0.4,
-            title: title,
-            content: url,
-            success: function (layero, index) {
-                //窗口加载成功刷新frame
-                // location.replace(location.href);
-                let body = layer.getChildFrame('body', index);
-                let iframeWin = layero.find('iframe')[0];
-                let readOnlyData = body.find('#readOnlyData');
-                let inputData = body.find('#inputData');
-                readOnlyData.val(readOnly);
-                inputData.val(id);
-                iframeWin.contentWindow.initEntryInfo();
-            },
-            cancel: function () {
-                //关闭窗口之后刷新frame
-                // location.replace(location.href);
-            },
-            end: function () {
-                //窗口销毁之后刷新frame
-                // location.replace(location.href);
-            }
-        });
-    }
 
     layui.use('laydate', function () {
         var laydate = layui.laydate;
