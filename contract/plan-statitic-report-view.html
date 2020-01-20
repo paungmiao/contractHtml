@@ -12,8 +12,14 @@
     <script type="text/javascript" src="../js/cookie.js"></script>
     <script src="../js/JCheck.js"></script>
     <script src="../js/echarts/echarts.min.js?v=1.0.4" charset="utf-8"></script>
+    <style>body{overflow-y: scroll;}</style>
 </head>
-
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon"></i>删除</button>
+    </div>
+</script>
 <body th:fragment="pagination">
     <div class="x-body">
         <fieldset class="layui-elem-field">
@@ -92,10 +98,10 @@
             </div>
         </fieldset>
         <fieldset class="layui-elem-field">
-            <xblock>
+            <!--<xblock>
                 <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
-                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i>删除</button>
-            </xblock>
+                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" onclick="delete_()"><i class="layui-icon"></i>删除</button>
+            </xblock>-->
             <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
             </table>
@@ -240,11 +246,22 @@
         this.name = option.name;
         this.data = option.data;
     }
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
     layui.use(['table'], function () {
         let table = layui.table;
+        var gid = getQueryString("gid");
         table.render({
             elem: '#test',
-            url: '/audit-api/auditPlan/page',
+            url: '/audit-api/planManage/planList?implementingAgencyId='+gid,
+            toolbar: '#toolbarDemo',
             xhrFields: {
                 withCredentials: true
             },
@@ -252,37 +269,43 @@
                 [{
                     type: 'checkbox', fixed: 'left'
                 },{
-                    field: 'planCheckList.projectCode',
+                    field: 'id',
+                    hide:true
+                },{
+                    field: 'project_code',
                     title: '项目编号',
-                    width: 200,
-                    templet: (data) => {
-                        return data.planCheckList.projectCode;
-                    }
+                    width: 120
                 }, {
-                    field: 'planCheckList.projectName',
+                    field: 'project_name',
                     title: '项目名称',
-                    width: 120,
-                    templet: (data) => {
-                        return data.planCheckList.projectName;
-                    }
+                    width: 120
                 }, {
-                    field: 'planCheckList.implementingAgencyId',
+                    field: 'agency_name',
                     title: '实施机构',
-                    width: 120,
-                    templet: (data) => {
-                        return data.planCheckList.implementingAgencyId;
-                    }
+                    width: 120
                 }, {
-                    field: 'auditObjectId',
+                    field: 'audit_object_name',
                     title: '审计对象',
                     width: 120,
                 }, {
-                    field: 'auditNatureId',
+                    field: 'audit_nature_name',
                     title: '审计性质',
                     width: 180,
                 }, {
-                    field: 'auditYear',
+                    field: 'audit_year',
                     title: '年度',
+                    width: 120,
+                }, {
+                    field: 'rectify_situation_name',
+                    title: '整改方案',
+                    width: 120,
+                }, {
+                    field: 'risk_assessment_name',
+                    title: '风险评估',
+                    width: 120,
+                }, {
+                    field: 'problem_severity_name',
+                    title: '严重程度',
                     width: 120,
                 }, {
                     field: 'status',
@@ -306,7 +329,7 @@
                     title: '操作',
                     width: 240,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
+                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../system/auditManagement/plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
                         return temp;
                     }
                     // sort: true
@@ -327,11 +350,103 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: role},
             done: function (res, curr, count) {
             }
         });
+        //监听头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data; //获取选中的数据
+            switch(obj.event){
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if(data.length === 0){
+                        layer.msg('请选择一行');
+                    } else if(data.length > 1){
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+                    }
+                    break;
+                case 'del':
+                    if(data.length === 0){
+                        layer.msg('请选择一行');
+                    } else {
+                        var ids = '';
+                        data.forEach((item, index)=>{
+                            if(index==0){
+                                ids = item.id;
+                            }else{
+                                ids += ","+item.id;
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/deletePlan",
+                            dataType: "json",
+                            type: "post",
+                            data: {"ids": ids},
+                            success: function (res) {
+                                table.reload('test', {
+                                    page: 1
+                                });
+                            }
+                        });
+                        layer.msg('删除');
+                    }
+                    break;
+            };
+        });
     });
 </script>
-
+<script>
+    function editPage_(title, url, w, h, id, readOnly) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        ;
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        ;
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        ;
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        ;
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let iframeWin = layero.find('iframe')[0];
+                let readOnlyData = body.find('#readOnlyData');
+                let inputData = body.find('#inputData');
+                readOnlyData.val(readOnly);
+                inputData.val(id);
+                iframeWin.contentWindow.initEntryInfo();
+            },
+            cancel: function () {
+                //关闭窗口之后刷新frame
+                // location.replace(location.href);
+            },
+            end: function () {
+                //窗口销毁之后刷新frame
+                // location.replace(location.href);
+            }
+        });
+    }
+</script>
 </html>

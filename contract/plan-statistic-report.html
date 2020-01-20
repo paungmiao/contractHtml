@@ -33,10 +33,6 @@
         <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
 </div>
 <div class="x-body">
-    <xblock>
-        <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
-        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i>删除</button>
-    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
     </table>
@@ -128,66 +124,12 @@
 
 
         });
-        //监听头工具栏事件
-        table.on('toolbar(test)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id)
-                ,data = checkStatus.data; //获取选中的数据
-            switch(obj.event){
-                case 'add':
-                    layer.msg('添加');
-                    break;
-                case 'update':
-                    if(data.length === 0){
-                        layer.msg('请选择一行');
-                    } else if(data.length > 1){
-                        layer.msg('只能同时编辑一个');
-                    } else {
-                        layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
-                    }
-                    break;
-                case 'delete':
-                    if(data.length === 0){
-                        layer.msg('请选择一行');
-                    } else {
-                        layer.msg('删除');
-                    }
-                    break;
-            };
-        });
-        form.on("submit()", function () {
-            table.reload('test', {
-                where: {roleId: '2'},
-                page: 1
-            });
-            return false;
-        })
-
     });
 
 
 </script>
 
 <script>
-    function delete_(id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/planManage/user_delete/" + id,
-                dataType: "json",
-                type: "delete",
-                success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-    function viewReport(id){
-        var Urlss = '{:U("plan-statitic-report-view.html")}&mer_id='+id;
-        top.layui.index.openTabsPage(Urlss, $(t).attr("title-data"));
-    }
 </script>
 </body>
 
