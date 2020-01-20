@@ -91,6 +91,15 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset class="layui-elem-field">
+            <xblock>
+                <button class="layui-btn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
+                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i>删除</button>
+            </xblock>
+            <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+            </table>
+        </fieldset>
     </div>
 
 </body>
@@ -112,7 +121,6 @@
             }
         }
     });
-    myChart.showLoading();
     PercentPie.prototype.init = function () {
         var _that = this;
         var option = {
@@ -159,33 +167,44 @@
         echarts.init(_that.domEle).setOption(option);
     };
 
-    /* 全省蓄水占比 */
-    var option1 = {
-            value: 38, //百分比,必填
-            name: '', //必填
-            title: '',
-            backgroundColor: null,
-            color: ['#289df5', '#ff5050'],
-            fontSize: 16,
-            domEle: document.getElementById("rectifySituation"), //必填
-            data :[{
-                value: "55",
-                name: "水水水",
-                label: {
-                    normal: {
-                        show: true
-                    }
-                }
-            },
-                {
-                    value: 45,
-                    name: '火火火'
-                }
-            ]
-    },
+    $.ajax({
+        url: "/audit-api/planStatistic/questionStatistic",
+        dataType: "json",
+        type: "post",
+        data:{"rectifySituationId":"all"},
+        success: function (res) {
+            var statisticData = res.data.statisticData;
+            var data1=[],legendData=[];
 
-    percentPie1 = new PercentPie(option1);
-    percentPie1.init();
+            if(statisticData){
+                statisticData.forEach((item, index)=>{
+                    var iiitem = {}
+                    iiitem.name=item.name;
+                    iiitem.value=item.value;
+                    if(index==1){
+                        iiitem.label = {normal: {show: true}};
+                    }
+                    data1.push(iiitem);
+                    legendData.push(item.name);
+                });
+                var option1 = {
+                        value: 38, //百分比,必填
+                        name: '', //必填
+                        title: '',
+                        backgroundColor: null,
+                        color: ['#289df5', '#ff5050'],
+                        fontSize: 16,
+                        domEle: document.getElementById("rectifySituation"), //必填
+                        data :data1,
+                        legendData:legendData,
+                    },
+
+                    percentPie1 = new PercentPie(option1);
+                percentPie1.init();
+            }
+        }
+    });
+
     var option2 = {
             value: 20, //百分比,必填
             name: '123', //必填
@@ -221,6 +240,98 @@
         this.name = option.name;
         this.data = option.data;
     }
+    layui.use(['table'], function () {
+        let table = layui.table;
+        table.render({
+            elem: '#test',
+            url: '/audit-api/auditPlan/page',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [{
+                    type: 'checkbox', fixed: 'left'
+                },{
+                    field: 'planCheckList.projectCode',
+                    title: '项目编号',
+                    width: 200,
+                    templet: (data) => {
+                        return data.planCheckList.projectCode;
+                    }
+                }, {
+                    field: 'planCheckList.projectName',
+                    title: '项目名称',
+                    width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.projectName;
+                    }
+                }, {
+                    field: 'planCheckList.implementingAgencyId',
+                    title: '实施机构',
+                    width: 120,
+                    templet: (data) => {
+                        return data.planCheckList.implementingAgencyId;
+                    }
+                }, {
+                    field: 'auditObjectId',
+                    title: '审计对象',
+                    width: 120,
+                }, {
+                    field: 'auditNatureId',
+                    title: '审计性质',
+                    width: 180,
+                }, {
+                    field: 'auditYear',
+                    title: '年度',
+                    width: 120,
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    width: 80,
+                    templet: (data) => {
+                        let temp;
+                        let text;
+                        if (undefined == data.status || data.status == 1005) {
+                            text = '<span>待审核</span>';
+                        } else if (data.status == 1006) {
+                            text = '<span style="color: #28ff34">已驳回</span>';
+                        } else if (data.status == 1007) {
+                            text = '<span style="color: red">已批准</span>';
+                        }
+                        temp = '<div>' + text + '</div>'
+                        return temp;
+                    }
+                }, {
+                    field: '',
+                    title: '操作',
+                    width: 240,
+                    templet: function (res) {
+                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
+                        return temp;
+                    }
+                    // sort: true
+                },]
+            ],
+            page: true,
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            },
+            page: 1,
+            limit: 10,
+            request: {
+                pageName: 'current', //页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            where: {roleId: role},
+            done: function (res, curr, count) {
+            }
+        });
+    });
 </script>
 
 </html>

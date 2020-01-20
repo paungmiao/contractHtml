@@ -305,7 +305,7 @@
             backgroundColor: _that.backgroundColor,
             color: _that.color,
             legend: {
-                data: ['水水水', '火火火'],
+                data: _that.legendData,
                 icon: 'rect',
                 top: 100,
                 right: '14.17004%',
@@ -336,7 +336,7 @@
                             fontSize: _that.fontSize,
                             fontWeight: 'bold'
                         },
-                        formatter: '{b}\n{c}%'
+                        formatter: '{b}\n{c}个'
                     }
                 },
                 data:_that.data
@@ -345,33 +345,45 @@
         echarts.init(_that.domEle).setOption(option);
     };
 
-    /* 全省蓄水占比 */
-    var option1 = {
-            value: 38, //百分比,必填
-            name: '', //必填
-            title: '',
-            backgroundColor: null,
-            color: ['#289df5', '#ff5050'],
-            fontSize: 16,
-            domEle: document.getElementById("rectifySituation"), //必填
-            data :[{
-                value: "55",
-                name: "水水水",
-                label: {
-                    normal: {
-                        show: true
-                    }
-                }
-            },
-                {
-                    value: 45,
-                    name: '火火火'
-                }
-            ]
-    },
 
-    percentPie1 = new PercentPie(option1);
-    percentPie1.init();
+    $.ajax({
+        url: "/audit-api/planStatistic/questionStatistic",
+        dataType: "json",
+        type: "post",
+        data:{"rectifySituationId":"all"},
+        success: function (res) {
+            var statisticData = res.data.statisticData;
+            var data1=[],legendData=[];
+
+            if(statisticData){
+                statisticData.forEach((item, index)=>{
+                    var iiitem = {}
+                    iiitem.name=item.name;
+                    iiitem.value=item.value;
+                    if(index==1){
+                        iiitem.label = {normal: {show: true}};
+                    }
+                    data1.push(iiitem);
+                    legendData.push(item.name);
+                });
+                var option1 = {
+                        value: 38, //百分比,必填
+                        name: '', //必填
+                        title: '',
+                        backgroundColor: null,
+                        color: ['#289df5', '#ff5050'],
+                        fontSize: 16,
+                        domEle: document.getElementById("rectifySituation"), //必填
+                        data :data1,
+                        legendData:legendData,
+                    },
+
+                    percentPie1 = new PercentPie(option1);
+                percentPie1.init();
+            }
+        }
+    });
+
     var option2 = {
             value: 20, //百分比,必填
             name: '123', //必填
@@ -406,6 +418,7 @@
         this.value = option.value;
         this.name = option.name;
         this.data = option.data;
+        this.legendData = option.legendData;
     }
 </script>
 
