@@ -200,7 +200,7 @@
                     console.log("data", data)
                    // return  xhrRequest(data)
                     try {
-                        $.ajax({
+                       let success = $.ajax({
                             url: '/audit-api/login/token',
                             type: 'get',
                             xhrFields: {
@@ -208,14 +208,36 @@
                             },
                             data: data,
                             success: function (res) {
-                                let data = res.data;
-                                for (let i in data){
-                                    debugger
-                                    window.sessionStorage.setItem(i, JSON.stringify(data[i]));
+                                if(res.code==0){
+                                    let data = JSON.parse(res.data);
+                                    for (let i in data){
+                                        window.sessionStorage.setItem(i, JSON.stringify(data[i]));
+                                    }
+                                    let tokenType = data.token_type
+                                    let accessToken = data.access_token;
+                                    if(tokenType && accessToken){
+                                        window.sessionStorage.setItem('Authorization', tokenType+' '+accessToken);
+                                        $.ajax({
+                                            url: '/audit-api/login/user/info',
+                                            type: 'get',
+                                            async:false,
+                                            headers:{
+                                                Authorization:window.sessionStorage.getItem('Authorization')
+                                            },
+                                            success:function (res) {
+                                                if(res.code==0){
+                                                    let userInfo = res.data
+                                                    window.sessionStorage.set('userInfo',JSON.parse(userInfo))
+                                                    return true;
+                                                }
+                                            }
+                                        })
+                                    }
                                 }
+
                                 console.log('res', res)
                             }, complete: function (com) {
-                                debugger
+                                
                                 console.log('com', com)
                             }
                         })
