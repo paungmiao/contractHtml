@@ -227,7 +227,7 @@
                                             success:function (res) {
                                                 if(res.code==0){
                                                     let userInfo = res.data
-                                                    window.sessionStorage.set('userInfo',JSON.parse(userInfo))
+                                                    window.sessionStorage.setItem('userInfo',JSON.parse(userInfo))
                                                     return true;
                                                 }
                                             }
