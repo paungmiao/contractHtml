@@ -227,7 +227,7 @@
                                             success:function (res) {
                                                 if(res.code==0){
                                                     let userInfo = res.data
-                                                    window.sessionStorage.setItem('userInfo', userInfo)
+                                                    window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
                                                     console.log(userInfo['username'])
                                                     return true;
                                                 }

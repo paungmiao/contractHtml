@@ -165,6 +165,7 @@
       type: "get",
       async: true,
       success: function (resp) {
+        debugger;
         layui.use('form',function () {
           layui.form.val('entryEditForm',resp.data)
         })

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../js/common/dateFormat.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">合同流程管理</a>
+      <a><cite>个人信息</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新"> <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+    <form class="layui-form" lay-filter="entryEditForm" id="entryEditForm">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                用户名:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                部门:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="deptName" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                电话:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                角色:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="roleName" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                状态:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="statusName" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                创建时间:
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="createTime" style="width:200px" class="layui-input" readonly>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    let userInfo = window.sessionStorage.getItem('userInfo')
+    let result = $.parseJSON(userInfo);// 转成JSON对象
+    layui.use('form', function () {
+        let status = result.delFlag;
+        if (status == 0) {
+            result.statusName = "有效";
+        } else {
+            result.statusName = "无效";
+        }
+        layui.form.val('entryEditForm', result)
+    })
+</script>
+</body>
+
+</html>
