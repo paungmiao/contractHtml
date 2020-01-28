@@ -186,6 +186,7 @@
                 layer.msg('请输入验证码', {icon: 2, time: 1000});
             } else if (val == num) {
                 layui.use('form', function () {
+                    debugger
                     let form = layui.form;
                     let formData = form.val('loginForm')
                     formData.grant_type = 'password';
@@ -203,11 +204,10 @@
                        let success = $.ajax({
                             url: '/audit-api/login/token',
                             type: 'get',
-                            xhrFields: {
-                                withCredentials: true
-                            },
+                            async:false,
                             data: data,
                             success: function (res) {
+                                debugger
                                 if(res.code==0){
                                     let data = JSON.parse(res.data);
                                     for (let i in data){
@@ -227,7 +227,8 @@
                                             success:function (res) {
                                                 if(res.code==0){
                                                     let userInfo = res.data
-                                                    window.sessionStorage.setItem('userInfo',JSON.parse(userInfo))
+                                                    window.sessionStorage.setItem('userInfo', userInfo)
+                                                    console.log(userInfo['username'])
                                                     return true;
                                                 }
                                             }
