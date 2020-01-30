@@ -185,7 +185,7 @@
                 layer.msg('请输入验证码', {icon: 2, time: 1000});
             } else if (val == num) {
                 layui.use('form', function () {
-                    debugger
+                    
                     let form = layui.form;
                     let formData = form.val('loginForm')
                     formData.grant_type = 'password';
@@ -206,7 +206,6 @@
                             async:false,
                             data: data,
                             success: function (res) {
-                                debugger
                                 if(res.code==0){
                                     let data = JSON.parse(res.data);
                                     for (let i in data){
@@ -224,6 +223,7 @@
                                                 Authorization:window.sessionStorage.getItem('Authorization')
                                             },
                                             success:function (res) {
+                                                debugger
                                                 if(res.code==0){
                                                     let userInfo = res.data
                                                     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
