@@ -32,11 +32,15 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
             项目名称：<input type="text" placeholder="请输入问题定性" id="projectName" autocomplete="off" class="layui-input">
-            状态：
-            <div class="layui-input-inline">
+
+            <label class="state">
+                状态：
+            </label>
+            <div class="layui-input-inline state">
                 <select id="stateSelect">
                 </select>
             </div>
+
             问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
                         class="layui-input">
             问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
@@ -83,7 +87,7 @@
             })
             form.render("select")
         } else {
-            $("#stateSelect").remove()
+            $(".state").hide()
         }
 
         var tableIns = table.render({
