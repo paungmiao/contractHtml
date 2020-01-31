@@ -3,14 +3,14 @@
 
 <head>
 	<meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/font.css">
-    <link rel="stylesheet" href="../css/xadmin.css">
-	<link rel="stylesheet" href="../layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../css/JCheck.css">
-    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
-	<script type="text/javascript" src="../js/cookie.js"></script>
-	<script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../js/xadmin.js"></script>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+	<link rel="stylesheet" href="../../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="../../js/cookie.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../js/xadmin.js"></script>
     <script src="../js/JCheck.js"></script>
 </head>
 
@@ -103,34 +103,40 @@
 								<cite>审核清单</cite>
 							</a>
 						</li>
-						<li class="layui-hide" id="pro">
-							<a _href="../system/auditProject/project-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>项目清单</cite>
-							</a>
-						</li>
-						<li class="layui-hide" id="aud">
-							<a _href="../system/auditProject/audit-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>审计清单</cite>
-							</a>
-						</li>
-						<li class="layui-hide" id="bsh_pro">
-							<a _href="../system/auditProject/bsh-project-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>被审核项目清单</cite>
-							</a>
-						</li>
-						<li class="layui-hide" id="bsh_aud">
-							<a _href="../system/auditProject/bsh-audit-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>被审核审计清单</cite>
-							</a>
-						</li>
+<!--						<li class="layui-hide" id="pro">-->
+<!--							<a _href="../system/auditProject/project-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>项目清单</cite>-->
+<!--							</a>-->
+<!--						</li>-->
+<!--						<li class="layui-hide" id="aud">-->
+<!--							<a _href="../system/auditProject/audit-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>审计清单</cite>-->
+<!--							</a>-->
+<!--						</li>-->
+<!--						<li class="layui-hide" id="bsh_pro">-->
+<!--							<a _href="../system/auditProject/bsh-project-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>被审核项目清单</cite>-->
+<!--							</a>-->
+<!--						</li>-->
+<!--						<li class="layui-hide" id="bsh_aud">-->
+<!--							<a _href="../system/auditProject/bsh-audit-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>被审核审计清单</cite>-->
+<!--							</a>-->
+<!--						</li>-->
 						<li>
 							<a _href="../system/auditProject/archive-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审计归档</cite>
+							</a>
+						</li>
+						<li>
+							<a _href="../system/auditManagement/attention-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>关注列表</cite>
 							</a>
 						</li>
 					</ul>
@@ -144,12 +150,6 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a _href="../contract/plan-statistic-report.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>汇总报告</cite>
-							</a>
-						</li>
-						<li>
 							<a _href="../contract/plan-check-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审计查询统计</cite>
@@ -161,25 +161,32 @@
 								<cite>发现问题统计</cite>
 							</a>
 						</li>
-						<li>
-							<a _href="../contract/audit-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>整改情况统计</cite>
-							</a>
-						</li>
-						<li>
-							<a _href="../contract/audit-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>问题占比图表显示</cite>
-							</a>
-						</li>
-						<li>
-							<a _href="../contract/audit-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>整改情况比例图表统计</cite>
-							</a>
-						</li>
+<!--						<li>-->
+<!--							<a _href="../contract/audit-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>整改情况统计</cite>-->
+<!--							</a>-->
+<!--						</li>-->
+<!--						<li>-->
+<!--							<a _href="../contract/audit-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>问题占比图表显示</cite>-->
+<!--							</a>-->
+<!--						</li>-->
+<!--						<li>-->
+<!--							<a _href="../contract/audit-list.html">-->
+<!--								<i class="iconfont">&#xe6a7;</i>-->
+<!--								<cite>整改情况比例图表统计</cite>-->
+<!--							</a>-->
+<!--						</li>-->
 					</ul>
+				</li>
+
+				<li>
+					<a _href="../contract/plan-statistic-report.html">
+						<i class="iconfont">&#xe6a7;</i>
+						<cite>汇总报告</cite>
+					</a>
 				</li>
 
 				<li>
@@ -190,13 +197,13 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a _href="role-list.html">
+							<a _href="../system/userManage/personal-Info.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>个人信息</cite>
 							</a>
 						</li>
 						<li>
-							<a _href="../system/user-list.html">
+							<a _href="../system/userManage/department-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>部门信息</cite>
 							</a>
@@ -245,7 +252,7 @@
 <script>
 
 	/**
-	 * /system/index.html?role=1   请求条件
+	 * /system/`index.html?role=1   请求条件
 	 * /system/index.html?role=   行长
 	 */
 

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so" style="">
+            项目名称：<input type="text" placeholder="请输入问题定性" id="projectName" autocomplete="off" class="layui-input">
+
+            <label class="state">
+                状态：
+            </label>
+            <div class="layui-input-inline state">
+                <select id="stateSelect">
+                </select>
+            </div>
+
+            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
+                        class="layui-input">
+            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
+                        class="layui-input">
+
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+        <button class="layui-btn" onclick="attentionCheck()"><i class="layui-icon"></i>关注</button>
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+    </table>
+
+
+</div>
+<script>
+    var role = getCookie("role") == undefined ? 1 : getCookie("role");
+    let type = GetQueryString('type');
+    var count = 0;
+    let checkArr = [];
+    layui.use(['table', 'form'], function () {
+
+        let table = layui.table;
+        let form = layui.form
+        if (type == 'all') {
+            $.ajax({
+                url: "/audit-api/state/list/" + role,
+                dataType: "json",
+                type: "get",
+                async: false,
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择状态</option>')
+                        data.forEach((Obj, index) => {
+                            let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#stateSelect").empty().append(options.join(""));
+                    }
+                }
+            })
+            form.render("select")
+        } else {
+            $(".state").hide()
+        }
+
+        var tableIns = table.render({
+            elem: '#test',
+            url: '/audit-api/planManage/' + type + '/page/',
+            id: 'queryList',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [
+                    {type: 'checkbox', field: 'id', title: '', width: 80, fixed: 'left', width: 80,},
+                    {
+                        field: 'projectCode',
+                        title: '项目编号',
+                        templet: (data) => {
+                            return data.projectCode;
+                        }
+                    }, {
+                    field: 'projectName',
+                    title: '项目名称',
+                    templet: (data) => {
+                        return data.projectName;
+                    }
+                }, {
+                    field: 'implementingAgencyId',
+                    title: '实施机构',
+                    templet: (data) => {
+                        return data.implementingAgencyId;
+                    }
+                }, {
+                    field: 'auditObjectId',
+                    title: '审计对象',
+                },
+                    {
+                        field: 'problemCharacterization',
+                        title: '问题定性',
+                    },
+                    {
+                        field: 'problemDescription',
+                        title: '问题描述',
+                    }, {
+                    field: 'auditNatureId',
+                    title: '审计性质',
+                }, {
+                    field: 'auditYear',
+                    title: '年度',
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    templet: (data) => {
+                        let temp;
+                        let text;
+                        if (undefined == data.status || data.status == 1001) {
+                            text = '<span>未呈批</span>';
+                        } else if (data.status == 1002) {
+                            text = '<span style="color: #28ff34">待审核</span>';
+                        } else if (data.status == 1003) {
+                            text = '<span style="color: red">已批准</span>';
+                        } else if (data.status == 1004) {
+                            text = '<span style="color: red">被驳回</span>';
+                        }
+                        temp = '<div>' + text + '</div>'
+                        return temp;
+                    }
+                },]
+            ],
+            page: true,
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            },
+            page: 1,
+            limit: 10,
+            request: {
+                pageName: 'current', //页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            done: function (res, curr, count) {
+                //可以自行添加判断的条件是否选中
+                //这句才是真正选中，通过设置关键字LAY_CHECKED为true选中，这里只对第一行选中
+                // res.data[0]["LAY_CHECKED"]='true';
+                //下面三句是通过更改css来实现选中的效果
+                var index = res.data[0]['LAY_TABLE_INDEX'];
+                // $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+                // $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+            }
+        });
+        form.on("submit(sreach)", function () {
+            tableIns.reload({
+                where: {
+                    projectName: $("#projectName").val(),
+                    normalStatus: $("#stateSelect").val(),//状态
+                    problemCharacterization: $("#problemCharacterization").val(),//问题定性
+                    problemDescription: $("#problemDescription").val()
+                },//问题描述
+                page: 1
+            });
+            return false;
+        })
+        //以复选框事件为例
+        table.on('checkbox(test)', function (obj) {
+            let data = obj.data;
+            let id = data.id;
+            let index = checkArr.indexOf(id);
+            if (index > -1) {
+                checkArr.slice(index, 1)
+            } else {
+                checkArr.push(id)
+            }
+        });
+    });
+
+    function attentionCheck() {
+        let userInfo = window.sessionStorage.userInfo;
+        let userId = ''
+        if (userInfo && JSON.parse(userInfo) && JSON.parse(userInfo).userId) {
+            userId = JSON.parse(userInfo).userId;
+        } else {
+            return top.layer.msg('登录信息已失效，请重新登录', {icon: 2})
+        }
+        if (checkArr.length == 0) {
+            return top.layer.msg('关注信息为空', {icon: 2})
+        }
+        $.ajax({
+            url: '/audit-api/planManage/check/attention',
+            type: 'put',
+            async: false,
+            dataType: 'json',
+            data:{
+              userId:userId,
+              checkStr:checkArr.join(",")
+            },
+            success: (res) => {
+                console.log(res)
+                if(res.data){
+                    top.layer.msg('关注成功，请前往我的关注列表查看详情');
+                }
+            },
+            error: res => {
+                top.layer.msg('请检查网络连接', {icon: 2})
+            }
+        })
+    }
+
+</script>
+
+<script>
+    function delete_(id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/audit-api/planManage/user_delete/" + id,
+                dataType: "json",
+                type: "delete",
+                success: function (resp) {
+                    layer.alert("删除成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
+        });
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+</script>
+</body>
+
+</html>

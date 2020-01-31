@@ -31,25 +31,25 @@
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
                                                 <h5 style="font-size: large;">总项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="planSum">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('all')" id="planSum">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
                                                 <h5 style="font-size: large;">已完成</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="finishCount">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('done')" id="finishCount">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
                                                 <h5 style="font-size: large;">未完成</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="nofinishCount">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('todo')" id="nofinishCount">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
                                             <a href="javascript:;" class="x-admin-backlog-body">
                                                 <h5 style="font-size: large;">延期项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="timeoutCount">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('delay')" id="timeoutCount">0</cite></p>
                                             </a>
                                         </li>
                                     </ul>
@@ -248,82 +248,82 @@
             }
         }
     });
-    var myChart = echarts.init(document.getElementById('echarts-xinjiang'));
-    myChart.showLoading();
-    $.get('../json/xinjiang.json', function (geoJson) {
 
-        myChart.hideLoading();
+    //查询地图信息
+    $.ajax({
+        url: "/audit-api/auditPlan/XJInfo",
+        dataType: "json",
+        type: "get",
+        success: function (resp) {
+            if (resp) {
+                let data = resp.data;
+                var myChart = echarts.init(document.getElementById('echarts-xinjiang'));
+                myChart.showLoading();
+                $.get('../json/xinjiang.json', function (geoJson) {
+                    myChart.hideLoading();
+                    echarts.registerMap('XJ', geoJson);
+                    myChart.setOption(option = {
+                        title: {
+                            // text: '新疆相关'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            // formatter: '{b}<br/>{c} (p / km2)'
+                            formatter:function(params){
+                                return (
+                                    params.data.name + '<br/>'
+                                    + '问题总个数：' + params.data.total + '<br/>'
+                                    + '未整改问题总个数：' + params.data.notRectified + '<br/>'
+                                    + '未整改问题总占比：' + params.data.value + '<br/>'
+                                )
 
-        echarts.registerMap('XJ', geoJson);
-
-        myChart.setOption(option = {
-            title: {
-                // text: '新疆相关'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}<br/>{c} (p / km2)'
-            },
-            toolbox: {
-                show: true,
-                // orient: 'vertical',
-                // left: 'right',
-                // top: 'center',
-                feature: {
-                    dataView: {readOnly: false},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            visualMap: {
-                min: 800,
-                max: 50000,
-                text: ['High', 'Low'],
-                realtime: false,
-                calculable: true,
-                inRange: {
-                    color: ['lightskyblue', 'yellow', 'orangered']
-                }
-            },
-            series: [
-                {
-                    // name: '新疆相关',
-                    type: 'map',
-                    mapType: 'XJ', // 自定义扩展图表类型
-                    label: {
-                        show: true
-                    },
-                    // selectedMode : 'multiple',
-                    mapLocation : {
-                        x : 'left'
-                    },
-                    data: [
-                        {name: '巴音郭楞蒙古自治州', value: 20057.34},
-                        {name: '和田地区', value: 15477.48},
-                        {name: '哈密地区', value: 31686.1},
-                        {name: '阿克苏地区', value: 6992.6},
-                        {name: '阿勒泰地区', value: 44045.49},
-                        {name: '喀什地区', value: 40689.64},
-                        {name: '塔城地区', value: 37659.78},
-                        {name: '昌吉回族自治州', value: 45180.97},
-                        {name: '克孜勒苏柯尔克孜自治州', value: 55204.26},
-                        {name: '吐鲁番地区', value: 21900.9},
-                        {name: '伊犁哈萨克自治州', value: 4918.26},
-                        {name: '博尔塔拉蒙古自治州', value: 5881.84},
-                        {name: '乌鲁木齐市', value: 4178.01},
-                        {name: '克拉玛依市', value: 2227.92},
-                        {name: '阿拉尔市', value: 2180.98},
-                        {name: '图木舒克市', value: 9172.94},
-                        {name: '五家渠市', value: 3368},
-                        {name: '石河子市', value: 806.98}
-                    ]
-                }
-            ]
-        });
-        myChart.on('click', function(params){
-            // alert(params.name);
-            console.log(params);//此处写点击事件内容
-        });
+                            }
+                        },
+                        toolbox: {
+                            show: true,
+                            // orient: 'vertical',
+                            // left: 'right',
+                            // top: 'center',
+                            feature: {
+                                dataView: {readOnly: false},
+                                restore: {},
+                                saveAsImage: {}
+                            }
+                        },
+                        visualMap: {
+                            min: 0,
+                            max: 50,
+                            text: ['High', 'Low'],
+                            realtime: false,
+                            calculable: true,
+                            inRange: {
+                                color: ['lightskyblue', 'yellow', 'orangered']
+                            }
+                        },
+                        series: [
+                            {
+                                // name: '新疆相关',
+                                type: 'map',
+                                mapType: 'XJ', // 自定义扩展图表类型
+                                label: {
+                                    show: true
+                                },
+                                // selectedMode : 'multiple',
+                                mapLocation : {
+                                    x : 'left'
+                                },
+                                data: data
+                            }
+                        ]
+                    });
+                    myChart.on('click', function(params){
+                        console.log(params);
+                        // var url = params.data.url;
+                        // window.location.href = url;
+                    });
+                });
+            }
+        }
     });
     PercentPie.prototype.init = function () {
         var _that = this;
@@ -447,6 +447,35 @@
         this.data = option.data;
         this.legendData = option.legendData;
     }
+    let typeArr={};
+    typeArr['all']='全部';
+    typeArr['todo']='未完成';
+    typeArr['done']='已完成';
+    typeArr['delay']='延期';
+    function openPlanCheckList(type) {
+        top.layer.open({
+            type: 2,
+            area: ['80%', '80%'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: typeArr[type]+'项目',
+            content: './plan-list.html?type='+type,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+            },
+            cancel: function () {
+                //关闭窗口之后刷新frame
+                // location.replace(location.href);
+            },
+            end: function () {
+                //窗口销毁之后刷新frame
+                // location.replace(location.href);
+            }
+        });
+    }
+
 </script>
 
 </html>
