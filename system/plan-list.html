@@ -60,6 +60,8 @@
 <script>
     var role = getCookie("role") == undefined ? 1 : getCookie("role");
     let type = GetQueryString('type');
+    //实施对象id
+    let deptId = GetQueryString('deptId');
     var count = 0;
     let checkArr = [];
     layui.use(['table', 'form'], function () {
@@ -68,7 +70,7 @@
         let form = layui.form
         if (type == 'all') {
             $.ajax({
-                url: "/audit-api/state/list/" + role,
+                url: "/audit-api/state/list/planState",
                 dataType: "json",
                 type: "get",
                 async: false,
@@ -92,8 +94,11 @@
 
         var tableIns = table.render({
             elem: '#test',
-            url: '/audit-api/planManage/' + type + '/page/',
+            url: '/audit-api/planManage/' + type + '/page',
             id: 'queryList',
+            headers:{
+                Authorization: window.sessionStorage.getItem('Authorization')
+            },
             xhrFields: {
                 withCredentials: true
             },
@@ -166,6 +171,9 @@
             },
             page: 1,
             limit: 10,
+            where:{
+              deptId:deptId
+            },
             request: {
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
@@ -186,7 +194,8 @@
                     projectName: $("#projectName").val(),
                     normalStatus: $("#stateSelect").val(),//状态
                     problemCharacterization: $("#problemCharacterization").val(),//问题定性
-                    problemDescription: $("#problemDescription").val()
+                    problemDescription: $("#problemDescription").val(),
+                    deptId:deptId
                 },//问题描述
                 page: 1
             });
