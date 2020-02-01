@@ -64,6 +64,7 @@
     let deptId = GetQueryString('deptId');
     var count = 0;
     let checkArr = [];
+    let stateData ={}
     layui.use(['table', 'form'], function () {
 
         let table = layui.table;
@@ -80,6 +81,7 @@
                         let options = [];
                         options.push('<option value="" >请选择状态</option>')
                         data.forEach((Obj, index) => {
+                            stateData[Obj.code]=Obj.name;
                             let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
                             options.push(option);
                         })
@@ -144,19 +146,11 @@
                     field: 'status',
                     title: '状态',
                     templet: (data) => {
-                        let temp;
-                        let text;
-                        if (undefined == data.status || data.status == 1001) {
-                            text = '<span>未呈批</span>';
-                        } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">待审核</span>';
-                        } else if (data.status == 1003) {
-                            text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1004) {
-                            text = '<span style="color: red">被驳回</span>';
+                        let  text = '<span style="color:gray">其他</span>';;
+                        if (stateData[data.status]) {
+                            text = '<span>'+stateData[data.status]+'</span>';
                         }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
+                        return text;
                     }
                 },]
             ],
