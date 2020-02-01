@@ -84,16 +84,14 @@
     </form>
 </div>
 <script>
-    let userInfo = window.sessionStorage.getItem('userInfo')
-    let result = $.parseJSON(userInfo);// 转成JSON对象
     layui.use('form', function () {
-        let status = result.delFlag;
+        let status = userInfo.delFlag;
         if (status == 0) {
-            result.statusName = "有效";
+            userInfo.statusName = "有效";
         } else {
-            result.statusName = "无效";
+            userInfo.statusName = "无效";
         }
-        layui.form.val('entryEditForm', result)
+        layui.form.val('entryEditForm', userInfo)
     })
 </script>
 </body>

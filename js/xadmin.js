@@ -5,10 +5,7 @@
 //     }
 
 // };
-var role = GetQueryString("role");
-if (role != undefined && role != '') {
-    setCookie("role", role);
-}
+let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 
 let Authorization = window.sessionStorage.getItem('Authorization')
 if (!Authorization || Authorization == '' || Authorization == undefined) {

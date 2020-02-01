@@ -46,36 +46,20 @@
 	<div class="left-nav">
 		<div id="side-nav">
 			<ul id="nav">
-<!--				<li>-->
-<!--					<a href="javascript:;">-->
-<!--						<i class="iconfont">&#xe6b8;</i>-->
-<!--						<cite>项目管理</cite>-->
-<!--						<i class="iconfont nav_right">&#xe697;</i>-->
-<!--					</a>-->
-<!--					<ul class="sub-menu">-->
-<!--						<li date-refresh="1">-->
-<!--							<a _href="../contract/program-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>项目列表</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--					</ul>-->
-<!--				</li>-->
-
-				<li>
+				<li id="entry">
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
 						<cite>词条管理</cite>
 						<i class="iconfont nav_right">&#xe697;</i>
 					</a>
 					<ul class="sub-menu">
-						<li date-refresh="1">
+						<li date-refresh="1" class="layui-hide" id="entry_list">
 							<a _href="../contract/entry-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>词条列表</cite>
 							</a>
 						</li>
-						<li date-refresh="1">
+						<li date-refresh="1" class="layui-hide" id="entry_audit">
 							<a _href="../contract/entryReview-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>词条审核</cite>
@@ -91,7 +75,7 @@
 						<i class="iconfont nav_right">&#xe697;</i>
 					</a>
 					<ul class="sub-menu">
-						<li class="layui-hide" id="plan_pro">
+						<li date-refresh="1" class="layui-hide" id="plan_pro">
 						<a _href="../system/auditManagement/plan-management-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>计划清单</cite>
@@ -103,37 +87,13 @@
 								<cite>审核清单</cite>
 							</a>
 						</li>
-<!--						<li class="layui-hide" id="pro">-->
-<!--							<a _href="../system/auditProject/project-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>项目清单</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--						<li class="layui-hide" id="aud">-->
-<!--							<a _href="../system/auditProject/audit-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>审计清单</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--						<li class="layui-hide" id="bsh_pro">-->
-<!--							<a _href="../system/auditProject/bsh-project-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>被审核项目清单</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--						<li class="layui-hide" id="bsh_aud">-->
-<!--							<a _href="../system/auditProject/bsh-audit-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>被审核审计清单</cite>-->
-<!--							</a>-->
-<!--						</li>-->
 						<li>
 							<a _href="../system/auditProject/archive-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审计归档</cite>
 							</a>
 						</li>
-						<li>
+						<li class="layui-hide" id="plan_att">
 							<a _href="../system/auditManagement/attention-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>关注列表</cite>
@@ -142,7 +102,7 @@
 					</ul>
 				</li>
 
-				<li>
+				<li class="layui-hide" id="statistics">
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
 						<cite>审计分析</cite>
@@ -161,28 +121,10 @@
 								<cite>发现问题统计</cite>
 							</a>
 						</li>
-<!--						<li>-->
-<!--							<a _href="../contract/audit-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>整改情况统计</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--						<li>-->
-<!--							<a _href="../contract/audit-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>问题占比图表显示</cite>-->
-<!--							</a>-->
-<!--						</li>-->
-<!--						<li>-->
-<!--							<a _href="../contract/audit-list.html">-->
-<!--								<i class="iconfont">&#xe6a7;</i>-->
-<!--								<cite>整改情况比例图表统计</cite>-->
-<!--							</a>-->
-<!--						</li>-->
 					</ul>
 				</li>
 
-				<li>
+				<li class="layui-hide" id="report">
 					<a _href="../contract/plan-statistic-report.html">
 						<i class="iconfont">&#xe6a7;</i>
 						<cite>汇总报告</cite>
@@ -256,28 +198,28 @@
 	 * /system/index.html?role=   行长
 	 */
 
-	if (role == 1) {
-		userName = "审计员工";
-		$("#pro").removeClass("layui-hide");
-		$("#plan_pro").removeClass("layui-hide");
-	} else if (role == 2) {
-		userName = "审计领导";
-		$("#aud").removeClass("layui-hide");
-		$("#plan_aud").removeClass("layui-hide");
-	} else if (role == 3) {
-		userName = "被审计员工";
-		$("#bsh_pro").removeClass("layui-hide");
-	} else if (role == 4) {
-		userName = "被审计领导";
-		$("#bsh_aud").removeClass("layui-hide");
-	} else {
-		$("#pro").removeClass("layui-hide");
-		$("#plan_pro").removeClass("layui-hide");
-		$("#aud").removeClass("layui-hide");
-		$("#plan_aud").removeClass("layui-hide");
-		$("#bsh_pro").removeClass("layui-hide");
-		$("#bsh_aud").removeClass("layui-hide");
-		userName = "行长";
+	debugger
+	let roleIdList = userInfo.roleIdList;
+	let userName = userInfo.username;
+	let deptName = userInfo.deptName;
+
+	if ($.inArray(6, roleIdList) > -1) {
+		if (deptName.indexOf('中支') > -1) {
+			$("#entry_list").removeClass("layui-hide");
+			$("#pro").removeClass("layui-hide");
+			$("#plan_pro").removeClass("layui-hide");
+			$("#statistics").removeClass("layui-hide");
+		} else if (deptName.indexOf('支行') > -1) {
+			$("#entry").addClass("layui-hide");
+		}
+	} else if ($.inArray(1, roleIdList) > -1) {
+		if (deptName.indexOf('中支') > -1) {
+			$("#entry_list").removeClass("layui-hide");
+			$("#entry_audit").removeClass("layui-hide");
+			$("#statistics").removeClass("layui-hide");
+		} else if (deptName.indexOf('支行') > -1) {
+			$("#entry").addClass("layui-hide");
+		}
 	}
 
 	$("#userName").text(userName);

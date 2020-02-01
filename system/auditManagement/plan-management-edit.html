@@ -2,219 +2,197 @@
 <html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
 
 <head>
-  <link rel="stylesheet" href="../../css/font.css">
-  <link rel="stylesheet" href="../../css/xadmin.css">
-  <link rel="stylesheet" href="../../layui/css/layui.css">
-  <link rel="stylesheet" href="../../css/JCheck.css">
-  <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
-  <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
-  <script type="text/javascript" src="../../js/xadmin.js"></script>
-  <script type="text/javascript" src="../../js/cookie.js"></script>
-  <script src="../../js/JCheck.js"></script>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="../../js/JCheck.js"></script>
 </head>
 
 <body>
 <div class="x-body">
 
-    <form class="layui-form" lay-filter="editForm">
-        <input id="inputData" name ="id" type="hidden">
-    </form>
-  <form class="layui-form" lay-filter="planEditForm">
-      <input id="readOnlyData" type="hidden">
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>审计年度:
-        </label>
-        <div class="layui-input-inline">
-          <input name="auditYear" class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">
+    <form class="layui-form" lay-filter="planEditForm">
+        <input id="readOnlyData" type="hidden">
+        <input id="inputData" type="hidden">
+        <input name="id" type="hidden">
+        <input name="createdBy" type="hidden">
+        <input name="status" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计年度:
+            </label>
+            <div class="layui-input-inline">
+                <input name="auditYear" class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">
+            </div>
         </div>
-      </div>
-      <div class="layui-form-item">
-        <label  class="layui-form-label">
-          <span class="x-red">*</span>实施机构:
-        </label>
-        <div class="layui-input-inline">
-          <select id="implementingAgencySelect" name="implementingAgencyId">
-          </select>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-inline">
+                <select id="auditObjectIdSelect" name="auditObjectId">
+                </select>
+            </div>
         </div>
-      </div>
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>审计对象:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="auditObjectIdSelect" name="auditObjectId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>审计性质:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="auditNatureIdSelect" name="auditNatureId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>问题词条:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="questionEntryIdSelect" name="questionEntryId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>问题严重程度:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="problemSeverityIdSelect" name="problemSeverityId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>整改情况:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="rectifySituationIdSelect" name="rectifySituationId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--        <label  class="layui-form-label">-->
-<!--          <span class="x-red">*</span>项目名称:-->
-<!--        </label>-->
-<!--        <div class="layui-input-inline">-->
-<!--          <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"-->
-<!--                 autocomplete="off" class="layui-input" value="">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>问题定性:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" value="">-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>问题描述:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="">-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>可能影响:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="">-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item layui-form-text">-->
-<!--          <label class="layui-form-label">-->
-<!--              <span class="x-red">*</span>整改建议:-->
-<!--          </label>-->
-<!--          <div class="layui-input-block">-->
-<!--              <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>审计依据:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <input name="auditBasis" type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>审计分类:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="auditClassificationIdSelect" name="auditClassificationId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>审计经验:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">-->
-<!--          </div>-->
-<!--      </div>-->
-<!--      <div class="layui-form-item">-->
-<!--          <label  class="layui-form-label">-->
-<!--              <span class="x-red">*</span>风险评估:-->
-<!--          </label>-->
-<!--          <div class="layui-input-inline">-->
-<!--              <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
-<!--              </select>-->
-<!--          </div>-->
-<!--      </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计性质:
+            </label>
+            <div class="layui-input-inline">
+                <select id="auditNatureIdSelect" name="auditNatureId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题词条:
+            </label>
+            <div class="layui-input-inline">
+                <select id="questionEntryIdSelect" name="questionEntryId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题严重程度:
+            </label>
+            <div class="layui-input-inline">
+                <select id="problemSeverityIdSelect" name="problemSeverityId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>整改情况:
+            </label>
+            <div class="layui-input-inline">
+                <select id="rectifySituationIdSelect" name="rectifySituationId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>项目名称:
+            </label>
+            <div class="layui-input-inline">
+                <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"
+                       autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题定性:
+            </label>
+            <div class="layui-input-inline">
+                <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题描述:
+            </label>
+            <div class="layui-input-inline">
+                <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>可能影响:
+            </label>
+            <div class="layui-input-inline">
+                <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>整改建议:
+            </label>
+            <div class="layui-input-block">
+                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计依据:
+            </label>
+            <div class="layui-input-inline">
+                <input name="auditBasis" type="text" style="width:200px" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计分类:
+            </label>
+            <div class="layui-input-inline">
+                <select id="auditClassificationIdSelect" name="auditClassificationId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计经验:
+            </label>
+            <div class="layui-input-inline">
+                <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>风险评估:
+            </label>
+            <div class="layui-input-inline">
+                <select id="riskAssessmentIdSelect" name="riskAssessmentId">
+                </select>
+            </div>
+        </div>
 
 
-      <div class="layui-input-inline">
-        <label for="L_repass" class="layui-form-label">
-        </label>
-        <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
-          <i class="layui-icon">&#xe605;</i>修改
-        </button>
-      </div>
-      <div class="layui-input-inline">
-        <label for="L_repass" class="layui-form-label">
-        </label>
-        <a class="layui-btn" onclick="off()">
-          <i class="layui-icon">&#x1007;</i>取消
-        </a>
-      </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+                <i class="layui-icon">&#xe605;</i>修改
+            </button>
+        </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <a class="layui-btn" onclick="off()">
+                <i class="layui-icon">&#x1007;</i>取消
+            </a>
+        </div>
 
     </form>
-  </div>
-  <script>
+</div>
+<script>
     layui.use(['form', 'layer'], function () {
-      var form = layui.form
-              , layer = layui.layer;
-      $.ajax({
-          url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=1",
-          dataType: "json",
-          type: "get",
-          success: function (resp) {
-              if (resp && 0 == resp.code) {
-                  let data = resp.data;
-                  let options = [];
-                  options.push('<option value="" >请选择实施机构</option>')
-                  data.forEach((Obj) => {
-                      let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                      options.push(option);
-                  })
-                  $("#implementingAgencySelect").empty().append(options.join(""));
-              }
-          }
-      });
-    $.ajax({
-        url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=2",
-        dataType: "json",
-        type: "get",
-        success: function (resp) {
-            if (resp && 0 == resp.code) {
-                let data = resp.data;
-                let options = [];
-                options.push('<option value="" >请选择审计对象</option>')
-                data.forEach((Obj) => {
-                    let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                    options.push(option);
-                })
-                $("#auditObjectIdSelect").empty().append(options.join(""));
+        let form = layui.form
+        let layer = layui.layer;
+        $.ajax({
+            url: "/audit-api/planManage/getAuditObject?deptId=10000",
+            dataType: "json",
+            type: "get",
+            headers:{
+                Authorization:window.sessionStorage.getItem('Authorization')
+            },
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计对象</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#auditObjectIdSelect").empty().append(options.join(""));
+                }
             }
-        }
-    })
+        })
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
@@ -317,98 +295,89 @@
                 }
             }
         });
-      form.verify({
-        projectName: function (value, dom) {
-          if (value.length > 128) {
-            return '项目名称不能超过128个字符！'
-          }
-        }
-      })
-      form.render("select")
-
-      //监听提交
-      form.on('submit(addPlanCheckList)', function (data) {
-          var EditForm = form.val("editForm");
-          var planEditForm = form.val("planEditForm");
-          EditForm.planCheckList = planEditForm;
-          var json = JSON.stringify(EditForm);
-          var obj = JSON.parse(json);
-          debugger;
-          $.ajax({
-              url: '/audit-api/auditPlan/saveOrUpdate',
-              type: 'POST',
-              dataType: "json",
-              data: obj,
-              success: function (resp) {
-                  //发异步，把数据提交给php
-                  if(0 == resp.code){
-                      layer.alert("修改成功", {icon: 6}, function () {
-                          // 获得frame索引
-                          var index = parent.layer.getFrameIndex(window.name);
-                          //关闭当前frame
-                          parent.layer.close(index);
-                          // 可以对父窗口进行刷新
-                          x_admin_father_reload();
-                      });
-                  }else {
-                      layer.alert("操作失败 "+resp.msg,{icon:2},function () {
-
-                      })
-                  }
-
-              },
+        form.verify({
+            projectName: function (value, dom) {
+                if (value.length > 128) {
+                    return '项目名称不能超过128个字符！'
+                }
+            }
         })
+        form.render("select")
 
-        return false;
-      });
+        //监听提交
+        form.on('submit(addPlanCheckList)', function (data) {
+            $.ajax({
+                url: '/audit-api/planManage/saveOrEditPlan',
+                type: 'POST',
+                dataType: "json",
+                data: form.val("planEditForm"),
+                success: function (resp) {
+                    //发异步，把数据提交给php
+                    if (0 == resp.code) {
+                        layer.alert("修改成功", {icon: 6}, function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            // 可以对父窗口进行刷新
+                            x_admin_father_reload();
+                        });
+                    } else {
+                        layer.alert("操作失败 " + resp.msg, {icon: 2}, function () {
+
+                        })
+                    }
+
+                },
+            })
+
+            return false;
+        });
 
     });
     layui.use('laydate', function () {
-      var laydate = layui.laydate;
-
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start' //指定元素
-      });
-
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start', //指定元素
+            type: 'year'
+        });
     });
 
-  </script>
+</script>
 <script>
 
-  function off() {
-    var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-    parent.layer.close(index);		//关闭窗口
-  }
+    function off() {
+        var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+        parent.layer.close(index);		//关闭窗口
+    }
 
-  function initEntryInfo() {
-    // 数据回显渲染
-    $.ajax({
-      url: "/audit-api/auditPlan/"+$("#inputData").val()+"?roleId=1",
-      dataType: "json",
-      type: "get",
-      async: true,
-      success: function (resp) {
-        layui.use('form',function () {
-          layui.form.val('editForm',resp.data)
-          layui.form.val('planEditForm',resp.data.planCheckList)
-            //渲染
-          layui.form.render("select");
+    function initEntryInfo() {
+        // 数据回显渲染
+        $.ajax({
+            url: "/audit-api/planManage/" + $("#inputData").val(),
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                layui.use('form', function () {
+                    layui.form.val('planEditForm', resp.data)
+                    //渲染 有待考究
+                    // layui.form.render("select");
+                })
+
+            }
         })
 
-      }
-    })
+        var readOnlyData = $("#readOnlyData").val();
+        if ("readOnly" == readOnlyData) {
+            layui.$('input').attr('disabled', true);
+            layui.$('select').attr('disabled', true);
+            layui.$('textarea').attr('disabled', true);
+            layui.form.render();
+        }
 
-      debugger;
-      var readOnlyData = $("#readOnlyData").val();
-      if ("readOnly" == readOnlyData) {
-          layui.$('input').attr('disabled',true);
-          layui.$('select').attr('disabled',true);
-          layui.$('textarea').attr('disabled',true);
-          layui.form.render();
-      }
-
-  }
+    }
 
 </script>
 
