@@ -69,31 +69,29 @@
 
         let table = layui.table;
         let form = layui.form
-        if (type == 'all') {
-            $.ajax({
-                url: "/audit-api/state/list/planState",
-                dataType: "json",
-                type: "get",
-                async: false,
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择状态</option>')
-                        data.forEach((Obj, index) => {
-                            stateData[Obj.code]=Obj.name;
-                            let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#stateSelect").empty().append(options.join(""));
-                    }
+        $.ajax({
+            url: "/audit-api/state/list/planState",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择状态</option>')
+                    data.forEach((Obj, index) => {
+                        stateData[Obj.code]=Obj.name;
+                        let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#stateSelect").empty().append(options.join(""));
                 }
-            })
-            form.render("select")
-        } else {
+            }
+        })
+        form.render("select")
+        if (type == 'done') {
             $(".state").hide()
         }
-
         var tableIns = table.render({
             elem: '#test',
             url: '/audit-api/planManage/' + type + '/page',
