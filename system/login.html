@@ -223,7 +223,7 @@
                                                 Authorization:window.sessionStorage.getItem('Authorization')
                                             },
                                             success:function (res) {
-                                                debugger
+
                                                 if(res.code==0){
                                                     let userInfo = res.data
                                                     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))

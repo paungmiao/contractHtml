@@ -218,11 +218,11 @@
                             layui.table.reload('test')
                         })
                     }else{
-                        debugger
+
                         layer.msg(resp.msg, {icon: 2})
                     }
                 }, error: function (resp) {
-                    debugger
+
                     layer.msg("操作失败，请检查网络连接", {icon: 2})
                 }
             })
