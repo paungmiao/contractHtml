@@ -47,7 +47,7 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','600','460')"><i class="layui-icon"></i>新增</button>
+        <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i class="layui-icon"></i>新增</button>
         <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
     </xblock>
@@ -124,9 +124,9 @@
                     title: '操作',
                     width: 240,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
+                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
                         if (undefined == res.status || res.status == 1001) { //未呈批
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `')" >编辑</span>
+                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','800','500','` + res.id + `')" >编辑</span>
                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
                         } else if (res.status == 1002) { //待审核
 

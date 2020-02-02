@@ -32,10 +32,31 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
+                <span class="x-red">*</span>实施机构:
+            </label>
+            <div class="layui-input-inline">
+                <select id="impAdminSelect" name="impAdminId">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="impUserSelect" name="impUserId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
             <div class="layui-input-inline">
-                <select id="auditObjectIdSelect" name="auditObjectId">
+                <select id="auditObjectIdSelect" name="auditObjectId" lay-filter="one_cate">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="auditAdminSelect" name="auditAdminId">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select id="auditUserSelect" name="auditUserId">
                 </select>
             </div>
         </div>
@@ -170,9 +191,52 @@
     </form>
 </div>
 <script>
+
     layui.use(['form', 'layer'], function () {
         let form = layui.form
         let layer = layui.layer;
+        {
+            $.ajax({
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=管理员",
+                dataType: "json",
+                type: "get",
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
+                },
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择实施机构管理员</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                            options.push(option);
+                        })
+                        $("#impAdminSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            $.ajax({
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=一般用户",
+                dataType: "json",
+                type: "get",
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
+                },
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择实施机构一般用户</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                            options.push(option);
+                        })
+                        $("#impUserSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+        }
         $.ajax({
             url: "/audit-api/planManage/getAuditObject?deptId=10000",
             dataType: "json",
@@ -332,6 +396,52 @@
             })
 
             return false;
+        });
+        form.on('select(one_cate)', function (data) {
+            let deptId = data['value'];
+            $.ajax({
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=管理员",
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
+                },
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象管理员</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditAdminSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            $.ajax({
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=一般用户",
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
+                },
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象一般用户</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditUserSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            form.render("select");
         });
 
     });
