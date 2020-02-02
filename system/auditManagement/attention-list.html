@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="/js/JCheck.js"></script>
 
@@ -41,27 +42,31 @@
                 <select id="stateSelect">
                 </select>
             </div>
-            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
-            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
+            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
+                        class="layui-input">
+            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
+                        class="layui-input">
 
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+    <table class="layui-table x-admin" id="queryList" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
+           lay-filter="queryList">
 
     </table>
 
 
 </div>
 <script>
-    var role = getCookie("role")==undefined?1:getCookie("role");
+    var role = getCookie("role") == undefined ? 1 : getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
 
         let table = layui.table;
         let form = layui.form
+        let stateData = {}
         $.ajax({
-            url: "/audit-api/state/list/" + role,
+            url: "/audit-api/state/list/planState",
             dataType: "json",
             type: "get",
             async: false,
@@ -71,6 +76,7 @@
                     let options = [];
                     options.push('<option value="" >请选择状态</option>')
                     data.forEach((Obj, index) => {
+                        stateData[Obj.code] = Obj.name;
                         let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
                         options.push(option);
                     })
@@ -80,56 +86,50 @@
         })
         form.render("select")
         table.render({
-            elem: '#test',
-            url: '/audit-api/planManage/page',
+            elem: '#queryList',
+            url: '/audit-api/planManage/attention/page',
             id: 'queryList',
             xhrFields: {
                 withCredentials: true
             },
+            headers:createAuthorizationTokenHeader(),
             cols: [
                 [
-                {
-                    field: 'projectCode',
-                    title: '项目编号',
-                    width: 200
-                }, {
+                    {
+                        field: 'projectCode',
+                        title: '项目编号',
+                    }, {
                     field: 'projectName',
                     title: '项目名称',
-                    width: 120
                 }, {
                     field: 'implementingAgencyId',
                     title: '实施机构',
-                    width: 120
-                }, {
+                },  {
                     field: 'auditObjectId',
                     title: '审计对象',
-                    width: 120,
                 }, {
+                    field: 'problemCharacterization',
+                    title: '问题定性',
+                }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
+                },{
                     field: 'auditNatureId',
                     title: '审计性质',
-                    width: 180,
                 }, {
                     field: 'auditYear',
                     title: '年度',
-                    width: 120,
                 }, {
                     field: 'status',
                     title: '状态',
-                    width: 80,
+                    width: 200,
                     templet: (data) => {
-                        let temp ;
-                        let text ;
-                        if (undefined == data.status || data.status == 1001) {
-                            text = '<span>未呈批</span>';
-                        } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">待审核</span>';
-                        } else if (data.status == 1003){
-                            text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1004){
-                            text = '<span style="color: red">被驳回</span>';
+                        let text = '<span style="color:gray">其他</span>';
+                        ;
+                        if (stateData[data.status]) {
+                            text = '<span>' + stateData[data.status] + '</span>';
                         }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
+                        return text;
                     }
                 }]
             ],
@@ -148,17 +148,25 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: role},
+            where: {
+                roleId: role,
+                userId: userInfo.userId
+            },
 
             done: function (res, curr, count) {
 
             }
         });
-        form.on("submit()", function () {
-            table.reload('test', {
-                where: {projectName: $("#projectName").val(),
+        form.on("submit(sreach)", function () {
+            table.reload('queryList', {
+                where: {
+                    projectName: $("#projectName").val(),
+                    normalStatus: $("#stateSelect").val(),//状态
                     problemCharacterization: $("#problemCharacterization").val(),
-                    problemDescription: $("#problemDescription").val()},
+                    problemDescription: $("#problemDescription").val(),
+                    roleId: role,
+                    userId: userInfo.userId
+                },
                 page: 1
             });
             return false;

@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/jwt.js"></script>
     <script type="text/javascript" src="../js/crypto-js-3.1.2/crypto-js.js"></script>
     <script type="text/javascript" src="../js/crypto-js-3.1.2/aes.js"></script>
     <script type="text/javascript" src="../js/crypto-js-3.1.2/mode-ecb.js"></script>
@@ -214,6 +215,8 @@
                                     let tokenType = data.token_type
                                     let accessToken = data.access_token;
                                     if(tokenType && accessToken){
+
+                                        setJwtToken( tokenType+' '+accessToken);
                                         window.sessionStorage.setItem('Authorization', tokenType+' '+accessToken);
                                         $.ajax({
                                             url: '/audit-api/login/user/info',

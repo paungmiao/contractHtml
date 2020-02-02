@@ -29,7 +29,7 @@
 				<!-- 二级菜单 -->
 				<dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
 				<dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-				<dd><a href="./login.html">退出</a></dd>
+				<dd><a href="javascript:;" onclick="logout()">退出</a></dd>
 			</dl>
 			</li>
 			<li class="layui-nav-item to-index ">
@@ -190,12 +190,14 @@
 
 </body>
 <script>
-
+	function logout(){
+		clearStorage();
+		window.location.href='./login.html'
+	}
 	/**
 	 * /system/`index.html?role=1   请求条件
 	 * /system/index.html?role=   行长
 	 */
-
 
 	let roleIdList = userInfo.roleIdList;
 	let userName = userInfo.username;

@@ -1,5 +1,6 @@
 /**
  * @author Quanlijian
+ * @update-author paungmiao@163.com
  * jwt有关
  */
 const HOST_URL = "http://127.0.0.1:8081/";
@@ -10,27 +11,27 @@ const TOKEN_KEY = "jwtToken";
  * @param token
  */
 function setJwtToken(token){
-	localStorage.setItem(TOKEN_KEY,token);
+	window.sessionStorage.setItem(TOKEN_KEY,token);
 }
 /**
  * 获取本地的token
  * @returns token
  */
 function getJwtToken(){
-	return localStorage.getItem(TOKEN_KEY);
+	return window.sessionStorage.getItem(TOKEN_KEY);
 }
 /**
  * 移除token
  */	
 function removeJwtToken() {
-	 localStorage.removeItem(TOKEN_KEY);
+	 window.sessionStorage.removeItem(TOKEN_KEY);
 }
 /**
  * 创建带Token  Header的请求头、
  * @returns
  */
 function createAuthorizationTokenHeader(){
-	token=getJwtToken();
+	let token=getJwtToken();
 	
 	if(token){
 		return {'Authorization':token}

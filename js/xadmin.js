@@ -11,7 +11,9 @@ let Authorization = window.sessionStorage.getItem('Authorization')
 if (!Authorization || Authorization == '' || Authorization == undefined) {
     location.href="login.html"
 }
-
+function clearStorage(){
+    window.sessionStorage.clear()
+}
 $(function () {
 
     //加载弹出层
