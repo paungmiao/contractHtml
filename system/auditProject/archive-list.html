@@ -86,7 +86,7 @@
             xhrFields: {
                 withCredentials: true
             },
-            headers:createAuthorizationTokenHeader(),
+            headers: createAuthorizationTokenHeader(),
             cols: [
                 [{
                     field: 'currentStepName',
@@ -96,9 +96,15 @@
                     field: 'title',
                     title: '标题',
                     width: 120,
-                },  {
+                }, {
                     title: '操作',
-                    width: 160,
+                    width: 240,
+                    templet: function (res) {
+                        var temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >计划详情</span>
+                                    <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/`+ res.processDefKey +`/`+ res.bizKey +`','800','600')">流程跟踪</span> `
+
+                        return temp;
+                    }
                 }]
             ],
             page: true,
@@ -133,6 +139,58 @@
 </script>
 
 <script>
+    
+    function taskView() {
+        x_admin_show("流程图","http://39.108.50.114:9999/act/task/view/auditApply/4","800","600");
+    }
+    
+    function editPage_(title, url, w, h, id, readOnly) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        ;
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        ;
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        ;
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        ;
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let iframeWin = layero.find('iframe')[0];
+                let readOnlyData = body.find('#readOnlyData');
+                let inputData = body.find('#implementingAgencyId');
+                readOnlyData.val(readOnly);
+                inputData.val(id);
+                iframeWin.contentWindow.initEntryInfo();
+            },
+            cancel: function () {
+                //关闭窗口之后刷新frame
+                // location.replace(location.href);
+            },
+            end: function () {
+                //窗口销毁之后刷新frame
+                // location.replace(location.href);
+            }
+        });
+    }
 
     layui.use('laydate', function () {
         var laydate = layui.laydate;
