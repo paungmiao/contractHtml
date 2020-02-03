@@ -58,10 +58,11 @@
 
     var count = 0;
     layui.use(['table', 'form'], function () {
+        debugger
         let table = layui.table;
         let form = layui.form
         $.ajax({
-            url: "/audit-api/state/list/1",
+            url: "/audit-api/state/list/planState",
             dataType: "json",
             type: "get",
             async: false,
@@ -88,42 +89,22 @@
             headers:createAuthorizationTokenHeader(),
             cols: [
                 [{
-                    field: 'planCheckList.projectCode',
-                    title: '项目编号',
+                    field: 'currentStepName',
+                    title: '当前步骤名称',
                     width: 200,
                     templet: (data) => {
                         return data.planCheckList.projectCode;
                     }
                 }, {
-                    field: 'planCheckList.projectName',
-                    title: '项目名称',
+                    field: 'title',
+                    title: '标题',
                     width: 120,
                     templet: (data) => {
                         return data.planCheckList.projectName;
                     }
-                }, {
-                    field: 'planCheckList.implementingAgencyId',
-                    title: '实施机构',
-                    width: 120,
-                    templet: (data) => {
-                        return data.planCheckList.implementingAgencyId;
-                    }
-                }, {
-                    field: 'auditObjectId',
-                    title: '审计对象',
-                    width: 120,
-                }, {
-                    field: 'auditNatureId',
-                    title: '审计性质',
-                    width: 180,
-                }, {
-                    field: 'auditYear',
-                    title: '年度',
-                    width: 120,
-                }, {
-                    field: 'status',
-                    title: '状态',
-                    width: 80,
+                },  {
+                    title: '操作',
+                    width: 160,
                     templet: (data) => {
                         let temp;
                         let text;

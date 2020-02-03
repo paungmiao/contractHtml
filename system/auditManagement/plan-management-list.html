@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="/js/JCheck.js"></script>
 
@@ -36,22 +37,25 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
             项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
-<!--            状态：-->
-<!--            <div class="layui-input-inline">-->
-<!--                <select id="stateSelect">-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
-<!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
+            <!--            状态：-->
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="stateSelect">-->
+            <!--                </select>-->
+            <!--            </div>-->
+            <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
+            <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i class="layui-icon"></i>新增</button>
+        <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i
+                class="layui-icon"></i>新增
+        </button>
         <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
     </xblock>
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test"></table>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
+           lay-filter="test"></table>
 
 </div>
 <script>
@@ -77,13 +81,14 @@
             }
         })
 
-       let tablePlan = table.render({
+        let tablePlan = table.render({
             elem: '#test',
             url: '/audit-api/planManage/page',
             id: 'test',
             xhrFields: {
                 withCredentials: true
             },
+            headers: createAuthorizationTokenHeader(),
             cols: [
                 [
                     {type: 'checkbox', fixed: 'left'},
@@ -121,8 +126,8 @@
                     templet: (data) => {
                         let text;
                         if (stateData[data.status]) {
-                            text = '<span>'+stateData[data.status]+'</span>';
-                        }else{
+                            text = '<span>' + stateData[data.status] + '</span>';
+                        } else {
                             text = '<span>其他</span>'
                         }
                         return text;
@@ -210,6 +215,7 @@
         layer.confirm('确认要上报计划吗？', function (index) {
             let table = layui.table;
             var checkStatus = table.checkStatus('queryList');
+            debugger
             var ids = [];
             $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
                 ids.push(o.id);
@@ -224,8 +230,8 @@
                 url: "/audit-api/auditPlan/reportPlan",
                 type: 'POST',
                 dataType: "json",
-                headers:{
-                    Authorization:window.sessionStorage.getItem('Authorization')
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
                 },
                 data: {ids: ids},
                 success: function (resp) {
