@@ -60,10 +60,27 @@
 
         let table = layui.table;
         let form = layui.form
-        table.render({
+
+        let stateData = {}
+        $.ajax({
+            url: "/audit-api/state/list/planState",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    data.forEach((Obj, index) => {
+                        stateData[Obj.code] = Obj.name;
+                    })
+                }
+            }
+        })
+
+       let tablePlan = table.render({
             elem: '#test',
             url: '/audit-api/planManage/page',
-            id: 'queryList',
+            id: 'test',
             xhrFields: {
                 withCredentials: true
             },
@@ -88,10 +105,7 @@
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
-                    width: 120,
-                    templet: (data) => {
-                        return "接口还在写";
-                    }
+                    width: 120
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
@@ -105,19 +119,13 @@
                     title: '状态',
                     width: 80,
                     templet: (data) => {
-                        let temp;
                         let text;
-                        if (undefined == data.status || data.status == 1001) {
-                            text = '<span>未呈批</span>';
-                        } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">待审核</span>';
-                        } else if (data.status == 1003) {
-                            text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1004) {
-                            text = '<span style="color: red">被驳回</span>';
+                        if (stateData[data.status]) {
+                            text = '<span>'+stateData[data.status]+'</span>';
+                        }else{
+                            text = '<span>其他</span>'
                         }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
+                        return text;
                     }
                 }, {
                     field: '',
@@ -166,8 +174,7 @@
             }
         });
         form.on("submit(search)", function () {
-
-            table.reload('test', {
+            tablePlan.reload({
                 where: {
                     createdBy: userInfo.userId,
                     projectName: $("#projectName").val(),
@@ -264,7 +271,7 @@
                 let body = layer.getChildFrame('body', index);
                 let iframeWin = layero.find('iframe')[0];
                 let readOnlyData = body.find('#readOnlyData');
-                let inputData = body.find('#inputData');
+                let inputData = body.find('#implementingAgencyId');
                 readOnlyData.val(readOnly);
                 inputData.val(id);
                 iframeWin.contentWindow.initEntryInfo();

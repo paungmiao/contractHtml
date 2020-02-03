@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="../../js/JCheck.js"></script>
 </head>
@@ -30,6 +31,9 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
             </label>
+            <div class="layui-input-inline">
+                <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled />
+            </div>
             <div class="layui-input-inline">
                 <select id="impAdminSelect" name="impAdminId">
                 </select>
@@ -197,11 +201,15 @@
 </div>
 <script>
 
-    //赋值
-    $("#implementingAgencyId").val(userInfo.deptId);
-    $("#createdBy").val(userInfo.userId);
-
     layui.use(['form', 'layer'], function () {
+        if(!userInfo){
+           return top.layer.msg("用户身份信息已失效",{icon:2})
+        }
+        //赋值
+        $("#implementingAgencyId").val(userInfo.deptId);
+        $("#implementingAgencyName").val(userInfo.deptName);
+        $("#createdBy").val(userInfo.userId);
+
         let form = layui.form
         let layer = layui.layer;
         {
@@ -209,10 +217,8 @@
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=管理员",
                 dataType: "json",
                 type: "get",
-                async: false,
-                headers: {
-                    Authorization: window.sessionStorage.getItem('Authorization')
-                },
+                async:false,
+                headers:createAuthorizationTokenHeader(),
                 success: function (resp) {
                     if (resp && 0 == resp.code) {
                         let data = resp.data;
@@ -230,7 +236,7 @@
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=一般用户",
                 dataType: "json",
                 type: "get",
-                async: false,
+                async:false,
                 headers: {
                     Authorization: window.sessionStorage.getItem('Authorization')
                 },
@@ -249,12 +255,11 @@
             });
         }
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId=10000",
+            url: "/audit-api/planManage/getAuditObject?deptId="+userInfo.deptId,
             dataType: "json",
             type: "get",
-            headers: {
-                Authorization: window.sessionStorage.getItem('Authorization')
-            },
+            async:false,
+            headers: createAuthorizationTokenHeader(),
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -272,6 +277,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
             type: "get",
+            async:false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -380,7 +386,7 @@
                 }
             }
         })
-        form.render("select")
+        form.render()
         //监听提交
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");
