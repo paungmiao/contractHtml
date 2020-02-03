@@ -92,32 +92,13 @@
                     field: 'currentStepName',
                     title: '当前步骤名称',
                     width: 200,
-                    templet: (data) => {
-                        return data.planCheckList.projectCode;
-                    }
                 }, {
                     field: 'title',
                     title: '标题',
                     width: 120,
-                    templet: (data) => {
-                        return data.planCheckList.projectName;
-                    }
                 },  {
                     title: '操作',
                     width: 160,
-                    templet: (data) => {
-                        let temp;
-                        let text;
-                        if (undefined == data.status || data.status == 1001) {
-                            text = '<span>正在实施</span>';
-                        } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">实施结束</span>';
-                        } else if (data.status == 1003) {
-                            text = '<span style="color: #28ff34">归档</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
-                    }
                 }]
             ],
             page: true,
@@ -125,8 +106,8 @@
                 return {
                     "code": res.code, //解析接口状态
                     "msg": res.msg, //解析提示文本
-                    "count": res.data.total, //解析数据长度
-                    "data": res.data.records //解析数据列表
+                    "count": res.data.data.total, //解析数据长度
+                    "data": res.data.data.records //解析数据列表
                 };
             },
             page: 1,
