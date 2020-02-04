@@ -413,9 +413,118 @@
                 headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
                     layui.use('form', function () {
+
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计性质</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditNatureIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题词条</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#questionEntryIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题严重程度</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#problemSeverityIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题整改情况</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#rectifySituationIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计分类</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditClassificationIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择风险评估</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#riskAssessmentIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
                         let form = layui.form;
-                        //渲染 有待考究
                         let implDeptId = resp.data.implementingAgencyId;
+                        let auditObjectId = resp.data.auditObjectId;
                         //赋值
                         if (implDeptId != undefined && implDeptId != '') {
                             $.ajax({
@@ -476,8 +585,49 @@
                                 }
                             })
                         }
+                        deleteCookie()
+                        $.ajax({
+                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=管理员",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            headers: createAuthorizationTokenHeader(),
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计对象管理员</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditAdminSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=一般用户",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            headers: createAuthorizationTokenHeader(),
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计对象一般用户</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditUserSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        
+                        resp.data['implementingAgencyName']=userInfo.deptName
                         form.val('planEditForm', resp.data)
-                        form.render()
+                        form.render(null,'planEditForm')
                     })
                 }
             })
