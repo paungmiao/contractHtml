@@ -125,10 +125,10 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (stateData[data.status]) {
-                            text = '<span>' + stateData[data.status] + '</span>';
+                        if (data.status>=1003&&stateData[data.status]) {
+                            text = '<span>已审核</span>';
                         } else {
-                            text = '<span>其他</span>'
+                            text = '<span>'+stateData[data.status]+'</span>'
                         }
                         return text;
                     }
