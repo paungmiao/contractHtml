@@ -153,8 +153,7 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                createdBy: userInfo.userId,
-                projectName: "",
+                implementingAgencyId: userInfo.deptId,
                 status: 1013
             },
 
@@ -165,7 +164,7 @@
         form.on("submit(search)", function () {
             tablePlan.reload({
                 where: {
-                    createdBy: userInfo.userId,
+                    implementingAgencyId: userInfo.deptId,
                     projectName: $("#projectName").val(),
                 },
                 page: 1
