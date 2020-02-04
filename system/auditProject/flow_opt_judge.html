@@ -29,7 +29,12 @@
     </form>
 
     <form class="layui-form" lay-filter="delayForm" id="delayForm">
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">延期时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="delayDate" id="delayDate" title="阅读">
+            </div>
+        </div>
     </form>
     <div class="layui-input-inline agree">
         <label for="L_repass" class="layui-form-label">
@@ -54,9 +59,13 @@
 <script>
     $(document).ready(function () {
         let reject = (auditEnum[auditStatus]).reject
+        let form = (auditEnum[auditStatus]).form
         if (!reject) {
             $("div.reject").remove();
+        }else if(form=='delayForm'){
+            $("#"+form).removeClass("remove")
         }
+        $("form.remove").remove()
     })
 
     //
@@ -125,6 +134,7 @@
         },
         1014:{
             agree: 1015,
+            reject: 1009
         },
         1015:{
             agree: 1016,
@@ -136,12 +146,16 @@
 
 
     }
-    layui.use(['form', 'layer'], function () {
+    layui.use(['form', 'layer','laydate'], function () {
 
         let form = layui.form
-            , layer = layui.layer;
+            , layer = layui.layer
+            , laydate = layui.laydate;
         // 词条分类
-
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#delayDate', //指定元素
+        });
         //监听提交
         form.on('submit(agree)', function (data) {
             return top.layer.msg("hhh")
