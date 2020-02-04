@@ -39,22 +39,34 @@
     <div class="layui-input-inline agree">
         <label for="L_repass" class="layui-form-label">
         </label>
-        <button class="layui-btn" onclick="completeTask('agree')" lay-submit>
-            <i class="layui-icon">&#xe605;</i>完成
+        <button class="layui-btn" onclick="completeTask('agree')" lay-submit id="edit">
+            <i class="layui-icon">&#xe605;</i>通过
         </button>
     </div>
     <div class="layui-input-inline reject">
         <label for="L_repass" class="layui-form-label">
         </label>
-        <a class="layui-btn" onclick="completeTask('reject')" lay-submit>
-            <i class="layui-icon">&#x1007;</i>拒绝
-        </a>
+        <button class="layui-btn" onclick="completeTask('reject')" lay-submit id="cancel">
+            <i class="layui-icon">&#x1007;</i>驳回
+        </button>
     </div>
 </div>
 <script>
     var auditStatus = getQueryString("auditStatus");
     var bizKey = getQueryString("bizKey");
     var taskId = getQueryString("taskId");
+    if (auditStatus == 1003) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>同意整改')
+    } else if (auditStatus == 1005 || auditStatus == 1007) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>提交审核')
+    } else if (auditStatus == 1008) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>整改')
+        $("#cancel").html('<i class="layui-icon">&#xe605;</i>延期整改')
+    } else if (auditStatus == 1009) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>提交整改')
+    } else if (auditStatus == 1011) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>同意归档')
+    }
 </script>
 <script>
     $(document).ready(function () {
@@ -79,7 +91,8 @@
             async: false,
             headers: createAuthorizationTokenHeader(),
             data: JSON.stringify({
-                'auditStatus': status
+                'auditStatus': status,
+                'bizKey': bizKey
             }),
             success: function (res) {
                 let index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
