@@ -81,14 +81,14 @@
 								<cite>计划清单</cite>
 							</a>
 						</li>
-						<li class="layui-hide" id="plan_aud">
-							<a _href="../system/auditManagement/audit-management-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>审核清单</cite>
-							</a>
-						</li>
 						<li id="achieve">
 							<a _href="../system/auditProject/archive-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>项目审计</cite>
+							</a>
+						</li>
+						<li class="layui-hide" id="plan_aud">
+							<a _href="../system/auditManagement/audit-management-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审计归档</cite>
 							</a>
@@ -216,6 +216,7 @@
 		if (deptName.indexOf('中支') > -1) {
 			$("#entry_audit").removeClass("layui-hide");
 			$("#statistics").removeClass("layui-hide");
+			$("#plan_aud").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
 		}

@@ -100,9 +100,18 @@
                 }, {
                     title: '操作',
                     templet: function (res) {
+                        let detail = ``
                         let opt = ''
-                        let detail = ` <span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >计划详情</span>`
                         opt = `<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('` + res.currentStepName + `办理','./flow_opt_judge.html?auditStatus=` + res.auditStatus + `&bizKey=` + res.bizKey + `&taskId=` + res.taskId + `','600','500')">流程办理</span>`
+                        if (res.auditStatus == 1004) { //待审核
+                            detail += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `')" >编辑</span> `
+                        } else if (res.auditStatus == 1005 || res.auditStatus == 1007) {
+                            detail += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('补充问题信息','../auditManagement/plan-management-supp.html','800','500','` + res.bizKey + `')" >补充计划</span> `
+                        } else if (res.auditStatus == 1008 || res.auditStatus == 1009) {
+                            detail += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','../auditManagement/plan-management-form.html','800','500','` + res.bizKey + `', 'readOnly')" >详情</span> `
+                        } else {
+                            detail += `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >详情</span>`
+                        }
                         let flowImage = `<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/` + res.processDefKey + `/` + res.bizKey + `','800','600')">流程跟踪</span>`
 
                         return detail + opt + flowImage;
