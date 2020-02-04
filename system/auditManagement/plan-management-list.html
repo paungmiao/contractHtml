@@ -211,7 +211,6 @@
         layer.confirm('确认要上报计划吗？', function (index) {
             let table = layui.table;
             var checkStatus = table.checkStatus('test');
-            debugger
             var ids = [];
             $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
                 ids.push(o.id);

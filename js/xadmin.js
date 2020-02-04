@@ -14,6 +14,15 @@ if (!Authorization || Authorization == '' || Authorization == undefined) {
 function clearStorage(){
     window.sessionStorage.clear()
 }
+function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) {
+        return unescape(r[2]);
+    }
+    return null;
+}
+
 $(function () {
 
     //加载弹出层

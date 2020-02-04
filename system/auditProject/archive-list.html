@@ -42,8 +42,10 @@
                 <select id="stateSelect">
                 </select>
             </div>
-            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
-            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
+            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
+                        class="layui-input">
+            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
+                        class="layui-input">
 
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
@@ -58,7 +60,6 @@
 
     var count = 0;
     layui.use(['table', 'form'], function () {
-        debugger
         let table = layui.table;
         let form = layui.form
         $.ajax({
@@ -98,12 +99,13 @@
                     width: 120,
                 }, {
                     title: '操作',
-                    width: 240,
                     templet: function (res) {
-                        var temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >计划详情</span>
-                                    <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/`+ res.processDefKey +`/`+ res.bizKey +`','800','600')">流程跟踪</span> `
+                        let opt = ''
+                        let detail = ` <span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >计划详情</span>`
+                        opt = `<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('` + res.currentStepName + `办理','./flow_opt_judge.html?auditStatus=` + res.auditStatus + `&bizKey=` + res.bizKey + `&taskId=` + res.taskId + `','600','500')">流程办理</span>`
+                        let flowImage = `<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/` + res.processDefKey + `/` + res.bizKey + `','800','600')">流程跟踪</span>`
 
-                        return temp;
+                        return detail + opt + flowImage;
                     }
                 }]
             ],
@@ -139,11 +141,11 @@
 </script>
 
 <script>
-    
+
     function taskView() {
-        x_admin_show("流程图","http://39.108.50.114:9999/act/task/view/auditApply/4","800","600");
+        x_admin_show("流程图", "http://39.108.50.114:9999/act/task/view/auditApply/4", "800", "600");
     }
-    
+
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
             title = false;

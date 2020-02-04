@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="  /css/font.css">
+    <link rel="stylesheet" href="../../../css/xadmin.css">
+    <link rel="stylesheet" href="../../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../../css/JCheck.css">
+    <script type="text/javascript" src="../../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../../js/jwt.js"></script>
+    <script type="text/javascript" src="../../../js/cookie.js"></script>
+    <script src="../../../js/JCheck.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+    <!--修改计划表单-->
+    <form class="layui-form" lay-filter="editPlan" id="editPlan">
+
+    </form>
+
+    <form class="layui-form" lay-filter="flowForm" id="flowForm">
+
+    </form>
+    <form class="layui-form" lay-filter="completePlan" id="completePlan">
+
+    </form>
+
+    <form class="layui-form" lay-filter="delayForm" id="delayForm">
+
+    </form>
+    <div class="layui-input-inline agree">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button class="layui-btn" onclick="completeTask('agree')" lay-submit>
+            <i class="layui-icon">&#xe605;</i>完成
+        </button>
+    </div>
+    <div class="layui-input-inline reject">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <a class="layui-btn" onclick="completeTask('reject')" lay-submit>
+            <i class="layui-icon">&#x1007;</i>拒绝
+        </a>
+    </div>
+</div>
+<script>
+    var auditStatus = getQueryString("auditStatus");
+    var bizKey = getQueryString("bizKey");
+    var taskId = getQueryString("taskId");
+</script>
+<script>
+    $(document).ready(function () {
+        let reject = (auditEnum[auditStatus]).reject
+        if (!reject) {
+            $("div.reject").remove();
+        }
+    })
+
+    //
+    function completeTask(type) {
+        var beforeStatus = getQueryString("auditStatus");
+        let status = auditEnum[beforeStatus][type]
+        $.ajax({
+            url: '/audit-api/task/complete/' + taskId,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            data: JSON.stringify({
+                'auditStatus': status
+            }),
+            success: function (res) {
+                let index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                parent.layer.close(index);		//关闭窗口
+            }
+        })
+    }
+
+    function rejectTask() {
+
+    }
+
+    let auditEnum = {
+        1002: {
+            agree: 1003,
+            reject: 1004,
+        },
+        1003: {
+            agree: 1005,
+            reject: 1004,
+        },
+        1004: {
+            agree: 1002,
+            form: 'editPlan' //修改计划表单
+        },
+        1005: {
+            agree: 1006,
+        },
+        1006: {
+            agree: 1008,
+            reject: 1007,
+            form: 'completePlan' //完善整改信息表单
+        },
+        1007: {
+            agree: 1006,
+        },
+        1008: {
+            agree: 1009,
+            form: 'delayForm' //延期申请表单
+        },
+        1008: {
+            agree: 1009, //根据延期字段判断，为空则1009 否则 1014（延期申请）
+            form: 'delayForm' //延期申请表单
+        },
+        1009: {
+            agree: 1010,
+        },
+        1010: {
+            agree: 1011,
+            reject: 1012
+        },
+        1011: {
+            agree: 1009,
+            reject: 1012
+        },
+
+
+    }
+    layui.use(['form', 'layer'], function () {
+
+        let form = layui.form
+            , layer = layui.layer;
+        // 词条分类
+
+        //监听提交
+        form.on('submit(agree)', function (data) {
+            return top.layer.msg("hhh")
+            $.ajax({
+                url: "/audit-api/entry/flow/update",
+                dataType: "json",
+                type: "put",
+                data: form.val("flowForm"),
+                async: false,
+                success: function (resp) {
+                    if (resp.data) {
+                        //发异步，把数据提交给php
+                        layer.alert("修改成功", {icon: 6}, function () {
+                            // 获得frame索引
+                            let index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            // 可以对父窗口进行刷新
+                            x_admin_father_reload();
+                        });
+                    } else {
+                        layer.alert(resp.msg, {icon: 1})
+                    }
+
+                }
+            })
+            return false;
+        });
+    });
+</script>
+<script>
+
+    function initEntryInfo() {
+        // 数据回显渲染
+        $.ajax({
+            url: "/audit-api/entry/flow/" + $("#inputData").val(),
+            dataType: "json",
+            type: "get",
+            async: true,
+            success: function (resp) {
+                ;
+                layui.use('form', function () {
+                    layui.form.val('flowForm', resp.data)
+                })
+
+            }
+        })
+
+    }
+</script>
+
+</body>
+
+</html>
