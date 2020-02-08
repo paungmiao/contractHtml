@@ -17,18 +17,18 @@
 <body>
 	<!-- 顶部开始 -->
 	<div class="container">
-		<div class="logo"><a href="../index">XX管理系统</a></div>
-		<div class="left_open">
-			<i title="展开左侧栏" class="iconfont">&#xe699;</i>
-		</div>
+		<div class="logo"><a href="javascript:;">问题整改系统</a></div>
+<!--		<div class="left_open">-->
+<!--			<i title="展开左侧栏" class="iconfont">&#xe699;</i>-->
+<!--		</div>-->
 
 		<ul class="layui-nav right" lay-filter="">
 			<li class="layui-nav-item">
-				<a href=" " id="userName"></a>
+				<a href="javascript:;" id="userName"></a>
 			<dl class="layui-nav-child">
 				<!-- 二级菜单 -->
-				<dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
-				<dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
+				<dd><a onclick="x_admin_show('个人信息','../system/userManage/personal-Info.html', 400, 400)">个人信息</a></dd>
+				<dd><a href="javascript:;" onclick="logout()">切换帐号</a></dd>
 				<dd><a href="javascript:;" onclick="logout()">退出</a></dd>
 			</dl>
 			</li>
@@ -46,6 +46,12 @@
 	<div class="left-nav">
 		<div id="side-nav">
 			<ul id="nav">
+				<li class="layui-hide" id="XJ">
+					<a _href="welcome.html" onclick="homePage()">
+						<i class="iconfont">&#xe6a7;</i>
+						<cite>全疆信息</cite>
+					</a>
+				</li>
 				<li id="entry">
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
@@ -131,7 +137,7 @@
 					</a>
 				</li>
 
-				<li>
+				<li class="layui-hide" id="userManage">
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
 						<cite>系统信息维护</cite>
@@ -161,8 +167,8 @@
 	<!-- 右侧主体开始 -->
 	<div class="page-content">
 		<div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
-			<ul class="layui-tab-title">
-				<li class="home"><i class="layui-icon">&#xe68e;</i>我的桌面</li>
+			<ul class="layui-tab-title" id="tebList">
+				<li id="home"></li>
 			</ul>
 			<div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
 				<dl>
@@ -206,9 +212,11 @@
 	if ($.inArray(6, roleIdList) > -1) { //一般员工
 		if (deptName.indexOf('中支') > -1) {
 			$("#entry_list").removeClass("layui-hide");
+			$("#entry_audit").removeClass("layui-hide");
 			$("#pro").removeClass("layui-hide");
 			$("#plan_pro").removeClass("layui-hide");
 			$("#statistics").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
 		}
@@ -222,10 +230,13 @@
 		}
 	} else if ($.inArray(13, roleIdList) > -1) { //超级管理员
 		$("#statistics").removeClass("layui-hide");
+		$("#XJ").removeClass("layui-hide");
 		$("#plan_att").removeClass("layui-hide");
+		$("#report").removeClass("layui-hide");
 		$("#achieve").addClass("layui-hide");
 		$("#entry").addClass("layui-hide");
 		$("#welcome").attr("src", "welcome.html");
+		$("#home").text("全疆信息");
 	}
 
 	$("#userName").text(userName);
@@ -239,6 +250,10 @@
 			area : [ '600px', '500px' ],
 			content : "../contract/message/message.html"// iframe的url
 		});
+	}
+
+	function homePage() {
+		$("#home").addClass("layui-hide");
 	}
 </script>
 

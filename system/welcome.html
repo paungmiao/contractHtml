@@ -145,6 +145,10 @@
     });
 
     //查询地图信息
+    let loading = top.layer.load(0, {
+        shade: 0.1,
+        time: 10*1000
+    });
     $.ajax({
         url: "/audit-api/auditPlan/XJInfo",
         dataType: "json",
@@ -154,6 +158,7 @@
         },
         success: function (resp) {
             if (resp) {
+                top.layer.close(loading);
                 let data = resp.data;
                 var myChart = echarts.init(document.getElementById('echarts-xinjiang'));
                 myChart.showLoading();
