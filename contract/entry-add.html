@@ -112,6 +112,8 @@
         //监听提交
         form.on('submit(addEntryFlow)', function (data) {
             let formData = form.val("entryFlowAddForm");
+            formData.createdBy = userInfo.username;
+            formData.applyUser = userInfo.username;
             $.ajax({
                 url: '/audit-api/entry/flow/add',
                 type: 'post',
