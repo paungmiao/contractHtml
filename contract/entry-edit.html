@@ -107,11 +107,13 @@
       //监听提交
       form.on('submit(update)', function (data) {
         console.log(data);
+        let formData = form.val("entryEditForm");
+        formData.updatedBy = userInfo.username;
         $.ajax({
           url: "/audit-api/entry/flow/update",
           dataType: "json",
           type: "put",
-          data:form.val("entryEditForm"),
+          data:formData,
           async: false,
           success: function (resp) {
             if(resp.data){
