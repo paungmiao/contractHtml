@@ -37,11 +37,27 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
             项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
-            <!--            状态：-->
-            <!--            <div class="layui-input-inline">-->
-            <!--                <select id="stateSelect">-->
-            <!--                </select>-->
-            <!--            </div>-->
+            审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" autocomplete="off" class="layui-input">
+            项目类型：
+            <div class="layui-input-inline">
+                <select id="projectTypeSelect">
+                </select>
+            </div>
+            审计性质：
+            <div class="layui-input-inline">
+                <select id="auditNatureIdSelect">
+                </select>
+            </div>
+            状态：
+            <div class="layui-input-inline">
+                <select id="stateSelect">
+                    <option value="">请选择状态</option>
+                    <option value="1001">未批呈</option>
+                    <option value="1002">待审核</option>
+                    <option value="1003">被驳回</option>
+                    <option value="1004">已批准</option>
+                </select>
+            </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -51,7 +67,7 @@
         <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i
                 class="layui-icon"></i>新增
         </button>
-        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
+<!--        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>-->
 
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
@@ -64,7 +80,43 @@
 
         let table = layui.table;
         let form = layui.form
-
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择项目类型</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#projectTypeSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计性质</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#auditNatureIdSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        form.render();
         let stateData = {}
         $.ajax({
             url: "/audit-api/state/list/planState",
@@ -91,11 +143,11 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                    {type: 'checkbox', fixed: 'left'},
+                    // {type: 'checkbox', fixed: 'left'},
                     {
                         field: 'projectCode',
                         title: '项目编号',
-                        width: 200,
+                        width: 160,
                     }, {
                     field: 'projectName',
                     title: '项目名称',
@@ -118,7 +170,7 @@
                 }, {
                     field: 'auditYear',
                     title: '年度',
-                    width: 120,
+                    width: 80,
                 }, {
                     field: 'status',
                     title: '状态',
@@ -126,7 +178,7 @@
                     templet: (data) => {
                         let text;
                         if (data.status>=1003&&stateData[data.status]) {
-                            text = '<span>已审核</span>';
+                            text = '<span>已批准</span>';
                         } else {
                             text = '<span>'+stateData[data.status]+'</span>'
                         }
@@ -135,12 +187,13 @@
                 }, {
                     field: '',
                     title: '操作',
-                    width: 240,
+                    width: 280,
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','plan-management-edit.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
                         if (undefined == res.status || res.status == 1001) { //未呈批
                             temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','800','500','` + res.id + `')" >编辑</span>
-                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
+                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span>
+                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="reportPlan('` + res.id + `')">上报计划</span>  `
                         } else if (res.status == 1002) { //待审核
 
                         }
@@ -179,6 +232,10 @@
                 where: {
                     createdBy: userInfo.userId,
                     projectName: $("#projectName").val(),
+                    auditYear: $("#auditYear").val(),
+                    status: $("#stateSelect").val(),
+                    auditNatureId: $("#auditNatureIdSelect").val(),
+                    projectType: $("#projectTypeSelect").val(),
                 },
                 page: 1
             });
@@ -207,14 +264,15 @@
         });
     }
 
-    function reportPlan() {
+    function reportPlan(id) {
         layer.confirm('确认要上报计划吗？', function (index) {
-            let table = layui.table;
-            var checkStatus = table.checkStatus('test');
+            // let table = layui.table;
+            // var checkStatus = table.checkStatus('test');
             var ids = [];
-            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
-                ids.push(o.id);
-            });
+            // $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+            //     ids.push(o.id);
+            // });
+            ids.push(id);
             if (ids.length < 1) {
                 layer.msg('无选中项');
                 return false;
