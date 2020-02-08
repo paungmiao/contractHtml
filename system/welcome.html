@@ -29,27 +29,27 @@
                             <div carousel-item="">
                                 <ul class="layui-row layui-col-space10 layui-this">
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('all')">
                                             <h5 style="font-size: large;">总项目</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('all')" id="planSum">0</cite></p>
+                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="planSum">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">
                                             <h5 style="font-size: large;">已完成</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('done')" id="finishCount">0</cite></p>
+                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="finishCount">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
                                             <h5 style="font-size: large;">未完成</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('todo')" id="nofinishCount">0</cite></p>
+                                            <p style="margin-left: 5px;margin-top: 10px;"><cite id="nofinishCount">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">
                                             <h5 style="font-size: large;">延期项目</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite onclick="openPlanCheckList('delay')" id="timeoutCount">0</cite></p>
+                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="timeoutCount">0</cite></p>
                                         </a>
                                     </li>
                                 </ul>
@@ -58,6 +58,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md12">
+
+            <div class="layui-input-inline  layui-form layui-colla-content" style="width: 100px;float:right;">
+                <select id="auditYear" lay-filter="auditYear" ><option >2022</option><option >2021</option><option selected>2020</option><option >2019</option><option >2018</option><option >2017</option></select>
+            </div>
+            <label class="layui-form-label" style="padding: 17px 15px;float:right;">年度：</label>
         </div>
         <div class="layui-col-xs6 layui-col-md12">
             <div id="echarts-xinjiang" style="background-color:#ffffff;min-height:500px;"></div>
@@ -143,32 +150,126 @@
             }
         }
     });
-
-    //查询地图信息
-    let loading = top.layer.load(0, {
-        shade: 0.1,
-        time: 10*1000
-    });
-    $.ajax({
-        url: "/audit-api/auditPlan/XJInfo",
-        dataType: "json",
-        type: "get",
-        headers:{
-            Authorization:window.sessionStorage.getItem('Authorization')
-        },
-        success: function (resp) {
-            if (resp) {
-                top.layer.close(loading);
-                let data = resp.data;
-                var myChart = echarts.init(document.getElementById('echarts-xinjiang'));
-                myChart.showLoading();
-                $.get('../json/xinjiang.json', function (geoJson) {
-                    myChart.hideLoading();
-                    echarts.registerMap('XJ', geoJson);
-                    myChart.setOption(option = {
-                        title: {
-                            // text: '新疆相关'
+    var myChart;
+    layui.use(['element','form'], function(){
+        var element = layui.element;
+        var form = layui.form;
+        var  layer = layui.layer;
+        var auditYear ="2020";
+        //初始化地图start
+        myChart = echarts.init(document.getElementById('echarts-xinjiang'));
+        myChart.showLoading();
+        $.get('../json/xinjiang.json', function (geoJson) {
+            myChart.hideLoading();
+            echarts.registerMap('XJ', geoJson);
+            myChart.setOption(option = {
+                title: {
+                    // text: '新疆相关'
+                },
+                toolbox: {
+                    show: false,
+                    // orient: 'vertical',
+                    // left: 'right',
+                    // top: 'center',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                visualMap: {
+                    /*min: 0,
+                    max: 1,
+                    text: ['High', 'Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue', 'yellow', 'orangered']
+                    }*/
+                    type:'piecewise',
+                    min: 0,
+                    max: 1,
+                    zoom: 1.25,
+                    label: {
+                        show: true
+                    },
+                    pieces: [{
+                        max: 0.2,
+                        label: '低于20%',
+                        color: '#99FF99'
+                    }, {
+                        max: 0.5,
+                        label: '低于50%',
+                        color: '#FF9900'
+                    }, {
+                        max: 1.1,
+                        label: '高于50%',
+                        color: '#FF0033'
+                    }],
+                },
+                series: [
+                    {
+                        // name: '新疆相关',
+                        type: 'map',
+                        mapType: 'XJ', // 自定义扩展图表类型
+                        zoom: 1.25,
+                        label: {
+                            show: true
                         },
+                        // selectedMode : 'multiple',
+                        mapLocation: {
+                            x: 'left'
+                        },
+                        data: []
+                    }
+                ]
+            });
+            myChart.on('click', function (params) {
+                console.log(params);
+                let data = params.data;
+                let deptId = data.deptId;
+                let name = data.name;
+                if (deptId) {
+                    openPlanCheckList('all', deptId, auditYear, name)
+                }
+            });
+        });
+        //初始化地图end
+        queryXJInfo(auditYear);
+        form.on('select(auditYear)', function (data) {
+            auditYear=$("#auditYear").val();
+            queryXJInfo(auditYear);
+        });
+    });
+    function queryXJInfo(auditYear){
+        //查询地图信息
+        $.ajax({
+            url: "/audit-api/auditPlan/XJInfo?auditYear="+auditYear,
+            dataType: "json",
+            type: "get",
+            headers:{
+                Authorization:window.sessionStorage.getItem('Authorization')
+            },
+            success: function (resp) {
+                if (resp) {
+                    let data = resp.data;
+                    myChart.setOption({
+                        series: [
+                            {
+                                // name: '新疆相关',
+                                type: 'map',
+                                mapType: 'XJ', // 自定义扩展图表类型
+                                zoom: 1.25,
+                                label: {
+                                    show: true
+                                },
+                                // selectedMode : 'multiple',
+                                mapLocation: {
+                                    x: 'left'
+                                },
+                                data: data
+                            }
+                        ],
                         tooltip: {
                             trigger: 'item',
                             // formatter: '{b}<br/>{c} (p / km2)'
@@ -181,57 +282,13 @@
                                 )
 
                             }
-                        },
-                        toolbox: {
-                            show: true,
-                            // orient: 'vertical',
-                            // left: 'right',
-                            // top: 'center',
-                            feature: {
-                                dataView: {readOnly: false},
-                                restore: {},
-                                saveAsImage: {}
-                            }
-                        },
-                        visualMap: {
-                            min: 0,
-                            max: 1,
-                            text: ['High', 'Low'],
-                            realtime: false,
-                            calculable: true,
-                            inRange: {
-                                color: ['lightskyblue', 'yellow', 'orangered']
-                            }
-                        },
-                        series: [
-                            {
-                                // name: '新疆相关',
-                                type: 'map',
-                                mapType: 'XJ', // 自定义扩展图表类型
-                                label: {
-                                    show: true
-                                },
-                                // selectedMode : 'multiple',
-                                mapLocation: {
-                                    x: 'left'
-                                },
-                                data: data
-                            }
-                        ]
-                    });
-                    myChart.on('click', function (params) {
-                        console.log(params);
-                        let data = params.data;
-                        let deptId = data.deptId;
-                        let name = data.name;
-                        if (deptId) {
-                            openPlanCheckList('all', deptId, name)
                         }
                     });
-                });
+                }
             }
-        }
-    });
+        });
+    }
+
     PercentPie.prototype.init = function () {
         var _that = this;
         var option = {
@@ -241,13 +298,14 @@
                 data: _that.legendData,
                 icon: 'rect',
                 top: 100,
-                right: '14.17004%',
+                right: '4.17004%',
                 itemGap: 35,
                 itemWidth: 10,
                 itemHeight: 10,
                 orient: 'vertical',
+                selectedMode:false,
                 textStyle: {
-                    padding: [0, 0, 0, 5],
+                    padding: [0, 0, 0, 2],fontSize:18
                 }
             },
             tooltip: {
@@ -361,7 +419,7 @@
     typeArr['done'] = '已完成';
     typeArr['delay'] = '延期';
 
-    function openPlanCheckList(type, deptId, title) {
+    function openPlanCheckList(type, deptId, auditYear, title) {
         top.layer.open({
             type: 2,
             area: ['80%', '80%'],
@@ -370,7 +428,7 @@
             shadeClose: true,
             shade: 0.4,
             title: (title == undefined ? '' : title) + typeArr[type] + '项目',
-            content: './plan-list.html?type=' + type + '&deptId=' + deptId,
+            content: './plan-list.html?type=' + type + '&deptId=' + deptId + '&auditYear='+ auditYear,
             success: function (layero, index) {
                 //窗口加载成功刷新frame
             },
