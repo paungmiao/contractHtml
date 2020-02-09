@@ -313,6 +313,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
             dataType: "json",
             type: "get",
+            async:false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -330,6 +331,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
             dataType: "json",
             type: "get",
+            async:false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -404,7 +406,7 @@
                 }
             }
         })
-        form.render();
+        form.render('select');
         //监听提交
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");
