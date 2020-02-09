@@ -135,13 +135,14 @@
             },
             headers: createAuthorizationTokenHeader(),
             cols: [
-                [
-                    {type: 'checkbox', fixed: 'left'},
-                    {
+                [{type: 'checkbox', fixed: 'left'}, {
                         field: 'projectCode',
                         title: '项目编号',
                         width: 160,
-                    }, {
+                }, {
+                    field: 'id',
+                    title: 'id'
+                }, {
                     field: 'projectName',
                     title: '项目名称',
                     width: 120
@@ -170,6 +171,21 @@
                     width: 80,
                     templet: (data) => {
                         let text;
+                        let status;
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getByPlanUserId?id=" + data.auditNatureId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    status = data.name;
+                                }
+                            }
+                        });
+
+
                         if (undefined === data.status || data.status === '1002') {
                             text = '<span>待审核</span>';
                         } else if (data.status === '1004') {
@@ -216,9 +232,10 @@
                 implementingAgencyId: userInfo.deptId
             },
             done: function (res, curr, count) {
+                $("[data-field='deal']").css('display', 'none');
                 let roleIdList = userInfo.roleIdList;
                 if ($.inArray(6, roleIdList) > -1) {
-                    $("[data-field='deal']").css('display','none');
+                    $("[data-field='deal']").css('display', 'none');
                 }
             }
         });
@@ -253,6 +270,7 @@
                 type: 'POST',
                 dataType: "json",
                 data: {ids: ids, status: status},
+                headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
                     layer.alert("操作成功", {icon: 1}, function () {
                         location.replace(location.href);
