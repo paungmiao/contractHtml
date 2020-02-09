@@ -25,9 +25,9 @@
 <div class="x-nav">
     <span class="layui-breadcrumb">
       <a href="">首页</a>
-      <a href="">审计管理</a>
+      <a href="">审计计划管理</a>
       <a>
-        <cite>审计计划管理</cite></a>
+        <cite>审核清单</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -67,7 +67,7 @@
         <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i
                 class="layui-icon"></i>新增
         </button>
-<!--        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>-->
+        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
@@ -143,7 +143,7 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                    // {type: 'checkbox', fixed: 'left'},
+                    {type: 'checkbox', fixed: 'left'},
                     {
                         field: 'projectCode',
                         title: '项目编号',
@@ -177,10 +177,14 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (data.status>=1003&&stateData[data.status]) {
-                            text = '<span>已批准</span>';
+                        if (undefined === data.status || data.status === '1001') {
+                            text = '<span>待呈报</span>';
+                        } else if (data.status === '1002') {
+                            text = '<span>待审核</span>';
+                        } else if (data.status === '1004') {
+                            text = '<span>已驳回</span>';
                         } else {
-                            text = '<span>'+stateData[data.status]+'</span>'
+                            text = '<span>已批准</span>';
                         }
                         return text;
                     }
@@ -189,16 +193,17 @@
                     title: '操作',
                     width: 280,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','plan-management-edit.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        if (undefined == res.status || res.status == 1001) { //未呈批
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','800','500','` + res.id + `')" >编辑</span>
-                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span>
-                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="reportPlan('` + res.id + `')">上报计划</span>  `
-                        } else if (res.status == 1002) { //待审核
-
+                        let html = '';
+                        if (undefined === res.status || res.status === '1001') { //未呈批
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
+                        } else if (res.status === '1003') { //待审核
+                        } else if (res.status === '1003') { //已批准
+                        } else if (res.status === '1004') { //已驳回
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
                         }
-
-                        return temp;
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        return html;
                     }
                     // sort: true
                 },]
@@ -264,35 +269,46 @@
         });
     }
 
-    function reportPlan(id) {
+    function reportPlan() {
         layer.confirm('确认要上报计划吗？', function (index) {
-            // let table = layui.table;
-            // var checkStatus = table.checkStatus('test');
+            let table = layui.table;
+            var checkStatus = table.checkStatus('test');
             var ids = [];
-            // $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
-            //     ids.push(o.id);
-            // });
-            ids.push(id);
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
             if (ids.length < 1) {
                 layer.msg('无选中项');
                 return false;
             }
             ids = ids.join(",");
-            //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/auditPlan/reportPlan",
+                url: "/audit-api/auditPlan/changePlanStatusByIds",
                 type: 'POST',
                 dataType: "json",
-                headers: {
-                    Authorization: window.sessionStorage.getItem('Authorization')
-                },
-                data: {ids: ids},
+                data: {ids: ids, status: "1002"},
                 success: function (resp) {
                     layer.alert("上报计划成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
             });
+
+
+            // $.ajax({
+            //     url: "/audit-api/auditPlan/reportPlan",
+            //     type: 'POST',
+            //     dataType: "json",
+            //     headers: {
+            //         Authorization: window.sessionStorage.getItem('Authorization')
+            //     },
+            //     data: {ids: ids},
+            //     success: function (resp) {
+            //         layer.alert("上报计划成功", {icon: 1}, function () {
+            //             location.replace(location.href);
+            //         });
+            //     }
+            // });
 
         });
     }

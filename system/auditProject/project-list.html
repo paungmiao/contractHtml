@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="/js/JCheck.js"></script>
 
@@ -26,7 +27,7 @@
       <a href="">首页</a>
       <a href="">审计管理</a>
       <a>
-        <cite>项目清单</cite></a>
+        <cite>审计计划管理</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -35,83 +36,81 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
-            项目名称：<input type="text" placeholder="请输入问题定性" id="projectName" autocomplete="off" class="layui-input">
-            状态：
-            <div class="layui-input-inline">
-                <select id="stateSelect">
-                </select>
-            </div>
-            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
-            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
-
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
+            <!--            状态：-->
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="stateSelect">-->
+            <!--                </select>-->
+            <!--            </div>-->
+            <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
+            <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
+            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i
+                class="layui-icon"></i>新增
+        </button>
+        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
-    </table>
-
+    </xblock>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
+           lay-filter="test"></table>
 
 </div>
 <script>
-
-    var role = getCookie("role")==undefined?1:getCookie("role");
-
     var count = 0;
     layui.use(['table', 'form'], function () {
+
         let table = layui.table;
         let form = layui.form
+
+        let stateData = {}
         $.ajax({
-            url: "/audit-api/state/list/" + role,
+            url: "/audit-api/state/list/planState",
             dataType: "json",
             type: "get",
             async: false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
-                    let options = [];
-                    options.push('<option value="" >请选择状态</option>')
                     data.forEach((Obj, index) => {
-                        let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
-                        options.push(option);
+                        stateData[Obj.code] = Obj.name;
                     })
-                    $("#stateSelect").empty().append(options.join(""));
                 }
             }
         })
-        form.render("select")
-        table.render({
+
+        let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/auditProject/page',
+            url: '/audit-api/planManage/page',
+            id: 'test',
             xhrFields: {
                 withCredentials: true
             },
+            headers: createAuthorizationTokenHeader(),
             cols: [
-                [{
-                    field: 'planCheckList.projectCode',
-                    title: '项目编号',
-                    width: 200,
-                    templet: (data) => {
-                        return data.planCheckList.projectCode;
-                    }
-                }, {
-                    field: 'planCheckList.projectName',
+                [
+                    {type: 'checkbox', fixed: 'left'},
+                    {
+                        field: 'projectCode',
+                        title: '项目编号',
+                        width: 200,
+                    }, {
+                    field: 'projectName',
                     title: '项目名称',
-                    width: 120,
-                    templet: (data) => {
-                        return data.planCheckList.projectName;
-                    }
+                    width: 120
                 }, {
-                    field: 'planCheckList.implementingAgencyId',
+                    field: 'implementingAgencyId',
                     title: '实施机构',
                     width: 120,
                     templet: (data) => {
-                        return data.planCheckList.implementingAgencyId;
+                        return userInfo.deptName;
                     }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
-                    width: 120,
+                    width: 120
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
@@ -125,46 +124,14 @@
                     title: '状态',
                     width: 80,
                     templet: (data) => {
-                        let temp;
-                        let text;
-                        if (undefined == data.status || data.status == 1001) {
-                            text = '<span>待完善</span>';
-                        } else if (data.status == 1002) {
-                            text = '<span style="color: #28ff34">待整改</span>';
-                        } else if (data.status == 1003) {
-                            text = '<span style="color: red">待审核</span>';
-                        } else if (data.status == 1004) {
-                            text = '<span style="color: red">被驳回</span>';
-                        } else if (data.status == 1005) {
-                            text = '<span style="color: red">已完成</span>';
-                        } else if (data.status == 1006) {
-                            text = '<span style="color: red">已驳回</span>';
-                        } else if (data.status == 1007) {
-                            text = '<span style="color: red">已批准</span>';
-                        } else if (data.status == 1008) {
-                            text = '<span style="color: red">整改完成待审批</span>';
-                        } else if (data.status == 1009) {
-                            text = '<span style="color: red">整改中</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
+                        return "已归档";
                     }
                 }, {
                     field: '',
                     title: '操作',
                     width: 240,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        if (undefined == res.status || res.status == 1001) {
-                        } else if (res.status == 1008) {
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="approvalPlan('` + res.id + `', '` + res.status + `')" >批准</span>
-                        <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPlan('` + res.id + `')">驳回</span> `
-                        } else if (res.status == 1009) { //整改中
-
-                        } else if (res.status == 1007) { //已批准
-
-                        } else {
-                        }
+                        let temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','plan-management-form.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
                         return temp;
                     }
                     // sort: true
@@ -185,13 +152,21 @@
                 pageName: 'current', //页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: role},
+            where: {
+                implementingAgencyId: userInfo.deptId,
+                status: 1013
+            },
+
             done: function (res, curr, count) {
+
             }
         });
-        form.on("submit()", function () {
-            table.reload('test', {
-                where: {roleId: role},
+        form.on("submit(search)", function () {
+            tablePlan.reload({
+                where: {
+                    implementingAgencyId: userInfo.deptId,
+                    projectName: $("#projectName").val(),
+                },
                 page: 1
             });
             return false;
@@ -202,59 +177,6 @@
 </script>
 
 <script>
-
-    function approvalPlan(id, status) {
-        layer.confirm('确认要批准计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/approvalPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: role, status: status},
-                success: function (resp) {
-                    layer.alert("批准计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function rejectPlan(id) {
-        layer.confirm('确认要驳回计划吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/auditProject/rejectPlan",
-                type: 'POST',
-                dataType: "json",
-                data: {id: id, roleId: role},
-                success: function (resp) {
-                    layer.alert("驳回计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-    function delete_(id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/planManage/user_delete/" + id,
-                dataType: "json",
-                type: "delete",
-                success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
 
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
@@ -288,7 +210,7 @@
                 let body = layer.getChildFrame('body', index);
                 let iframeWin = layero.find('iframe')[0];
                 let readOnlyData = body.find('#readOnlyData');
-                let inputData = body.find('#inputData');
+                let inputData = body.find('#implementingAgencyId');
                 readOnlyData.val(readOnly);
                 inputData.val(id);
                 iframeWin.contentWindow.initEntryInfo();
@@ -309,7 +231,8 @@
 
         //执行一个laydate实例
         laydate.render({
-            elem: '#start' //指定元素
+            elem: '#start', //指定元素
+            type: "year"
         });
 
         //执行一个laydate实例

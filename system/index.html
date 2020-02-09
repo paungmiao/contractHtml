@@ -74,6 +74,27 @@
 					</ul>
 				</li>
 
+				<li class="layui-hide" id="plan_manage">
+					<a href="javascript:;">
+						<i class="iconfont">&#xe6b8;</i>
+						<cite>审计计划管理</cite>
+						<i class="iconfont nav_right">&#xe697;</i>
+					</a>
+					<ul class="sub-menu">
+						<li date-refresh="1" class="layui-hide" id="plan_manage_j">
+							<a _href="../system/auditManagement/plan-management-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>计划清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="plan_manage_s">
+							<a _href="../system/auditManagement/audit-management-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核清单</cite>
+							</a>
+						</li>
+					</ul>
+				</li>
 				<li>
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
@@ -216,6 +237,9 @@
 			$("#pro").removeClass("layui-hide");
 			$("#plan_pro").removeClass("layui-hide");
 			$("#userManage").removeClass("layui-hide");
+			$("#plan_manage").removeClass("layui-hide");
+			$("#plan_manage_j").removeClass("layui-hide");
+			$("#plan_manage_s").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
 		}
@@ -224,6 +248,8 @@
 			$("#entry_audit").removeClass("layui-hide");
 			$("#statistics").removeClass("layui-hide");
 			$("#plan_aud").removeClass("layui-hide");
+			$("#plan_manage").removeClass("layui-hide");
+			$("#plan_manage_s").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
 		}
