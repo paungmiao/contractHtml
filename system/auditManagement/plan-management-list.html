@@ -177,7 +177,7 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (undefined === data.status || data.status === '1001') {
+                        if (undefined === data.status || undefined === '' || data.status === '1001') {
                             text = '<span>待呈报</span>';
                         } else if (data.status === '1002') {
                             text = '<span>待审核</span>';
