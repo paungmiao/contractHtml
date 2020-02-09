@@ -1,11 +1,9 @@
-
-
+var messageUser;
         $(function() {
             layui.use(['upload','form','layer'], function() {
                 var form = layui.form;
 
-
-
+alert(userInfo.userId)
                                 let value = [{
                                     "msg": "这里是内容",
                                     "time": "2019-12-12",

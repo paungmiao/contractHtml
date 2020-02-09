@@ -34,7 +34,7 @@
 			</li>
 			<li class="layui-nav-item to-index ">
 				<a href="javascript:ding()">
-					<i class="layui-icon">&#xe667;</i>
+					<i class="layui-icon">&#xe667;<span id="deadCount"></span></i>
 				</a>
 			</li>
 		</ul>
@@ -276,7 +276,7 @@
 	function ding() {
 		layer.open({
 			type : 2,
-			title : "这是通知",
+			title : "延期提醒",
 			maxmin : true,
 			offset: '100px',
 			area : [ '600px', '500px' ],
