@@ -128,7 +128,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/planManage/page',
+            url: '/audit-api/task/flow/page',
             id: 'test',
             xhrFields: {
                 withCredentials: true
@@ -186,11 +186,13 @@
                         if (undefined === status || status === '1001') {
                             text = '<span>待完善</span>';
                         } else if (status === '1002') {
+                            text = '<span>待整改</span>';
+                        } else if (status === '1003') {
                             text = '<span>待审核</span>';
                         } else if (status === '1004') {
-                            text = '<span>已驳回</span>';
+                            text = '<span>被驳回</span>';
                         } else {
-                            text = '<span>已批准</span>';
+                            text = '<span>已完成</span>';
                         }
                         return text;
                     }
@@ -199,29 +201,12 @@
                     title: '操作',
                     width: 280,
                     templet: function (res) {
-                        let status;
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getByPlanUserId?planId=" + res.id + "&userId=" + userInfo.userId,
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    status = data.status;
-                                }
-                            }
-                        });
                         let html = '';
-                        // if (undefined === status || status === '1001') { //未呈批
-                        //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
-                        //     html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
-                        // } else if (status === '1003') { //待审核
-                        // } else if (status === '1003') { //已批准
-                        // } else if (status === '1004') { //已驳回
-                        //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
-                        // }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        if (res.taskId !== null) { // res.auditStatus
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
+                        }
                         return html;
                     }
                     // sort: true
@@ -270,6 +255,86 @@
 </script>
 
 <script>
+    //流程办理
+    function completeTask(type, taskId, auditStatus, bizKey) {
+        layer.confirm('确认操作吗？', function (index) {
+            let beforeStatus = auditStatus;
+            let status = auditEnum[beforeStatus][type];
+            let data = {
+                'auditStatus': status,
+                'bizKey': bizKey
+            }
+            $.ajax({
+                url: '/audit-api/task/complete/' + taskId,
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                data: JSON.stringify(data),
+                success: function (res) {
+                    layer.alert("操作成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            })
+        });
+    }
+
+    let auditEnum = {
+        1002: {
+            agree: 1003,
+            reject: 1004,
+        },
+        1003: {
+            agree: 1005,
+            reject: 1004,
+        },
+        1004: {
+            agree: 1002,
+            form: 'editPlan' //修改计划表单
+        },
+        1005: {
+            agree: 1006,
+        },
+        1006: {
+            agree: 1008,
+            reject: 1007,
+            form: 'completePlan' //完善整改信息表单
+        },
+        1007: {
+            agree: 1006,
+        },
+        1008: {
+            agree: 1009, //根据延期字段判断，为空则1009 否则 1014（延期申请）
+            reject: 1014, //延期申请
+            form: 'delayForm' //延期申请表单
+        },
+        1009: {
+            agree: 1010,
+        },
+        1010: {
+            agree: 1011,
+            reject: 1009
+        },
+        1011: {
+            agree: 1013,
+            reject: 1009
+        },
+        1014:{
+            agree: 1015,
+            reject: 1009
+        },
+        1015:{
+            agree: 1016,
+        },
+        1016:{
+            agree: 1009,
+            reject: 1009,
+        }
+
+
+    }
+
     function delete_(id) {
         layer.confirm('确认要删除吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
