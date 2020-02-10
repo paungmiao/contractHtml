@@ -103,12 +103,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li date-refresh="1" class="layui-hide" id="plan_pro">
-						<a _href="../system/auditProject/project-list.html">
+							<a _href="../system/auditProject/project-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>项目清单</cite>
 							</a>
 						</li>
-						<li id="achieve" class="layui-hide">
+						<li date-refresh="1" id="achieve" class="layui-hide">
 							<a _href="../system/auditProject/archive-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审核清单</cite>
@@ -120,13 +120,25 @@
 								<cite>审核清单</cite>
 							</a>
 						</li>
-						<li class="layui-hide" id="plan_aud">
+						<li date-refresh="1" class="layui-hide" id="audit_X">
+							<a _href="../system/auditProject/project-list-audit.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>项目清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" id="audit_S" class="layui-hide">
+							<a _href="../system/auditProject/audit-list-audit.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="plan_aud">
 							<a _href="../system/auditManagement/audit-management-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>审核归档</cite>
 							</a>
 						</li>
-						<li class="layui-hide" id="plan_att">
+						<li date-refresh="1" class="layui-hide" id="plan_att">
 							<a _href="../system/auditManagement/attention-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>关注列表</cite>
@@ -245,9 +257,10 @@
 			$("#userManage").removeClass("layui-hide");
 			$("#plan_manage").removeClass("layui-hide");
 			$("#plan_manage_j").removeClass("layui-hide");
-			$("#plan_manage_s").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
+			$("#audit_X").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 		}
 	} else if ($.inArray(1, roleIdList) > -1) { //管理员
 		if (deptName.indexOf('中支') > -1) {
@@ -256,9 +269,12 @@
 			$("#plan_aud").removeClass("layui-hide");
 			$("#plan_manage").removeClass("layui-hide");
 			$("#plan_manage_s").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 			$("#audit_pro").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
+			$("#audit_S").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 		}
 	} else if ($.inArray(13, roleIdList) > -1) { //超级管理员
 		$("#statistics").removeClass("layui-hide");

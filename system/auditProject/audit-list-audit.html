@@ -27,7 +27,7 @@
       <a href="">首页</a>
       <a href="">审计计划管理</a>
       <a>
-        <cite>计划清单</cite></a>
+        <cite>审核清单</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -52,13 +52,12 @@
             <div class="layui-input-inline">
                 <select id="stateSelect">
                     <option value="">请选择状态</option>
+                    <option value="1001">未批呈</option>
                     <option value="1002">待审核</option>
-                    <option value="1003">已驳回</option>
+                    <option value="1003">被驳回</option>
                     <option value="1004">已批准</option>
                 </select>
             </div>
-            <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
-            <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -127,8 +126,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/auditPlan/page',
-            data: {},
+            url: '/audit-api/planManage/page',
             id: 'test',
             xhrFields: {
                 withCredentials: true
@@ -165,14 +163,29 @@
                     title: '年度',
                     width: 80,
                 }, {
-                    field: 'status',
+                    field: '',
                     title: '状态',
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (undefined === data.status || data.status === '1002') {
+                        let status;
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getByPlanUserId?planId=" + data.id + "&userId=" + userInfo.userId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    status = data.status;
+                                }
+                            }
+                        });
+                        if (undefined === status || status === '1001') {
                             text = '<span>待审核</span>';
-                        } else if (data.status === '1004') {
+                        } else if (status === '1002') {
+                            text = '<span>待审核</span>';
+                        } else if (status === '1004') {
                             text = '<span>已驳回</span>';
                         } else {
                             text = '<span>已批准</span>';
@@ -180,17 +193,32 @@
                         return text;
                     }
                 }, {
-                    field: 'deal',
+                    field: '',
                     title: '操作',
                     width: 280,
                     templet: function (res) {
+                        let status;
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getByPlanUserId?planId=" + res.id + "&userId=" + userInfo.userId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    status = data.status;
+                                }
+                            }
+                        });
                         let html = '';
-                        if (undefined === res.status || res.status === '1002') { //待审核
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">批准</span>';
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1004\')">驳回</span>';
-                        } else if (res.status === '1003') { //已批准
-                        } else if (res.status === '1004') { //已驳回
-                        }
+                        // if (undefined === status || status === '1001') { //未呈批
+                        //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
+                        //     html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
+                        // } else if (status === '1003') { //待审核
+                        // } else if (status === '1003') { //已批准
+                        // } else if (status === '1004') { //已驳回
+                        //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
+                        // }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         return html;
                     }
@@ -213,19 +241,17 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                implementingAgencyId: userInfo.deptId
+                auditAdminId: userInfo.userId
             },
+
             done: function (res, curr, count) {
-                // let roleIdList = userInfo.roleIdList;
-                // if ($.inArray(6, roleIdList) > -1) {
-                //     $("[data-field='deal']").css('display','none');
-                // }
+
             }
         });
         form.on("submit(search)", function () {
             tablePlan.reload({
                 where: {
-                    implementingAgencyId: userInfo.deptId,
+                    auditAdminId: userInfo.userId,
                     projectName: $("#projectName").val(),
                     auditYear: $("#auditYear").val(),
                     status: $("#stateSelect").val(),
@@ -242,20 +268,15 @@
 </script>
 
 <script>
-
-    function dealPlan(id, status) {
-        layer.confirm('确认操作？', function (index) {
-            var ids = [];
-            ids.push(id);
-            ids = ids.join(",");
+    function delete_(id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/auditPlan/changePlanStatusByIds",
-                type: 'POST',
+                url: "/audit-api/planManage/user_delete/" + id,
                 dataType: "json",
-                data: {ids: ids, status: status},
-                headers: createAuthorizationTokenHeader(),
+                type: "delete",
                 success: function (resp) {
-                    layer.alert("操作成功", {icon: 1}, function () {
+                    layer.alert("删除成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
@@ -263,6 +284,51 @@
 
         });
     }
+
+    function reportPlan() {
+        layer.confirm('确认要上报计划吗？', function (index) {
+            let table = layui.table;
+            var checkStatus = table.checkStatus('test');
+            var ids = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            ids = ids.join(",");
+            $.ajax({
+                url: "/audit-api/auditPlan/changePlanStatusByIds",
+                type: 'POST',
+                dataType: "json",
+                data: {ids: ids, status: "1002"},
+                success: function (resp) {
+                    layer.alert("上报计划成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
+
+            // $.ajax({
+            //     url: "/audit-api/auditPlan/reportPlan",
+            //     type: 'POST',
+            //     dataType: "json",
+            //     headers: {
+            //         Authorization: window.sessionStorage.getItem('Authorization')
+            //     },
+            //     data: {ids: ids},
+            //     success: function (resp) {
+            //         layer.alert("上报计划成功", {icon: 1}, function () {
+            //             location.replace(location.href);
+            //         });
+            //     }
+            // });
+
+        });
+    }
+
 
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
