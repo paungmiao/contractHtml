@@ -60,15 +60,15 @@
                 </select>
             </div>
         </div>
-        <!--        <div class="layui-form-item">-->
-        <!--            <label class="layui-form-label">-->
-        <!--                <span class="x-red">*</span>项目类型:-->
-        <!--            </label>-->
-        <!--            <div class="layui-input-inline">-->
-        <!--                <select name="contrller">-->
-        <!--                </select>-->
-        <!--            </div>-->
-        <!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>项目类型:
+            </label>
+            <div class="layui-input-inline">
+                <select id="projectTypeSelect" name="projectType">
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计性质:
@@ -148,7 +148,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>审计依据:
+                审计依据:
             </label>
             <div class="layui-input-inline">
                 <input name="auditBasis" type="text" style="width:200px" placeholder="请输入审计依据" autocomplete="off" class="layui-input" value="">
@@ -156,7 +156,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>审计分类:
+                审计分类:
             </label>
             <div class="layui-input-inline">
                 <select id="auditClassificationIdSelect" name="auditClassificationId">
@@ -165,7 +165,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>审计经验:
+                审计经验:
             </label>
             <div class="layui-input-inline">
                 <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
@@ -173,7 +173,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>风险评估:
+                风险评估:
             </label>
             <div class="layui-input-inline">
                 <select id="riskAssessmentIdSelect" name="riskAssessmentId">
@@ -274,6 +274,24 @@
             }
         })
         $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+            dataType: "json",
+            type: "get",
+            async:false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择项目类型</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#projectTypeSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
             type: "get",
@@ -295,6 +313,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
             dataType: "json",
             type: "get",
+            async:false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -312,6 +331,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
             dataType: "json",
             type: "get",
+            async:false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -386,7 +406,7 @@
                 }
             }
         })
-        form.render()
+        form.render('select');
         //监听提交
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");

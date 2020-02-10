@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/jwt.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script src="../js/JCheck.js"></script>
+    <script src="../js/echarts/echarts.min.js?v=1.0.4" charset="utf-8"></script>
+</head>
+
+<style type="text/css">
+    .nav {
+        width: 90%;
+    }
+
+    .nav .layui-input {
+        border: none;
+    }
+
+    .time .layui-form-label {
+        width: 95px;
+    }
+
+    .time .layui-input-block {
+        margin-left: 125px;
+    }
+
+    .submit {
+        text-align: center;
+    }
+
+    .position {
+        position: absolute;
+        right: 20px;
+        top: 55px;
+    }
+
+    .position > .showMsg {
+        position: absolute;
+        right: 60px;
+        text-align: center;
+    }
+
+    .position > .showMsg > label {
+        text-align: center;
+    }
+
+    .position > .showMsg > span {
+        font-size: 18px;
+    }
+
+    .formShow .layui-input, .formShow .layui-textarea {
+        border: none;
+    }
+
+    .formShow .layui-form-label {
+        width: 96px;
+    }
+
+    .formShow .layui-input-block {
+        margin-left: 126px;
+    }
+
+    .x-admin-sm .layui-input, .x-admin-sm .layui-select, .x-admin-sm .layui-textarea {
+        height: 38px;
+    }
+
+    h3 {
+        padding-left: 15px;
+    }
+</style>
+<body>
+<div class="x-body">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend id="planName">2333</legend>
+    </fieldset>
+    <div class="layui-form" lay-filter="basicForm">
+        <div class="layui-row layui-form nav">
+            <div class="layui-col-md3">
+                <label class="layui-form-label">项目编号：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="projectCode" value="">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">项目年度：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="auditYear" value="">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">实施机构：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="implementingAgencyId">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">审计对象：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="auditObjectId">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-form-item nav">
+            <div class="layui-col-md3">
+                <label class="layui-form-label">计划时长：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="planTime">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">已用时长：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="costTime">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">整改情况：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="rectifySituationId">
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <label class="layui-form-label">创建日期：</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" name="createdTime">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position">
+        <!--    <span class="layui-btn">更改状态</span>-->
+        <div class="showMsg">
+            <!--        <label class="layui-form-label">项目状态</label>-->
+            <!--        <span>已启动</span>-->
+        </div>
+    </div>
+    <!-- tab -->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本信息</li>
+            <li>资料清单</li>
+            <li>项目节点</li>
+            <li>初次编制</li>
+        </ul>
+        <div class="layui-tab-content">
+            <!-- 基本信息 -->
+            <div class="layui-tab-item layui-show formShow layui-form" lay-filter="extendForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="updatedTime" value="2020-2-9">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">出现频次：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改部门负责人：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="impAdminId" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改负责人：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="rectifyMan" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">项目类型：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="projectType" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审计性质：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="auditNatureId" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">问题词条：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="questionEntryId" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">问题定性：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="problemCharacterization" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审计依据：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="auditBasis" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审计分类：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="auditClassificationId" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审计经验：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="auditingExperience" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">风险评估：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" riskAssessmentId value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">问题描述：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="problemDescription" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">可能影响：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="mayAffect" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改建议：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectificationSuggestions" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectifyWay" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改结果：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectifyResult" value="整改结果整改结果"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <!-- 资料清单 -->
+            <div class="layui-tab-item">
+                <table class="layui-table x-admin" id="documentList" lay-data="{id:'documentList'}">
+
+                </table>
+            </div>
+            <!-- 项目节点 -->
+            <div class="layui-tab-item">
+                <table class="layui-table x-admin" id="test2" lay-data="{id:'test2'}">
+
+                </table>
+            </div>
+            <!-- 初次编制  -->
+            <div class="layui-tab-item">
+                <h2>完善信息</h2>
+                <hr/>
+                <div class="layui-row layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">整改负责人：</label>
+                        <div class="layui-input-block">
+                            <select class="layui-select">
+                                <option value="">请选择负责人</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 time">
+                        <label class="layui-form-label">计划整改时长：</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" id="chooseTime">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改结果：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上传文档：</label>
+                    <div class="layui-input-block">
+                        <span class="layui-btn"><i class="layui-icon">&#xe681;</i>上传</span>
+                    </div>
+                </div>
+                <div class="layui-form-item submit">
+                    <button class="layui-btn " lay-filter="add" lay-submit="">
+                        <i class="layui-icon">&#xe605;</i>提交
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+
+    var count = 0;
+    let bizKey = getQueryString("bizKey")
+    let bizName = getQueryString("bizName")
+    layui.use(['table', 'element', 'laydate', 'form'], function () {
+        var element = layui.element;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        $("#planName").text(bizName)
+        $('.nav input').attr('disabled', 'disabled');
+        $('.formShow input').attr('disabled', 'disabled');
+        $('.formShow textarea').attr('disabled', 'disabled');
+
+        $.ajax({
+            url: "/audit-api/planManage/detail/" + bizKey,
+            async: false,
+            type: 'get',
+            headers: createAuthorizationTokenHeader(),
+            success: function (res) {
+                debugger
+                form.val('basicForm', res.data)
+                form.val('extendForm', res.data)
+            },
+            error: function (error) {
+                top.layer.msg('请检查网络连接', {icon: 2})
+            }
+        })
+
+        table.render({
+            elem: '#documentList',
+            url: '../json/rectify.json',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [{
+                    field: 'empno',
+                    title: '序号',
+                    width: 80
+                }, {
+                    field: 'name',
+                    title: '索引号',
+                    width: 200,
+                }, {
+                    field: 'type',
+                    title: '资料名称',
+                    width: 300,
+                }, {
+                    field: 'behavior',
+                    title: '操作人员',
+                    width: 200,
+                }, {
+                    field: 'advice',
+                    title: '创建日期',
+                    width: 300,
+                }, {
+                    field: 'date',
+                    title: '附件',
+                    width: 220,
+                }]
+            ],
+            page: true
+        });
+
+        table.render({
+            elem: '#test2',
+            url: '../json/rectify.json',
+            xhrFields: {
+                withCredentials: true
+            },
+            cols: [
+                [{
+                    field: 'empno',
+                    title: '节点编号',
+                    width: 80
+                }, {
+                    field: 'name',
+                    title: '节点名称',
+                    width: 200,
+                }, {
+                    field: 'type',
+                    title: '节点内容',
+                    width: 300,
+                }, {
+                    field: 'behavior',
+                    title: '节点时间',
+                    width: 200,
+                }, {
+                    field: 'advice',
+                    title: '创建者',
+                    width: 300,
+                }, {
+                    field: 'advice',
+                    title: '创建时间',
+                    width: 300,
+                }]
+            ],
+            page: true
+        });
+
+
+        //时间选择器
+        laydate.render({
+            elem: '#chooseTime'
+            , trigger: "click"
+        });
+    });
+
+</script>
+</body>
+</html>

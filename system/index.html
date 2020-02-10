@@ -34,7 +34,7 @@
 			</li>
 			<li class="layui-nav-item to-index ">
 				<a href="javascript:ding()">
-					<i class="layui-icon">&#xe667;</i>
+					<i class="layui-icon">&#xe667;<span id="deadCount"></span></i>
 				</a>
 			</li>
 		</ul>
@@ -74,32 +74,71 @@
 					</ul>
 				</li>
 
-				<li>
+				<li class="layui-hide" id="plan_manage">
 					<a href="javascript:;">
 						<i class="iconfont">&#xe6b8;</i>
-						<cite>审计管理</cite>
+						<cite>审计计划管理</cite>
 						<i class="iconfont nav_right">&#xe697;</i>
 					</a>
 					<ul class="sub-menu">
-						<li date-refresh="1" class="layui-hide" id="plan_pro">
-						<a _href="../system/auditManagement/plan-management-list.html">
+						<li date-refresh="1" class="layui-hide" id="plan_manage_j">
+							<a _href="../system/auditManagement/plan-management-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>计划清单</cite>
 							</a>
 						</li>
-						<li id="achieve">
-							<a _href="../system/auditProject/archive-list.html">
-								<i class="iconfont">&#xe6a7;</i>
-								<cite>项目审计</cite>
-							</a>
-						</li>
-						<li class="layui-hide" id="plan_aud">
+						<li date-refresh="1" class="layui-hide" id="plan_manage_s">
 							<a _href="../system/auditManagement/audit-management-list.html">
 								<i class="iconfont">&#xe6a7;</i>
-								<cite>审计归档</cite>
+								<cite>审核清单</cite>
 							</a>
 						</li>
-						<li class="layui-hide" id="plan_att">
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<i class="iconfont">&#xe6b8;</i>
+						<cite>审计项目管理</cite>
+						<i class="iconfont nav_right">&#xe697;</i>
+					</a>
+					<ul class="sub-menu">
+						<li date-refresh="1" class="layui-hide" id="plan_pro">
+							<a _href="../system/auditProject/project-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>项目清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1">
+							<a _href="../system/auditProject/archive-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>查看流程的</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="audit_pro">
+							<a _href="../system/auditProject/audit-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="audit_X">
+							<a _href="../system/auditProject/project-list-audit.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>项目清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" id="audit_S" class="layui-hide">
+							<a _href="../system/auditProject/audit-list-audit.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核清单</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="plan_aud">
+							<a _href="../system/auditManagement/audit-management-list.html">
+								<i class="iconfont">&#xe6a7;</i>
+								<cite>审核归档</cite>
+							</a>
+						</li>
+						<li date-refresh="1" class="layui-hide" id="plan_att">
 							<a _href="../system/auditManagement/attention-list.html">
 								<i class="iconfont">&#xe6a7;</i>
 								<cite>关注列表</cite>
@@ -215,25 +254,33 @@
 			$("#entry_audit").removeClass("layui-hide");
 			$("#pro").removeClass("layui-hide");
 			$("#plan_pro").removeClass("layui-hide");
-			$("#statistics").removeClass("layui-hide");
 			$("#userManage").removeClass("layui-hide");
+			$("#plan_manage").removeClass("layui-hide");
+			$("#plan_manage_j").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
+			$("#audit_X").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 		}
 	} else if ($.inArray(1, roleIdList) > -1) { //管理员
 		if (deptName.indexOf('中支') > -1) {
 			$("#entry_audit").removeClass("layui-hide");
 			$("#statistics").removeClass("layui-hide");
 			$("#plan_aud").removeClass("layui-hide");
+			$("#plan_manage").removeClass("layui-hide");
+			$("#plan_manage_s").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
+			$("#audit_pro").removeClass("layui-hide");
 		} else if (deptName.indexOf('支行') > -1) {
 			$("#entry").addClass("layui-hide");
+			$("#audit_S").removeClass("layui-hide");
+			$("#userManage").removeClass("layui-hide");
 		}
 	} else if ($.inArray(13, roleIdList) > -1) { //超级管理员
 		$("#statistics").removeClass("layui-hide");
 		$("#XJ").removeClass("layui-hide");
 		$("#plan_att").removeClass("layui-hide");
 		$("#report").removeClass("layui-hide");
-		$("#achieve").addClass("layui-hide");
 		$("#entry").addClass("layui-hide");
 		$("#welcome").attr("src", "welcome.html");
 		$("#home").text("全疆信息");
@@ -244,7 +291,7 @@
 	function ding() {
 		layer.open({
 			type : 2,
-			title : "这是通知",
+			title : "延期提醒",
 			maxmin : true,
 			offset: '100px',
 			area : [ '600px', '500px' ],

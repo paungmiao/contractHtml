@@ -57,8 +57,10 @@
     var taskId = getQueryString("taskId");
     if (auditStatus == 1002) {
         $("#edit").html('<i class="layui-icon">&#xe605;</i>同意上报')
-    } else  if (auditStatus == 1003) {
+    } else if (auditStatus == 1003) {
         $("#edit").html('<i class="layui-icon">&#xe605;</i>同意整改')
+    } else if (auditStatus == 1004) {
+        $("#edit").html('<i class="layui-icon">&#xe605;</i>上报计划')
     } else if (auditStatus == 1005 || auditStatus == 1007) {
         $("#edit").html('<i class="layui-icon">&#xe605;</i>提交审核')
     } else if (auditStatus == 1008) {
@@ -108,6 +110,8 @@
             success: function (res) {
                 let index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                 parent.layer.close(index);		//关闭窗口
+                // 可以对父窗口进行刷新
+                x_admin_father_reload();
             }
         })
     }

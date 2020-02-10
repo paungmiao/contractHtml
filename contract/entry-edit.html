@@ -26,6 +26,17 @@
       <br>
       词条名称:<input type="text" name="name" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称" autocomplete="off" class="layui-input">
       <br>
+      <div class="layui-form-item level-4 layui-hide" >
+        二级词条名称:<input name="name1" type="text" style="width:200px" lay-verify="name" placeholder="请输入二级词条名称"
+                      autocomplete="off" class="layui-input" value="">
+        <br>
+        三级词条名称:<input name="name2" type="text" style="width:200px" lay-verify="name" placeholder="请输入三级词条名称"
+                      autocomplete="off" class="layui-input" value="">
+        <br>
+        四词条名称:<input name="name3" type="text" style="width:200px" lay-verify="name" placeholder="请输入四级词条名称"
+                     autocomplete="off" class="layui-input" value="">
+        <br>
+      </div>
       增添说明:<textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea" ></textarea>
       <br>
       <br>
@@ -71,6 +82,12 @@
           }
         }
       })
+      form.on('select(categoryFilter)', function (data) {
+        let level = $(data.elem).find(':selected').first().attr('level');
+        if(level==4){
+          $("div.level-4").removeClass('layui-hide')
+        }
+      });
       form.verify({
         remarks: function (value, dom) {
           if (value.length > 128) {
@@ -167,11 +184,13 @@
       type: "get",
       async: true,
       success: function (resp) {
-        ;
         layui.use('form',function () {
           layui.form.val('entryEditForm',resp.data)
         })
-
+        let level = $("#categorySelect").find(':selected').first().attr('level');
+        if(level==4){
+          $("div.level-4").removeClass('layui-hide')
+        }
       }
     })
 

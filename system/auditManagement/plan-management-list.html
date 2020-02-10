@@ -25,9 +25,9 @@
 <div class="x-nav">
     <span class="layui-breadcrumb">
       <a href="">首页</a>
-      <a href="">审计管理</a>
+      <a href="">审计计划管理</a>
       <a>
-        <cite>审计计划管理</cite></a>
+        <cite>审核清单</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -37,11 +37,27 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
             项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
-            <!--            状态：-->
-            <!--            <div class="layui-input-inline">-->
-            <!--                <select id="stateSelect">-->
-            <!--                </select>-->
-            <!--            </div>-->
+            审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" autocomplete="off" class="layui-input">
+            项目类型：
+            <div class="layui-input-inline">
+                <select id="projectTypeSelect">
+                </select>
+            </div>
+            审计性质：
+            <div class="layui-input-inline">
+                <select id="auditNatureIdSelect">
+                </select>
+            </div>
+            状态：
+            <div class="layui-input-inline">
+                <select id="stateSelect">
+                    <option value="">请选择状态</option>
+                    <option value="1001">未批呈</option>
+                    <option value="1002">待审核</option>
+                    <option value="1003">被驳回</option>
+                    <option value="1004">已批准</option>
+                </select>
+            </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -64,7 +80,43 @@
 
         let table = layui.table;
         let form = layui.form
-
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择项目类型</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#projectTypeSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计性质</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#auditNatureIdSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        form.render();
         let stateData = {}
         $.ajax({
             url: "/audit-api/state/list/planState",
@@ -91,12 +143,12 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                    {type: 'checkbox', fixed: 'left'},
-                    {
-                        field: 'projectCode',
-                        title: '项目编号',
-                        width: 200,
-                    }, {
+                {type: 'checkbox', fixed: 'left'},
+                {
+                    field: 'projectCode',
+                    title: '项目编号',
+                    width: 160,
+                }, {
                     field: 'projectName',
                     title: '项目名称',
                     width: 120
@@ -118,34 +170,40 @@
                 }, {
                     field: 'auditYear',
                     title: '年度',
-                    width: 120,
+                    width: 80,
                 }, {
                     field: 'status',
                     title: '状态',
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (data.status>=1003&&stateData[data.status]) {
-                            text = '<span>已审核</span>';
+                        if (undefined === data.status || undefined === '' || data.status === '1001') {
+                            text = '<span>待呈报</span>';
+                        } else if (data.status === '1002') {
+                            text = '<span>待审核</span>';
+                        } else if (data.status === '1004') {
+                            text = '<span>已驳回</span>';
                         } else {
-                            text = '<span>'+stateData[data.status]+'</span>'
+                            text = '<span>已批准</span>';
                         }
                         return text;
                     }
                 }, {
                     field: '',
                     title: '操作',
-                    width: 240,
+                    width: 280,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','plan-management-edit.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
-                        if (undefined == res.status || res.status == 1001) { //未呈批
-                            temp += `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','plan-management-edit.html','800','500','` + res.id + `')" >编辑</span>
-                                     <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
-                        } else if (res.status == 1002) { //待审核
-
+                        let html = '';
+                        if (undefined === res.status || res.status === '1001') { //未呈批
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
+                        } else if (res.status === '1003') { //待审核
+                        } else if (res.status === '1003') { //已批准
+                        } else if (res.status === '1004') { //已驳回
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
                         }
-
-                        return temp;
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        return html;
                     }
                     // sort: true
                 },]
@@ -179,6 +237,10 @@
                 where: {
                     createdBy: userInfo.userId,
                     projectName: $("#projectName").val(),
+                    auditYear: $("#auditYear").val(),
+                    status: $("#stateSelect").val(),
+                    auditNatureId: $("#auditNatureIdSelect").val(),
+                    projectType: $("#projectTypeSelect").val(),
                 },
                 page: 1
             });
@@ -220,21 +282,33 @@
                 return false;
             }
             ids = ids.join(",");
-            //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/auditPlan/reportPlan",
+                url: "/audit-api/auditPlan/changePlanStatusByIds",
                 type: 'POST',
                 dataType: "json",
-                headers: {
-                    Authorization: window.sessionStorage.getItem('Authorization')
-                },
-                data: {ids: ids},
+                data: {ids: ids, status: "1002"},
                 success: function (resp) {
                     layer.alert("上报计划成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
             });
+
+
+            // $.ajax({
+            //     url: "/audit-api/auditPlan/reportPlan",
+            //     type: 'POST',
+            //     dataType: "json",
+            //     headers: {
+            //         Authorization: window.sessionStorage.getItem('Authorization')
+            //     },
+            //     data: {ids: ids},
+            //     success: function (resp) {
+            //         layer.alert("上报计划成功", {icon: 1}, function () {
+            //             location.replace(location.href);
+            //         });
+            //     }
+            // });
 
         });
     }
