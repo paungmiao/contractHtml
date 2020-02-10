@@ -42,11 +42,17 @@
                 <select id="stateSelect">
                 </select>
             </div>
-            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
+            <!--问题清单：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
                         class="layui-input">
             问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
+                        class="layui-input">-->
+            问题清单：<input type="text" placeholder="请输入问题清单" id="problemDescription" autocomplete="off"
                         class="layui-input">
-
+            整改情况：
+            <div class="layui-input-inline">
+                <select id="rectifySituationSelect" name="rectifySituationId" >
+                </select>
+            </div>
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -58,6 +64,26 @@
 
 </div>
 <script>
+    function findEntryByCategory(categoryId,eleId){
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId="+categoryId,
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >全部</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#"+eleId).empty().append(options.join(""));
+                }
+            }
+        });
+    }
     var role = getCookie("role") == undefined ? 1 : getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
@@ -84,7 +110,8 @@
                 }
             }
         })
-        form.render("select")
+        form.render("select");
+        findEntryByCategory(6,"rectifySituationSelect");
         table.render({
             elem: '#queryList',
             url: '/audit-api/planManage/attention/page',
@@ -116,6 +143,9 @@
                 },{
                     field: 'auditNatureId',
                     title: '审计性质',
+                },{
+                    field: 'rectifySituationId',
+                    title: '整改情况',
                 }, {
                     field: 'auditYear',
                     title: '年度',
@@ -165,7 +195,8 @@
                     problemCharacterization: $("#problemCharacterization").val(),
                     problemDescription: $("#problemDescription").val(),
                     roleId: role,
-                    userId: userInfo.userId
+                    userId: userInfo.userId,
+                    rectifySituationId: $("#rectifySituationSelect").val()
                 },
                 page: 1
             });

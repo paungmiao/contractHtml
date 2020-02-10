@@ -44,27 +44,27 @@
                                 <div carousel-item="">
                                     <ul class="layui-row layui-col-space10 layui-this">
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                            <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('all')">
                                                 <h5 style="font-size: large;">总项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="planSum">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="planSum">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                            <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">
                                                 <h5 style="font-size: large;">已完成</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="finishCount">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="finishCount">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                            <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
                                                 <h5 style="font-size: large;">未完成</h5>
                                                 <p style="margin-left: 5px;margin-top: 10px;"><cite id="nofinishCount">0</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                            <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">
                                                 <h5 style="font-size: large;">延期项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="timeoutCount">0</cite></p>
+                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="timeoutCount">0</cite></p>
                                             </a>
                                         </li>
                                     </ul>
@@ -293,6 +293,35 @@
             return unescape(r[2]);
         }
         return null;
+    }
+    let typeArr = {};
+    typeArr['all'] = '全部';
+    typeArr['todo'] = '未完成';
+    typeArr['done'] = '已完成';
+    typeArr['delay'] = '延期';
+
+    function openPlanCheckList(type, deptId, auditYear, title) {
+        top.layer.open({
+            type: 2,
+            area: ['80%', '80%'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: (title == undefined ? '' : title) + typeArr[type] + '项目',
+            content: './plan-list.html?type=' + type + '&deptId=' + deptId + '&auditYear='+ auditYear,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+            },
+            cancel: function () {
+                //关闭窗口之后刷新frame
+                // location.replace(location.href);
+            },
+            end: function () {
+                //窗口销毁之后刷新frame
+                // location.replace(location.href);
+            }
+        });
     }
     var gid;
     layui.use(['table'], function () {
