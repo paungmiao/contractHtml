@@ -325,12 +325,13 @@
 
     var count = 0;
     let bizKey = getQueryString("bizKey")
+    let bizName = getQueryString("bizName")
     layui.use(['table', 'element', 'laydate', 'form'], function () {
         var element = layui.element;
         var table = layui.table;
         var laydate = layui.laydate;
         var form = layui.form;
-
+        $("#planName").val(bizName)
         $('.nav input').attr('disabled', 'disabled');
         $('.formShow input').attr('disabled', 'disabled');
         $('.formShow textarea').attr('disabled', 'disabled');

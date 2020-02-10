@@ -32,7 +32,7 @@ function getDeadCount(){
     })
 }
 
-function openAuditDetail(bizKey){
+function openAuditDetail(bizKey,bizName){
     top.layer.open({
         type: 2,
         area: ['80%', '80%'],
@@ -40,8 +40,8 @@ function openAuditDetail(bizKey){
         maxmin: true,
         shadeClose: true,
         shade: 0.4,
-        title: '审计项目详情',
-        content: '../system/auditDeatil.html?bizKey='+bizKey,
+        title: bizName+'审计项目详情',
+        content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName,
         success: function (layero, index) {
             //窗口加载成功刷新frame
         },

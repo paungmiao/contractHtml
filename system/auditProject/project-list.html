@@ -202,7 +202,7 @@
                     width: 280,
                     templet: function (res) {
                         let html = '';
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
