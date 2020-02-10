@@ -200,9 +200,14 @@
                         let html = '';
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
-                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
-                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
+                            if (res.auditStatus === "1009") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
+                            } else {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改</span>';
+                            }
                         }
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
                         return html;
                     }
                     // sort: true
