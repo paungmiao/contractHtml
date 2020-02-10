@@ -32,6 +32,30 @@ function getDeadCount(){
     })
 }
 
+function openAuditDetail(bizKey){
+    top.layer.open({
+        type: 2,
+        area: ['80%', '80%'],
+        fix: false, //不固定
+        maxmin: true,
+        shadeClose: true,
+        shade: 0.4,
+        title: '审计项目详情',
+        content: '../system/auditDeatil.html?bizKey='+bizKey,
+        success: function (layero, index) {
+            //窗口加载成功刷新frame
+        },
+        cancel: function () {
+            //关闭窗口之后刷新frame
+            // location.replace(location.href);
+        },
+        end: function () {
+            //窗口销毁之后刷新frame
+            // location.replace(location.href);
+        }
+    });
+}
+
 
 $(function () {
 
