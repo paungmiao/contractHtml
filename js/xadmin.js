@@ -8,6 +8,61 @@
 let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://127.0.0.1:8666/audit-api/socket/'
 
+let auditEnum = {
+    1002: {
+        agree: 1003,
+        reject: 1004,
+    },
+    1003: {
+        agree: 1005,
+        reject: 1004,
+    },
+    1004: {
+        agree: 1002,
+        form: 'editPlan' //修改计划表单
+    },
+    1005: {
+        agree: 1006,
+    },
+    1006: {
+        agree: 1008,
+        reject: 1007,
+        form: 'completePlan' //完善整改信息表单
+    },
+    1007: {
+        agree: 1006,
+    },
+    1008: {
+        agree: 1009, //根据延期字段判断，为空则1009 否则 1014（延期申请）
+        reject: 1014, //延期申请
+        form: 'delayForm' //延期申请表单
+    },
+    1009: {
+        agree: 1010,
+    },
+    1010: {
+        agree: 1011,
+        reject: 1009
+    },
+    1011: {
+        agree: 1013,
+        reject: 1009
+    },
+    1014:{
+        agree: 1015,
+        reject: 1009
+    },
+    1015:{
+        agree: 1016,
+    },
+    1016:{
+        agree: 1009,
+        reject: 1009,
+    }
+
+
+}
+
 let Authorization = window.sessionStorage.getItem('Authorization')
 if (!Authorization || Authorization == '' || Authorization == undefined) {
     location.href="login.html"
@@ -32,7 +87,7 @@ function getDeadCount(){
     })
 }
 
-function openAuditDetail(bizKey,bizName){
+function openAuditDetail(bizKey,bizName,taskId,auditStatus){
     top.layer.open({
         type: 2,
         area: ['80%', '80%'],
@@ -41,7 +96,7 @@ function openAuditDetail(bizKey,bizName){
         shadeClose: true,
         shade: 0.4,
         title: bizName+'审计项目详情',
-        content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName,
+        content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName+'&taskId='+taskId+'&auditStatus='+auditStatus,
         success: function (layero, index) {
             //窗口加载成功刷新frame
         },
