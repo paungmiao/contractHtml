@@ -48,7 +48,11 @@
                         实施机构：
                         <div class="layui-input-inline "  style="width:300px" id = "implementingAgencySelect">
                         </div>
-                        项目类型：<input type="text" placeholder="请输入项目类型" id="projectName3" name="projectName3" autocomplete="off" class="layui-input">
+                        项目类型：
+                        <div class="layui-input-inline">
+                            <select id="projectTypeSelect" name="projectType" >
+                            </select>
+                        </div>
                         审计性质：
                         <div class="layui-input-inline">
                             <select id="auditNatureSelect" name="auditNatureId" >
@@ -247,6 +251,7 @@
         });
         // findEntryByCategory(1,"implementingAgencySelect");
         findEntryByCategory(2,"auditObjectSelect");
+        findEntryByCategory(3,"projectTypeSelect");
         findEntryByCategory(4,"auditNatureSelect");
         findEntryByCategory(5,"problemSeveritySelect");
         findEntryByCategory(6,"rectifySituationSelect");
@@ -262,6 +267,25 @@
                     field: 'project_name',
                     title: '项目名称',
                     width: 200
+                },{
+                    field: 'project_type',
+                    title: '项目类型',
+                    width: 200
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    width: 80,
+                    templet: (data) => {
+                        let text;
+                        if (undefined === data.status || data.status === '1002') {
+                            text = '<span>待审核</span>';
+                        } else if (data.status === '1004') {
+                            text = '<span>已驳回</span>';
+                        } else {
+                            text = '<span>已批准</span>';
+                        }
+                        return text;
+                    }
                 }, {
                     field: 'problem_characterization',
                     title: '问题定性',
@@ -277,6 +301,18 @@
                 }, {
                     field: 'agency_name',
                     title: '机构名称',
+                    width: 120,
+                }, {
+                    field: 'auditBasis',
+                    title: '审计依据',
+                    width: 120,
+                }, {
+                    field: 'auditClassificationId',
+                    title: '审计分类',
+                    width: 120,
+                }, {
+                    field: 'auditingExperience',
+                    title: '审计经验',
                     width: 120,
                 }, {
                     field: 'audit_object_name',
@@ -340,7 +376,8 @@
                     auditNatureId: $("#auditNatureSelect").val(),
                     auditObjectId: $("#auditObjectSelect").val(),
                     problemSeverityId: $("#problemSeveritySelect").val(),
-                    rectifySituationId: $("#rectifySituationSelect").val()
+                    rectifySituationId: $("#rectifySituationSelect").val(),
+                    projectType: $("#projectTypeSelect").val()
                 },
                 page: 1
             });
