@@ -411,7 +411,7 @@
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");
             $.ajax({
-                url: '/audit-api/planManage/saveOrEditPlan',
+                url: '/audit-api/planCheckList/saveOrEditPlan',
                 type: 'POST',
                 dataType: "json",
                 data: formData,

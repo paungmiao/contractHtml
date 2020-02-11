@@ -127,7 +127,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/auditPlan/page',
+            url: '/audit-api/planCheckList/page',
             data: {},
             id: 'test',
             xhrFields: {
@@ -170,9 +170,10 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (undefined === data.status || data.status === '1002') {
+                        let status = data.planInfos[0]['statusUser'];
+                        if (undefined === status || status === '1001') {
                             text = '<span>待审核</span>';
-                        } else if (data.status === '1004') {
+                        } else if (status === '1003') {
                             text = '<span>已驳回</span>';
                         } else {
                             text = '<span>已批准</span>';
@@ -185,11 +186,12 @@
                     width: 280,
                     templet: function (res) {
                         let html = '';
-                        if (undefined === res.status || res.status === '1002') { //待审核
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">批准</span>';
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1004\')">驳回</span>';
-                        } else if (res.status === '1003') { //已批准
-                        } else if (res.status === '1004') { //已驳回
+                        let status = res.planInfos[0]['statusUser'];
+                        if (undefined === status || status === '1001') { //待审核
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1002\')">批准</span>';
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">驳回</span>';
+                        } else if (status === '1002') { //已批准
+                        } else if (status === '1003') { //已驳回
                         }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         return html;
@@ -213,7 +215,8 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                implementingAgencyId: userInfo.deptId
+                type: 0, //必填
+                userId : userInfo.userId, //必填
             },
             done: function (res, curr, count) {
                 // let roleIdList = userInfo.roleIdList;
@@ -249,10 +252,10 @@
             ids.push(id);
             ids = ids.join(",");
             $.ajax({
-                url: "/audit-api/auditPlan/changePlanStatusByIds",
+                url: "/audit-api/planCheckList/changePlanStatusByIds",
                 type: 'POST',
                 dataType: "json",
-                data: {ids: ids, status: status},
+                data: {ids: ids, statusUser: status, userId: userInfo.userId},
                 headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
                     layer.alert("操作成功", {icon: 1}, function () {

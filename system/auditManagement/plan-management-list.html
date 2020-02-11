@@ -135,7 +135,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/planManage/page',
+            url: '/audit-api/planCheckList/page',
             id: 'test',
             xhrFields: {
                 withCredentials: true
@@ -177,12 +177,13 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (undefined === data.status || undefined === '' || data.status === '1001') {
+                        let status = data.planInfos[0]['statusUser'];
+                        if (undefined === status || status === '' || status === '1001') {
                             text = '<span>待呈报</span>';
-                        } else if (data.status === '1002') {
+                        } else if (status === '1002') {
                             text = '<span>待审核</span>';
-                        } else if (data.status === '1004') {
-                            text = '<span>已驳回</span>';
+                        } else if (status === '1004') {
+                            text = '<span>被驳回</span>';
                         } else {
                             text = '<span>已批准</span>';
                         }
@@ -194,12 +195,13 @@
                     width: 280,
                     templet: function (res) {
                         let html = '';
-                        if (undefined === res.status || res.status === '1001') { //未呈批
+                        let status = res.planInfos[0]['statusUser'];
+                        if (undefined === status || status === '1001') { //未呈批
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
                             html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
-                        } else if (res.status === '1003') { //待审核
-                        } else if (res.status === '1003') { //已批准
-                        } else if (res.status === '1004') { //已驳回
+                        } else if (status === '1002') { //待审核
+                        } else if (status === '1003') { //已批准
+                        } else if (status === '1004') { //已驳回
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
                         }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
@@ -224,8 +226,8 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                createdBy: userInfo.userId,
-                projectName: ""
+                type: 0, //必填
+                userId : userInfo.userId, //必填
             },
 
             done: function (res, curr, count) {
@@ -283,10 +285,10 @@
             }
             ids = ids.join(",");
             $.ajax({
-                url: "/audit-api/auditPlan/changePlanStatusByIds",
+                url: "/audit-api/planCheckList/changePlanStatusByIds",
                 type: 'POST',
                 dataType: "json",
-                data: {ids: ids, status: "1002"},
+                data: {ids: ids, statusUser: "1002", userId: userInfo.userId},
                 success: function (resp) {
                     layer.alert("上报计划成功", {icon: 1}, function () {
                         location.replace(location.href);
