@@ -168,19 +168,7 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        let status;
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getByPlanUserId?planId=" + data.id + "&userId=" + userInfo.userId,
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    status = data.status;
-                                }
-                            }
-                        });
+                        let status = data.planInfos[0]['statusUser'];
                         if (undefined === status || status === '1001') {
                             text = '<span>待整改</span>';
                         } else if (status === '1002') {
@@ -229,7 +217,8 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                auditUserId: userInfo.userId
+                type: 1, //必填
+                userId : userInfo.userId, //必填
             },
 
             done: function (res, curr, count) {
@@ -281,60 +270,6 @@
         });
     }
 
-    let auditEnum = {
-        1002: {
-            agree: 1003,
-            reject: 1004,
-        },
-        1003: {
-            agree: 1005,
-            reject: 1004,
-        },
-        1004: {
-            agree: 1002,
-            form: 'editPlan' //修改计划表单
-        },
-        1005: {
-            agree: 1006,
-        },
-        1006: {
-            agree: 1008,
-            reject: 1007,
-            form: 'completePlan' //完善整改信息表单
-        },
-        1007: {
-            agree: 1006,
-        },
-        1008: {
-            agree: 1009, //根据延期字段判断，为空则1009 否则 1014（延期申请）
-            reject: 1014, //延期申请
-            form: 'delayForm' //延期申请表单
-        },
-        1009: {
-            agree: 1010,
-        },
-        1010: {
-            agree: 1011,
-            reject: 1009
-        },
-        1011: {
-            agree: 1013,
-            reject: 1009
-        },
-        1014:{
-            agree: 1015,
-            reject: 1009
-        },
-        1015:{
-            agree: 1016,
-        },
-        1016:{
-            agree: 1009,
-            reject: 1009,
-        }
-
-
-    }
 
     function delete_(id) {
         layer.confirm('确认要删除吗？', function (index) {
@@ -349,50 +284,6 @@
                     });
                 }
             });
-
-        });
-    }
-
-    function reportPlan() {
-        layer.confirm('确认要上报计划吗？', function (index) {
-            let table = layui.table;
-            var checkStatus = table.checkStatus('test');
-            var ids = [];
-            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
-                ids.push(o.id);
-            });
-            if (ids.length < 1) {
-                layer.msg('无选中项');
-                return false;
-            }
-            ids = ids.join(",");
-            $.ajax({
-                url: "/audit-api/auditPlan/changePlanStatusByIds",
-                type: 'POST',
-                dataType: "json",
-                data: {ids: ids, status: "1002"},
-                success: function (resp) {
-                    layer.alert("上报计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-
-            // $.ajax({
-            //     url: "/audit-api/auditPlan/reportPlan",
-            //     type: 'POST',
-            //     dataType: "json",
-            //     headers: {
-            //         Authorization: window.sessionStorage.getItem('Authorization')
-            //     },
-            //     data: {ids: ids},
-            //     success: function (resp) {
-            //         layer.alert("上报计划成功", {icon: 1}, function () {
-            //             location.replace(location.href);
-            //         });
-            //     }
-            // });
 
         });
     }
