@@ -149,8 +149,8 @@
             <li class="layui-this">基本信息</li>
             <li>资料清单</li>
             <li>项目节点</li>
-            <li class="completeForm ">完善信息</li>
-            <li class="reportForm ">整改结果</li>
+            <li class="completeForm">完善信息</li>
+            <li class="reportForm">整改结果</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -272,87 +272,75 @@
                 </table>
             </div>
             <!-- 完善信息  -->
-            <div class="layui-tab-item">
+            <div class="layui-tab-item layui-form completeForm " lay-filter="completeForm">
                 <h2>完善信息</h2>
                 <hr/>
-                <div class="layui-tab-item layui-form layui-hide completeForm layui-hide" lay-filter="completeForm">
-                    <div class="layui-row layui-form-item">
-                        <div class="layui-col-md6">
-                            <label class="layui-form-label">整改负责人：</label>
-                            <div class="layui-input-block">
-<!--                                <select class="layui-select">-->
-<!--                                    <option value="">请选择负责人</option>-->
-<!--                                </select>-->
-                                <input class="layui-input" name="auditUserId">
+                <div class="layui-row layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">整改负责人：</label>
+                        <div class="layui-input-block">
+                            <!--                                <select class="layui-select">-->
+                            <!--                                    <option value="">请选择负责人</option>-->
+                            <!--                                </select>-->
+                            <input class="layui-input" name="auditUserId">
 
-                            </div>
-                        </div>
-                        <div class="layui-col-md6 time">
-                            <label class="layui-form-label">计划整改时长：</label>
-                            <div class="layui-input-block">
-                                <input class="layui-input" id="planTime">
-                            </div>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-col-md6 time">
+                        <label class="layui-form-label">计划整改时长：</label>
                         <div class="layui-input-block">
-                            <textarea class="layui-textarea" name="rectifyWay"></textarea>
+                            <input class="layui-input" id="planTime" name="planTime">
                         </div>
                     </div>
                 </div>
-                <div class="layui-form reportForm layui-hide" lay-filter="reportForm">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">整改结果：</label>
-                        <div class="layui-input-block">
-                            <textarea class="layui-textarea" name="rectifyResult"></textarea>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectifyWay"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item layui-hide layui-file">
+                <div class="layui-form-item submit layui-hide layui-file">
                     <label class="layui-form-label">上传文档：</label>
-                    <div class="layui-input-block" id="uploadFile">
-                        <input type="hidden" name="fileUri" >
+                    <div class="layui-input-block">
+                        <input type="hidden" name="fileUri">
                         <input type="hidden" name="taskId">
                         <input type="hidden" name="taskName">
                         <input type="hidden" name="bizKey">
                         <input type="hidden" name="uploadUser">
-                        <span class="layui-btn" name="file-btn"><i class="layui-icon">&#xe681;</i>上传</span>
-                        <span id="uploadName"></span>
+                        <span class="layui-btn file-btn" name="file-btn"><i class="layui-icon">&#xe681;</i>上传</span>
+                        <span name="uploadName"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit">
+                <div class="layui-form-item submit layui-hide">
                     <button class="layui-btn " lay-filter="completeSubmit" lay-submit="">
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
             </div>
             <!-- 整改结果  -->
-            <div class="layui-tab-item">
+            <div class="layui-tab-item layui-form reportForm " lay-filter="reportForm">
                 <h2>整改结果</h2>
                 <hr/>
-                <div class="layui-form reportForm layui-hide" lay-filter="reportForm">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">整改结果：</label>
-                        <div class="layui-input-block">
-                            <textarea class="layui-textarea" name="rectifyResult"></textarea>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改结果1：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectifyResult"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item layui-hide layui-file">
+                <div class="layui-form-item submit layui-hide layui-file">
                     <label class="layui-form-label">上传文档：</label>
                     <div class="layui-input-block">
-                        <input type="hidden" name="fileUri" >
-                        <input type="hidden" name="taskId" >
+                        <input type="hidden" name="fileUri">
+                        <input type="hidden" name="taskId">
                         <input type="hidden" name="taskName">
                         <input type="hidden" name="bizKey">
-                        <input type="hidden" name="uploadUser" >
-                        <span class="layui-btn" name="file-btn"><i class="layui-icon">&#xe681;</i>上传</span>
+                        <input type="hidden" name="uploadUser">
+                        <span class="layui-btn file-btn" name="file-btn"><i class="layui-icon">&#xe681;</i>上传</span>
                         <span name="uploadName"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit">
-                    <button class="layui-btn " lay-filter="reportSubmit" lay-submit="">
+                <div class="layui-form-item submit layui-hide">
+                    <button class="layui-btn " lay-filter="reportSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
@@ -374,30 +362,26 @@
         var laydate = layui.laydate;
         var form = layui.form;
         var upload = layui.upload;
-        $("#bizKey").val(bizKey);
-        $("#bizName").val(bizName);
-        $("#taskId").val(taskId);
-        $("#uploadUser").val(userInfo.username);
-        $("#planName").text(bizName);
+        $("[name='bizKey']").val(bizKey);
+        $("[name='bizName']").val(bizName);
+        $("[name='taskId']").val(taskId);
+        $("[name='uploadUser']").val(userInfo.username);
+        $("[name='planName']").text(bizName);
         $('.nav input').attr('disabled', 'disabled');
         $('.formShow input').attr('disabled', 'disabled');
         $('.formShow textarea').attr('disabled', 'disabled');
 
         if (auditStatus == 1005) { // 通过计划 -> 完善计划
-            // $(".completeForm").removeClass("layui-hide")
-            // $(".submit").removeClass("layui-hide")
-        }else if(auditStatus == 1008){ //提交整改结果
-            // $(".reportForm").removeClass("layui-hide")
-            // $(".submit").removeClass("layui-hide")
+            $(".completeForm").removeClass("layui-hide")
+            $(".submit").removeClass("layui-hide")
+        } else if (auditStatus == 1008) { //提交整改结果
+            $(".reportForm").removeClass("layui-hide")
+            $(".submit").removeClass("layui-hide")
         }
-
-        $("div.submit").on("click.native",function () {
-            layer.msg('sasdasdas')
-        })
 
         //执行实例
         var uploadInst = upload.render({
-            elem: '[name="file-btn"]' //绑定元素
+            elem: '.file-btn' //绑定元素
             , url: '/audit-api/file/upload',//上传接口
             field: 'file',
             accept: 'file',
@@ -409,9 +393,9 @@
                 //上传成功毕回调
                 if (res.code == 0) {
                     let data = res.data;
-                    $("#uploadName").text(data.substr(data.lastIndexOf('/') + 1));
-                    $("#fileUri").val(data);
-                    $("#file-btn").text('重新上传');
+                    $("[name='uploadName']").text(data.substr(data.lastIndexOf('/') + 1));
+                    $("[name='fileUri']").val(data);
+                    $(".file-btn").text('重新上传');
                 }
                 console.log(res)
             }
@@ -423,6 +407,9 @@
             url: "/audit-api/planManage/detail/" + bizKey,
             async: false,
             type: 'get',
+            // data:{
+            //     taskId:taskId
+            // },
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
                 form.val('basicForm', res.data)
@@ -469,6 +456,65 @@
                 bizKey: bizKey
             }
         });
+        /**
+         * 提交整改结果
+         */
+        form.on('submit(reportSubmit)', function (res) {
+            //提交完善信息
+            let reportForm = form.val('reportForm');
+            // let nextStatus = auditEnum[auditStatus].agree;
+            let nextStatus = 1006;
+            nextStatus['status']=nextStatus;
+            nextStatus['id']=bizKey;
+            $.ajax({
+                url:'/audit-api/task/submitReport',
+                type:'post',
+                data:JSON.stringify(reportForm),
+                headers:createAuthorizationTokenHeader(),
+                contentType:'application/json;charset=utf8',
+                dataType:'json',
+                async: false,
+                success:function (res) {
+                    if(res.code==0 && res.data){
+                        top.layer.msg("操作成功",{icon:1})
+                        $(".submit").addClass("layui-hide");
+                    }
+                },
+                error:function () {
+                    layer.msg('请检查网络连接',{icon:2})
+                }
+            })
+            return false;
+        })
+        //提交完善信息
+        form.on('submit(completeSubmit)', function (res) {
+            //提交完善信息
+            let completeForm = form.val('completeForm');
+            // let nextStatus = auditEnum[auditStatus].agree;
+            let nextStatus = 1006;
+            nextStatus['status']=nextStatus;
+            nextStatus['id']=bizKey;
+            $.ajax({
+                url:'/audit-api/task/completePlan',
+                type:'post',
+                data:JSON.stringify(completeForm),
+                headers:createAuthorizationTokenHeader(),
+                contentType:'application/json;charset=utf8',
+                dataType:'json',
+                async: false,
+                success:function (res) {
+                    if(res.code==0 && res.data){
+                        top.layer.msg("操作成功",{icon:1})
+                        $(".submit").addClass("layui-hide");
+                    }
+                },
+                error:function () {
+                    layer.msg('请检查网络连接',{icon:2})
+                }
+            })
+            return false;
+        })
+
 
         table.render({
             elem: '#flowTaskHistory',
@@ -519,7 +565,7 @@
 
         //时间选择器
         laydate.render({
-            elem: '#chooseTime'
+            elem: '#planTime'
             , trigger: "click"
         });
     });
