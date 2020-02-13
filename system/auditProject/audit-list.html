@@ -185,13 +185,15 @@
                     title: '操作',
                     width: 280,
                     templet: function (res) {
+                        debugger;
                         let html = '';
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'../../system/auditManagement/plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
-                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
+                            // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'260\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                         }
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
+                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
                         return html;
                     }
                     // sort: true
@@ -286,6 +288,42 @@
     }
 
 
+
+    function rejectPage_(title, url, w, h, taskId, auditStatus, planId) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let taskIdDate = body.find('#taskId');
+                let auditStatusDate = body.find('#auditStatus');
+                let planIdDate = body.find('#planId');
+                taskIdDate.val(taskId);
+                auditStatusDate.val(auditStatus);
+                planIdDate.val(planId);
+            }
+        });
+    }
 
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
