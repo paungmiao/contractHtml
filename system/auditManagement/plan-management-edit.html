@@ -343,7 +343,7 @@
             //监听提交
             form.on('submit(addPlanCheckList)', function (data) {
                 $.ajax({
-                    url: '/audit-api/planManage/saveOrEditPlan',
+                    url: '/audit-api/planCheckList/saveOrEditPlan',
                     type: 'POST',
                     dataType: "json",
                     data: form.val("planEditForm"),
