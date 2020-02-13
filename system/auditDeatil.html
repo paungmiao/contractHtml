@@ -390,7 +390,7 @@
             $(".submit").removeClass("layui-hide")
         }else if (auditStatus == 1006) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
-        }else if (auditStatus == 1008) { //提交整改结果 有提交
+        }else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
         }else if (auditStatus == 1010 || auditStatus == 1011) { // 审核整改结果 无提交
@@ -461,9 +461,8 @@
                 }, {
                     field: 'fileName',
                     title: '文件名',
-                    width: 200,
                     templet: (res) => {
-                        let fileUrlDiv = '<div><a href="' + res.fileUrl + '">' + res.fileName + '</a></div>'
+                        let fileUrlDiv = '<div><a  target="view_window" title="点击下载附件" style="text-decoration: underline;color: #00b7ee" href="javascript:void(0);" onclick="openNewWindow(\''+ res.fileUrl+'\')">' + res.fileName + '</a></div>'
                         return fileUrlDiv;
                     }
                 }, {
@@ -486,11 +485,10 @@
          */
         form.on('submit(reportSubmit)', function (res) {
             //提交完善信息
-            debugger
             let reportForm = form.val('reportForm');
             let nextStatus = auditEnum[auditStatus].agree;
-            nextStatus['status']=nextStatus;
-            nextStatus['id']=bizKey;
+            reportForm['status']=nextStatus;
+            reportForm['id']=bizKey;
             $.ajax({
                 url:'/audit-api/task/submitReport',
                 type:'post',
@@ -503,6 +501,8 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                    }else{
+                        top.layer.msg(res.msg,{icon:2})
                     }
                 },
                 error:function () {
@@ -594,7 +594,9 @@
             , trigger: "click"
         });
     });
-
+function openNewWindow(url) {
+    location.href='http://'+url
+}
 </script>
 </body>
 </html>
