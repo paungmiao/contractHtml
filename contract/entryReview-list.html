@@ -144,8 +144,10 @@
                         if ($.inArray(6, roleIdList) > -1) {
 
                         } else {
-                            temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="pass_(\'' + res.instanceId + '\' )">审核通过</span>' +
-                                '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="reject_(\'' + res.instanceId + '\')">驳回</span>'
+                            if(res.auditStatus==0){
+                                temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="pass_(\'' + res.instanceId + '\' )">审核通过</span>' +
+                                    '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="reject_(\'' + res.instanceId + '\')">驳回</span>'
+                            }
                         }
                         return temp;
                     }

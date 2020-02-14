@@ -84,9 +84,11 @@
             console.log(data);
         });
         form.on('select(categoryList)', function (data) {
-            let level = $(data.elem).find(':selected').first().attr('level');
-            if(level==4){
+            let formVal = form.val('entryFlowAddForm');
+            if(formVal.categoryFk!=undefined&&formVal.categoryFk==8){
                 $("div.level-4").removeClass('layui-hide')
+            }else{
+                $("div.level-4").addClass('layui-hide')
             }
         });
         form.verify({
@@ -131,6 +133,11 @@
             let formData = form.val("entryFlowAddForm");
             formData.createdBy = userInfo.username;
             formData.applyUser = userInfo.username;
+            if(formData.categoryFk!=8){
+                formData.name1='';
+                formData.name2='';
+                formData.name3='';
+            }
             $.ajax({
                 url: '/audit-api/entry/flow/add',
                 type: 'post',
