@@ -384,7 +384,10 @@
         $('.formShow textarea').attr('disabled', 'disabled');
 
 
-
+        // $(".completeForm").removeClass("layui-hide")
+        // $(".reportForm").removeClass("layui-hide")
+        // $(".rollbackForm").removeClass("layui-hide")
+        // $(".submit").removeClass("layui-hide")
         if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
@@ -398,9 +401,12 @@
         }else if (auditStatus == 1007) { // 被驳回，完善计划
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
+            $(".rollbackForm").removeClass("layui-hide")
         }else if (auditStatus > 1010) { // 被驳回，完善整改 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
+        }else if (auditStatus == 1012 || auditStatus==1004) { // 被驳回
+            $(".rollbackForm").removeClass("layui-hide")
         }
 
         //执行实例
