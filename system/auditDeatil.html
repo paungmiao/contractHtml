@@ -379,7 +379,6 @@
         $("[name='bizName']").val(bizName);
         $("[name='taskId']").val(taskId);
         $("[name='uploadUser']").val(userInfo.username);
-        $("[name='planName']").text(bizName);
         $('.nav input').attr('disabled', 'disabled');
         $('.formShow input').attr('disabled', 'disabled');
         $('.formShow textarea').attr('disabled', 'disabled');
@@ -438,6 +437,7 @@
             url: "/audit-api/planManage/detail/" + bizKey,
             async: false,
             type: 'get',
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
                 let status = res.data.status;
@@ -454,6 +454,7 @@
                     default:
                         $("#statusName").text('正在实施')
                 }
+                $("[name='planName']").text(res.data.projectName);
                 form.val('allForm', res.data)
             },
             error: function (error) {
@@ -467,7 +468,7 @@
             async:false,
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
-                $("#costTime").val(res.data.days)
+                $("#costTime").val(res.data.days==undefined?0:res.data.days)
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
@@ -622,7 +623,8 @@
         // });
     });
 function openNewWindow(url) {
-    location.href='http://'+url
+    console.log('http://'+url)
+    window.open('http://'+url,"_blank ");
 }
 </script>
 </body>

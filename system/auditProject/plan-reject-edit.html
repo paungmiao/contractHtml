@@ -21,6 +21,7 @@
         <input id="taskId" type="hidden">
         <input id="auditStatus" type="hidden">
         <input id="planId" type="hidden">
+        <input id="uploadUser" type="hidden">
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">
@@ -28,6 +29,14 @@
             </label>
             <div class="layui-input-block">
                 <textarea name="opinion" placeholder="驳回意见" class="layui-textarea" id="opinion"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item submit layui-file">
+            <label class="layui-form-label">上传文档：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="fileUri">
+                <span class="layui-btn  file-btn" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
+                <span name="uploadName" style="float: left;"></span>
             </div>
         </div>
 
@@ -48,10 +57,34 @@
 
     </form>
     <script>
-        layui.use(['form', 'layer'], function () {
+        layui.use(['form', 'layer','upload'], function () {
+            $("#uploadUser").val(userInfo.username)
             let form = layui.form
             let layer = layui.layer;
-
+            //执行实例
+            var uploadInst = layui.upload.render({
+                elem: '.file-btn' //绑定元素
+                , url: '/audit-api/file/upload',//上传接口
+                field: 'file',
+                accept: 'file',
+                size: 1024 * 50, // 单位kb
+                data: {
+                    bizKey: $("#planId").val()
+                }
+                , done: function (res, index, upload) {
+                    //上传成功毕回调
+                    if (res.code == 0) {
+                        let data = res.data;
+                        $("[name='uploadName']").text(data.substr(data.lastIndexOf('/') + 1));
+                        $("[name='fileUri']").val(data);
+                        $(".file-btn").text('重新上传');
+                    }
+                    console.log(res)
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
             //监听提交
             form.on('submit(addPlanCheckList)', function (data) {
                 //type, taskId, auditStatus, bizKey

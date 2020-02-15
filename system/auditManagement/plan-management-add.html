@@ -19,6 +19,7 @@
     <form class="layui-form" lay-filter="planAddForm">
         <input name="implementingAgencyId" type="hidden" id="implementingAgencyId">
         <input name="createdBy" type="hidden" id="createdBy">
+        <input name="createdUsername" type="hidden" id="createdUsername">
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计年度:
@@ -180,6 +181,16 @@
                 </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                附件上传:
+            </label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="fileUri">
+                <span class="layui-btn file-btn" id="upload" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
+                <span name="uploadName" style="float: left;"></span>
+            </div>
+        </div>
 
 
         <div class="layui-input-inline">
@@ -201,7 +212,7 @@
 </div>
 <script>
 
-    layui.use(['form', 'layer'], function () {
+    layui.use(['form', 'layer','upload'], function () {
         if(!userInfo){
            return top.layer.msg("用户身份信息已失效",{icon:2})
         }
@@ -209,9 +220,38 @@
         $("#implementingAgencyId").val(userInfo.deptId);
         $("#implementingAgencyName").val(userInfo.deptName);
         $("#createdBy").val(userInfo.userId);
+        $("#createdUsername").val(userInfo.username);
 
         let form = layui.form
         let layer = layui.layer;
+        let upload = layui.upload;
+
+        upload.render({
+            elem: '#upload',
+            url: '/audit-api/file/upload',
+            auto: true,//选完文件后自动上传
+            data:{
+                bizKey:userInfo.username
+            },
+            accept: 'file', //所有文件
+            size: 500*1024, //限制文件大小，单位 KB
+            done: function (res) {
+                //上传成功毕回调
+                if (res.code == 0) {
+                    let data = res.data;
+                    $("[name='uploadName']").text(data.substr(data.lastIndexOf('/') + 1));
+                    $("[name='fileUri']").val(data);
+                    $(".file-btn").text('重新上传');
+                    console.log(res)
+                }else {
+                    top.layer.msg("上传失败",{icon:1})
+                }
+            },
+            choose: function (obj) {
+
+            }
+        });
+
         {
             $.ajax({
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=管理员",
