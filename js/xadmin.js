@@ -67,8 +67,34 @@ let Authorization = window.sessionStorage.getItem('Authorization')
 if (!Authorization || Authorization == '' || Authorization == undefined) {
     location.href="login.html"
 }
+function getCookie(name) {
+    var dc = document.cookie;
+    var prefix = name + "=";
+    var begin = dc.indexOf("; " + prefix);
+    if (begin == -1) {
+        begin = dc.indexOf(prefix);
+        if (begin != 0) return null;
+    } else {
+        begin += 2;
+    }
+    var end = document.cookie.indexOf(";", begin);
+    if (end == -1) {
+        end = dc.length;
+    }
+    return unescape(dc.substring(begin + prefix.length, end));
+}
+function deleteCookie(name, path, domain) {
+    if (getCookie(name)) {
+        document.cookie = name + "=" +
+            ((path) ? "; path=" + path : "") +
+            ((domain) ? "; domain=" + domain : "") +
+            "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+    }
+}
+
 function clearStorage(){
-    window.sessionStorage.clear()
+    deleteCookie('tab_list');
+    window.sessionStorage.clear();
 }
 function getQueryString(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -428,7 +454,7 @@ $(function () {
             if(!is_exist){
                 tab_list.push(index);
             }
-
+            // 缓存菜单西南西
             setCookie('tab_list',tab_list);
 
             tab.tabAdd(title,url,index+1);
@@ -439,7 +465,7 @@ $(function () {
          
     })
 
-    // 左侧菜单记忆功能
+    左侧菜单记忆功能
     if(getCookie('left_menu_father')!=null){
         $('.left-nav #nav li').eq(getCookie('left_menu_father')).click();
     }

@@ -25,9 +25,9 @@
 <div class="x-nav">
     <span class="layui-breadcrumb">
       <a href="">首页</a>
-      <a href="">合同流程管理</a>
+      <a href="">词条管理</a>
       <a>
-        <cite>合同流程</cite></a>
+        <cite>词条列表</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -51,6 +51,12 @@
         <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','500')">
             <i class="layui-icon"></i>新增数据
         </button>
+        <a class="layui-btn" onclick="downloadTemplate()">
+            <i class="layui-icon"></i>模板下载
+        </a>
+        <a class="layui-btn" id="bachImport" >
+            <i class="layui-icon"></i>批量导入
+        </a>
 
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
@@ -60,10 +66,46 @@
 
 </div>
 <script>
+    function downloadTemplate() {
+        window.location.href='/audit-api/entry/flow/template/download'
+    }
     var count = 0;
-    layui.use(['table', 'form'], function () {
+    layui.use(['table', 'form','upload'], function () {
         let table = layui.table;
         let form = layui.form
+        let upload = layui.upload;
+
+        upload.render({
+            elem: '#bachImport',
+            url: '/audit-api/entry/flow/import',
+            auto: true,//选完文件后自动上传
+            accept: 'file', //所有文件
+            data:{
+                createdUser:userInfo.username
+            },
+            //,multiple: true,
+            exts: 'xls|xlsx', //只允许上传压缩文件
+            //size: 500*1028 //限制文件大小，单位 KB
+            bindAction: '#fileUpload',
+            done: function (res) {
+                if(res.code==0){
+                    if(res.data){
+                        top.layer.msg(res.msg,{icon:1})
+                        table.reload('test', {
+                            page: 1
+                        });
+                    }else {
+                        top.layer.msg(res.msg,{icon:2})
+                    }
+                }else {
+                    top.layer.msg("上传失败",{icon:1})
+                }
+            },
+            choose: function (obj) {
+
+            }
+        });
+
         $.ajax({
             url: "/audit-api/entry/category/list",
             dataType: "json",
