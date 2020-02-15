@@ -52,10 +52,8 @@
             <div class="layui-input-inline">
                 <select id="stateSelect">
                     <option value="">请选择状态</option>
-                    <option value="1001">未批呈</option>
-                    <option value="1002">待审核</option>
-                    <option value="1003">被驳回</option>
-                    <option value="1004">已批准</option>
+                    <option value="1002">实施结束</option>
+                    <option value="1003">归档完成</option>
                 </select>
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
@@ -128,7 +126,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/task/flow/page',
+            url: '/audit-api/planCheckList/statuses',
             id: 'test',
             xhrFields: {
                 withCredentials: true
@@ -165,44 +163,19 @@
                     title: '年度',
                     width: 80,
                 }, {
-                    field: '',
+                    field: 'status',
                     title: '状态',
                     width: 80,
                     templet: (data) => {
                         let text;
-                        let status = data.planInfos[0]['statusUser'];
-                        if (undefined === status || status === '1001') {
-                            text = '<span>待审核</span>';
-                        } else if (status === '1002') {
-                            text = '<span>已驳回</span>';
-                        } else if (status === '1003') {
-                            text = '<span>已批准</span>';
+                        if (undefined === data.status || data.status === '' || data.status === '1002') {
+                            text = '<span>实施结束</span>';
+                        } else if (data.status === '1003') {
+                            text = '<span>归档完成</span>';
                         }
                         return text;
                     }
-                }, {
-                    field: '',
-                    title: '操作',
-                    width: 280,
-                    templet: function (res) {
-                        let html = '';
-                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'../../system/auditManagement/plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
-                        if (res.taskId !== null) { // res.auditStatus
-                            if (res.auditStatus === "1006") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
-                            } else {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
-                            }
-                            // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
-                            // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'260\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
-                        }
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
-                        return html;
-                    }
-                    // sort: true
-                },]
+                }]
             ],
             page: true,
             parseData: function (res) { //res 即为原始返回的数据
@@ -220,8 +193,7 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                type: 1, //必填
-                userId : userInfo.userId, //必填
+                statuses: "1002,1003"
             },
 
             done: function (res, curr, count) {
@@ -231,7 +203,6 @@
         form.on("submit(search)", function () {
             tablePlan.reload({
                 where: {
-                    impAdminId: userInfo.userId,
                     projectName: $("#projectName").val(),
                     auditYear: $("#auditYear").val(),
                     status: $("#stateSelect").val(),
@@ -248,135 +219,6 @@
 </script>
 
 <script>
-
-    //流程办理
-    function completeTask(type, taskId, auditStatus, bizKey) {
-        layer.confirm('确认要操作吗？', function (index) {
-            let beforeStatus = auditStatus;
-            let status = auditEnum[beforeStatus][type];
-            let data = {
-                'auditStatus': status,
-                'bizKey': bizKey
-            }
-            $.ajax({
-                url: '/audit-api/task/complete/' + taskId,
-                type: 'post',
-                contentType: 'application/json;charset=utf-8',
-                async: false,
-                headers: createAuthorizationTokenHeader(),
-                data: JSON.stringify(data),
-                success: function (res) {
-                    layer.alert("操作成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            })
-        });
-    }
-
-
-    function delete_(id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //捉到所有被选中的，发异步进行删除
-            $.ajax({
-                url: "/audit-api/planManage/user_delete/" + id,
-                dataType: "json",
-                type: "delete",
-                success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
-                }
-            });
-
-        });
-    }
-
-
-
-    function rejectPage_(title, url, w, h, taskId, auditStatus, planId) {
-        if (title == null || title == '') {
-            title = false;
-        }
-        if (url == null || url == '') {
-            url = "404.html";
-        }
-        if (w == null || w == '') {
-            w = ($(window).width() * 0.9);
-        }
-        if (h == null || h == '') {
-            h = ($(window).height() - 50);
-        }
-        layer.open({
-            type: 2,
-            area: [w + 'px', h + 'px'],
-            fix: false, //不固定
-            maxmin: true,
-            shadeClose: true,
-            shade: 0.4,
-            title: title,
-            content: url,
-            success: function (layero, index) {
-                //窗口加载成功刷新frame
-                // location.replace(location.href);
-                let body = layer.getChildFrame('body', index);
-                let taskIdDate = body.find('#taskId');
-                let auditStatusDate = body.find('#auditStatus');
-                let planIdDate = body.find('#planId');
-                taskIdDate.val(taskId);
-                auditStatusDate.val(auditStatus);
-                planIdDate.val(planId);
-            }
-        });
-    }
-
-    function editPage_(title, url, w, h, id, readOnly) {
-        if (title == null || title == '') {
-            title = false;
-        }
-        ;
-        if (url == null || url == '') {
-            url = "404.html";
-        }
-        ;
-        if (w == null || w == '') {
-            w = ($(window).width() * 0.9);
-        }
-        ;
-        if (h == null || h == '') {
-            h = ($(window).height() - 50);
-        }
-        ;
-        layer.open({
-            type: 2,
-            area: [w + 'px', h + 'px'],
-            fix: false, //不固定
-            maxmin: true,
-            shadeClose: true,
-            shade: 0.4,
-            title: title,
-            content: url,
-            success: function (layero, index) {
-                //窗口加载成功刷新frame
-                // location.replace(location.href);
-                let body = layer.getChildFrame('body', index);
-                let iframeWin = layero.find('iframe')[0];
-                let readOnlyData = body.find('#readOnlyData');
-                let inputData = body.find('#implementingAgencyId');
-                readOnlyData.val(readOnly);
-                inputData.val(id);
-                iframeWin.contentWindow.initEntryInfo();
-            },
-            cancel: function () {
-                //关闭窗口之后刷新frame
-                // location.replace(location.href);
-            },
-            end: function () {
-                //窗口销毁之后刷新frame
-                // location.replace(location.href);
-            }
-        });
-    }
 
     layui.use('laydate', function () {
         var laydate = layui.laydate;

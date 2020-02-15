@@ -20,14 +20,15 @@
         <input name="implementingAgencyId" type="hidden" id="implementingAgencyId">
         <input name="createdBy" type="hidden" id="createdBy">
         <input name="createdUsername" type="hidden" id="createdUsername">
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>审计年度:
-            </label>
-            <div class="layui-input-inline">
-                <input name="auditYear" class="layui-input" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">
-            </div>
-        </div>
+        <input name="impUserId" type="hidden" id="impUserId">
+        <!--        <div class="layui-form-item">-->
+        <!--            <label class="layui-form-label">-->
+        <!--                <span class="x-red">*</span>审计年度:-->
+        <!--            </label>-->
+        <!--            <div class="layui-input-inline">-->
+        <!--                <input name="auditYear" class="layui-input layui-disabled" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
@@ -39,10 +40,10 @@
                 <select id="impAdminSelect" name="impAdminId">
                 </select>
             </div>
-            <div class="layui-input-inline">
-                <select id="impUserSelect" name="impUserId">
-                </select>
-            </div>
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="impUserSelect" name="impUserId">-->
+            <!--                </select>-->
+            <!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -212,15 +213,15 @@
 </div>
 <script>
 
-    layui.use(['form', 'layer','upload'], function () {
+    layui.use(['form', 'layer', 'upload'], function () {
         if(!userInfo){
-           return top.layer.msg("用户身份信息已失效",{icon:2})
+            return top.layer.msg("用户身份信息已失效",{icon:2})
         }
         //赋值
         $("#implementingAgencyId").val(userInfo.deptId);
         $("#implementingAgencyName").val(userInfo.deptName);
         $("#createdBy").val(userInfo.userId);
-        $("#createdUsername").val(userInfo.username);
+        $("#impUserId").val(userInfo.userId);
 
         let form = layui.form
         let layer = layui.layer;
@@ -251,7 +252,6 @@
 
             }
         });
-
         {
             $.ajax({
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=管理员",

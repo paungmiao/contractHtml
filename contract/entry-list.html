@@ -57,7 +57,6 @@
         <a class="layui-btn" id="bachImport" >
             <i class="layui-icon"></i>批量导入
         </a>
-
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
@@ -69,8 +68,13 @@
     function downloadTemplate() {
         window.location.href='/audit-api/entry/flow/template/download'
     }
+    let roleIdList = userInfo.roleIdList;
+    if ($.inArray(1, roleIdList) > -1) {
+        $("xblock").addClass("layui-hide");
+
+    }
     var count = 0;
-    layui.use(['table', 'form','upload'], function () {
+    layui.use(['table', 'form', 'upload'], function () {
         let table = layui.table;
         let form = layui.form
         let upload = layui.upload;
@@ -105,7 +109,6 @@
 
             }
         });
-
         $.ajax({
             url: "/audit-api/entry/category/list",
             dataType: "json",
@@ -192,17 +195,17 @@
                     }
                 },
                     {
-                    field: 'uploadMsg',
-                    title: '操作',
-                    width: 200,
-                    templet: function (res) {
-                        var temp = ``;
-                        temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','500','` + res.id + `')" >编辑</span>
+                        field: 'uploadMsg',
+                        title: '操作',
+                        width: 200,
+                        templet: function (res) {
+                            var temp = ``;
+                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','500','` + res.id + `')" >编辑</span>
                       <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
-                        return temp;
-                    }
-                    // sort: true
-                },]
+                            return temp;
+                        }
+                        // sort: true
+                    },]
             ],
             page: true,
             parseData: function (res) { //res 即为原始返回的数据
@@ -219,6 +222,11 @@
             request: {
                 pageName: 'current' //页码的参数名称，默认：page
                 , limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            done: function (res, curr, count) {
+                if ($.inArray(1, roleIdList) > -1) {
+                    $("[data-field='uploadMsg']").css('display','none');
+                }
             }
         });
         form.on("submit(search)", function () {

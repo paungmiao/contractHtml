@@ -190,11 +190,12 @@
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
                         if (undefined === status || status === '1001') { //待审核
                             html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1002\')">批准</span>';
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">驳回</span>';
+                            // html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">驳回</span>';
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'260\', \'' + res.id + '\', \'1003\')" >驳回</span>';
                         } else if (status === '1002') { //已批准
                         } else if (status === '1003') { //已驳回
                         }
-                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
+                        //html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         return html;
                     }
                     // sort: true
@@ -246,6 +247,40 @@
 </script>
 
 <script>
+
+    function rejectPage_(title, url, w, h, planId, status) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let statusDate = body.find('#status');
+                let planIdDate = body.find('#planId');
+                planIdDate.val(planId);
+                statusDate.val(status);
+            }
+        });
+    }
 
     function dealPlan(id, status) {
         layer.confirm('确认操作？', function (index) {
