@@ -60,8 +60,8 @@
                     url: "/audit-api/planCheckList/changePlanStatusByIds",
                     type: 'POST',
                     dataType: "json",
+                    async: false,
                     data: {ids: ids, statusUser: status, userId: userInfo.userId, opinion: opinion},
-                    headers: createAuthorizationTokenHeader(),
                     success: function (resp) {
                         // 获得frame索引
                         var index = parent.layer.getFrameIndex(window.name);

@@ -52,10 +52,10 @@
             <div class="layui-input-inline">
                 <select id="stateSelect">
                     <option value="">请选择状态</option>
-                    <option value="1001">未批呈</option>
+                    <option value="1001">待整改</option>
                     <option value="1002">待审核</option>
                     <option value="1003">被驳回</option>
-                    <option value="1004">已批准</option>
+                    <option value="1004">已完成</option>
                 </select>
             </div>
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -148,16 +148,49 @@
                     title: '实施机构',
                     width: 120,
                     templet: (data) => {
-                        return userInfo.deptName;
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    implementingAgencyName = data['name'];
+                                }
+                            }
+                        });
+                        return implementingAgencyName;
                     }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
-                    width: 120
+                    width: 120,
+                    templet: (data) => {
+                        return userInfo.deptName;
+                    }
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
                     width: 180,
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryById?id="+data.auditNatureId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 }, {
                     field: 'auditYear',
                     title: '年度',

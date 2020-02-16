@@ -52,10 +52,11 @@
             <div class="layui-input-inline">
                 <select id="stateSelect">
                     <option value="">请选择状态</option>
-                    <option value="1001">未批呈</option>
-                    <option value="1002">待审核</option>
-                    <option value="1003">被驳回</option>
-                    <option value="1004">已批准</option>
+                    <option value="1001">待完善</option>
+                    <option value="1002">待整改</option>
+                    <option value="1003">待审核</option>
+                    <option value="1004">被驳回</option>
+                    <option value="1005">已完成</option>
                 </select>
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
@@ -155,11 +156,44 @@
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
-                    width: 120
+                    width: 120,
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.auditObjectId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
                     width: 180,
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryById?id="+data.auditNatureId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 }, {
                     field: 'auditYear',
                     title: '年度',
