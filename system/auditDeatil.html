@@ -388,6 +388,8 @@
         // $(".reportForm").removeClass("layui-hide")
         // $(".rollbackForm").removeClass("layui-hide")
         // $(".submit").removeClass("layui-hide")
+        let opinionStatus=1000
+        let opinionUser = 1;
         if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
@@ -460,6 +462,36 @@
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
             }
+        }).then((res)=>{
+            let opinionStatus=1000
+            let opinionUser = 1;
+            let type = 0;// 0计划，1项目
+            if (auditStatus == 1007) { // 被驳回，完善计划
+                opinionStatus=1003
+                type=0;
+                opinionUser=res.data.impAdminId;
+            }else if (auditStatus > 1010) { // 被驳回，完善整改 有提交
+                opinionStatus=1003
+                type=1;
+                opinionUser=res.data.impAdminId;
+            }
+            else if(auditStatus==1004) { // 被驳回
+                type=0;
+                opinionUser=res.data.impUserId;
+                opinionStatus=1004
+            }
+            $.get('/audit-api/planInfo/user/opinion',{
+                userId:opinionUser,
+                type:type,
+                statusUser:opinionStatus,
+                planId:bizKey
+            },function (data) {
+                if(data.code==0&&data.data){
+                    form.val('rollbackForm',{
+                        rollbackRemarks:data.data.opinion
+                    })
+                }
+            })
         })
 
         $.ajax({
