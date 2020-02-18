@@ -153,7 +153,7 @@
             <li class="completeForm layui-hide">完善信息</li>
             <li class="reportForm layui-hide">整改结果</li>
             <li class="rollbackForm layui-hide">驳回反馈</li>
-            <li class="impUserForm layui-hide">完善信息（指派负责人）</li>
+            <li class="auditAdminUserForm layui-hide">完善信息（指派负责人）</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -360,14 +360,13 @@
                 </div>
             </div>
             <!-- 任务指派  -->
-            <div class="layui-tab-item layui-form impUserForm  layui-hide" lay-filter="impUserForm">
+            <div class="layui-tab-item layui-form auditAdminUserForm  layui-hide" lay-filter="auditAdminUserForm">
                 <h2>完善信息（实施任务指派）</h2>
                 <hr/>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">实施员工：</label>
+                    <label class="layui-form-label">审计对象领导：</label>
                     <div class="layui-input-block">
-                            <select class="layui-select" name="impUserId" id="impUserId" lay-filter="required">
-                                <option value="">请选择实施员工</option>
+                            <select class="layui-select" name="impUserId" id="auditAdminId" lay-filter="required">
                             </select>
                     </div>
                     <div class="layui-form-item submit ">
@@ -387,7 +386,8 @@
     let bizKey = getQueryString("bizKey")
     let bizName = getQueryString("bizName")
     let taskId = getQueryString("taskId")
-    let auditStatus = getQueryString("auditStatus")
+    // let auditStatus = getQueryString("auditStatus")
+    let auditStatus = 1002
     layui.use(['table', 'element', 'laydate', 'form', 'upload'], function () {
         var element = layui.element;
         var table = layui.table;
@@ -410,47 +410,8 @@
         let opinionStatus=1000
         let opinionUser = 1;
         if (auditStatus == 1002) { // 实施领导指派负责人
-            $(".impUserForm").removeClass("layui-hide")
+            $(".auditAdminUserForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
-            layui.use('form',()=>{
-                let form = layui.form;
-                $.ajax({
-                    url:'/audit-api/task/dept/normal/user',
-                    headers:createAuthorizationTokenHeader(),
-                    data:{
-                        bizKey:bizKey,
-                        deptId:userInfo.deptId
-                    },
-                    async:false,
-                    success:(res)=>{
-                        let optionHtml = '<option >请选择实施负责人</option>';
-                        if(res.code==0){
-                            for (let i in res.data){
-                                optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
-                            }
-                            $("#impUserId").empty().append(optionHtml);
-                            form.render('select')
-                        }
-                    }
-                })
-                form.on('submit(impUserSubmit)',(data)=>{
-                    let impUserId = form.val('impUserForm').impUserId
-                    if(!impUserId){
-                        return top.layer.msg('请指派实施负责人',{icon:2});
-                    }
-                    $.post('/audit-api/task/commitImpUser',{
-                        bizKey:bizKey,
-                        impUserId:impUserId
-                    },function (res) {
-                        if(res.code==0 && res.data){
-                            top.layer.msg('提交成功',{icon:1})
-                        }else{
-                            top.layer.msg(res.msg,{icon:2})
-                        }
-
-                    })
-                })
-            })
         }else if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
@@ -562,6 +523,44 @@
                 type=0;
                 opinionUser=res.data.impUserId;
                 opinionStatus=1004
+            }else if (auditStatus==1002){
+                $.ajax({
+                    url:'/audit-api/task/dept/normal/user',
+                    headers:createAuthorizationTokenHeader(),
+                    data:{
+                        bizKey:bizKey,
+                        deptId:res.data.auditObjectId,
+                        roleName:'管理员'
+                    },
+                    async:false,
+                    success:(res)=>{
+                        let optionHtml = '<option >请选择实施负责人</option>';
+                        if(res.code==0){
+                            for (let i in res.data){
+                                optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
+                            }
+                            $("#auditAdminId").empty().append(optionHtml);
+                            form.render('select')
+                        }
+                    }
+                })
+                form.on('submit(impUserSubmit)',(data)=>{
+                    let auditAdminId = form.val('auditAdminUserForm').auditAdminId
+                    if(!auditAdminId){
+                        return top.layer.msg('请指派实施负责人',{icon:2});
+                    }
+                    $.post('/audit-api/task/commitAuditAdminUser',{
+                        bizKey:bizKey,
+                        auditAdminId:auditAdminId
+                    },function (res) {
+                        if(res.code==0 && res.data){
+                            top.layer.msg('提交成功',{icon:1})
+                        }else{
+                            top.layer.msg(res.msg,{icon:2})
+                        }
+
+                    })
+                })
             }
             $.get('/audit-api/planInfo/user/opinion',{
                 userId:opinionUser,
