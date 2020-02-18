@@ -208,6 +208,16 @@
                         }
                         return text;
                     }
+                },{
+                    field: 'deal',
+                    title: '操作',
+                    width: 280,
+                    templet: function (res) {
+                        let html = '';
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
+                        return html;
+                    }
+                    // sort: true
                 }]
             ],
             page: true,

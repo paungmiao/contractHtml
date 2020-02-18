@@ -37,7 +37,7 @@
                 <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled />
             </div>
             <div class="layui-input-inline">
-                <select id="impAdminSelect" name="impAdminId">
+                <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
                 </select>
             </div>
             <!--            <div class="layui-input-inline">-->
@@ -50,24 +50,24 @@
                 <span class="x-red">*</span>审计对象:
             </label>
             <div class="layui-input-inline">
-                <select id="auditObjectIdSelect" name="auditObjectId" lay-filter="one_cate">
+                <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId">
                 </select>
             </div>
-            <div class="layui-input-inline">
-                <select id="auditAdminSelect" name="auditAdminId">
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select id="auditUserSelect" name="auditUserId">
-                </select>
-            </div>
+<!--            <div class="layui-input-inline">-->
+<!--                <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <select id="auditUserSelect" name="auditUserId">-->
+<!--                </select>-->
+<!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>项目类型:
             </label>
             <div class="layui-input-inline">
-                <select id="projectTypeSelect" name="projectType">
+                <select id="projectTypeSelect" name="projectType" lay-verify="required|projectType">
                 </select>
             </div>
         </div>
@@ -76,7 +76,7 @@
                 <span class="x-red">*</span>审计性质:
             </label>
             <div class="layui-input-inline">
-                <select id="auditNatureIdSelect" name="auditNatureId">
+                <select id="auditNatureIdSelect" name="auditNatureId" lay-verify="required|auditNatureId">
                 </select>
             </div>
         </div>
@@ -85,7 +85,7 @@
                 <span class="x-red">*</span>问题词条:
             </label>
             <div class="layui-input-inline">
-                <select id="questionEntryIdSelect" name="questionEntryId">
+                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">
                 </select>
             </div>
         </div>
@@ -94,7 +94,7 @@
                 <span class="x-red">*</span>问题严重程度:
             </label>
             <div class="layui-input-inline">
-                <select id="problemSeverityIdSelect" name="problemSeverityId">
+                <select id="problemSeverityIdSelect" name="problemSeverityId" lay-verify="required|problemSeverityId">
                 </select>
             </div>
         </div>
@@ -103,7 +103,7 @@
                 <span class="x-red">*</span>整改情况:
             </label>
             <div class="layui-input-inline">
-                <select id="rectifySituationIdSelect" name="rectifySituationId">
+                <select id="rectifySituationIdSelect" name="rectifySituationId" lay-verify="required|rectifySituationId">
                 </select>
             </div>
         </div>
@@ -121,7 +121,7 @@
                 <span class="x-red">*</span>问题定性:
             </label>
             <div class="layui-input-inline">
-                <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" value="">
+                <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" lay-verify="required|problemCharacterization">
             </div>
         </div>
         <div class="layui-form-item">
@@ -129,7 +129,7 @@
                 <span class="x-red">*</span>问题描述:
             </label>
             <div class="layui-input-inline">
-                <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="">
+                <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="" lay-verify="required|problemDescription">
             </div>
         </div>
         <div class="layui-form-item">
@@ -137,7 +137,7 @@
                 <span class="x-red">*</span>可能影响:
             </label>
             <div class="layui-input-inline">
-                <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="">
+                <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="" lay-verify="required|mayAffect">
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -145,7 +145,7 @@
                 <span class="x-red">*</span>整改建议:
             </label>
             <div class="layui-input-block">
-                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
+                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea" lay-verify="required|rectificationSuggestions"></textarea>
             </div>
         </div>
         <div class="layui-form-item">

@@ -70,8 +70,7 @@
         <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
 
     </xblock>
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
-           lay-filter="test"></table>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test"></table>
 
 </div>
 <script>
@@ -265,7 +264,26 @@
             },
 
             done: function (res, curr, count) {
+                let state = "";
+                for (let i in res.data) {
+                    let item = res.data[i];
+                    let status = item.planInfos[0]['statusUser']
+                    if (status === '1001') {// 这里是判断需要禁用的条件（如：状态为0的）
 
+                    } else {
+                        state = "1";
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
+                        form.render();// 重新渲染一下
+                    }
+                }
+
+                if(state === "1"){
+                    // 根据条件移除全选 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0"><span></span></div>');
+                }else {
+                    //翻页显示全选按钮 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
+                }
             }
         });
         form.on("submit(search)", function () {
@@ -282,6 +300,21 @@
             });
             return false;
         })
+
+        table.on('checkbox(test)', function(obj){
+            console.log(obj);
+
+        });
+        // form.on('checkbox(test)', function(data){
+        //     console.log(data)
+        //     if ($("input[name='tagid']:checked").length>5){
+        //         //将选中的全部取消
+        //         //$("input[name='level']:checked").removeAttr("checked");
+        //         //$(this).checked = false;
+        //         $(this).prop("checked", false);
+        //         form.render('checkbox');
+        //     }
+        // });
     });
 
 
