@@ -386,8 +386,8 @@
     let bizKey = getQueryString("bizKey")
     let bizName = getQueryString("bizName")
     let taskId = getQueryString("taskId")
-    // let auditStatus = getQueryString("auditStatus")
-    let auditStatus = 1002
+    let auditStatus = getQueryString("auditStatus")
+    // let auditStatus = 1002
     layui.use(['table', 'element', 'laydate', 'form', 'upload'], function () {
         var element = layui.element;
         var table = layui.table;
