@@ -153,6 +153,7 @@
             <li class="completeForm layui-hide">完善信息</li>
             <li class="reportForm layui-hide">整改结果</li>
             <li class="rollbackForm layui-hide">驳回反馈</li>
+            <li class="impUserForm layui-hide">完善信息（指派负责人）</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -281,10 +282,10 @@
                     <div class="layui-col-md6">
                         <label class="layui-form-label">整改负责人：</label>
                         <div class="layui-input-block">
-                            <!--                                <select class="layui-select">-->
-                            <!--                                    <option value="">请选择负责人</option>-->
-                            <!--                                </select>-->
-                            <input class="layui-input" name="auditUserId">
+                            <select class="layui-select" name="auditUserId" id="auditUserId">
+                                <option value="">请选择整改负责人</option>
+                            </select>
+<!--                            <input class="layui-input" name="auditUserId">-->
 
                         </div>
                     </div>
@@ -313,14 +314,14 @@
                         <span name="uploadName" style="float: left;"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit layui-hide">
+                <div class="layui-form-item submit ">
                     <button class="layui-btn " lay-filter="completeSubmit" lay-submit="">
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
             </div>
             <!-- 整改结果  -->
-            <div class="layui-tab-item layui-form reportForm " lay-filter="reportForm">
+            <div class="layui-tab-item layui-form reportForm layui-hide" lay-filter="reportForm">
                 <h2>整改结果</h2>
                 <hr/>
                 <div class="layui-form-item">
@@ -329,7 +330,7 @@
                         <textarea class="layui-textarea" name="rectifyResult"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item submit layui-hide layui-file">
+                <div class="layui-form-item submit  layui-file">
                     <label class="layui-form-label">上传文档：</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="fileUri">
@@ -341,20 +342,38 @@
                         <span name="uploadName" style="float: left;"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit layui-hide">
+                <div class="layui-form-item submit ">
                     <button class="layui-btn " lay-filter="reportSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
             </div>
             <!-- 驳回反馈  -->
-            <div class="layui-tab-item layui-form rollbackForm layui-hide " lay-filter="rollbackForm">
+            <div class="layui-tab-item layui-form rollbackForm  layui-hide" lay-filter="rollbackForm">
                 <h2>驳回反馈</h2>
                 <hr/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">驳回反馈：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" name="rollbackRemarks"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 任务指派  -->
+            <div class="layui-tab-item layui-form impUserForm  layui-hide" lay-filter="impUserForm">
+                <h2>完善信息（实施任务指派）</h2>
+                <hr/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">实施员工：</label>
+                    <div class="layui-input-block">
+                            <select class="layui-select" name="impUserId" id="impUserId" lay-filter="required">
+                                <option value="">请选择实施员工</option>
+                            </select>
+                    </div>
+                    <div class="layui-form-item submit ">
+                        <button class="layui-btn " lay-filter="impUserSubmit" lay-submit>
+                            <i class="layui-icon">&#xe605;</i>提交
+                        </button>
                     </div>
                 </div>
             </div>
@@ -390,9 +409,73 @@
         // $(".submit").removeClass("layui-hide")
         let opinionStatus=1000
         let opinionUser = 1;
-        if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
+        if (auditStatus == 1002) { // 实施领导指派负责人
+            $(".impUserForm").removeClass("layui-hide")
+            $(".submit").removeClass("layui-hide")
+            layui.use('form',()=>{
+                let form = layui.form;
+                $.ajax({
+                    url:'/audit-api/task/dept/normal/user',
+                    headers:createAuthorizationTokenHeader(),
+                    data:{
+                        bizKey:bizKey,
+                        deptId:userInfo.deptId
+                    },
+                    async:false,
+                    success:(res)=>{
+                        let optionHtml = '<option >请选择实施负责人</option>';
+                        if(res.code==0){
+                            for (let i in res.data){
+                                optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
+                            }
+                            $("#impUserId").empty().append(optionHtml);
+                            form.render('select')
+                        }
+                    }
+                })
+                form.on('submit(impUserSubmit)',(data)=>{
+                    let impUserId = form.val('impUserForm').impUserId
+                    if(!impUserId){
+                        return top.layer.msg('请指派实施负责人',{icon:2});
+                    }
+                    $.post('/audit-api/task/commitImpUser',{
+                        bizKey:bizKey,
+                        impUserId:impUserId
+                    },function (res) {
+                        if(res.code==0 && res.data){
+                            top.layer.msg('提交成功',{icon:1})
+                        }else{
+                            top.layer.msg(res.msg,{icon:2})
+                        }
+
+                    })
+                })
+            })
+        }else if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
+            layui.use('form',()=>{
+                let form = layui.form;
+                $.ajax({
+                    url:'/audit-api/task/dept/normal/user',
+                    headers:createAuthorizationTokenHeader(),
+                    data:{
+                        bizKey:bizKey,
+                        deptId:userInfo.deptId
+                    },
+                    async:false,
+                    success:(res)=>{
+                        let optionHtml = '<option >请选择整改负责人</option>';
+                        if(res.code==0){
+                            for (let i in res.data){
+                                optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
+                            }
+                            $("#auditUserId").empty().append(optionHtml);
+                            form.render('select')
+                        }
+                    }
+                })
+            })
         }else if (auditStatus == 1006) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
         }else if (auditStatus == 1009) { //提交整改结果 有提交
@@ -404,11 +487,11 @@
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
             $(".rollbackForm").removeClass("layui-hide")
+        }else if (auditStatus == 1012 || auditStatus==1004) { // 被驳回
+            $(".rollbackForm").removeClass("layui-hide")
         }else if (auditStatus > 1010) { // 被驳回，完善整改 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
-        }else if (auditStatus == 1012 || auditStatus==1004) { // 被驳回
-            $(".rollbackForm").removeClass("layui-hide")
         }
 
         //执行实例
@@ -500,7 +583,11 @@
             async:false,
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
-                $("#costTime").val(res.data.days==undefined?0:res.data.days)
+                let days =0;
+                if(res.data!=null){
+                    days=res.data.days==undefined?0:res.data.days
+                }
+                $("#costTime").val(days)
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
