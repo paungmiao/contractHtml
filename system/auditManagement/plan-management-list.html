@@ -268,7 +268,7 @@
                 for (let i in res.data) {
                     let item = res.data[i];
                     let status = item.planInfos[0]['statusUser']
-                    if (status === '1001') {// 这里是判断需要禁用的条件（如：状态为0的）
+                    if (status === '1001' || status === '1004') {// 这里是判断需要禁用的条件（如：状态为0的）
 
                     } else {
                         state = "1";

@@ -40,23 +40,23 @@
                 <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
                 </select>
             </div>
-            <!--            <div class="layui-input-inline">-->
-            <!--                <select id="impUserSelect" name="impUserId">-->
-            <!--                </select>-->
-            <!--            </div>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <select id="impUserSelect" name="impUserId">-->
+<!--                </select>-->
+<!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
             <div class="layui-input-inline">
-                <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId">
+                <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId" lay-filter="one_cate">
                 </select>
             </div>
-<!--            <div class="layui-input-inline">-->
-<!--                <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">-->
-<!--                </select>-->
-<!--            </div>-->
+            <div class="layui-input-inline">
+                <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">
+                </select>
+            </div>
 <!--            <div class="layui-input-inline">-->
 <!--                <select id="auditUserSelect" name="auditUserId">-->
 <!--                </select>-->

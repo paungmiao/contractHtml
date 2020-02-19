@@ -213,7 +213,9 @@
                             text = '<span>待审核</span>';
                         } else if (status === '1004') {
                             text = '<span>被驳回</span>';
-                        } else {
+                        } else if (status === '1005') {
+                            text = '<span>已驳回</span>';
+                        } else if (status === '1006') {
                             text = '<span>已完成</span>';
                         }
                         return text;
