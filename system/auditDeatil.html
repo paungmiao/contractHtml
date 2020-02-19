@@ -282,8 +282,7 @@
                     <div class="layui-col-md6">
                         <label class="layui-form-label">整改负责人：</label>
                         <div class="layui-input-block">
-                            <select class="layui-select" name="auditUserId" id="auditUserId">
-                                <option value="">请选择整改负责人</option>
+                            <select class="layui-select" lay-verify="required" name="auditUserId" id="auditUserId">
                             </select>
 <!--                            <input class="layui-input" name="auditUserId">-->
 
@@ -292,14 +291,14 @@
                     <div class="layui-col-md6 time">
                         <label class="layui-form-label">计划整改时长：</label>
                         <div class="layui-input-block">
-                            <input class="layui-input" id="planTime" placeholder="单位（天）" type="number"  min="0.5" max="100.0" step="0.5" name="planTime">
+                            <input class="layui-input" lay-verify="required" id="planTime" placeholder="单位（天）" type="number"  min="0.5" max="100.0" step="0.5" name="planTime">
                         </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">整改措施：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rectifyWay"></textarea>
+                        <textarea class="layui-textarea" lay-verify="required" name="rectifyWay"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item submit  layui-file">
@@ -315,7 +314,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item submit ">
-                    <button class="layui-btn " lay-filter="completeSubmit" lay-submit="">
+                    <button class="layui-btn " lay-filter="completeSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
@@ -366,7 +365,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">审计对象领导：</label>
                     <div class="layui-input-block">
-                            <select class="layui-select" name="impUserId" id="auditAdminId" lay-filter="required">
+                            <select class="layui-select" name="auditAdminId" id="auditAdminId" lay-filter="required">
                             </select>
                     </div>
                     <div class="layui-form-item submit ">
@@ -426,7 +425,7 @@
                     },
                     async:false,
                     success:(res)=>{
-                        let optionHtml = '<option >请选择整改负责人</option>';
+                        let optionHtml = '<option value="">请选择整改负责人</option>';
                         if(res.code==0){
                             for (let i in res.data){
                                 optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
@@ -534,7 +533,7 @@
                     },
                     async:false,
                     success:(res)=>{
-                        let optionHtml = '<option >请选择实施负责人</option>';
+                        let optionHtml = '<option value="">请选择实施负责人</option>';
                         if(res.code==0){
                             for (let i in res.data){
                                 optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
@@ -662,9 +661,9 @@
             //提交完善信息
             let completeForm = form.val('completeForm');
             // let nextStatus = auditEnum[auditStatus].agree;
-            let nextStatus = 1006;
-            nextStatus['status']=nextStatus;
-            nextStatus['id']=bizKey;
+            // let nextStatus = 1006;
+            // nextStatus['status']=nextStatus;
+            completeForm['id']=bizKey;
             $.ajax({
                 url:'/audit-api/task/completePlan',
                 type:'post',
@@ -677,6 +676,8 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                    }else{
+                        top.layer.msg(res.msg,{icon:2})
                     }
                 },
                 error:function () {
