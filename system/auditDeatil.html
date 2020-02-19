@@ -675,7 +675,7 @@
             // let nextStatus = auditEnum[auditStatus].agree;
             // let nextStatus = 1006;
             // nextStatus['status']=nextStatus;
-            completeForm['id']=bizKey;
+            completeForm.id=bizKey;
             $.ajax({
                 url:'/audit-api/task/completePlan',
                 type:'post',
