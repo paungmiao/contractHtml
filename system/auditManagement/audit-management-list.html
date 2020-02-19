@@ -331,9 +331,15 @@
                 data: {ids: ids, statusUser: status, userId: userInfo.userId},
                 headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
-                    layer.alert("操作成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
+                    if (!resp.data) {
+                        let index = layer.alert("操作失败，请完善审计对象管理员！", {icon: 1}, function () {
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert("操作成功", {icon: 1}, function () {
+                            location.replace(location.href);
+                        });
+                    }
                 }
             });
 

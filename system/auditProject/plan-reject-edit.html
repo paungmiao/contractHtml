@@ -22,6 +22,7 @@
         <input id="auditStatus" type="hidden">
         <input id="planId" type="hidden">
         <input id="uploadUser" type="hidden">
+        <input id="mark" type="hidden">
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">
@@ -87,17 +88,18 @@
             });
             //监听提交
             form.on('submit(addPlanCheckList)', function (data) {
-                //type, taskId, auditStatus, bizKey
                 let type = "reject";
                 let beforeStatus = $("#auditStatus").val();
                 let bizKey = $("#planId").val();
                 let taskId = $("#taskId").val();
                 let opinion = $("#opinion").val();
+                let mark = $("#mark").val();
                 let status = auditEnum[beforeStatus][type];
                 let data1 = {
                     'auditStatus': status,
                     'bizKey': bizKey,
-                    "opinion": opinion
+                    "opinion": opinion,
+                    "mark": mark
                 }
                 $.ajax({
                     url: '/audit-api/task/complete/' + taskId,

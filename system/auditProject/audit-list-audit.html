@@ -335,9 +335,15 @@
                 headers: createAuthorizationTokenHeader(),
                 data: JSON.stringify(data),
                 success: function (res) {
-                    layer.alert("操作成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
+                    if (res.data && !res.data) {
+                        let index = layer.alert("操作失败，请完善审计对象员工！", {icon: 1}, function () {
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert("操作成功", {icon: 1}, function () {
+                            location.replace(location.href);
+                        });
+                    }
                 }
             })
         });
