@@ -633,7 +633,7 @@
             let reportForm = form.val('reportForm');
             let rectifyResult = reportForm.rectifyResult
             if(!rectifyResult){
-                top.layer.msg('整改结果不能为空',{icon:2})
+                return  top.layer.msg('整改结果不能为空',{icon:2})
             }
             reportForm['id']=bizKey;
             $.ajax({
@@ -666,11 +666,11 @@
             let planTime = completeForm.planTime;
             let rectifyWay = completeForm.rectifyWay;
             if(!auditUserId){
-                top.layer.msg('请选择整改负责人',{icon:2})
+                return top.layer.msg('请选择整改负责人',{icon:2})
             }if(!planTime){
-                top.layer.msg('计划整改时长不能为空',{icon:2})
+                return  top.layer.msg('计划整改时长不能为空',{icon:2})
             }if(!rectifyWay){
-                top.layer.msg('整改方式不能为空',{icon:2})
+                return top.layer.msg('整改方式不能为空',{icon:2})
             }
             // let nextStatus = auditEnum[auditStatus].agree;
             // let nextStatus = 1006;
