@@ -352,9 +352,9 @@
                 <h2>驳回反馈</h2>
                 <hr/>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">驳回反馈：</label>
+                    <label class="layui-form-label">描述：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rollbackRemarks"></textarea>
+                        <textarea class="layui-textarea"  style="border: none"readonly name="rollbackRemarks"></textarea>
                     </div>
                 </div>
             </div>
@@ -409,8 +409,8 @@
         let opinionStatus=1000
         let opinionUser = 1;
         if (auditStatus == 1002) { // 实施领导指派负责人
-            $(".auditAdminUserForm").removeClass("layui-hide")
-            $(".submit").removeClass("layui-hide")
+            // $(".auditAdminUserForm").removeClass("layui-hide")
+            // $(".submit").removeClass("layui-hide")
         }else if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")

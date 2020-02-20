@@ -57,6 +57,10 @@
         <a class="layui-btn" id="bachImport" >
             <i class="layui-icon"></i>批量导入
         </a>
+        <a class="layui-btn" id="export" >
+            <i class="layui-icon"></i>导出词条
+        </a>
+    </a>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
@@ -109,6 +113,9 @@
 
             }
         });
+        $("#export").off("click.native").on("click.native",()=>{
+            window.open("/audit-api/entry/flow/download/entry")
+        })
         $.ajax({
             url: "/audit-api/entry/category/list",
             dataType: "json",
