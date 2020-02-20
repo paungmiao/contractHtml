@@ -167,7 +167,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">出现频次：</label>
                     <div class="layui-input-block">
-                        <input class="layui-input" value="">
+                        <input class="layui-input" name="frequency" value="">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -227,7 +227,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">风险评估：</label>
                     <div class="layui-input-block">
-                        <input class="layui-input" riskAssessmentId value="">
+                        <input class="layui-input" name="riskAssessmentId" value="">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -500,7 +500,10 @@
                         $("#statusName").text('正在实施')
                 }
                 $("[name='planName']").text(res.data.projectName);
-                form.val('allForm', res.data)
+                form.val('allForm', res.data);
+                if(res.data.resultEnterTime){
+                    $(".reportForm").removeClass("layui-hide")
+                }
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
