@@ -301,7 +301,7 @@
                         <textarea class="layui-textarea"  name="rectifyWay"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item submit  layui-file">
+                <div class="layui-form-item submit layui-hide layui-file">
                     <label class="layui-form-label">上传文档：</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="fileUri">
@@ -313,7 +313,7 @@
                         <span name="uploadName" style="float: left;"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit ">
+                <div class="layui-form-item submit layui-hide ">
                     <button class="layui-btn " lay-filter="completeSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
@@ -329,7 +329,7 @@
                         <textarea class="layui-textarea" name="rectifyResult"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item submit  layui-file">
+                <div class="layui-form-item submit layui-hide  layui-file">
                     <label class="layui-form-label">上传文档：</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="fileUri">
@@ -341,7 +341,7 @@
                         <span name="uploadName" style="float: left;"></span>
                     </div>
                 </div>
-                <div class="layui-form-item submit ">
+                <div class="layui-form-item submit layui-hide ">
                     <button class="layui-btn " lay-filter="reportSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>提交
                     </button>
@@ -441,17 +441,20 @@
         }else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
-        }else if (auditStatus == 1010 || auditStatus == 1011) { // 审核整改结果 无提交
-            $(".reportForm").removeClass("layui-hide")
         }else if (auditStatus == 1007) { // 被驳回，完善计划
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
             $(".rollbackForm").removeClass("layui-hide")
-        }else if (auditStatus == 1012 || auditStatus==1004) { // 被驳回
+        }else if (auditStatus==1004) { // 被驳回
             $(".rollbackForm").removeClass("layui-hide")
-        }else if (auditStatus > 1010) { // 被驳回，完善整改 有提交
-            $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
+        }else if (auditStatus == 1012) { // 被驳回
+            $(".rollbackForm").removeClass("layui-hide")
+            $(".submit").removeClass("layui-hide")
+            $(".reportForm").removeClass("layui-hide")
+        }else if (auditStatus >= 1010) { // 被驳回，完善整改 有提交
+            $(".reportForm").removeClass("layui-hide")
+            $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
         }
 
         //执行实例
@@ -510,12 +513,11 @@
             }
         }).then((res)=>{
             let opinionStatus=1000
-            let opinionUser = 1;
+            let opinionUser=userInfo.userId;
             let type = 0;// 0计划，1项目
             if (auditStatus == 1007) { // 被驳回，完善计划
                 opinionStatus=1005
                 type=1;
-                opinionUser=userInfo.userId;
                 $.ajax({
                     url:'/audit-api/task/dept/normal/user',
                     headers:createAuthorizationTokenHeader(),
@@ -539,10 +541,9 @@
                         }
                     }
                 })
-            }else if (auditStatus > 1010) { // 被驳回，完善整改 有提交
+            }else if (auditStatus == 1009) { // 被驳回，完善整改 有提交
                 opinionStatus=1003
                 type=1;
-                opinionUser=res.data.impAdminId;
             }
             else if(auditStatus==1004) { // 被驳回
                 type=0;
@@ -595,8 +596,10 @@
             },function (data) {
                 if(data.code==0&&data.data){
                     if(undefined == data.data.opinion){
+                        $(".rollbackForm").addClass("layui-hide")
                         return
                     }
+                    $(".rollbackForm").removeClass("layui-hide")
                     form.val('rollbackForm',{
                         rollbackRemarks:data.data.opinion
                     })
