@@ -42,7 +42,7 @@ let auditEnum = {
     },
     1010: {
         agree: 1011,
-        reject: 1009
+        reject: 1008
     },
     1011: {
         agree: 1013,
@@ -50,14 +50,14 @@ let auditEnum = {
     },
     1014:{
         agree: 1015,
-        reject: 1009
+        reject: 1008
     },
     1015:{
-        agree: 1016,
+        agree: 1016
     },
     1016:{
         agree: 1009,
-        reject: 1009,
+        reject: 1008
     }
 
 

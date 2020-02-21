@@ -174,7 +174,7 @@
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
-                    width: 180,
+                    width: 120,
                     templet: (data) => {
                         let auditObjectName = "";
                         $.ajax({
@@ -210,13 +210,15 @@
                             text = '<span>被驳回</span>';
                         } else if (status === '1004') {
                             text = '<span>已完成</span>';
+                        } else if (status === '1005') {
+                            text = '<span>已批准</span>';
                         }
                         return text;
                     }
                 }, {
                     field: '',
                     title: '操作',
-                    width: 280,
+                    width: 300,
                     templet: function (res) {
                         let html = '';
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
