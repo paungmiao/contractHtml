@@ -228,7 +228,7 @@
                         if (undefined === status || status === '1001') { //待审核
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1002\')">批准</span>';
                             // html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="dealPlan(\'' + res.id + '\', \'1003\')">驳回</span>';
-                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'260\', \'' + res.id + '\', \'1003\')" >驳回</span>';
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\', \'' + res.id + '\', \'1003\')" >驳回</span>';
                         } else if (status === '1002') { //已批准
                         } else if (status === '1003') { //已驳回
                         }
