@@ -225,11 +225,12 @@
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'../../system/auditManagement/plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
-                            if (res.auditStatus === "1006" || res.auditStatus === "1016") {
+                            if (res.auditStatus === "1006") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
-                            } else {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
+                            } else if (res.auditStatus === "1016") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'2\')" >批准</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'1\')" >驳回</span>';
                             }
                             // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                             // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'260\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
@@ -286,13 +287,14 @@
 <script>
 
     //流程办理
-    function completeTask(type, taskId, auditStatus, bizKey) {
+    function completeTask(type, taskId, auditStatus, bizKey, mark) {
         layer.confirm('确认要操作吗？', function (index) {
             let beforeStatus = auditStatus;
             let status = auditEnum[beforeStatus][type];
             let data = {
                 'auditStatus': status,
-                'bizKey': bizKey
+                'bizKey': bizKey,
+                'mark': mark
             }
             $.ajax({
                 url: '/audit-api/task/complete/' + taskId,
@@ -330,7 +332,7 @@
 
 
 
-    function rejectPage_(title, url, w, h, taskId, auditStatus, planId) {
+    function rejectPage_(title, url, w, h, taskId, auditStatus, planId, mark) {
         if (title == null || title == '') {
             title = false;
         }
@@ -359,9 +361,11 @@
                 let taskIdDate = body.find('#taskId');
                 let auditStatusDate = body.find('#auditStatus');
                 let planIdDate = body.find('#planId');
+                let markDate = body.find('#mark');
                 taskIdDate.val(taskId);
                 auditStatusDate.val(auditStatus);
                 planIdDate.val(planId);
+                markDate.val(mark);
             }
         });
     }

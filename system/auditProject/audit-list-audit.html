@@ -228,9 +228,11 @@
                         if (res.taskId !== null) { // res.auditStatus
                             if (res.auditStatus === "1005" || res.auditStatus === "1007") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
+                            } else if (res.auditStatus === "1014") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'1\')" >驳回</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
-                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'markOne\')" >驳回</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                             }
                         }
@@ -285,7 +287,7 @@
 
 <script>
 
-    function rejectPage_(title, url, w, h, taskId, auditStatus, planId) {
+    function rejectPage_(title, url, w, h, taskId, auditStatus, planId, mark) {
         if (title == null || title == '') {
             title = false;
         }
@@ -314,9 +316,11 @@
                 let taskIdDate = body.find('#taskId');
                 let auditStatusDate = body.find('#auditStatus');
                 let planIdDate = body.find('#planId');
+                let markDate = body.find('#mark');
                 taskIdDate.val(taskId);
                 auditStatusDate.val(auditStatus);
                 planIdDate.val(planId);
+                markDate.val(mark);
             }
         });
     }

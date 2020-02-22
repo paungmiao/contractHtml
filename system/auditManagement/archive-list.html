@@ -54,6 +54,7 @@
                     <option value="">请选择状态</option>
                     <option value="1002">实施结束</option>
                     <option value="1003">归档完成</option>
+                    <option value="1004">延期整改</option>
                 </select>
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
@@ -126,7 +127,7 @@
 
         let tablePlan = table.render({
             elem: '#test',
-            url: '/audit-api/planCheckList/statuses',
+            url: '/audit-api/task/statuses',
             id: 'test',
             xhrFields: {
                 withCredentials: true
@@ -215,6 +216,9 @@
                     templet: function (res) {
                         let html = '';
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
+                        if (res.taskId !== null) {
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
+                        }
                         return html;
                     }
                     // sort: true

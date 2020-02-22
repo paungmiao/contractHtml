@@ -228,7 +228,8 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >确认整改</span>';
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改</span>';
+                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'延迟说明\',\'plan-delay-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改</span>';
                             }
                         }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
@@ -281,6 +282,43 @@
 </script>
 
 <script>
+    function rejectPage_(title, url, w, h, taskId, auditStatus, planId, mark) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let taskIdDate = body.find('#taskId');
+                let auditStatusDate = body.find('#auditStatus');
+                let planIdDate = body.find('#planId');
+                let markDate = body.find('#mark');
+                taskIdDate.val(taskId);
+                auditStatusDate.val(auditStatus);
+                planIdDate.val(planId);
+                markDate.val(mark);
+            }
+        });
+    }
     //流程办理
     function completeTask(type, taskId, auditStatus, bizKey) {
         layer.confirm('确认操作吗？', function (index) {
