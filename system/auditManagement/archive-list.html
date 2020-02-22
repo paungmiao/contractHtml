@@ -267,6 +267,32 @@
 
 <script>
 
+    //流程办理
+    function completeTask(type, taskId, auditStatus, bizKey, mark) {
+        layer.confirm('确认要操作吗？', function (index) {
+            let beforeStatus = auditStatus;
+            let status = auditEnum[beforeStatus][type];
+            let data = {
+                'auditStatus': status,
+                'bizKey': bizKey,
+                'mark': mark
+            }
+            $.ajax({
+                url: '/audit-api/task/complete/' + taskId,
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                data: JSON.stringify(data),
+                success: function (res) {
+                    layer.alert("操作成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            })
+        });
+    }
+
     layui.use('laydate', function () {
         var laydate = layui.laydate;
 

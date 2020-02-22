@@ -235,7 +235,7 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             }
                         }
-                        if (res.status === "1003") {
+                        if (res.status === "1002") {
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'修改时长\',\'plan-time-edit.html\',\'500\',\'200\',\'' + res.id + '\')" >修改时长</span>';
                         }
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
