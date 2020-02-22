@@ -248,13 +248,13 @@
                         <textarea class="layui-textarea" name="rectificationSuggestions" value=""></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item layui-hide">
                     <label class="layui-form-label">整改措施：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" name="rectifyWay" value=""></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item layui-hide">
                     <label class="layui-form-label">整改结果：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" name="rectifyResult" value="整改结果整改结果"></textarea>
@@ -386,7 +386,6 @@
     let bizName = getQueryString("bizName")
     let taskId = getQueryString("taskId")
     let auditStatus = getQueryString("auditStatus")
-    // let auditStatus = 1002
     layui.use(['table', 'element', 'laydate', 'form', 'upload'], function () {
         var element = layui.element;
         var table = layui.table;
@@ -587,6 +586,11 @@
 
                     })
                 })
+            }else if(undefined == auditStatus || null ==auditStatus || 'null' == auditStatus){
+                if(undefined != res.data.rectifyResult){
+                    $(".reportForm").removeClass("layui-hide")
+                    $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
+                }
             }
             $.get('/audit-api/planInfo/user/opinion',{
                 userId:opinionUser,
