@@ -38,7 +38,7 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so" style="" id="filterForm" action="/audit-api/export/exportExcel"
+        <form class="layui-form layui-col-md12 x-so" style="" id="filterForm"
               method="post" ENCTYPE="application/vnd.ms-excel">
             <div style=" width: calc(100% - 85px) ;height:30px" class="fl">
                 <div class="w25 fl">
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div>
-                <button class="layui-btn" lay-submit lay-filter="search"><i
+                <button class="layui-btn"  lay-submit lay-filter="search"><i
                         class="layui-icon">&#xe615;</i>搜索</button>
             </div>
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
@@ -113,7 +113,7 @@
                     <label class="layui-form-label-size">问题词条
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">
+                        <select id="questionEntryIdSelect" name="questionEntryId" >
                         </select>
                     </div>
                 </div>
@@ -193,6 +193,7 @@
 <script>
     var echarts;
     function exportData() {
+        $("#filterForm").attr("action","/audit-api/export/exportExcel");
         $("#filterForm").submit();
     };
     function generateEchars() {
@@ -346,31 +347,6 @@
                         options.push(option);
                     })
                     $("#implementingAgencySelect").empty().append(options.join(""));
-                }
-            }
-        });
-        $.ajax({
-            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=1",
-            dataType: "json",
-            type: "get",
-            async: false,
-            success: function (resp) {
-                if (resp && 0 == resp.code) {
-                    let data = resp.data;
-                    let options = [];
-                    var voteall = {};
-                    voteall.name = "全部条件";
-                    voteall.value = "all";
-                    options.push(voteall);
-                    data.forEach((Obj) => {
-                        var option = {};
-                        option.name = Obj.name;
-                        option.value = Obj.id;
-                        options.push(option);
-                    })
-                    demo1.update({
-                        data: options,
-                    })
                 }
             }
         });
@@ -546,12 +522,13 @@
             }
         });
         form.on("submit(search)", function () {
+
             table.reload('test', {
                 where: {
                     projectName: $("#projectName").val(),
                     problemDescription: $("#problemDescription").val(),
                     auditYear: $("#auditYear").val(),
-                    implementingAgencyId: demo1.getValue("valueStr"),
+                    implementingAgencyId: $("#implementingAgencySelect").val(),
                     auditNatureId: $("#auditNatureSelect").val(),
                     auditObjectId: $("#auditObjectSelect").val(),
                     problemSeverityId: $("#problemSeveritySelect").val(),

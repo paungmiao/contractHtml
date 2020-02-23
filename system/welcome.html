@@ -87,7 +87,7 @@
                     <div class="layui-card-header" style="font-size: 16px;font-weight:bold">项目类型</div>
                     <div class="layui-card-body">
                         <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;" id="ViewPhbInfo">
-                            <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                            <table class="layui-table layuiadmin-page-table" lay-skin="line" >
                                 <thead>
                                 <tr>
                                     <th>排名</th>
@@ -95,22 +95,8 @@
                                     <th>项目数</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>类型3</td>
-                                    <td>10</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>类型2</td>
-                                    <td>9</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>类型3</td>
-                                    <td>8</td>
-                                </tr>
+                                <tbody id="projectTypeBody">
+
                                 </tbody>
                             </table>
                         </div>
@@ -134,22 +120,6 @@
 </body>
 
 <script>
-    //查询项目统计数
-    $.ajax({
-        url: "/audit-api/planStatistic/countOfPlan",
-        dataType: "json",
-        type: "post",
-        data: {},
-        success: function (resp) {
-            if (resp && 0 == resp.code) {
-                let data = resp.data;
-                $("#planSum").html(data.planSum);
-                $("#finishCount").html(data.finishCount);
-                $("#nofinishCount").html(data.nofinishCount);
-                $("#timeoutCount").html(data.timeoutCount);
-            }
-        }
-    });
     var myChart;
     layui.use(['element','form'], function(){
         var element = layui.element;
@@ -335,16 +305,15 @@
         };
         echarts.init(_that.domEle).setOption(option);
     };
-
-
+    //根据整改情况统计
     $.ajax({
         url: "/audit-api/planStatistic/questionStatistic",
         dataType: "json",
         type: "post",
-        data: {"rectifySituationId": "all"},
+        data: {"rectifySituationId": "all","auditYear": $("#auditYear").val()},
         success: function (res) {
             var statisticData = res.data.statisticData;
-            var data1 = [], legendData = [];
+            var data1 = [], legendData = [],colors = [];
 
             if (statisticData) {
                 statisticData.forEach((item, index) => {
@@ -356,13 +325,14 @@
                     }
                     data1.push(iiitem);
                     legendData.push(item.name);
+                    colors.push(color16());
                 });
                 var option1 = {
                         value: 38, //百分比,必填
                         name: '', //必填
                         title: '',
                         backgroundColor: null,
-                        color: ['#289df5', '#ff5050'],
+                        color: colors,
                         fontSize: 14,
                         domEle: document.getElementById("rectifySituation"), //必填
                         data: data1,
@@ -374,34 +344,73 @@
             }
         }
     });
-
-    var option2 = {
-            value: 20, //百分比,必填
-            name: '123', //必填
-            title: '',
-            backgroundColor: null,
-            color: ['#289df5', '#ff5050'],
-            fontSize: 16,
-            domEle: document.getElementById("timeoutProject"), //必填
-            data: [{
-                value: "5",
-                name: "已超时",
-                label: {
-                    normal: {
-                        show: true
-                    }
-                }
-            },
-                {
-                    value: 10,
-                    name: '未超时'
-                }
-            ],
-            legendData: ["已超时", "未超时"],
-        },
-        percentPie2 = new PercentPie(option2);
-    percentPie2.init();
-
+    //根据项目类型统计
+    $.ajax({
+        url: "/audit-api/planStatistic/questionStatistic",
+        dataType: "json",
+        type: "post",
+        data: {"projectType": "all","auditYear": $("#auditYear").val()},
+        success: function (res) {
+            var statisticData = res.data.statisticData;
+            if (statisticData) {
+                var html = "";
+                statisticData.forEach((item, index) => {
+                    html+="<tr><td>"+(index+1)+"</td><td>"+item.name+"</td><td>"+item.value+"</td></tr>";
+                });
+                $("#projectTypeBody").html(html);
+            }
+        }
+    });
+    //查询项目统计数
+    $.ajax({
+        url: "/audit-api/planStatistic/countOfPlan",
+        dataType: "json",
+        type: "post",
+        data: {},
+        success: function (resp) {
+            if (resp && 0 == resp.code) {
+                let data = resp.data;
+                $("#planSum").html(data.planSum);
+                $("#finishCount").html(data.finishCount);
+                $("#nofinishCount").html(data.nofinishCount);
+                $("#timeoutCount").html(data.timeoutCount);
+                var data1 = [], legendData = [],colors = [];
+                var iiitem1 = {}
+                iiitem1.name = "未超时";
+                iiitem1.value = data.finishCount+data.nofinishCount;
+                iiitem1.label = {normal: {show: true}};
+                data1.push(iiitem1);
+                legendData.push("未超时");
+                colors.push(color16());
+                var iiitem2 = {}
+                iiitem2.name = "已超时";
+                iiitem2.value = data.timeoutCount;
+                data1.push(iiitem2);
+                legendData.push("已超时");
+                colors.push(color16());
+                var option2 = {
+                        value: 20, //百分比,必填
+                        name: '123', //必填
+                        title: '',
+                        backgroundColor: null,
+                        color: colors,
+                        fontSize: 16,
+                        domEle: document.getElementById("timeoutProject"), //必填
+                        data: data1,
+                        legendData: legendData
+                    },
+                    percentPie2 = new PercentPie(option2);
+                percentPie2.init();
+            }
+        }
+    });
+    function color16(){//十六进制颜色随机
+        var r = Math.floor(Math.random()*256);
+        var g = Math.floor(Math.random()*256);
+        var b = Math.floor(Math.random()*256);
+        var color = '#'+r.toString(16)+g.toString(16)+b.toString(16);
+        return color;
+    }
     function PercentPie(option) {
         this.backgroundColor = option.backgroundColor || '#fff';
         this.color = option.color || ['#EAEAEA', '#6CAEE8'];
