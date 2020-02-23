@@ -67,7 +67,7 @@
                         <!-- <input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off"
                             class="layui-input search-input-find"> -->
                     </div>
-                    <div class="w25 fl">
+                    <div class="w25 fl layui-hide" id="ssjg">
                         <label class="layui-form-label-size">实施机构
                         </label>
                         <div class="layui-input-inline search-input-find" id="implementingAgencySelect">
@@ -186,6 +186,11 @@
 
     </div>
     <script>
+        let roleIdList = userInfo.roleIdList;
+        if ($.inArray(13, roleIdList) > -1) {
+            $("#ssjg").removeClass("layui-hide");
+        }
+
         var echarts;
         function exportData() {
             $("#filterForm").submit();
