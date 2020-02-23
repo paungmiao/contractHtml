@@ -470,10 +470,13 @@
                     width: 240,
                     fixed:"right",
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../system/auditManagement/plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >查看</span>`
+                        let auditStatus = res.auditStatus;
+                        if(undefined != status && status === '1001'){
+                            auditStatus='1002'
+                        }
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.project_name+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
                         return temp;
                     }
-                    // sort: true
                 }]
             ],
             page: true,

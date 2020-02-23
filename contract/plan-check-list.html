@@ -400,6 +400,7 @@
                 }, {
                     field: 'status',
                     title: '项目状态',
+                    width: 120,
                     templet: (data) => {
                         let status = data.status;
                         let statusName = "正在实施";
@@ -523,7 +524,7 @@
                         if(undefined != status && status === '1001'){
                             auditStatus='1002'
                         }
-                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.project_name+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
                         return temp;
                     }
                     // sort: true

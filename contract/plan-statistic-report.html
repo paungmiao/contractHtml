@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/jwt.js"></script>
     <script src="/js/JCheck.js"></script>
 
 </head>
@@ -62,83 +63,6 @@
             let element = layui.element;
 
             form.render("select")
-            table.render({
-                elem: '#test',
-                url: '/audit-api/planStatistic/report',
-                xhrFields: {
-                    withCredentials: true
-                },
-                cols: [
-                    [
-                        {
-                            field: 'id',
-                            hide: true
-                        }, {
-                            field: 'name',
-                            title: '审计机构',
-                            width: 200
-                        }, {
-                            field: 'projectCount',
-                            title: '总项目数',
-                            width: 120
-                        }, {
-                            field: 'finishCount',
-                            title: '已完成',
-                            width: 120
-                        }, {
-                            field: 'noFinishCount',
-                            title: '未完成',
-                            width: 120,
-                        }, {
-                            field: 'timeoutCount',
-                            title: '延期项目',
-                            width: 180,
-                        }, {
-                            field: '',
-                            title: '操作',
-                            width: 240,
-                            templet: function (res) {
-                                return `<span class="layui-btn layui-btn-normal layui-btn-mini " data-type="tabAdd" id="viewReport" data-id="` + res.id + `" >查看</span>`
-                            }
-                        },]
-                ],
-                page: true,
-                parseData: function (res) { //res 即为原始返回的数据
-                    return {
-                        "code": res.code, //解析接口状态
-                        "msg": res.msg, //解析提示文本
-                        "count": res.data.total, //解析数据长度
-                        "data": res.data.records //解析数据列表
-                    };
-                },
-                page: 1,
-                limit: 10,
-                request: {
-                    pageName: 'current', //页码的参数名称，默认：page
-                    limitName: 'size' //每页数据量的参数名，默认：limit
-                },
-                where: { roleId: '2' },
-                done: function (res, curr, count) {
-                }
-            });
-            $(document).on('click', '#viewReport', function (data) {
-                // element.tabAdd('demo', {
-                //     title: '新选项'+ (Math.random()*1000|0) //用于演示
-                //     ,content: '内容'+ (Math.random()*1000|0)
-                //     ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-                // })
-                var id = $(this).attr('data-id');
-                layer.open({
-                    type: 2,
-                    skin: 'layui-layer-demo', //样式类名
-                    title: '汇总详情',
-                    closeBtn: 1, //不显示关闭按钮
-                    anim: 2,
-                    area: ['100%', '650px'],
-                    shadeClose: true, //开启遮罩关闭
-                    content: 'plan-statitic-report-view.html?gid=' + id
-                });
-        form.render("select")
         table.render({
             elem: '#test',
             url: '/audit-api/planStatistic/report',
@@ -215,26 +139,24 @@
             }
         });
         $(document).on('click', '#viewReport', function(data) {
-            // element.tabAdd('demo', {
-            //     title: '新选项'+ (Math.random()*1000|0) //用于演示
-            //     ,content: '内容'+ (Math.random()*1000|0)
-            //     ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-            // })
-            var id = $(this).attr('data-id');
-            layer.open({
-                type: 2,
-                skin: 'layui-layer-demo', //样式类名
-                title: '汇总详情',
-                closeBtn: 1, //不显示关闭按钮
-                anim: 2,
-                area: ['1300px', '650px'],
-                shadeClose: true, //开启遮罩关闭
-                content: 'plan-statitic-report-view.html?gid='+id
+                // element.tabAdd('demo', {
+                //     title: '新选项'+ (Math.random()*1000|0) //用于演示
+                //     ,content: '内容'+ (Math.random()*1000|0)
+                //     ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                // })
+                var id = $(this).attr('data-id');
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-demo', //样式类名
+                    title: '汇总详情',
+                    closeBtn: 1, //不显示关闭按钮
+                    anim: 2,
+                    area: ['1300px', '650px'],
+                    shadeClose: true, //开启遮罩关闭
+                    content: 'plan-statitic-report-view.html?gid='+id
+                });
             });
-
-
-            });
-        });
+    });
 
 
     </script>

@@ -49,10 +49,19 @@
 	<div id="side-nav">
 		<ul id="nav">
 			<li class="layui-hide" id="XJ">
-				<a _href="welcome.html" onclick="homePage()">
-					<i class="iconfont">&#xe6a7;</i>
+				<a href="javascript:;">
+					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>全疆信息</cite>
+					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
+				<ul class="sub-menu">
+					<li date-refresh="1" class="layui-hide" id="entry_list">
+						<a _href="welcome.html" onclick="homePage()">
+							<i class="iconfont">&#xe6a7;</i>
+							<cite>全疆信息</cite>
+						</a>
+					</li>
+				</ul>
 			</li>
 			<li id="entry">
 				<a href="javascript:;">
@@ -182,10 +191,18 @@
 			</li>
 
 			<li class="layui-hide" id="report">
-				<a _href="../contract/plan-statistic-report.html">
-					<i class="iconfont">&#xe6a7;</i>
+				<a _href="javascript:;">
 					<cite>汇总报告</cite>
+					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
+				<ul class="sub-menu">
+					<li>
+						<a _href="../contract/plan-statistic-report.html">
+							<i class="iconfont">&#xe6a7;</i>
+							<cite>汇总报告</cite>
+						</a>
+					</li>
+				</ul>
 			</li>
 
 			<li class="layui-hide" id="userManage">

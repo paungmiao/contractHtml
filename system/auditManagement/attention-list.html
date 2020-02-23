@@ -200,6 +200,20 @@
                         }
                         return text;
                     }*/
+                }, {
+                    field: '',
+                    title: '操作',
+                    width: 240,
+                    fixed:"right",
+                    templet: function (res) {
+                        let auditStatus = res.auditStatus;
+                        if(undefined != status && status === '1001'){
+                            auditStatus='1002'
+                        }
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
+                        return temp;
+                    }
+                    // sort: true
                 }]
             ],
             page: true,
