@@ -586,9 +586,12 @@
 
                     })
                 })
-            }else if(undefined == auditStatus || null ==auditStatus || 'null' == auditStatus){
-                if(undefined != res.data.rectifyResult){
-                    $(".reportForm").removeClass("layui-hide")
+            }
+            if(undefined != res.data.rectifyResult){
+                $(".reportForm").removeClass("layui-hide")
+                if(1009 == auditStatus || 1012==auditStatus){
+
+                }else {
                     $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
                 }
             }
