@@ -45,7 +45,7 @@
 
     .position > .showMsg {
         position: absolute;
-        right: 60px;
+        right: 16px;
         text-align: center;
     }
 
@@ -310,7 +310,7 @@
                         <input type="hidden" name="bizKey">
                         <input type="hidden" name="uploadUser">
                         <span class="layui-btn file-btn" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
-                        <span name="uploadName" style="float: left;"></span>
+                        <span name="uploadName" style="float: left; margin: 8px 0 0 16px;"></span>
                     </div>
                 </div>
                 <div class="layui-form-item submit layui-hide ">
@@ -338,7 +338,7 @@
                         <input type="hidden" name="bizKey">
                         <input type="hidden" name="uploadUser">
                         <span class="layui-btn  file-btn" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
-                        <span name="uploadName" style="float: left;"></span>
+                        <span name="uploadName" style="float: left;margin: 8px 0 0 16px;"></span>
                     </div>
                 </div>
                 <div class="layui-form-item submit layui-hide ">
@@ -821,5 +821,10 @@ function openNewWindow(url) {
     window.open('http://'+url,"_blank ");
 }
 </script>
+<style>
+    .layui-form-label{
+        line-height: 26px;
+    }
+</style>
 </body>
 </html>

@@ -1,142 +1,482 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="x-admin-sm">
+
 <head>
     <meta charset="UTF-8">
-    <title>发现问题统计</title>
+    <title>欢迎页面-X-admin2.1</title>
     <meta name="renderer" content="webkit">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
     <link rel="stylesheet" href="../css/font.css">
-    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
     <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../js/common/dateFormat.js"></script>
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/echarts/echarts.js"></script>
+    <script type="text/javascript" src="../js/xm-select.js"></script>
+    <script src="/js/JCheck.js"></script>
+
 </head>
+
 <body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">审计分析</a>
+            <a>
+                <cite>问题个数统计</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+            href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+    </div>
     <div class="x-body">
-        <div style="padding: 15px; background-color: #F2F2F2;">
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-header">视频课程订单</div>
-                        <div class="layui-card-body">
-                            <div  class="layui-carousel" id="Notice_carousel" lay-filter="Notice_carousel">
-                                <div carousel-item>
-                                    <div  id="Notice"></div>
-                                    <div id="NoticeAll"></div>
-                                </div>
-                            </div>
+        <div class="layui-row">
+            <form class="layui-form layui-col-md12 x-so" style="" id="filterForm" action="/audit-api/export/exportExcel"
+                method="post" ENCTYPE="application/vnd.ms-excel">
+                <div style=" width: calc(100% - 85px) ;height:30px" class="fl">
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">项目名称
+                        </label>
+                        <input type="text" placeholder="请输入项目名称" id="projectName" name="projectName" autocomplete="off"
+                            class="layui-input search-input-find">
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">问题清单
+                        </label>
+                        <input type="text" placeholder="请输入问题清单" id="problemDescription" name="problemDescription"
+                            autocomplete="off" class="layui-input search-input-find">
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">审计年度
+                        </label>
+                        <div class="w100">
+                            <input autocomplete="off"  class="layui-input w5010" placeholder="开始日" name="createdStart" id="start">
+                            <span style="width: 14px;line-height: 30px;color:#efeef0" class="fl">
+                                —
+                            </span>
+                            <input autocomplete="off"  class="layui-input w5010 fl" placeholder="截止日" name="createdEnd" id="end">
+                        </div>
+
+
+                        <!-- <input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off"
+                            class="layui-input search-input-find"> -->
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">实施机构
+                        </label>
+                        <div class="layui-input-inline search-input-find" id="implementingAgencySelect">
                         </div>
                     </div>
                 </div>
-            </div>
+                <div>
+                    <button class="layui-btn" lay-submit lay-filter="search"><i
+                            class="layui-icon" onclick="x_admin_show('选中第一列','find-first.html','600','280')">&#xe615;</i>搜索</button>
+                </div>
+                <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">项目类型
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="projectTypeSelect" name="projectType">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">审计性质
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="auditNatureSelect" name="auditNatureId" class="search-input-find">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">审计对象
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="auditObjectSelect" name="auditObjectId">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">问题词条
+                        </label>
+                        <input type="text" placeholder="请输入问题词条" id="projectName6" name="projectName6"
+                            autocomplete="off" class="layui-input search-input-find">
+                    </div>
+                </div>
+
+                <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">严重程度
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="problemSeveritySelect" name="problemSeverityId">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">整改情况
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="rectifySituationSelect" name="rectifySituationId">
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-- 整改时常 超时情况 无逻辑 新加 -->
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">整改时常
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="rectifySituationSelect" name="rectifySituationId">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="w25 fl">
+                        <label class="layui-form-label-size">超时情况
+                        </label>
+                        <div class="fl  search-input-find">
+                            <select id="rectifySituationSelect" name="rectifySituationId">
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <div class="layui-collapse" lay-filter="test">
+                <div class="layui-colla-item">
+                    <h5 class="layui-colla-title">更多查询条件</h5>
+                    <div class="layui-colla-content">
+                       
+                    </div>
+                </div>
+            </div> -->
+
+
+
+            </form>
         </div>
+        <xblock>
+            <button class="layui-btn" onclick="exportData()">
+                <i class="layui-icon"></i>导出
+            </button>
+            <!--<button class="layui-btn" onclick="generateEchars()">
+            <i class="layui-icon"></i>生成图表
+        </button>-->
+        </xblock>
+        <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+        </table>
+        <!-- <div class="layui-card">
+            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>报表统计</div>
+            <div class="layui-card-body">
+                <div id="echarts-records" style="width: 100%;min-height:500px"></div>
+            </div>
+        </div> -->
+
     </div>
-</body>
-<script>
-    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
-    layui.config({
-        version: 1,
-        base: '../js/echarts/'
-    }).use(['element', 'echarts', 'carousel'], function () {
-        var element = layui.element,
-            $ = layui.jquery,
-            carousel = layui.carousel,
+    <script>
+        var echarts;
+        function exportData() {
+            $("#filterForm").submit();
+        };
+        function generateEchars() {
+            $.ajax({
+                url: "/audit-api/planStatistic/questionStatistic",
+                dataType: "json",
+                type: "post",
+                data: $("#filterForm").serialize(),
+                success: function (res) {
+                    if (JSON.stringify(res.data) == "{}") {
+                        return;
+                    }
+                    var type = res.data.type;
+                    var title = res.data.title;
+                    var subtitle = res.data.subtitle;
+                    if (subtitle) {
+                        subtitle = "按" + subtitle + "分析";
+                    } else {
+                        subtitle = "";
+                    }
+                    var legendData = res.data.legendData;
+                    var xData = res.data.xData;
+                    var statisticData = res.data.statisticData;
+
+                    var echartsApp = [],
+                        options = [{
+                            title: {
+                                text: "问题分析图",
+                                subtext: subtitle, //副标题
+                                x: 'center' //标题居中
+                            },
+                            tooltip: {
+                                trigger: 'item' //悬浮显示对比
+                            },
+                            legend: {
+                                orient: 'vertical', //类型垂直,默认水平
+                                left: 'left', //类型区分在左 默认居中
+                                data: legendData//['单价', '总价', '销量', '产量']
+                            },
+                            series: [{
+                                type: 'pie', //饼状
+                                radius: '60%', //圆的大小
+                                center: ['50%', '50%'], //居中
+                                label: {            //饼图图形上的文本标签
+                                    normal: {
+                                        show: true,
+                                        position: 'outer', //标签的位置
+                                        textStyle: {
+                                            fontWeight: 300,
+                                            fontSize: 16    //文字的字体大小
+                                        },
+                                        // formatter:'{d}%'
+                                        formatter: function (a) {
+                                            return a.name + "：" + a.percent + "%";
+                                        }
+                                    }
+                                },
+                                data: statisticData,
+                                calculable: true
+                            }]
+                        }, {
+                            title: {
+                                // text: '商品订单'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data: legendData//['销量','产量']
+                            },
+                            xAxis: {
+                                data: xData//['周一', '周二', '周三', '周四', '周五', '周六', '周天']
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: statisticData
+                        }]
+                        , renderDataView = function (index) {
+                            echartsApp[index] = echarts.init(document.getElementById('echarts-records'));
+                            // echartsApp[index].setOption(options[index]);
+                            setTimeout(echartsApp[index].setOption(options[index]), 500);
+                            // window.onresize = echartsApp[index].resize;
+                        };
+                    renderDataView(type);
+                }
+            });
+        }
+        function findEntryByCategory(categoryId, eleId) {
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=" + categoryId,
+                dataType: "json",
+                type: "get",
+                async: false,
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >全部</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#" + eleId).empty().append(options.join(""));
+                    }
+                }
+            });
+        }
+        layui.config({
+            version: 1,
+            base: '../js/echarts/'
+        }).use(['table', 'form', 'echarts'], function () {
+            let table = layui.table;
+            let form = layui.form;
             echarts = layui.echarts;
-        //建造轮播实例
-        carousel.render({
-            elem: '#Notice_carousel'
-            , width: '100%' //设置容器宽度
-            , height: '300px'
-            , arrow: 'none' //不显示箭头
-            , indicator: 'outside'//lay-indicator:outside
-            , autoplay: false//自动切换
-            , trigger: 'hover'//悬浮切换
-            //,anim: 'updown' //切换动画方式默认左右
-        });
-        //监听轮播切换事件
-        carousel.on('change(Notice_carousel)', function (obj) { //Notice_carousel 来源于对应HTML容器的 lay-filter="Notice_carousel" 属性值
-            obj.index === 0 ? Notice.resize() : NoticeAll.resize();
-            //console.log(obj.index); //当前条目的索引
-            //console.log(obj.prevIndex); //上一个条目的索引
-            //console.log(obj.item); //当前条目的元素对象
+            var demo1 = xmSelect.render({
+                name: 'implementingAgencyId',
+                el: '#implementingAgencySelect',
+                language: 'zn',
+                style: {
+                    'min-height': '30px',
+                    'line-height': '30px',
+                },
+                data: [
+                ]
+            })
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=1",
+                dataType: "json",
+                type: "get",
+                async: false,
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        var voteall = {};
+                        voteall.name = "全部条件";
+                        voteall.value = "all";
+                        options.push(voteall);
+                        data.forEach((Obj) => {
+                            var option = {};
+                            option.name = Obj.name;
+                            option.value = Obj.id;
+                            options.push(option);
+                        })
+                        demo1.update({
+                            data: options,
+                        })
+                    }
+                }
+            });
+            // findEntryByCategory(1,"implementingAgencySelect");
+            findEntryByCategory(2, "auditObjectSelect");
+            findEntryByCategory(3, "projectTypeSelect");
+            findEntryByCategory(4, "auditNatureSelect");
+            findEntryByCategory(5, "problemSeveritySelect");
+            findEntryByCategory(6, "rectifySituationSelect");
+            form.render("select")
+            table.render({
+                elem: '#test',
+                url: '/audit-api/planManage/planList',
+                xhrFields: {
+                    withCredentials: true
+                },
+                cols: [
+                    [{
+                        field: 'project_name',
+                        title: '项目名称',
+                        width: 200
+                    }, {
+                        field: 'project_type',
+                        title: '项目类型',
+                        width: 200
+                    }, {
+                        field: 'status',
+                        title: '状态',
+                        width: 80,
+                        templet: (data) => {
+                            let text;
+                            if (undefined === data.status || data.status === '1002') {
+                                text = '<span>待审核</span>';
+                            } else if (data.status === '1004') {
+                                text = '<span>已驳回</span>';
+                            } else {
+                                text = '<span>已批准</span>';
+                            }
+                            return text;
+                        }
+                    }, {
+                        field: 'problem_characterization',
+                        title: '问题定性',
+                        width: 150,
+                    }, {
+                        field: 'problem_description',
+                        title: '问题描述',
+                        width: 200,
+                    }, {
+                        field: 'problem_severity_name',
+                        title: '严重程度',
+                        width: 120,
+                    }, {
+                        field: 'agency_name',
+                        title: '机构名称',
+                        width: 120,
+                    }, {
+                        field: 'auditBasis',
+                        title: '审计依据',
+                        width: 120,
+                    }, {
+                        field: 'auditClassificationId',
+                        title: '审计分类',
+                        width: 120,
+                    }, {
+                        field: 'auditingExperience',
+                        title: '审计经验',
+                        width: 120,
+                    }, {
+                        field: 'audit_object_name',
+                        title: '审计对象',
+                        width: 120,
+                    }, {
+                        field: 'audit_nature_name',
+                        title: '审计性质',
+                        width: 180,
+                    }, {
+                        field: 'audit_year',
+                        title: '年度',
+                        width: 120,
+                    }, {
+                        field: 'agency_name',
+                        title: '机构名称',
+                        width: 120,
+                    }, {
+                        field: 'rectify_situation_name',
+                        title: '整改情况',
+                        width: 120,
+                    }, {
+                        field: 'risk_assessment_name',
+                        title: '风险评估',
+                        width: 120,
+                    }/*, {
+                    field: 'createdBy',
+                    title: '创建人',
+                    width: 150
+                }, {
+                    field: 'createdTime',
+                    title: '创建时间',
+                    width: 200,
+                    templet: (data) => {
+                        return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
+                    }
+                }*/]
+                ],
+                page: true,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.records //解析数据列表
+                    };
+                },
+                page: 1,
+                request: {
+                    pageName: 'current' //页码的参数名称，默认：page
+                    , limitName: 'size' //每页数据量的参数名，默认：limit
+                }
+            });
+            form.on("submit(search)", function () {
+                table.reload('test', {
+                    where: {
+                        projectName: $("#projectName").val(),
+                        problemDescription: $("#problemDescription").val(),
+                        auditYear: $("#auditYear").val(),
+                        implementingAgencyId: demo1.getValue("valueStr"),
+                        auditNatureId: $("#auditNatureSelect").val(),
+                        auditObjectId: $("#auditObjectSelect").val(),
+                        problemSeverityId: $("#problemSeveritySelect").val(),
+                        rectifySituationId: $("#rectifySituationSelect").val(),
+                        projectType: $("#projectTypeSelect").val()
+                    },
+                    page: 1
+                });
+                generateEchars();
+                return false;
+            })
         });
 
-        var Notice = echarts.init(document.getElementById('Notice')),
-            NoticeAll = echarts.init(document.getElementById('NoticeAll'));
-        var optionNotice = {
-            title: {
-                text: '公告'
-            },
-            tooltip: {
-                trigger: 'axis'//悬浮显示对比
-            },
-            legend: {//顶部显示 与series中的数据类型的name一致
-                data: ['公告', '作业', '光荣榜', '成绩报告']
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}//保存图片下载
-                }
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,//从起点开始
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                name: '公告',
-                type: 'line',//线性
-                data: [620, 732, 701, 734, 1090, 1130, 1120],
-            }, {
-                name: '作业',
-                type: 'line',//线性
-                data: [720, 832, 801, 834, 1190, 1230, 1220],
-            }, {
-                smooth: true,//曲线 默认折线
-                name: '光荣榜',
-                type: 'line',//线性
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-            }, {
-                smooth: true,//曲线
-                name: '成绩报告',
-                type: 'line',//线性
-                data: [220, 332, 401, 534, 690, 730, 820],
-            }]
-        },optionNoticeAll = {
-            title: {
-                text: '发布类型汇总',
-                subtext: '纯属虚构',//副标题
-                x: 'center'//标题居中
-            }     ,       tooltip: {
-                trigger: 'item'//悬浮显示对比
-            },
-            legend: {
-                orient: 'vertical',//类型垂直,默认水平
-                left: 'left',//类型区分在左 默认居中
-                data: ['公告', '作业', '光荣榜', '成绩报告']
-            },
-            series: [
-                {
-                    type: 'pie',//饼状
-                    radius: '60%',//圆的大小
-                    center: ['50%', '50%'],//居中
-                    data: [
-                        { value: 335, name: '公告' },
-                        { value: 310, name: '作业' },
-                        { value: 234, name: '光荣榜' },
-                        { value: 135, name: '成绩报告' }
-                    ]
-                }
-            ]
-        }
-        Notice.setOption(optionNotice);
-        NoticeAll.setOption(optionNoticeAll);
-        window.onresize = function () {//用于使echarts自适应高度和宽度
-            Notice.resize();
-            NoticeAll.resize();
-        };
-    });
-</script>
+
+    </script>
+</body>
+
 </html>

@@ -25,9 +25,9 @@
 <div class="x-nav">
     <span class="layui-breadcrumb">
       <a href="">首页</a>
-      <a href="">合同流程管理</a>
+      <a href="">系统信息维护</a>
       <a>
-        <cite>合同流程</cite></a>
+        <cite>部门信息</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -67,15 +67,18 @@
                 [{
                     field: 'username',
                     title: '用户名称',
-                    width: 200
+                    width: 200,
+                    align:'center'
                 }, {
                     field: 'phone',
                     title: '手机号',
                     width: 200,
+                    align:'center'
                 }, {
                     field: 'roleName',
                     title: '角色',
                     width: 150,
+                    align:'center'
                     templet: (data) => {
                         return data.roleList[0].roleName;
                     }
@@ -83,6 +86,7 @@
                     field: 'delFlag',
                     title: '状态',
                     width: 150,
+                    align:'center',
                     templet: (data) => {
                         let temp;
                         let text;
@@ -98,6 +102,7 @@
                     field: 'createTime',
                     title: '创建时间',
                     width: 200,
+                    align:'center',
                     templet: (data) => {
                         return new Date(data.createTime).Format('yyyy-MM-dd HH:mm:ss');
                     }

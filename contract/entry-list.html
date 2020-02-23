@@ -48,7 +48,7 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','500')">
+        <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','320')">
             <i class="layui-icon"></i>新增数据
         </button>
         <a class="layui-btn" onclick="downloadTemplate()">
@@ -57,10 +57,12 @@
         <a class="layui-btn" id="bachImport" >
             <i class="layui-icon"></i>批量导入
         </a>
-        <a class="layui-btn" id="export" >
+        <!-- <a class="layui-btn" id="export" >
             <i class="layui-icon"></i>导出词条
-        </a>
-    </a>
+        </a> -->
+        <button class="layui-btn" id="export" style="margin-left: 10px;">
+            <i class="layui-icon"></i>导出词条
+        </button>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
@@ -207,7 +209,7 @@
                         width: 200,
                         templet: function (res) {
                             var temp = ``;
-                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','500','` + res.id + `')" >编辑</span>
+                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','320','` + res.id + `')" >编辑</span>
                       <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
                             return temp;
                         }

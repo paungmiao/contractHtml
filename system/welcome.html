@@ -28,28 +28,28 @@
                              lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                             <div carousel-item="">
                                 <ul class="layui-row layui-col-space10 layui-this">
-                                    <li class="layui-col-xs2">
+                                    <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('all')">
-                                            <h5 style="font-size: large;">总项目</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="planSum">0</cite></p>
+                                            <h5 style="font-size: large;text-align: center;">总项目</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="planSum">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs2">
+                                    <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">
-                                            <h5 style="font-size: large;">已完成</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="finishCount">0</cite></p>
+                                            <h5 style="font-size: large;text-align: center;">已完成</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="finishCount">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs2">
+                                    <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
-                                            <h5 style="font-size: large;">未完成</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite id="nofinishCount">0</cite></p>
+                                            <h5 style="font-size: large;text-align: center;">未完成</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="nofinishCount">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs2">
+                                    <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">
-                                            <h5 style="font-size: large;">延期项目</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;"><cite  id="timeoutCount">0</cite></p>
+                                            <h5 style="font-size: large;text-align: center;">延期项目</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="timeoutCount">0</cite></p>
                                         </a>
                                     </li>
                                 </ul>
@@ -64,7 +64,7 @@
             <div class="layui-input-inline  layui-form layui-colla-content" style="width: 100px;float:right;">
                 <select id="auditYear" lay-filter="auditYear" ><option >2022</option><option >2021</option><option selected>2020</option><option >2019</option><option >2018</option><option >2017</option></select>
             </div>
-            <label class="layui-form-label" style="padding: 17px 15px;float:right;">年度：</label>
+            <label class="layui-form-label" style="padding-top:6px !important;padding-right:0 !important;float:right;line-height: 40px;">年度：</label>
         </div>
         <div class="layui-col-xs6 layui-col-md12">
             <div id="echarts-xinjiang" style="background-color:#ffffff;min-height:500px;"></div>
@@ -72,7 +72,7 @@
     </fieldset>
     <fieldset class="layui-elem-field">
         <div class="layui-row layui-col-space15">
-            <div class="layui-col-md4">
+            <div class="layui-col-md4 layui-col-sm4">
                 <div class="layui-card">
                     <div class="layui-card-header" style="font-size: 16px;font-weight:bold">整改情况</div>
                     <div class="layui-card-body">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md4">
+            <div class="layui-col-md4 layui-col-sm4">
                 <div class="layui-card">
                     <div class="layui-card-header" style="font-size: 16px;font-weight:bold">项目类型</div>
                     <div class="layui-card-body">
@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md4">
+            <div class="layui-col-md4 layui-col-sm4">
                 <div class="layui-card">
                     <div class="layui-card-header" style="font-size: 16px;font-weight:bold">超时项目</div>
                     <div class="layui-card-body">
@@ -297,7 +297,7 @@
             legend: {
                 data: _that.legendData,
                 icon: 'rect',
-                top: 100,
+                top: 10,
                 right: '4.17004%',
                 itemGap: 35,
                 itemWidth: 10,
@@ -305,7 +305,7 @@
                 orient: 'vertical',
                 selectedMode:false,
                 textStyle: {
-                    padding: [0, 0, 0, 2],fontSize:18
+                    padding: [0, 0, 0, 2],fontSize:14
                 }
             },
             tooltip: {
@@ -363,7 +363,7 @@
                         title: '',
                         backgroundColor: null,
                         color: ['#289df5', '#ff5050'],
-                        fontSize: 16,
+                        fontSize: 14,
                         domEle: document.getElementById("rectifySituation"), //必填
                         data: data1,
                         legendData: legendData,

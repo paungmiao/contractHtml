@@ -24,13 +24,13 @@
         }
     </style>
 </head>
-<!--<script type="text/html" id="toolbarDemo">-->
-<!--    <div class="layui-btn-container ">-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-normal" id="addBtn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>-->
-<!--    </div>-->
-<!--</script>-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container ">
+        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="addBtn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>
+        <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>
+        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>
+    </div>
+</script>
 <body th:fragment="pagination">
     <div class="x-body">
         <fieldset class="layui-elem-field">
@@ -43,28 +43,28 @@
                                 lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                                 <div carousel-item="">
                                     <ul class="layui-row layui-col-space10 layui-this">
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs3">
                                             <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('all')">
-                                                <h5 style="font-size: large;">总项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="planSum">0</cite></p>
+                                                <h5 style="font-size: large;text-align: center;">总项目</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="planSum">0</cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs3">
                                             <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">
-                                                <h5 style="font-size: large;">已完成</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="finishCount">0</cite></p>
+                                                <h5 style="font-size: large;text-align: center;">已完成</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="finishCount">0</cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs3">
                                             <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
-                                                <h5 style="font-size: large;">未完成</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite id="nofinishCount">0</cite></p>
+                                                <h5 style="font-size: large;text-align: center;">未完成</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="nofinishCount">0</cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs3">
                                             <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">
-                                                <h5 style="font-size: large;">延期项目</h5>
-                                                <p style="margin-left: 5px;margin-top: 10px;"><cite  id="timeoutCount">0</cite></p>
+                                                <h5 style="font-size: large;text-align: center;">延期项目</h5>
+                                                <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="timeoutCount">0</cite></p>
                                             </a>
                                         </li>
                                     </ul>
@@ -134,11 +134,6 @@
         </fieldset>
         <fieldset class="layui-elem-field" >
             <legend style="font-size: 16px;font-weight:bold">关注问题</legend>
-            <xblock>
-                <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="addBtn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>
-                <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>
-                <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>
-            </xblock>
             <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
             </table>
@@ -179,8 +174,8 @@
             legend: {
                 data: _that.legendData,
                 icon: 'rect',
-                top: 100,
-                right: '14.17004%',
+                top: 10,
+                right: 20,
                 itemGap: 35,
                 itemWidth: 10,
                 itemHeight: 10,
@@ -340,12 +335,12 @@
             }
         } else if ($.inArray(1, roleIdList) > -1) { //管理员
             if (deptName.indexOf('中支') > -1) {
-                $("#addBtn").removeClass("layui-hide");
-                $("#delBtn").removeClass("layui-hide");
-                $("#submitReportBtn").removeClass("layui-hide");
             } else if (deptName.indexOf('支行') > -1) {
             }
         } else if ($.inArray(13, roleIdList) > -1) { //超级管理员
+            $("#addBtn").removeClass("layui-hide");
+            $("#delBtn").removeClass("layui-hide");
+            $("#submitReportBtn").removeClass("layui-hide");
         }
         gid = getQueryString("gid");
         table.render({

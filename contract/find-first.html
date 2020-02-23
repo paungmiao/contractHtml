@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+	<link rel="stylesheet" href="../css/font.css">
+	<link rel="stylesheet" href="../css/xadmin.css">
+	<link rel="stylesheet" href="../layui/css/layui.css">
+	<link rel="stylesheet" href="../css/JCheck.css">
+	<script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../js/xadmin.js"></script>
+	<script type="text/javascript" src="../js/cookie.js"></script>
+	<script src="../js/JCheck.js"></script>
+</head>
+
+<body>
+	<div class="x-body addMerchant layerBox layui-layer-wrap">
+		<form class="layui-form textCenter" lay-filter="entryFlowAddForm">
+			<div class="w100 clearfix ">
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="项目名称">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="问题清单">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="审计年度">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="实施机构">
+				</div>
+			</div>
+			<div class="w100 mt16 clearfix">
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="项目类型">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="审计性质">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="审计对象">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="问题词条">
+				</div>
+			</div>
+			<div class="w100 mt16 clearfix">
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="严重程度">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="整改情况">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="整改时常">
+				</div>
+				<div class="w25 fl">
+					<input type="radio" name="sex" value="nan" title="超时情况">
+				</div>
+			</div>
+
+			<div class="layui-input-inline textCenter" style="margin-top: 24px;">
+				<a class="layui-btn" onclick="off()">
+					<i class="layui-icon">&#x1007;</i>确认
+				</a>
+			</div>
+
+		</form>
+	</div>
+	<script>
+
+		function off() {
+			var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+			parent.layer.close(index);		//关闭窗口
+		}
+
+	</script>
+
+</body>
+
+</html>

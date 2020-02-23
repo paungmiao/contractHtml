@@ -25,7 +25,7 @@
 <div class="x-nav">
     <span class="layui-breadcrumb">
       <a href="">首页</a>
-      <a href="">审计计划管理</a>
+      <a href="">审计项目管理</a>
       <a>
         <cite>审核清单</cite></a>
     </span>
@@ -129,6 +129,7 @@
             elem: '#test',
             url: '/audit-api/task/statuses',
             id: 'test',
+            align:'center',
             xhrFields: {
                 withCredentials: true
             },
@@ -140,10 +141,12 @@
                         field: 'projectCode',
                         title: '项目编号',
                         width: 160,
+                        align:'center',
                     }, {
                     field: 'projectName',
                     title: '项目名称',
-                    width: 120
+                    width: 120,
+                    align:'center',
                 }, {
                     field: 'implementingAgencyId',
                     title: '实施机构',

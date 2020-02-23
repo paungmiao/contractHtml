@@ -31,15 +31,28 @@
         <!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">
+                <span class="x-red">*</span>项目名称:
+            </label>
+            <div class="layui-input-block">
+                <input name="projectName" type="text" lay-verify="required|projectName" placeholder="请输入项目名称"
+                       autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block" >
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
                 <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled />
             </div>
-            <div class="layui-input-inline">
+            <div style="width:50%; float:left">
                 <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
                 </select>
             </div>
+            </div>
+            
 <!--            <div class="layui-input-inline">-->
 <!--                <select id="impUserSelect" name="impUserId">-->
 <!--                </select>-->
@@ -49,14 +62,19 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
-            <div class="layui-input-inline">
+            
+            <div class="layui-input-block" >
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
                 <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId" lay-filter="one_cate">
                 </select>
             </div>
-            <div class="layui-input-inline">
+            <div style="width:50%; float:left">
                 <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">
                 </select>
             </div>
+            </div>
+
+            
 <!--            <div class="layui-input-inline">-->
 <!--                <select id="auditUserSelect" name="auditUserId">-->
 <!--                </select>-->
@@ -66,78 +84,70 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>项目类型:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block" >
                 <select id="projectTypeSelect" name="projectType" lay-verify="required|projectType">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计性质:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="auditNatureIdSelect" name="auditNatureId" lay-verify="required|auditNatureId">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 <span class="x-red">*</span>问题词条:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
-                <span class="x-red">*</span>问题严重程度:
+                <span class="x-red">*</span>严重程度:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="problemSeverityIdSelect" name="problemSeverityId" lay-verify="required|problemSeverityId">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 <span class="x-red">*</span>整改情况:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="rectifySituationIdSelect" name="rectifySituationId" lay-verify="required|rectifySituationId">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>项目名称:
-            </label>
-            <div class="layui-input-inline">
-                <input name="projectName" type="text" style="width:200px" lay-verify="required|projectName" placeholder="请输入项目名称"
-                       autocomplete="off" class="layui-input" value="">
-            </div>
-        </div>
+       
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>问题定性:
             </label>
-            <div class="layui-input-inline">
-                <input name="problemCharacterization" type="text" style="width:200px" placeholder="请输入问题定性" autocomplete="off" class="layui-input" lay-verify="required|problemCharacterization">
+            <div class="layui-input-block">
+                <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off" class="layui-input" lay-verify="required|problemCharacterization">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>问题描述:
             </label>
-            <div class="layui-input-inline">
-                <input name="problemDescription" type="text" style="width:200px" placeholder="请输入问题描述" autocomplete="off" class="layui-input" value="" lay-verify="required|problemDescription">
+            <div class="layui-input-block">
+                <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea" lay-verify="required|problemDescription"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>可能影响:
             </label>
-            <div class="layui-input-inline">
-                <input name="mayAffect" type="text" style="width:200px" placeholder="请输入可能影响" autocomplete="off" class="layui-input" value="" lay-verify="required|mayAffect">
+            <div class="layui-input-block">
+                <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea" lay-verify="required|mayAffect"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -148,40 +158,42 @@
                 <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea" lay-verify="required|rectificationSuggestions"></textarea>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                审计依据:
-            </label>
-            <div class="layui-input-inline">
-                <input name="auditBasis" type="text" style="width:200px" placeholder="请输入审计依据" autocomplete="off" class="layui-input" value="">
-            </div>
-        </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 审计分类:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="auditClassificationIdSelect" name="auditClassificationId">
                 </select>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                审计经验:
-            </label>
-            <div class="layui-input-inline">
-                <input name="auditingExperience" type="text" style="width:200px" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
-            </div>
-        </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 风险评估:
             </label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select id="riskAssessmentIdSelect" name="riskAssessmentId">
                 </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                审计依据:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditBasis" type="text" placeholder="请输入审计依据" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+      
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                审计经验:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditingExperience" type="text" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+      
         <div class="layui-form-item">
             <label class="layui-form-label">
                 附件上传:
@@ -189,7 +201,7 @@
             <div class="layui-input-inline">
                 <input type="hidden" name="fileUri">
                 <span class="layui-btn file-btn" id="upload" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
-                <span name="uploadName" style="float: left;"></span>
+                <span name="uploadName" style="float: left;margin: 8px 0 0 16px;"></span>
             </div>
         </div>
 
