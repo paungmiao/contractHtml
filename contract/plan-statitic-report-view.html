@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script src="../js/JCheck.js"></script>
     <script src="../js/echarts/echarts.min.js?v=1.0.4" charset="utf-8"></script>
     <style>
@@ -359,7 +360,7 @@
             cols: [
                 [/*{
                     type: 'checkbox', fixed: 'left'
-                },*/{
+                },*/ {
                     field: 'id',
                     hide:true
                 },{
@@ -371,13 +372,53 @@
                     title: '项目名称',
                     width: 120
                 }, {
-                    field: 'agency_name',
+                    field: 'implementingAgencyId',
                     title: '实施机构',
-                    width: 120
+                    width: 120,
+                    templet: (data) => {
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    implementingAgencyName = data['name'];
+                                }
+                            }
+                        });
+                        return implementingAgencyName;
+                    }
                 }, {
-                    field: 'audit_object_name',
+                    field: 'auditObjectId',
                     title: '审计对象',
                     width: 120,
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        let auditObjectId = data.auditObjectId;
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp.AuditObject) {
+                                    let data = resp.AuditObject;
+                                    data.forEach((Obj) => {
+                                        if(Obj.deptId==auditObjectId){
+                                            auditObjectName = Obj.area;
+                                            return;
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 }, {
                     field: 'audit_nature_name',
                     title: '审计性质',
@@ -403,28 +444,37 @@
                     title: '状态',
                     width: 80,
                     templet: (data) => {
-                        let temp;
-                        let text;
-                        if (undefined == data.status || data.status == 1005) {
-                            text = '<span>待审核</span>';
-                        } else if (data.status == 1006) {
-                            text = '<span style="color: #28ff34">已驳回</span>';
-                        } else if (data.status == 1007) {
-                            text = '<span style="color: red">已批准</span>';
+                        let status = data.status;
+                        let statusName = "正在实施";
+                        switch(status) {
+                            case '1001':
+                                statusName="正在实施";
+                                break;
+                            case '1002':
+                                statusName="实施结束";
+                                break;
+                            case '1003':
+                                statusName="已归档";
+                                break;
+                            case '1004':
+                                statusName="延期整改";
+                                break;
+                            default:
+                                statusName="正在实施";
                         }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
+                        return statusName;
                     }
-                }, {
+                },{
                     field: '',
                     title: '操作',
                     width: 240,
+                    fixed:"right",
                     templet: function (res) {
                         var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑问题信息','../system/auditManagement/plan-management-edit.html','500','500','` + res.id + `', 'readOnly')" >查看</span>`
                         return temp;
                     }
                     // sort: true
-                },]
+                }]
             ],
             page: true,
             parseData: function (res) { //res 即为原始返回的数据

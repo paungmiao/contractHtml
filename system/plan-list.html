@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="/js/JCheck.js"></script>
 
@@ -32,19 +33,25 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
             项目名称：<input type="text" placeholder="请输入问题定性" id="projectName" autocomplete="off" class="layui-input">
-
+            审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" autocomplete="off" class="layui-input">
+            问题清单：<input type="text" placeholder="请输入问题清单" id="problemDescription" name="problemDescription" autocomplete="off" class="layui-input">
             <label class="state">
-                状态：
+                项目状态：
             </label>
             <div class="layui-input-inline state">
                 <select id="stateSelect">
                 </select>
             </div>
-
+            整改情况：
+            <div class="layui-input-inline">
+                <select id="rectifySituationSelect" name="rectifySituationId" >
+                </select>
+            </div>
+<!--
             问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off"
                         class="layui-input">
             问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off"
-                        class="layui-input">
+                        class="layui-input">-->
             实施机构：
             <div class="layui-input-inline">
                 <select id="implementingAgencySelect" name="implementingAgencyId" >
@@ -73,8 +80,27 @@
     layui.use(['table', 'form'], function () {
 
         let table = layui.table;
-        let form = layui.form
-        findEntryByCategory("1","implementingAgencySelect");
+        let form = layui.form;
+        findEntryByCategory(6,"rectifySituationSelect");
+        $.ajax({
+            url: "/audit-api/auditPlan/getImplementingAgency",
+            dataType: "json",
+            type: "get",
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            success: function (resp) {
+                if (resp.implementingAgency) {
+                    let data = resp.implementingAgency;
+                    let options = [];
+                    options.push('<option value="" >全部</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.deptId + '">' + Obj.area + '</option>';
+                        options.push(option);
+                    })
+                    $("#implementingAgencySelect").empty().append(options.join(""));
+                }
+            }
+        });
         $.ajax({
             url: "/audit-api/state/list/planState",
             dataType: "json",
@@ -84,12 +110,16 @@
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
                     let options = [];
-                    options.push('<option value="" >请选择状态</option>')
-                    data.forEach((Obj, index) => {
+                    options.push('<option value="" >请选择状态</option>');
+                    options.push('<option value="1001" >正在实施</option>');
+                    options.push('<option value="1002" >实施结束</option>');
+                    options.push('<option value="1003" >已归档</option>');
+                    options.push('<option value="1004" >延期整改</option>');
+                    /*data.forEach((Obj, index) => {
                         stateData[Obj.code]=Obj.name;
                         let option = '<option value="' + Obj.code + '" >' + Obj.name + '</option>';
                         options.push(option);
-                    })
+                    })*/
                     $("#stateSelect").empty().append(options.join(""));
                 }
             }
@@ -127,11 +157,48 @@
                     field: 'implementingAgencyId',
                     title: '实施机构',
                     templet: (data) => {
-                        return data.implementingAgencyId;
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    implementingAgencyName = data['name'];
+                                }
+                            }
+                        });
+                        return implementingAgencyName;
                     }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        let auditObjectId = data.auditObjectId;
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp.AuditObject) {
+                                    let data = resp.AuditObject;
+                                    data.forEach((Obj) => {
+                                        if(Obj.deptId==auditObjectId){
+                                            auditObjectName = Obj.area;
+                                            return;
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 },
                     {
                         field: 'problemCharacterization',
@@ -148,20 +215,42 @@
                     title: '年度',
                 }, {
                     field: 'status',
-                    title: '状态',
+                    title: '项目状态',
                     templet: (data) => {
-                        let  text = '<span style="color:gray">其他</span>';;
+                        let status = data.status;
+                        let statusName = "正在实施";
+                        switch(status) {
+                            case '1001':
+                                statusName="正在实施";
+                                break;
+                            case '1002':
+                                statusName="实施结束";
+                                break;
+                            case '1003':
+                                statusName="已归档";
+                                break;
+                            case '1004':
+                                statusName="延期整改";
+                                break;
+                            default:
+                                statusName="正在实施";
+                        }
+                       /* let  text = '<span style="color:gray">其他</span>';;
                         if (stateData[data.status]) {
                             text = '<span>'+stateData[data.status]+'</span>';
-                        }
-                        return text;
+                        }*/
+                        return statusName;
                     }
                 }, {
                     field: '',
                     title: '操作',
                     width: 240,
                     templet: function (res) {
-                        var temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','./auditManagement/plan-management-edit.html','800','500','` + res.id + `', 'readOnly')" >详情</span>`
+                        let auditStatus = res.auditStatus;
+                        if(undefined != status && status === '1001'){
+                            auditStatus='1002'
+                        }
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
                         return temp;
                     }
                     // sort: true
@@ -203,7 +292,8 @@
                     normalStatus: $("#stateSelect").val(),//状态
                     problemCharacterization: $("#problemCharacterization").val(),//问题定性
                     problemDescription: $("#problemDescription").val(),
-                    deptId:deptId
+                    deptId:$("#implementingAgencySelect").val(),
+                    auditYear:$("#auditYear").val()
                 },//问题描述
                 page: 1
             });
@@ -253,42 +343,18 @@
             }
         })
     }
-    function editPage_(title, url, w, h, id, readOnly) {
-        if (title == null || title == '') {
-            title = false;
-        }
-        ;
-        if (url == null || url == '') {
-            url = "404.html";
-        }
-        ;
-        if (w == null || w == '') {
-            w = ($(window).width() * 0.9);
-        }
-        ;
-        if (h == null || h == '') {
-            h = ($(window).height() - 50);
-        }
-        ;
-        layer.open({
+    function openAuditDetail(bizKey,bizName,taskId,auditStatus){
+        top.layer.open({
             type: 2,
-            area: [w + 'px', h + 'px'],
+            area: ['80%', '80%'],
             fix: false, //不固定
             maxmin: true,
             shadeClose: true,
             shade: 0.4,
-            title: title,
-            content: url,
+            title: bizName+'审计项目详情',
+            content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName+'&taskId='+taskId+'&auditStatus='+auditStatus,
             success: function (layero, index) {
                 //窗口加载成功刷新frame
-                // location.replace(location.href);
-                let body = layer.getChildFrame('body', index);
-                let iframeWin = layero.find('iframe')[0];
-                let readOnlyData = body.find('#readOnlyData');
-                let inputData = body.find('#implementingAgencyId');
-                readOnlyData.val(readOnly);
-                inputData.val(id);
-                iframeWin.contentWindow.initEntryInfo();
             },
             cancel: function () {
                 //关闭窗口之后刷新frame
