@@ -57,24 +57,31 @@
     </div>
     <script>
         var count = 0;
+        var auditYear = "2020"
         layui.use(['table', 'form', 'element'], function () {
             let table = layui.table;
             let form = layui.form;
             let element = layui.element;
-
+            form.on('select(auditYear)', function (data) {
+                auditYear=$("#auditYear").val();
+                table.reload('test', {
+                    where: {
+                        roleId: '2',"auditYear":auditYear
+                    },
+                    page: 1
+                });
+            });
             form.render("select")
         table.render({
             elem: '#test',
             url: '/audit-api/planStatistic/report',
+            headers: createAuthorizationTokenHeader(),
+            page: false,
             xhrFields: {
                 withCredentials: true
             },
             cols: [
-                [
-                   {
-                    field: 'id',
-                    hide:true
-                }, {
+                [ {
                     field: 'implementingAgencyId',
                     title: '实施机构',
                     templet: (data) => {
@@ -119,7 +126,6 @@
                     }
                 },]
             ],
-            page: true,
             parseData: function (res) { //res 即为原始返回的数据
                 return {
                     "code": res.code, //解析接口状态
@@ -128,13 +134,11 @@
                     "data": res.data.records //解析数据列表
                 };
             },
-            page: 1,
-            limit: 10,
             request: {
-                pageName: 'current', //页码的参数名称，默认：page
-                limitName: 'size' //每页数据量的参数名，默认：limit
+                //pageName: 'current', //页码的参数名称，默认：page
+                //limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '2'},
+            where: {roleId: '2',"auditYear":auditYear},
             done: function (res, curr, count) {
             }
         });
