@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../css/xadmin2.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../css/JCheck.css">
+    <script type="text/javascript" src="../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../js/common/dateFormat.js"></script>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/cookie.js"></script>
+    <script type="text/javascript" src="../js/jwt.js"></script>
+    <script type="text/javascript" src="../js/echarts/echarts.js"></script>
+    <script type="text/javascript" src="../js/xm-select.js"></script>
+    <script src="/js/JCheck.js"></script>
+
+</head>
+
+<body>
+<div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">审计分析</a>
+            <a>
+                <cite>问题个数统计</cite></a>
+        </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-form layui-col-md12 x-so" style="" id="filterForm" lay-filter="filterForm">
+            <div style=" width: calc(100% - 85px) ;height:30px" class="fl">
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">项目名称
+                    </label>
+                    <input type="text" placeholder="请输入项目名称" id="projectName" name="projectName" autocomplete="off"
+                           class="layui-input search-input-find">
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">问题清单
+                    </label>
+                    <input type="text" placeholder="请输入问题清单" id="problemDescription" name="problemDescription"
+                           autocomplete="off" class="layui-input search-input-find">
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">审计年度
+                    </label>
+                    <div class="w100">
+                        <input autocomplete="off" class="layui-input w5010" placeholder="开始日" name="createdStart"
+                               id="start">
+                        <span style="width: 14px;line-height: 30px;color:#efeef0" class="fl">
+                                —
+                            </span>
+                        <input autocomplete="off" class="layui-input w5010 fl" placeholder="截止日" name="createdEnd"
+                               id="end">
+                    </div>
+
+
+                    <!-- <input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off"
+                        class="layui-input search-input-find"> -->
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">实施机构
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="implementingAgencyId" groupBy="a.implementing_Agency_Id"
+                                name="implementingAgencyId">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="layui-btn" lay-submit lay-filter="search"><i
+                        class="layui-icon">&#xe615;</i>搜索
+                </button>
+            </div>
+            <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">项目类型
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="projectType" name="projectType">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">审计性质
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="auditNatureId" groupBy="a.audit_Nature_Id" name="auditNatureId"
+                                class="search-input-find">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">审计对象
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="auditObjectId" groupBy="a.audit_Object_Id" name="auditObjectId">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">问题词条
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="questionEntryId" groupBy="a.question_Entry_Id" name="questionEntryId">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">严重程度
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="problemSeverityId" groupBy="a.question_Entry_Id" name="problemSeverityId">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">整改情况
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="rectifySituationId" name="rectifySituationId">
+                        </select>
+                    </div>
+
+                </div>
+                <!-- 整改时常 超时情况 无逻辑 新加 -->
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">整改时长
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="costTime" name="costTime">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">超时情况
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="overtime" name="overtime">
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <!-- <div class="layui-collapse" lay-filter="test">
+            <div class="layui-colla-item">
+                <h5 class="layui-colla-title">更多查询条件</h5>
+                <div class="layui-colla-content">
+
+                </div>
+            </div>
+        </div> -->
+
+
+        </div>
+    </div>
+    <!--    <xblock>-->
+    <!--        <button class="layui-btn" onclick="exportData()">-->
+    <!--            <i class="layui-icon"></i>导出-->
+    <!--        </button>-->
+    <!--        &lt;!&ndash;<button class="layui-btn" onclick="generateEchars()">-->
+    <!--        <i class="layui-icon"></i>生成图表-->
+    <!--    </button>&ndash;&gt;-->
+    <!--    </xblock>-->
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+
+    </table>
+    <div class="layui-card">
+        <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>报表统计</div>
+        <div class="layui-card-body">
+            <div id="echarts-records" style="width: 100%;min-height:500px"></div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var echarts;
+
+    function exportData() {
+        $("#filterForm").submit();
+    };
+
+    function generateEchars(subtitle, xData,legendData) {
+        if (undefined==xData||xData.length==0) {
+            return;
+        }
+        if (subtitle) {
+            subtitle = "按" + subtitle + "分析";
+        } else {
+            subtitle = "";
+        }
+        let options = {
+            title: {
+                text: "问题统计图",
+                subtext: subtitle, //副标题
+                x: 'center' //标题居中
+            },
+            tooltip: {
+                trigger: 'item' //悬浮显示对比
+            },
+            legend: {
+                orient: 'vertical', //类型垂直,默认水平
+                left: 'left', //类型区分在左 默认居中
+                data: legendData//['单价', '总价', '销量', '产量']
+            },
+            series: [{
+                type: 'pie', //饼状
+                radius: '30%', //圆的大小
+                center: ['50%', '50%'], //居中
+                label: {            //饼图图形上的文本标签
+                    normal: {
+                        show: true,
+                        position: 'outer', //标签的位置
+                        textStyle: {
+                            fontWeight: 300,
+                            fontSize: 16    //文字的字体大小
+                        },
+                        // formatter:'{d}%'
+                        formatter: function (a) {
+                            return a.name + "：" + a.percent + "%";
+                        }
+                    }
+                },
+                data: xData,
+                calculable: true
+            }]
+        }
+        var myChart = echarts.init(document.getElementById('echarts-records'));
+        myChart.setOption(options)
+    }
+
+    function findEntryByCategory(categoryId, eleId) {
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=" + categoryId,
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >未选择</option>')
+                    options.push('<option value="all" >全部条件</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#" + eleId).empty().append(options.join(""));
+                }
+            }
+        });
+    }
+
+
+    function findAllDeptGroup() {
+        $.ajax({
+            url: "/audit-api/planManage/findAllDeptGroup",
+            dataType: "json",
+            type: "get",
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let impData = data.impData;
+                    let auditData = data.auditData;
+                    if (impData) {
+                        let options = [];
+                        options.push('<option value="" >未选择</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        impData.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#implementingAgencyId").empty().append(options.join(""));
+                    }
+                    if (auditData) {
+                        let options = [];
+                        options.push('<option value="" >未选择</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        auditData.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectId").empty().append(options.join(""));
+                    }
+                }
+            }
+        });
+    }
+
+    layui.config({
+        version: 1,
+        base: '../js/echarts/'
+    }).use(['table', 'form', 'echarts'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        echarts = layui.echarts;
+        findEntryByCategory(3, "projectType");
+        findEntryByCategory(4, "auditNatureId");
+        findEntryByCategory(5, "problemSeverityId");
+        findEntryByCategory(6, "rectifySituationId");
+        findEntryByCategory(8, "questionEntryId");
+        findAllDeptGroup();
+        form.render("select")
+
+        let baseCols = [
+            {
+                type: 'numbers',
+                title: '序号',
+            },
+            {
+                field: 'name',
+                title: '类型',
+            },
+            {
+                field: 'value',
+                title: '数量',
+            },
+            {
+                field: 'percent',
+                title: '占比',
+            },
+        ]
+        form.on("submit(search)", function () {
+            let formVal = form.val('filterForm')
+            let allArr = [];
+            let groupByArr = []
+            let typeName = ''
+            for (let key in formVal) {
+                let val = formVal[key];
+                if (undefined != val && 'all' == val) {
+                    allArr.push(key);
+                }
+                let grouBy = $("#" + key).attr("groupBy");
+                if (undefined != grouBy && undefined != val && 'all' == val) {
+                    groupByArr.push(grouBy);
+                }
+            }
+            if (allArr.length != 1) {
+                return top.layer.msg("全部条件有且只有一个")
+            }
+            formVal.groupBy = groupByArr.join(",")
+            $.ajax({
+                url: "/audit-api/planManage/planList/groupList",
+                headers: createAuthorizationTokenHeader(),
+                type: 'get',
+                data: formVal,
+                success: function (resp) {
+                    console.log(resp)
+                    if (resp.code == 0) {
+                        table.render({
+                            elem: '#test'
+                            , page: false //开启分页
+                            , cols: [baseCols],
+                            data: resp.data.tableData
+                            , defaultToolbar: ['exports']
+                        });
+                        generateEchars('',resp.data.records,resp.data.legend);
+                    }
+                }
+            })
+            return false;
+        });
+    })
+
+
+</script>
+</body>
+
+</html>
