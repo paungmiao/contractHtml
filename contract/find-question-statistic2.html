@@ -24,7 +24,6 @@
     <script src="/js/JCheck.js"></script>
 
 </head>
-
 <body>
 <div class="x-nav">
         <span class="layui-breadcrumb">
@@ -175,15 +174,15 @@
 
         </div>
     </div>
-    <!--    <xblock>-->
-    <!--        <button class="layui-btn" onclick="exportData()">-->
-    <!--            <i class="layui-icon"></i>导出-->
-    <!--        </button>-->
-    <!--        &lt;!&ndash;<button class="layui-btn" onclick="generateEchars()">-->
-    <!--        <i class="layui-icon"></i>生成图表-->
-    <!--    </button>&ndash;&gt;-->
-    <!--    </xblock>-->
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+<!--        <xblock>-->
+<!--            <button class="layui-btn"  lay-filter="exportBtn">-->
+<!--                <i class="layui-icon"></i>导出-->
+<!--            </button>-->
+<!--            &lt;!&ndash;<button class="layui-btn" onclick="generateEchars()">-->
+<!--            <i class="layui-icon"></i>生成图表-->
+<!--        </button>&ndash;&gt;-->
+<!--        </xblock>-->
+    <table class="layui-table x-admin" id="test" lay-data="{id:'test'}" lay-filter="test">
 
     </table>
     <div class="layui-card">
@@ -196,10 +195,6 @@
 </div>
 <script>
     var echarts;
-
-    function exportData() {
-        $("#filterForm").submit();
-    };
 
     function generateEchars(subtitle, xData,legendData) {
         if (undefined==xData||xData.length==0) {
@@ -370,13 +365,23 @@
                 success: function (resp) {
                     console.log(resp)
                     if (resp.code == 0) {
+                        let tableOption = {
+                            elem: '#test'
+                            ,id:'group'
+                            , page: false //开启分页
+                            , cols: [baseCols],
+                            data: resp.data.tableData
+                            , defaultToolbar: ['exports']
+                        }
                         table.render({
                             elem: '#test'
                             , page: false //开启分页
                             , cols: [baseCols],
                             data: resp.data.tableData
-                            , defaultToolbar: ['exports']
+                            , defaultToolbar: ['exports'],
+                            toolbar: '#toolbarDemo'
                         });
+                        //将上述表格示例导出为 csv 文件
                         generateEchars('',resp.data.records,resp.data.legend);
                     }
                 }
