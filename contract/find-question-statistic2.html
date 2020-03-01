@@ -148,6 +148,16 @@
                     </label>
                     <div class="fl  search-input-find">
                         <select id="costTime" name="costTime">
+                            <option value="">未选择</option>
+                            <option value="all">全部条件</option>
+                            <option value="1">一个月</option>
+                            <option value="2">二个月</option>
+                            <option value="3">三个月</option>
+                            <option value="4">四个月</option>
+                            <option value="5">五个月</option>
+                            <option value="6">六个月</option>
+                            <option value="7">六个月以上一年以内</option>
+                            <option value="8">超过一年</option>
                         </select>
                     </div>
 
@@ -156,7 +166,16 @@
                     <label class="layui-form-label-size">超时情况
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="overtime" name="overtime">
+                        <select id="overTime" name="overTime">
+                            <option value="">未选择</option>
+                            <option value="all">全部条件</option>
+                            <option value="1">一个月</option>
+                            <option value="2">二个月</option>
+                            <option value="3">三个月</option>
+                            <option value="4">四个月</option>
+                            <option value="5">五个月</option>
+                            <option value="6">六个月</option>
+                            <option value="7">六个月以上</option>
                         </select>
                     </div>
 
@@ -365,14 +384,6 @@
                 success: function (resp) {
                     console.log(resp)
                     if (resp.code == 0) {
-                        let tableOption = {
-                            elem: '#test'
-                            ,id:'group'
-                            , page: false //开启分页
-                            , cols: [baseCols],
-                            data: resp.data.tableData
-                            , defaultToolbar: ['exports']
-                        }
                         table.render({
                             elem: '#test'
                             , page: false //开启分页
