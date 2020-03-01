@@ -372,8 +372,11 @@
                     groupByArr.push(grouBy);
                 }
             }
+            if (allArr.length == 0) {
+                return top.layer.msg("全部条件不能为空")
+            }
             if (allArr.length != 1) {
-                return top.layer.msg("全部条件有且只有一个")
+                return top.layer.msg("只能有一个全部条件")
             }
             formVal.groupBy = groupByArr.join(",")
             $.ajax({
