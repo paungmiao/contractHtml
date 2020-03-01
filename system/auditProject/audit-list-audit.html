@@ -343,9 +343,8 @@
                 headers: createAuthorizationTokenHeader(),
                 data: JSON.stringify(data),
                 success: function (res) {
-                    debugger;
                     if (!res.data) {
-                        let index = layer.alert("操作失败，请完善审计对象员工！", {icon: 1}, function () {
+                        let index = layer.alert("操作失败，请到详情页完善信息！", {icon: 1}, function () {
                             layer.close(index);
                         });
                     } else {

@@ -26,10 +26,19 @@
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">
+                <span class="x-red">*</span>延迟时间（天数）:
+            </label>
+            <div class="layui-input-block">
+                <input name="delayDate" type="text" lay-verify="required|delayDate" placeholder="请输入延迟时间"
+                       autocomplete="off" class="layui-input" value="" id="delayDate">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>延迟说明:
             </label>
             <div class="layui-input-block">
-                <textarea name="opinion" placeholder="延迟说明" class="layui-textarea" id="opinion"></textarea>
+                <textarea name="opinion" placeholder="延迟说明" lay-verify="required|opinion" class="layui-textarea" id="opinion"></textarea>
             </div>
         </div>
 
@@ -62,12 +71,14 @@
                 let taskId = $("#taskId").val();
                 let opinion = $("#opinion").val();
                 let mark = $("#mark").val();
+                let delayDate = $("#delayDate").val();
                 let status = auditEnum[beforeStatus][type];
                 let data1 = {
                     'auditStatus': status,
                     'bizKey': bizKey,
                     "opinion": opinion,
-                    "mark": mark
+                    "mark": mark,
+                    "delayDate": delayDate
                 }
                 $.ajax({
                     url: '/audit-api/task/complete/' + taskId,
