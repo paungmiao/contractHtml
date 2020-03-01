@@ -111,7 +111,7 @@
                         } else {
                             detail += `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('问题信息详情','../auditManagement/plan-management-edit.html','800','500','` + res.bizKey + `', 'readOnly')" >详情</span>`
                         }
-                        let flowImage = `<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/` + res.processDefKey + `/` + res.bizKey + `','800','600')">流程跟踪</span>`
+                        let flowImage = `<!--<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="x_admin_show('流程图','http://39.108.50.114:9999/act/task/view/` + res.processDefKey + `/` + res.bizKey + `','800','600')">流程跟踪</span>-->`
 
                         return detail + opt + flowImage;
                     }
@@ -150,9 +150,9 @@
 
 <script>
 
-    function taskView() {
-        x_admin_show("流程图", "http://39.108.50.114:9999/act/task/view/auditApply/4", "800", "600");
-    }
+    // function taskView() {
+    //     x_admin_show("流程图", "http://39.108.50.114:9999/act/task/view/auditApply/4", "800", "600");
+    // }
 
     function editPage_(title, url, w, h, id, readOnly) {
         if (title == null || title == '') {
