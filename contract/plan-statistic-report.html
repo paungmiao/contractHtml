@@ -138,7 +138,7 @@
                 //pageName: 'current', //页码的参数名称，默认：page
                 //limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {roleId: '2',"auditYear":auditYear},
+            where: {deptId: userInfo.deptId,"auditYear":auditYear},
             done: function (res, curr, count) {
             }
         });

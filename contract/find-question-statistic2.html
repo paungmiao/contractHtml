@@ -70,11 +70,10 @@
                         class="layui-input search-input-find"> -->
                 </div>
                 <div class="w25 fl">
-                    <label class="layui-form-label-size">实施机构
+                    <label class="layui-form-label-size">严重程度
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="implementingAgencyId" groupBy="a.implementing_Agency_Id"
-                                name="implementingAgencyId">
+                        <select id="problemSeverityId" groupBy="a.question_Entry_Id" name="problemSeverityId">
                         </select>
                     </div>
                 </div>
@@ -125,15 +124,6 @@
 
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
                 <div class="w25 fl">
-                    <label class="layui-form-label-size">严重程度
-                    </label>
-                    <div class="fl  search-input-find">
-                        <select id="problemSeverityId" groupBy="a.question_Entry_Id" name="problemSeverityId">
-                        </select>
-                    </div>
-
-                </div>
-                <div class="w25 fl">
                     <label class="layui-form-label-size">整改情况
                     </label>
                     <div class="fl  search-input-find">
@@ -178,7 +168,15 @@
                             <option value="7">六个月以上</option>
                         </select>
                     </div>
-
+                </div>
+                <div class="w25 fl layui-hide"  id="ssjg">
+                    <label class="layui-form-label-size">实施机构
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="implementingAgencyId" groupBy="a.implementing_Agency_Id"
+                                name="implementingAgencyId">
+                        </select>
+                    </div>
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -213,6 +211,10 @@
 
 </div>
 <script>
+    let roleIdList = userInfo.roleIdList;
+    if ($.inArray(13, roleIdList) > -1) {
+        $("#ssjg").removeClass("layui-hide");
+    }
     var echarts;
 
     function generateEchars(subtitle, xData,legendData) {

@@ -68,11 +68,11 @@
                     <!-- <input type="text" placeholder="请输入审计年度" id="auditYear" name="auditYear" autocomplete="off"
                         class="layui-input search-input-find"> -->
                 </div>
-                <div class="w25 fl layui-hide" id="ssjg">
-                    <label class="layui-form-label-size">实施机构
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">严重程度
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="implementingAgencySelect" name="implementingAgencyId" >
+                        <select id="problemSeveritySelect" name="problemSeverityId">
                         </select>
                     </div>
                 </div>
@@ -121,15 +121,6 @@
 
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
                 <div class="w25 fl">
-                    <label class="layui-form-label-size">严重程度
-                    </label>
-                    <div class="fl  search-input-find">
-                        <select id="problemSeveritySelect" name="problemSeverityId">
-                        </select>
-                    </div>
-
-                </div>
-                <div class="w25 fl">
                     <label class="layui-form-label-size">整改情况
                     </label>
                     <div class="fl  search-input-find">
@@ -157,6 +148,14 @@
                     </div>
 
                 </div>
+                <div class="w25 fl layui-hide" id="ssjg">
+                <label class="layui-form-label-size">实施机构
+                </label>
+                <div class="fl  search-input-find">
+                    <select id="implementingAgencySelect" name="implementingAgencyId" >
+                    </select>
+                </div>
+            </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
             <div class="layui-colla-item">
