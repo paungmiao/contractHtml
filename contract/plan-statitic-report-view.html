@@ -25,13 +25,15 @@
         }
     </style>
 </head>
-<!--<script type="text/html" id="toolbarDemo">-->
-<!--    <div class="layui-btn-container ">-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-normal" id="addBtn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>-->
-<!--        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>-->
-<!--    </div>-->
-<!--</script>-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container ">
+        <!--onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')"-->
+        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="addBtn" lay-event="add">新增</button>
+        <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>
+        <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>
+        <div class="layui-inline" lay-event="refresh"><i class="layui-icon layui-icon-refresh-3"></i></div>
+    </div>
+</script>
 <body th:fragment="pagination">
     <div class="x-body">
         <fieldset class="layui-elem-field">
@@ -99,22 +101,7 @@
                                         <th>项目数</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>类型3</td>
-                                        <td>10</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>类型2</td>
-                                        <td>9</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>类型3</td>
-                                        <td>8</td>
-                                    </tr>
+                                    <tbody id="projectTypeBody">
                                     </tbody>
                                 </table>
                             </div>
@@ -135,20 +122,18 @@
         </fieldset>
         <fieldset class="layui-elem-field" >
             <legend style="font-size: 16px;font-weight:bold">关注问题</legend>
-            <xblock>
+            <!--<xblock>
                 <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="addBtn" onclick="x_admin_show('创建问题词条','../system/auditManagement/plan-management-add.html','600','460')">新增</button>
                 <button class="layui-btn layui-btn-lg layui-btn-danger layui-btn-xs layui-hide" id="delBtn"  lay-event="del" ><i class="layui-icon"></i>删除</button>
                 <button class="layui-btn layui-btn-lg layui-btn-normal layui-hide" id="submitReportBtn" lay-event="editContent">提交报告</button>
-            </xblock>
-            <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+            </xblock>-->
+            <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo'}" lay-filter="test">
 
             </table>
         </fieldset>
         <fieldset class="layui-elem-field" >
             <legend style="font-size: 16px;font-weight:bold">汇总报告</legend>
-            <div id="reportContent" class="layadmin-homepage-pad-hor">
-                fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看
-                    fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看fsjdfksdjflsjdfpiuwepirlkdh螺丝扣搭街坊士大夫的数量较少的接下来看
+            <div id="reportContent" class="layadmin-homepage-pad-hor" style="height:300px">
             </div>
         </fieldset>
     </div>
@@ -156,22 +141,158 @@
 </body>
 
 <script>
-    //查询项目统计数
-    $.ajax({
-        url: "/audit-api/planStatistic/countOfPlan",
-        dataType: "json",
-        type: "post",
-        data:{},
-        success: function (resp) {
-            if (resp && 0 == resp.code) {
-                let data = resp.data;
-                $("#planSum").html(data.planSum);
-                $("#finishCount").html(data.finishCount);
-                $("#nofinishCount").html(data.nofinishCount);
-                $("#timeoutCount").html(data.timeoutCount);
+    var gid = getQueryString("gid");
+    var auditYear = getQueryString("auditYear");
+    function initView(){
+        //根据整改情况统计
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatistic",
+            dataType: "json",
+            type: "post",
+            data: {"rectifySituationId": "all","auditYear": auditYear},
+            success: function (res) {
+                var statisticData = res.data.statisticData;
+                var data1 = [], legendData = [],colors = [];
+                if (statisticData!=null&&statisticData!=""&&statisticData!='undefined') {
+                    statisticData.forEach((item, index) => {
+                        var iiitem = {}
+                        iiitem.name = item.name;
+                        iiitem.value = item.value;
+                        if (index == 1) {
+                            iiitem.label = {normal: {show: true}};
+                        }
+                        data1.push(iiitem);
+                        legendData.push(item.name);
+                        colors.push(color16());
+                    });
+                    var option1 = {
+                            value: 38, //百分比,必填
+                            name: '', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 14,
+                            domEle: document.getElementById("rectifySituation"), //必填
+                            data: data1,
+                            legendData: legendData,
+                        },
+
+                        percentPie1 = new PercentPie(option1);
+                    percentPie1.init();
+                }else{
+                    var data1 = [], legendData = [],colors = [];
+                    var iiitem1 = {}
+                    iiitem1.name = "";
+                    iiitem1.value = 0;
+                    iiitem1.label = {normal: {show: true}};
+                    data1.push(iiitem1);
+                    legendData.push("");
+                    colors.push(color16());
+                    var iiitem2 = {}
+                    iiitem2.name = "";
+                    iiitem2.value = 0;
+                    data1.push(iiitem2);
+                    legendData.push("");
+                    colors.push(color16());
+                    var option1 = {
+                            value: 38, //百分比,必填
+                            name: '', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 14,
+                            domEle: document.getElementById("rectifySituation"), //必填
+                            data: data1,
+                            legendData: legendData,
+                        },
+
+                        percentPie1 = new PercentPie(option1);
+                    percentPie1.init();
+
+                }
             }
-        }
-    });
+        });
+        //根据项目类型统计
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatistic",
+            dataType: "json",
+            type: "post",
+            data: {"projectType": "all","auditYear": auditYear},
+            success: function (res) {
+                var statisticData = res.data.statisticData;
+                if (statisticData) {
+                    var html = "";
+                    statisticData.forEach((item, index) => {
+                        html+="<tr><td>"+(index+1)+"</td><td>"+item.name+"</td><td>"+item.value+"</td></tr>";
+                    });
+                    $("#projectTypeBody").html(html);
+                }
+            }
+        });
+        //查询项目统计数
+        $.ajax({
+            url: "/audit-api/planStatistic/countOfPlan",
+            dataType: "json",
+            type: "post",
+            data: {auditYear: auditYear},
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    $("#planSum").html(data.planSum);
+                    $("#finishCount").html(data.finishCount);
+                    $("#nofinishCount").html(data.nofinishCount);
+                    $("#timeoutCount").html(data.timeoutCount);
+                    var data1 = [], legendData = [],colors = [];
+                    var iiitem1 = {}
+                    iiitem1.name = "未超时";
+                    iiitem1.value = data.finishCount+data.nofinishCount;
+                    iiitem1.label = {normal: {show: true}};
+                    data1.push(iiitem1);
+                    legendData.push("未超时");
+                    colors.push(color16());
+                    var iiitem2 = {}
+                    iiitem2.name = "已超时";
+                    iiitem2.value = data.timeoutCount;
+                    data1.push(iiitem2);
+                    legendData.push("已超时");
+                    colors.push(color16());
+                    var option2 = {
+                            value: 20, //百分比,必填
+                            name: '123', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 16,
+                            domEle: document.getElementById("timeoutProject"), //必填
+                            data: data1,
+                            legendData: legendData
+                        },
+                        percentPie2 = new PercentPie(option2);
+                    percentPie2.init();
+                }
+            }
+        });
+        //加载报告
+        $.ajax({
+            url: '/audit-api/planManage/deptYearReport/load',
+            type: 'put',
+            data: {"deptId":getQueryString("gid"),"auditYear":getQueryString("auditYear")}, //入参
+            dataType: 'json',
+            timeout: 6000,
+            async: false,
+            success: function(retData) {
+                console.log(retData);
+                $("#reportContent").html(retData.data);
+            },
+            error: function(request,testStatus,errorThrown){
+                //执行错误的方法
+                if(testStatus == "timeout"){
+                    alert("请求超时！");
+                }
+            }
+        })
+    }
+
     PercentPie.prototype.init = function () {
         var _that = this;
         var option = {
@@ -218,43 +339,7 @@
         echarts.init(_that.domEle).setOption(option);
     };
 
-    $.ajax({
-        url: "/audit-api/planStatistic/questionStatistic",
-        dataType: "json",
-        type: "post",
-        data:{"rectifySituationId":"all"},
-        success: function (res) {
-            var statisticData = res.data.statisticData;
-            var data1=[],legendData=[];
 
-            if(statisticData){
-                statisticData.forEach((item, index)=>{
-                    var iiitem = {}
-                    iiitem.name=item.name;
-                    iiitem.value=item.value;
-                    if(index==1){
-                        iiitem.label = {normal: {show: true}};
-                    }
-                    data1.push(iiitem);
-                    legendData.push(item.name);
-                });
-                var option1 = {
-                        value: 38, //百分比,必填
-                        name: '', //必填
-                        title: '',
-                        backgroundColor: null,
-                        color: ['#289df5', '#ff5050'],
-                        fontSize: 16,
-                        domEle: document.getElementById("rectifySituation"), //必填
-                        data :data1,
-                        legendData:legendData,
-                    },
-
-                    percentPie1 = new PercentPie(option1);
-                percentPie1.init();
-            }
-        }
-    });
 
     var option2 = {
             value: 20, //百分比,必填
@@ -283,6 +368,13 @@
     percentPie2 = new PercentPie(option2);
     percentPie2.init();
 
+    function color16(){//十六进制颜色随机
+        var r = Math.floor(Math.random()*256);
+        var g = Math.floor(Math.random()*256);
+        var b = Math.floor(Math.random()*256);
+        var color = '#'+r.toString(16)+g.toString(16)+b.toString(16);
+        return color;
+    }
     function PercentPie(option) {
         this.backgroundColor = option.backgroundColor || '#fff';
         this.color = option.color || ['#EAEAEA', '#6CAEE8'];
@@ -327,29 +419,159 @@
             end: function () {
                 //窗口销毁之后刷新frame
                 // location.replace(location.href);
+                table.reload("test",{
+                    where: {
+                        auditYear:auditYear,
+                        deptId:gid
+                    },
+                    page: 1
+                });
             }
         });
     }
-    var gid;
-    layui.use(['table'], function () {
-        let table = layui.table;
-        let roleIdList = userInfo.roleIdList;
-        let deptName = userInfo.deptName;
-        if ($.inArray(6, roleIdList) > -1) { //一般员工
-            if (deptName.indexOf('中支') > -1) {
-            } else if (deptName.indexOf('支行') > -1) {
-            }
-        } else if ($.inArray(1, roleIdList) > -1) { //管理员
-            if (deptName.indexOf('中支') > -1) {
-                $("#addBtn").removeClass("layui-hide");
-                $("#delBtn").removeClass("layui-hide");
-                $("#submitReportBtn").removeClass("layui-hide");
-            } else if (deptName.indexOf('支行') > -1) {
-            }
-        } else if ($.inArray(13, roleIdList) > -1) { //超级管理员
-        }
-        gid = getQueryString("gid");
+    let table;
+        layui.use(['table'], function () {
+        table = layui.table;
+            initView();
         table.render({
+            elem: '#test',
+            url: '/audit-api/planManage/attention/page',
+            id: 'test',
+            toolbar: '#toolbarDemo',
+            xhrFields: {
+                withCredentials: true
+            },
+            headers:createAuthorizationTokenHeader(),
+            cols: [
+                [{
+                    type: 'checkbox', fixed: 'left'
+                }, {
+                    field: 'id',
+                    hide:true
+                },{
+                        field: 'projectCode',
+                        title: '项目编号',
+                    }, {
+                    field: 'projectName',
+                    title: '项目名称',
+                }, {
+                    field: 'implementingAgencyId',
+                    title: '实施机构',
+                },  {
+                    field: 'auditObjectId',
+                    title: '审计对象',
+                }, {
+                    field: 'problemCharacterization',
+                    title: '问题定性',
+                }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
+                },{
+                    field: 'auditNatureId',
+                    title: '审计性质',
+                },{
+                    field: 'rectifySituationId',
+                    title: '整改情况',
+                }, {
+                    field: 'auditYear',
+                    title: '年度',
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    width: 200,
+                    templet: (data) => {
+                        let status = data.status;
+                        let statusName = "正在实施";
+                        switch(status) {
+                            case '1001':
+                                statusName="正在实施";
+                                break;
+                            case '1002':
+                                statusName="实施结束";
+                                break;
+                            case '1003':
+                                statusName="已归档";
+                                break;
+                            case '1004':
+                                statusName="延期整改";
+                                break;
+                            default:
+                                statusName="正在实施";
+                        }
+                        /* let  text = '<span style="color:gray">其他</span>';;
+                         if (stateData[data.status]) {
+                             text = '<span>'+stateData[data.status]+'</span>';
+                         }*/
+                        return statusName;
+                    }/*,
+                    templet: (data) => {
+                        let text = '<span style="color:gray">其他</span>';
+                        ;
+                        if (stateData[data.status]) {
+                            text = '<span>' + stateData[data.status] + '</span>';
+                        }
+                        return text;
+                    }*/
+                }, {
+                    field: '',
+                    title: '操作',
+                    width: 240,
+                    fixed:"right",
+                    templet: function (res) {
+                        let auditStatus = res.auditStatus;
+                        if(undefined != status && status === '1001'){
+                            auditStatus='1002'
+                        }
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
+                        return temp;
+                    }
+                    // sort: true
+                }]
+            ],
+            page: true,
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            },
+            page: 1,
+            limit: 10,
+            request: {
+                pageName: 'current', //页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            where: {
+                // roleId: role,
+                // userId: userInfo.userId
+                auditYear:auditYear,
+                deptId:gid
+            },
+
+            done: function (res, curr, count) {
+                let roleIdList = userInfo.roleIdList;
+                let deptName = userInfo.deptName;
+                if ($.inArray(6, roleIdList) > -1) { //一般员工
+                    if (deptName.indexOf('中支') > -1) {
+                    } else if (deptName.indexOf('支行') > -1) {
+                    }
+                } else if ($.inArray(1, roleIdList) > -1) { //管理员
+                    if (deptName.indexOf('中支') > -1) {
+                        $("#addBtn").removeClass("layui-hide");
+                        $("#delBtn").removeClass("layui-hide");
+                        $("#submitReportBtn").removeClass("layui-hide");
+                    } else if (deptName.indexOf('支行') > -1) {
+                    }
+                } else if ($.inArray(13, roleIdList) > -1) { //超级管理员
+                    $("#addBtn").removeClass("layui-hide");
+                    $("#delBtn").removeClass("layui-hide");
+                    $("#submitReportBtn").removeClass("layui-hide");
+                }
+            }
+        });
+        /*table.render({
             elem: '#test',
             url: '/audit-api/planManage/planList?implementingAgencyId='+gid,
             toolbar: '#toolbarDemo',
@@ -358,9 +580,9 @@
                 withCredentials: true
             },
             cols: [
-                [/*{
+                [{
                     type: 'checkbox', fixed: 'left'
-                },*/ {
+                }, {
                     field: 'id',
                     hide:true
                 },{
@@ -495,15 +717,34 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             done: function (res, curr, count) {
+                let roleIdList = userInfo.roleIdList;
+                let deptName = userInfo.deptName;
+                if ($.inArray(6, roleIdList) > -1) { //一般员工
+                    if (deptName.indexOf('中支') > -1) {
+                    } else if (deptName.indexOf('支行') > -1) {
+                    }
+                } else if ($.inArray(1, roleIdList) > -1) { //管理员
+                    if (deptName.indexOf('中支') > -1) {
+                        $("#addBtn").removeClass("layui-hide");
+                        $("#delBtn").removeClass("layui-hide");
+                        $("#submitReportBtn").removeClass("layui-hide");
+                    } else if (deptName.indexOf('支行') > -1) {
+                    }
+                } else if ($.inArray(13, roleIdList) > -1) { //超级管理员
+                    $("#addBtn").removeClass("layui-hide");
+                    $("#delBtn").removeClass("layui-hide");
+                    $("#submitReportBtn").removeClass("layui-hide");
+                }
             }
-        });
+        });*/
+
         //监听头工具栏事件
         table.on('toolbar(test)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data; //获取选中的数据
             switch(obj.event){
                 case 'add':
-                    layer.msg('添加');
+                    openPlanCheckList('all');
                     break;
                 case 'update':
                     if(data.length === 0){
@@ -526,22 +767,43 @@
                                 ids += ","+item.id;
                             }
                         });
+                        let userInfo = window.sessionStorage.userInfo;
+                        let userId = ''
+                        if (userInfo && JSON.parse(userInfo) && JSON.parse(userInfo).userId) {
+                            userId = JSON.parse(userInfo).userId;
+                        } else {
+                            return top.layer.msg('登录信息已失效，请重新登录', {icon: 2})
+                        }
                         $.ajax({
-                            url: "/audit-api/planManage/deletePlan",
+                            url: "/audit-api/planManage/uncheck/attention",
                             dataType: "json",
-                            type: "post",
-                            data: {"ids": ids},
+                            type: "put",
+                            data: {userId:userId,"checkStr": ids},
                             success: function (res) {
-                                table.reload('test', {
-                                    page: 1
+                                layer.msg('取消关注',function () {
+                                    table.reload("test",{
+                                        where: {
+                                            auditYear:auditYear,
+                                            deptId:gid
+                                        },
+                                        page: 1
+                                    });
                                 });
                             }
                         });
-                        layer.msg('删除');
                     }
                     break;
+                case 'refresh':
+                    table.reload("test",{
+                        where: {
+                            auditYear:auditYear,
+                            deptId:gid
+                        },
+                        page: 1
+                    });
+                    break;
                 case 'editContent':
-                    x_admin_show('提交汇总报告','plan-statistic-report-content.html?gid='+gid,'600','460');
+                    x_admin_show('提交汇总报告','plan-statistic-report-content.html?gid='+gid+'&auditYear='+auditYear,'600','460');
                     break;
             };
         });

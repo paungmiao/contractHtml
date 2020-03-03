@@ -206,9 +206,12 @@
         });
         //初始化地图end
         queryXJInfo(auditYear);
+        //初始化数据
+        initView();
         form.on('select(auditYear)', function (data) {
             auditYear=$("#auditYear").val();
             queryXJInfo(auditYear);
+            initView();
         });
     });
     function queryXJInfo(auditYear){
@@ -305,105 +308,137 @@
         };
         echarts.init(_that.domEle).setOption(option);
     };
-    //根据整改情况统计
-    $.ajax({
-        url: "/audit-api/planStatistic/questionStatistic",
-        dataType: "json",
-        type: "post",
-        data: {"rectifySituationId": "all","auditYear": $("#auditYear").val()},
-        success: function (res) {
-            var statisticData = res.data.statisticData;
-            var data1 = [], legendData = [],colors = [];
-
-            if (statisticData) {
-                statisticData.forEach((item, index) => {
-                    var iiitem = {}
-                    iiitem.name = item.name;
-                    iiitem.value = item.value;
-                    if (index == 1) {
-                        iiitem.label = {normal: {show: true}};
-                    }
-                    data1.push(iiitem);
-                    legendData.push(item.name);
-                    colors.push(color16());
-                });
-                var option1 = {
-                        value: 38, //百分比,必填
-                        name: '', //必填
-                        title: '',
-                        backgroundColor: null,
-                        color: colors,
-                        fontSize: 14,
-                        domEle: document.getElementById("rectifySituation"), //必填
-                        data: data1,
-                        legendData: legendData,
-                    },
-
-                    percentPie1 = new PercentPie(option1);
-                percentPie1.init();
-            }
-        }
-    });
-    //根据项目类型统计
-    $.ajax({
-        url: "/audit-api/planStatistic/questionStatistic",
-        dataType: "json",
-        type: "post",
-        data: {"projectType": "all","auditYear": $("#auditYear").val()},
-        success: function (res) {
-            var statisticData = res.data.statisticData;
-            if (statisticData) {
-                var html = "";
-                statisticData.forEach((item, index) => {
-                    html+="<tr><td>"+(index+1)+"</td><td>"+item.name+"</td><td>"+item.value+"</td></tr>";
-                });
-                $("#projectTypeBody").html(html);
-            }
-        }
-    });
-    //查询项目统计数
-    $.ajax({
-        url: "/audit-api/planStatistic/countOfPlan",
-        dataType: "json",
-        type: "post",
-        data: {},
-        success: function (resp) {
-            if (resp && 0 == resp.code) {
-                let data = resp.data;
-                $("#planSum").html(data.planSum);
-                $("#finishCount").html(data.finishCount);
-                $("#nofinishCount").html(data.nofinishCount);
-                $("#timeoutCount").html(data.timeoutCount);
+    function initView(){
+        //根据整改情况统计
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatistic",
+            dataType: "json",
+            type: "post",
+            data: {"rectifySituationId": "all","auditYear": $("#auditYear").val()},
+            success: function (res) {
+                var statisticData = res.data.statisticData;
                 var data1 = [], legendData = [],colors = [];
-                var iiitem1 = {}
-                iiitem1.name = "未超时";
-                iiitem1.value = data.finishCount+data.nofinishCount;
-                iiitem1.label = {normal: {show: true}};
-                data1.push(iiitem1);
-                legendData.push("未超时");
-                colors.push(color16());
-                var iiitem2 = {}
-                iiitem2.name = "已超时";
-                iiitem2.value = data.timeoutCount;
-                data1.push(iiitem2);
-                legendData.push("已超时");
-                colors.push(color16());
-                var option2 = {
-                        value: 20, //百分比,必填
-                        name: '123', //必填
-                        title: '',
-                        backgroundColor: null,
-                        color: colors,
-                        fontSize: 16,
-                        domEle: document.getElementById("timeoutProject"), //必填
-                        data: data1,
-                        legendData: legendData
-                    },
-                    percentPie2 = new PercentPie(option2);
-                percentPie2.init();
+                if (statisticData!=null&&statisticData!=""&&statisticData!='undefined') {
+                    statisticData.forEach((item, index) => {
+                        var iiitem = {}
+                        iiitem.name = item.name;
+                        iiitem.value = item.value;
+                        if (index == 1) {
+                            iiitem.label = {normal: {show: true}};
+                        }
+                        data1.push(iiitem);
+                        legendData.push(item.name);
+                        colors.push(color16());
+                    });
+                    var option1 = {
+                            value: 38, //百分比,必填
+                            name: '', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 14,
+                            domEle: document.getElementById("rectifySituation"), //必填
+                            data: data1,
+                            legendData: legendData,
+                        },
+
+                        percentPie1 = new PercentPie(option1);
+                    percentPie1.init();
+                }else{
+                    var data1 = [], legendData = [],colors = [];
+                    var iiitem1 = {}
+                    iiitem1.name = "";
+                    iiitem1.value = 0;
+                    iiitem1.label = {normal: {show: true}};
+                    data1.push(iiitem1);
+                    legendData.push("");
+                    colors.push(color16());
+                    var iiitem2 = {}
+                    iiitem2.name = "";
+                    iiitem2.value = 0;
+                    data1.push(iiitem2);
+                    legendData.push("");
+                    colors.push(color16());
+                    var option1 = {
+                            value: 38, //百分比,必填
+                            name: '', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 14,
+                            domEle: document.getElementById("rectifySituation"), //必填
+                            data: data1,
+                            legendData: legendData,
+                        },
+
+                        percentPie1 = new PercentPie(option1);
+                    percentPie1.init();
+
+                }
             }
-        }
-    });
+        });
+        //根据项目类型统计
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatistic",
+            dataType: "json",
+            type: "post",
+            data: {"projectType": "all","auditYear": $("#auditYear").val()},
+            success: function (res) {
+                var statisticData = res.data.statisticData;
+                if (statisticData) {
+                    var html = "";
+                    statisticData.forEach((item, index) => {
+                        html+="<tr><td>"+(index+1)+"</td><td>"+item.name+"</td><td>"+item.value+"</td></tr>";
+                    });
+                    $("#projectTypeBody").html(html);
+                }
+            }
+        });
+        //查询项目统计数
+        $.ajax({
+            url: "/audit-api/planStatistic/countOfPlan",
+            dataType: "json",
+            type: "post",
+            data: {auditYear: $("#auditYear").val()},
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    $("#planSum").html(data.planSum);
+                    $("#finishCount").html(data.finishCount);
+                    $("#nofinishCount").html(data.nofinishCount);
+                    $("#timeoutCount").html(data.timeoutCount);
+                    var data1 = [], legendData = [],colors = [];
+                    var iiitem1 = {}
+                    iiitem1.name = "未超时";
+                    iiitem1.value = data.finishCount+data.nofinishCount;
+                    iiitem1.label = {normal: {show: true}};
+                    data1.push(iiitem1);
+                    legendData.push("未超时");
+                    colors.push(color16());
+                    var iiitem2 = {}
+                    iiitem2.name = "已超时";
+                    iiitem2.value = data.timeoutCount;
+                    data1.push(iiitem2);
+                    legendData.push("已超时");
+                    colors.push(color16());
+                    var option2 = {
+                            value: 20, //百分比,必填
+                            name: '123', //必填
+                            title: '',
+                            backgroundColor: null,
+                            color: colors,
+                            fontSize: 16,
+                            domEle: document.getElementById("timeoutProject"), //必填
+                            data: data1,
+                            legendData: legendData
+                        },
+                        percentPie2 = new PercentPie(option2);
+                    percentPie2.init();
+                }
+            }
+        });
+    }
+
     function color16(){//十六进制颜色随机
         var r = Math.floor(Math.random()*256);
         var g = Math.floor(Math.random()*256);
