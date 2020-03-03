@@ -56,12 +56,12 @@
                     <label class="layui-form-label-size">审计年度
                     </label>
                     <div class="w100">
-                        <input autocomplete="off" class="layui-input w5010" placeholder="开始日" name="createdStart"
+                        <input autocomplete="off" class="layui-input w5010" placeholder="起始年度" name="auditYearStart"
                                id="start">
                         <span style="width: 14px;line-height: 30px;color:#efeef0" class="fl">
                                 —
                             </span>
-                        <input autocomplete="off" class="layui-input w5010 fl" placeholder="截止日" name="createdEnd"
+                        <input autocomplete="off" class="layui-input w5010 fl" placeholder="末尾年度" name="auditYearEnd"
                                id="end">
                     </div>
 
@@ -169,7 +169,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="w25 fl layui-hide"  id="ssjg">
+                <div class="w25 fl layui-hide" id="ssjg">
                     <label class="layui-form-label-size">实施机构
                     </label>
                     <div class="fl  search-input-find">
@@ -191,14 +191,14 @@
 
         </div>
     </div>
-<!--        <xblock>-->
-<!--            <button class="layui-btn"  lay-filter="exportBtn">-->
-<!--                <i class="layui-icon"></i>导出-->
-<!--            </button>-->
-<!--            &lt;!&ndash;<button class="layui-btn" onclick="generateEchars()">-->
-<!--            <i class="layui-icon"></i>生成图表-->
-<!--        </button>&ndash;&gt;-->
-<!--        </xblock>-->
+    <xblock>
+        <button class="layui-btn" lay-filter="exportBtn" id="exportBtn">
+            <i class="layui-icon"></i>导出
+        </button>
+        <!--<button class="layui-btn" onclick="generateEchars()">
+        <i class="layui-icon"></i>生成图表
+    </button>-->
+    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{id:'test'}" lay-filter="test">
 
     </table>
@@ -217,8 +217,8 @@
     }
     var echarts;
 
-    function generateEchars(subtitle, xData,legendData) {
-        if (undefined==xData||xData.length==0) {
+    function generateEchars(subtitle, xData, legendData) {
+        if (undefined == xData || xData.length == 0) {
             return;
         }
         if (subtitle) {
@@ -341,6 +341,21 @@
         findAllDeptGroup();
         form.render("select")
 
+        $("#exportBtn").off("click.native").on("click.native", (e) => {
+            let formVale = initForm();
+            let $hiddenForm = $("<form target='_blank' id='submitForm"+new Date().getTime()+"' class='layui-hide' method='get'></form>")
+            $hiddenForm.attr("action",'/audit-api/planManage/export/groupcount');
+            for (let key in formVale){
+                debugger
+                if(formVale[key]){
+                    let input = "<input type='hidden' name='"+key+"' value='"+formVale[key]+"'/>";
+                    $hiddenForm.append(input)
+                }
+            }
+            $(document.body).append($hiddenForm);
+            $hiddenForm.submit();
+        })
+
         let baseCols = [
             {
                 type: 'numbers',
@@ -359,7 +374,8 @@
                 title: '占比',
             },
         ]
-        form.on("submit(search)", function () {
+
+        function initForm() {
             let formVal = form.val('filterForm')
             let allArr = [];
             let groupByArr = []
@@ -374,13 +390,15 @@
                     groupByArr.push(grouBy);
                 }
             }
-            if (allArr.length == 0) {
-                return top.layer.msg("全部条件不能为空")
-            }
-            if (allArr.length != 1) {
+            if (allArr.length != 0 && allArr.length != 1) {
                 return top.layer.msg("只能有一个全部条件")
             }
             formVal.groupBy = groupByArr.join(",")
+            return formVal;
+        }
+
+        form.on("submit(search)", function () {
+            let formVal = initForm();
             $.ajax({
                 url: "/audit-api/planManage/planList/groupList",
                 headers: createAuthorizationTokenHeader(),
@@ -394,11 +412,9 @@
                             , page: false //开启分页
                             , cols: [baseCols],
                             data: resp.data.tableData
-                            , defaultToolbar: ['exports'],
-                            toolbar: '#toolbarDemo'
                         });
                         //将上述表格示例导出为 csv 文件
-                        generateEchars('',resp.data.records,resp.data.legend);
+                        generateEchars('', resp.data.records, resp.data.legend);
                     }
                 }
             })
