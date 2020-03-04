@@ -266,7 +266,7 @@
         });
         {
             $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施机构管理员",
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=管理员",
                 dataType: "json",
                 type: "get",
                 async:false,
@@ -285,7 +285,7 @@
                 }
             });
             $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施机构一般员工",
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=一般用户",
                 dataType: "json",
                 type: "get",
                 async:false,
