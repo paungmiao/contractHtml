@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="../../js/cookie.js"></script>
 	<script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../../js/xadmin.js"></script>
-	
+
 	<script src="../js/JCheck.js"></script>
 </head>
 
@@ -48,8 +48,9 @@
 <div class="left-nav">
 	<div id="side-nav">
 		<ul id="nav">
-			<li class="layui-hide" id="XJ">
-				<a _href="javascript:;">
+			<li class="audit_allXj_menu layui-hide">
+				<a href="javascript:;">
+					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>全疆信息</cite>
 					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
@@ -62,20 +63,20 @@
 					</li>
 				</ul>
 			</li>
-			<li id="entry">
+			<li class="audit_entry_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>词条管理</cite>
 					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
 				<ul class="sub-menu">
-					<li date-refresh="1" class="layui-hide" id="entry_list">
+					<li date-refresh="1">
 						<a _href="../contract/entry-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>词条列表</cite>
 						</a>
 					</li>
-					<li date-refresh="1" class="layui-hide" id="entry_audit">
+					<li date-refresh="1">
 						<a _href="../contract/entryReview-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>词条审核</cite>
@@ -83,21 +84,20 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="layui-hide" id="plan_manage">
+			<li class="audit_plan_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>审计计划管理</cite>
 					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
 				<ul class="sub-menu">
-					<li date-refresh="1" class="layui-hide" id="plan_manage_j">
+					<li date-refresh="1" class="audit_plan_user_list_menu layui-hide">
 						<a _href="../system/auditManagement/plan-management-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>计划清单</cite>
 						</a>
 					</li>
-					<li date-refresh="1" class="layui-hide" id="plan_manage_s">
+					<li date-refresh="1" class="audit_plan_admin_list_menu layui-hide">
 						<a _href="../system/auditManagement/audit-management-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>审核清单</cite>
@@ -105,44 +105,38 @@
 					</li>
 				</ul>
 			</li>
-			<li>
+			<li class="audit_project_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>审计项目管理</cite>
 					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
 				<ul class="sub-menu">
-					<li date-refresh="1" class="layui-hide" id="plan_pro">
+					<li date-refresh="1" class="audit_imp_user_list_menu layui-hide">
 						<a _href="../system/auditProject/project-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>项目清单</cite>
 						</a>
 					</li>
-					<li date-refresh="1" class="layui-hide">
-						<a _href="../system/auditProject/archive-list.html">
-							<i class="iconfont">&#xe6a7;</i>
-							<cite>查看流程的</cite>
-						</a>
-					</li>
-					<li date-refresh="1" class="layui-hide" id="audit_pro">
+					<li date-refresh="1" class="audit_imp_admin_list_menu layui-hide">
 						<a _href="../system/auditProject/audit-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>审核清单</cite>
 						</a>
 					</li>
-					<li date-refresh="1" class="layui-hide" id="audit_X">
+					<li date-refresh="1" class="audit_aud_user_list_menu layui-hide">
 						<a _href="../system/auditProject/project-list-audit.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>项目清单</cite>
 						</a>
 					</li>
-					<li date-refresh="1" id="audit_S" class="layui-hide">
+					<li date-refresh="1" class="audit_aud_admin_list_menu layui-hide">
 						<a _href="../system/auditProject/audit-list-audit.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>审核清单</cite>
 						</a>
 					</li>
-					<li date-refresh="1" class="layui-hide" id="plan_att">
+					<li date-refresh="1" class="audit_attention_menu layui-hide">
 						<a _href="../system/auditManagement/attention-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>关注列表</cite>
@@ -150,8 +144,7 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="layui-hide" id="plan_aud">
+			<li class="audit_archive_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>审计项目归档</cite>
@@ -166,8 +159,7 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="layui-hide" id="statistics">
+			<li class="audit_statistics_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>审计分析</cite>
@@ -188,8 +180,7 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="layui-hide" id="report">
+			<li class="audit_report_menu layui-hide">
 				<a _href="javascript:;">
 					<cite>汇总报告</cite>
 					<i class="iconfont nav_right">&#xe697;</i>
@@ -203,8 +194,7 @@
 					</li>
 				</ul>
 			</li>
-
-			<li class="layui-hide" id="userManage">
+			<li class="audit_user_menu layui-hide">
 				<a href="javascript:;">
 					<!-- <i class="iconfont">&#xe6b8;</i> -->
 					<cite>系统信息维护</cite>
@@ -225,7 +215,6 @@
 					</li>
 				</ul>
 			</li>
-
 		</ul>
 	</div>
 </div>
@@ -267,57 +256,9 @@
 		clearStorage();
 		window.location.href='./login.html'
 	}
-	/**
-	 * /system/`index.html?role=1   请求条件
-	 * /system/index.html?role=   行长
-	 */
 
-	let roleIdList = userInfo.roleIdList;
 	let userName = userInfo.username;
-	let deptName = userInfo.deptName;
-
-	if ($.inArray(6, roleIdList) > -1) { //一般员工
-		if (deptName.indexOf('中支') > -1) {
-			$("#entry_list").removeClass("layui-hide");
-			$("#entry_audit").removeClass("layui-hide");
-			$("#pro").removeClass("layui-hide");
-			$("#plan_pro").removeClass("layui-hide");
-			$("#userManage").removeClass("layui-hide");
-			$("#plan_manage").removeClass("layui-hide");
-			$("#plan_manage_j").removeClass("layui-hide");
-		} else if (deptName.indexOf('支行') > -1) {
-			$("#entry").addClass("layui-hide");
-			$("#audit_X").removeClass("layui-hide");
-			$("#userManage").removeClass("layui-hide");
-		}
-	} else if ($.inArray(1, roleIdList) > -1) { //管理员
-		if (deptName.indexOf('中支') > -1) {
-			$("#entry_list").removeClass("layui-hide");
-			$("#entry_audit").removeClass("layui-hide");
-			$("#statistics").removeClass("layui-hide");
-			$("#plan_aud").removeClass("layui-hide");
-			$("#plan_manage").removeClass("layui-hide");
-			$("#plan_manage_s").removeClass("layui-hide");
-			$("#userManage").removeClass("layui-hide");
-			$("#audit_pro").removeClass("layui-hide");
-			$("#report").removeClass("layui-hide");
-		} else if (deptName.indexOf('支行') > -1) {
-			$("#entry").addClass("layui-hide");
-			$("#audit_S").removeClass("layui-hide");
-			$("#userManage").removeClass("layui-hide");
-		}
-	} else if ($.inArray(13, roleIdList) > -1) { //超级管理员
-		$("#statistics").removeClass("layui-hide");
-		$("#XJ").removeClass("layui-hide");
-		$("#plan_att").removeClass("layui-hide");
-		$("#report").removeClass("layui-hide");
-		$("#entry").addClass("layui-hide");
-		$("#welcome").attr("src", "welcome.html");
-		$("#home").text("全疆信息");
-	}
-
 	$("#userName").text(userName);
-
 	function ding() {
 		layer.open({
 			type : 2,
