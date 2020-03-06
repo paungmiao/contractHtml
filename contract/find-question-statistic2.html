@@ -346,6 +346,8 @@
                     $hiddenForm.append(input)
                 }
             }
+            let auditHeaderAuthorization="<input type='hidden' name='auditHeaderAuthorization' value='"+getJwtToken()+"'/>";
+            $hiddenForm.append(auditHeaderAuthorization)
             $(document.body).append($hiddenForm);
             $hiddenForm.submit();
         })
