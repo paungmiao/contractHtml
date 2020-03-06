@@ -11,6 +11,13 @@ $.get('/audit-api/login/getPermission?roleIds='+roleIdList.join(","),{},function
         })
     }
 });
+function reloadPermission(){
+    if(rPermissionList){
+        $.each(rPermissionList,function(i,v){
+            $("." + v).removeClass("layui-hide");
+        })
+    }
+}
 
 
 let auditEnum = {

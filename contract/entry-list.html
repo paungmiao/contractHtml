@@ -232,9 +232,7 @@
                 , limitName: 'size' //每页数据量的参数名，默认：limit
             },
             done: function (res, curr, count) {
-                if ($.inArray(30, roleIdList) > -1) {
-                    $("[data-field='uploadMsg']").css('display','none');
-                }
+                reloadPermission()
             }
         });
         form.on("submit(search)", function () {
@@ -243,7 +241,10 @@
                     categoryFk: $("#categorySelect").val(),
                     name: $("#entryName").val()
                 },
-                page: 1
+                page: 1,
+                done: function (res, curr, count) {
+                    reloadPermission()
+                }
             });
             return false;
         })
