@@ -148,14 +148,14 @@
                     </div>
 
                 </div>
-                <div class="w25 fl layui-hide" id="ssjg">
-                <label class="layui-form-label-size">实施机构
-                </label>
-                <div class="fl  search-input-find">
-                    <select id="implementingAgencySelect" name="implementingAgencyId" >
-                    </select>
+                <div class="w25 fl audit_plan_check_div layui-hide">
+                    <label class="layui-form-label-size">实施机构
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="implementingAgencySelect" name="implementingAgencyId" >
+                        </select>
+                    </div>
                 </div>
-            </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
             <div class="layui-colla-item">
@@ -190,10 +190,10 @@
 
 </div>
 <script>
-    let roleIdList = userInfo.roleIdList;
-    if ($.inArray(13, roleIdList) > -1) {
-        $("#ssjg").removeClass("layui-hide");
-    }
+    // let roleIdList = userInfo.roleIdList;
+    // if ($.inArray(13, roleIdList) > -1) {
+    //     $("#ssjg").removeClass("layui-hide");
+    // }
     var echarts;
     function exportData() {
         $("#filterForm").attr("action","/audit-api/export/exportExcel");

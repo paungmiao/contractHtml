@@ -47,7 +47,7 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
+    <xblock class="audit_entry_xblock layui-hide">
         <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','320')">
             <i class="layui-icon"></i>新增数据
         </button>
@@ -74,11 +74,10 @@
     function downloadTemplate() {
         window.location.href='/audit-api/entry/flow/template/download'
     }
-    let roleIdList = userInfo.roleIdList;
-    if ($.inArray(1, roleIdList) > -1) {
-        $("xblock").addClass("layui-hide");
-
-    }
+    // if ($.inArray(1, roleIdList) > -1) {
+    //     $("xblock").addClass("layui-hide");
+    //
+    // }
     var count = 0;
     layui.use(['table', 'form', 'upload'], function () {
         let table = layui.table;
@@ -209,8 +208,8 @@
                         width: 200,
                         templet: function (res) {
                             var temp = ``;
-                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('编辑词条信息','entry-edit.html','500','320','` + res.id + `')" >编辑</span>
-                      <span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_('` + res.id + `')">删除</span> `
+                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini audit_entry_operate layui-hide" onclick="editPage_('编辑词条信息','entry-edit.html','500','320','` + res.id + `')" >编辑</span>
+                      <span class="layui-btn layui-btn-danger layui-btn-mini audit_entry_operate layui-hide" onclick="delete_('` + res.id + `')">删除</span> `
                             return temp;
                         }
                         // sort: true
@@ -233,7 +232,7 @@
                 , limitName: 'size' //每页数据量的参数名，默认：limit
             },
             done: function (res, curr, count) {
-                if ($.inArray(1, roleIdList) > -1) {
+                if ($.inArray(30, roleIdList) > -1) {
                     $("[data-field='uploadMsg']").css('display','none');
                 }
             }

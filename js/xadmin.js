@@ -1,12 +1,17 @@
-// Array.prototype.remove = function(val) { 
-//     var index = this.indexOf(val); 
-//     if (index > -1) { 
-//         return  this.splice(index, 1); 
-//     }
-
-// };
 let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://127.0.0.1:8666/audit-api/socket/'
+
+let roleIdList = userInfo.roleIdList;
+let rPermissionList;
+$.get('/audit-api/login/getPermission?roleIds='+roleIdList.join(","),{},function (res) {
+    if(res.code==0){
+        rPermissionList = res.data;
+        $.each(res.data,function(i,v){
+            $("." + v).removeClass("layui-hide");
+        })
+    }
+});
+
 
 let auditEnum = {
     1002: {
