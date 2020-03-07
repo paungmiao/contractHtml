@@ -298,6 +298,8 @@
                     let body = layer.getChildFrame('body', index);
                     let iframeWin = layero.find('iframe')[0];
                     let inputData = body.find('#inputData');
+                    body.find("input").prop("disabled",true)
+                    body.find("textarea").prop("disabled",true)
                     inputData.val(id);
                     iframeWin.contentWindow.initEntryInfo();
                 },

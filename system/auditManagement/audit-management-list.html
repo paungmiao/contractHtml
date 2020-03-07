@@ -221,8 +221,12 @@
                         let html = '';
                         let status = res.planInfos[0]['statusUser'];
                         let auditStatus = res.auditStatus;
+                        let opinionStatus = null;
+                        let type = 0;
                         if(undefined != status && status === '1001'){
                             auditStatus='1002'
+                        }else if(status === '1003'){
+                            auditStatus=1004;
                         }
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
                         if (undefined === status || status === '1001') { //待审核

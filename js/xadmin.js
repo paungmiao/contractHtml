@@ -125,7 +125,7 @@ function getDeadCount(){
     })
 }
 
-function openAuditDetail(bizKey,bizName,taskId,auditStatus){
+function openAuditDetail(bizKey,bizName,taskId,auditStatus,opinionStatus,type){
     top.layer.open({
         type: 2,
         area: ['80%', '80%'],
@@ -134,7 +134,7 @@ function openAuditDetail(bizKey,bizName,taskId,auditStatus){
         shadeClose: true,
         shade: 0.4,
         title: bizName+'审计项目详情',
-        content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName+'&taskId='+taskId+'&auditStatus='+auditStatus,
+        content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName+'&taskId='+taskId+'&auditStatus='+auditStatus+'&opinionStatus='+opinionStatus+'&type='+type,
         success: function (layero, index) {
             //窗口加载成功刷新frame
         },

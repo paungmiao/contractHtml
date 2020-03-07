@@ -131,7 +131,7 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">创建日期：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" name="createdTime">
+                    <input class="layui-input" name="createdTime" style="width: 112%;" >
                 </div>
             </div>
         </div>
@@ -243,6 +243,12 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="rectifyWay" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">整改建议：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" name="rectificationSuggestions" value=""></textarea>
@@ -291,7 +297,7 @@
                     <div class="layui-col-md6 time">
                         <label class="layui-form-label">计划整改时长：</label>
                         <div class="layui-input-block">
-                            <input class="layui-input"  id="planTime" placeholder="单位（天）" type="number"  min="0.5" max="100.0" step="0.5" name="planTime">
+                            <input class="layui-input"  id="planTime" placeholder="单位（天）" type="number" min="0.5"  step="0.5" name="planTime">
                         </div>
                     </div>
                 </div>
@@ -386,6 +392,8 @@
     let bizName = getQueryString("bizName")
     let taskId = getQueryString("taskId")
     let auditStatus = getQueryString("auditStatus")
+    let opinionStatus = getQueryString("opinionStatus")
+    let type = getQueryString("type")
     layui.use(['table', 'element', 'laydate', 'form', 'upload'], function () {
         var element = layui.element;
         var table = layui.table;
@@ -405,8 +413,6 @@
         // $(".reportForm").removeClass("layui-hide")
         // $(".rollbackForm").removeClass("layui-hide")
         // $(".submit").removeClass("layui-hide")
-        let opinionStatus=1000
-        let opinionUser = 1;
         if (auditStatus == 1002) { // 实施领导指派负责人
             // $(".auditAdminUserForm").removeClass("layui-hide")
             // $(".submit").removeClass("layui-hide")
@@ -420,7 +426,7 @@
                     headers:createAuthorizationTokenHeader(),
                     data:{
                         bizKey:bizKey,
-                        deptId:userInfo.deptId
+                        deptId:userInfo.deptId // 审计部门
                     },
                     async:false,
                     success:(res)=>{
@@ -437,6 +443,9 @@
             })
         }else if (auditStatus == 1006) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
+            $(".completeForm").find("input").prop("disabled",true)
+            $(".completeForm").find("textarea").prop("disabled",true)
+            $(".completeForm").find("select").prop("disabled",true)
         }else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
@@ -502,18 +511,40 @@
                         $("#statusName").text('正在实施')
                 }
                 $("[name='planName']").text(res.data.projectName);
+                $.ajax({
+                    url:'/audit-api/task/dept/normal/user',
+                    headers:createAuthorizationTokenHeader(),
+                    data:{
+                        bizKey:bizKey,
+                        deptId:res.data.auditObjectId,
+                        // deptId:res.data.implementingAgencyId,
+                        roleName:'一般用户'
+                    },
+                    async:false,
+                    success:(data)=>{
+                        let optionHtml = '<option value="">请选择整改负责人</option>';
+                        if(data.code==0){
+                            for (let i in data.data){
+                                optionHtml+='<option value="'+data.data[i].userId+'">'+data.data[i].username+'</option>'
+                            }
+                            $("#auditUserId").empty().append(optionHtml);
+                            form.render("select")
+                        }
+                    }
+                })
                 form.val('allForm', res.data);
                 if(res.data.resultEnterTime){
                     $(".reportForm").removeClass("layui-hide")
                 }
+
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
             }
         }).then((res)=>{
-            let opinionStatus=1000
+            // let opinionStatus=1000
             let opinionUser=userInfo.userId;
-            let type = 0;// 0计划，1项目
+            // let type = 0;// 0计划，1项目
             if (auditStatus == 1007) { // 被驳回，完善计划
                 opinionStatus=1005
                 type=1;
@@ -544,7 +575,7 @@
                 opinionStatus=1003
                 type=1;
             }
-            else if(auditStatus==1004) { // 被驳回
+            else if(auditStatus==1004) { // 计划被驳回
                 type=0;
                 opinionUser=res.data.impUserId;
                 opinionStatus=1004
@@ -580,6 +611,7 @@
                     },function (res) {
                         if(res.code==0 && res.data){
                             top.layer.msg('提交成功',{icon:1})
+                            x_admin_close()
                         }else{
                             top.layer.msg(res.msg,{icon:2})
                         }
@@ -714,6 +746,7 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                        x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
                     }
@@ -754,6 +787,7 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                        x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
                     }
