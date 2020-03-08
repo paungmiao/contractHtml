@@ -228,11 +228,11 @@
                         let html = '';
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\''+res.taskId+'\',\''+res.auditStatus+'\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
-                            if (res.auditStatus === "1010" || res.auditStatus === "1014") {
+                            if (res.auditStatus === "1010" || res.auditStatus === "1014" || res.auditStatus === "1015") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >批准</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'1\')" >驳回</span>';
-                            } else {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
+                            // } else {
+                            //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             }
                         }
                         // if (res.status === "1002") {
