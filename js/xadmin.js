@@ -1,6 +1,10 @@
 let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://127.0.0.1:8666/audit-api/socket/'
 
+let Authorization = window.sessionStorage.getItem('Authorization')
+if (!Authorization || Authorization == '' || Authorization == undefined) {
+    location.href="login.html"
+}
 let roleIdList = userInfo.roleIdList;
 let rPermissionList;
 $.get('/audit-api/login/getPermission?roleIds='+roleIdList.join(","),{},function (res) {
@@ -74,11 +78,6 @@ let auditEnum = {
     }
 
 
-}
-
-let Authorization = window.sessionStorage.getItem('Authorization')
-if (!Authorization || Authorization == '' || Authorization == undefined) {
-    location.href="login.html"
 }
 function getCookie(name) {
     var dc = document.cookie;
