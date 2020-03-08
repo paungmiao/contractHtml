@@ -218,7 +218,7 @@
                     title: '项目状态',
                     templet: (data) => {
                         let status = data.status;
-                        let statusName = "正在实施";
+                        let statusName ;
                         switch(status) {
                             case '1001':
                                 statusName="正在实施";
@@ -233,7 +233,7 @@
                                 statusName="延期整改";
                                 break;
                             default:
-                                statusName="正在实施";
+                                statusName="项目立项";
                         }
                        /* let  text = '<span style="color:gray">其他</span>';;
                         if (stateData[data.status]) {
@@ -244,7 +244,6 @@
                 }, {
                     field: '',
                     title: '操作',
-                    width: 240,
                     templet: function (res) {
                         let auditStatus = res.auditStatus;
                         if(undefined != status && status === '1001'){
