@@ -154,6 +154,7 @@
             <li class="reportForm layui-hide">整改结果</li>
             <li class="rollbackForm layui-hide">驳回反馈</li>
             <li class="auditAdminUserForm layui-hide">完善信息（指派负责人）</li>
+            <li class="delayForm layui-hide">延迟整改信息</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -381,6 +382,21 @@
                     </div>
                 </div>
             </div>
+            <!-- 驳回反馈  -->
+            <div class="layui-tab-item layui-form delayForm  layui-hide" lay-filter="rollbackForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">延期天数：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"  style="border: none"readonly name="delayDate"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">延期说明：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"  style="border: none"readonly name="delayRemarks"></textarea>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -460,9 +476,11 @@
             $(".rollbackForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
             $(".reportForm").removeClass("layui-hide")
-        }else if (auditStatus >= 1010) { // 被驳回，完善整改 有提交
+        }else if (auditStatus >= 1010 && auditStatus<1014) { // 被驳回，完善整改 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
+        }else if (auditStatus >= 1014) { // 被驳回，完善整改 有提交
+            $(".delayForm").removeClass("layui-hide")
         }
 
         //执行实例
@@ -508,7 +526,7 @@
                         $("#statusName").text('已归档')
                         break;
                     default:
-                        $("#statusName").text('正在实施')
+                        $("#statusName").text('正在立项')
                 }
                 $("[name='planName']").text(res.data.projectName);
                 $.ajax({
