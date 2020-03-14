@@ -151,7 +151,7 @@
             result = '词条名称不能超过32个字符！'
           } else if (value.length > 0) {
             $.ajax({
-              url: "/audit-api/entry/flow/checkName",
+              url: "/audit-api/entry/checkName",
               type: "get",
               dataType: 'json',
               async: false,
@@ -178,7 +178,7 @@
         let formData = form.val("entryEditForm");
         formData.updatedBy = userInfo.username;
         $.ajax({
-          url: "/audit-api/entry/flow/update",
+          url: "/audit-api/entry/update",
           dataType: "json",
           type: "put",
           data: formData,
@@ -230,7 +230,7 @@
     function initEntryInfo() {
       // 数据回显渲染
       $.ajax({
-        url: "/audit-api/entry/flow/" + $("#inputData").val(),
+        url: "/audit-api/entry/" + $("#inputData").val(),
         dataType: "json",
         type: "get",
         async: true,

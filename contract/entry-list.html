@@ -47,22 +47,19 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock class="audit_entry_xblock layui-hide">
+    <xblock class="audit_entry_operate">
         <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','320')">
             <i class="layui-icon"></i>新增数据
         </button>
         <a class="layui-btn" onclick="downloadTemplate()">
             <i class="layui-icon"></i>模板下载
         </a>
-        <a class="layui-btn" id="bachImport" >
+        <a class="layui-btn" id="bachImport">
             <i class="layui-icon"></i>批量导入
         </a>
-        <!-- <a class="layui-btn" id="export" >
+         <a class="layui-btn" id="export" >
             <i class="layui-icon"></i>导出词条
-        </a> -->
-        <button class="layui-btn" id="export" style="margin-left: 10px;">
-            <i class="layui-icon"></i>导出词条
-        </button>
+        </a>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
 
@@ -72,8 +69,9 @@
 </div>
 <script>
     function downloadTemplate() {
-        window.location.href='/audit-api/entry/flow/template/download'
+        window.location.href = '/audit-api/entry/template/download'
     }
+
     // if ($.inArray(1, roleIdList) > -1) {
     //     $("xblock").addClass("layui-hide");
     //
@@ -86,36 +84,36 @@
 
         upload.render({
             elem: '#bachImport',
-            url: '/audit-api/entry/flow/import',
+            url: '/audit-api/entry/import',
             auto: true,//选完文件后自动上传
             accept: 'file', //所有文件
-            data:{
-                createdUser:userInfo.username
+            data: {
+                createdUser: userInfo.username
             },
             //,multiple: true,
             exts: 'xls|xlsx', //只允许上传压缩文件
             //size: 500*1028 //限制文件大小，单位 KB
             bindAction: '#fileUpload',
             done: function (res) {
-                if(res.code==0){
-                    if(res.data){
-                        top.layer.msg(res.msg,{icon:1})
+                if (res.code == 0) {
+                    if (res.data) {
+                        top.layer.msg(res.msg, {icon: 1})
                         table.reload('test', {
                             page: 1
                         });
-                    }else {
-                        top.layer.msg(res.msg,{icon:2})
+                    } else {
+                        top.layer.msg(res.msg, {icon: 2})
                     }
-                }else {
-                    top.layer.msg("上传失败",{icon:1})
+                } else {
+                    top.layer.msg("上传失败", {icon: 1})
                 }
             },
             choose: function (obj) {
 
             }
         });
-        $("#export").off("click.native").on("click.native",()=>{
-            window.open("/audit-api/entry/flow/download/entry")
+        $("#export").off("click.native").on("click.native", () => {
+            window.open("/audit-api/entry/download/entry")
         })
         $.ajax({
             url: "/audit-api/entry/category/list",
@@ -138,7 +136,7 @@
         form.render("select")
         table.render({
             elem: '#test',
-            url: '/audit-api/entry/flow/page',
+            url: '/audit-api/entry/page',
             xhrFields: {
                 withCredentials: true
             },
@@ -161,45 +159,11 @@
                     title: '创建人',
                     width: 150
                 }, {
-                    field: 'createdTime',
-                    title: '创建时间',
+                    field: 'updatedTime',
+                    title: '更新时间',
                     width: 200,
                     templet: (data) => {
                         return new Date(data.createdTime).Format('yyyy-MM-dd HH:mm:ss');
-                    }
-                },{
-                    field: 'userOpt',
-                    title: '用户行为',
-                    width: 120,
-                    templet: (data) => {
-                        let temp ;
-                        let text ;
-                        if (undefined == data.userOpt || data.userOpt == 0) {
-                            text = '<span >删除</span>';
-                        } else if (data.userOpt == 1) {
-                            text = '<span >新增</span>';
-                        } else if (data.userOpt == 2){
-                            text = '<span >修改</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
-                    }
-                }, {
-                    field: 'auditStatus',
-                    title: '审核状态',
-                    width: 200,
-                    templet: (data) => {
-                        let temp ;
-                        let text ;
-                        if (undefined == data.auditStatus || data.auditStatus == 0) {
-                            text = '<span>待审核</span>';
-                        } else if (data.auditStatus == 1) {
-                            text = '<span style="color: #1E9FFF">通过</span>';
-                        } else if (data.auditStatus == 2){
-                            text = '<span style="color: red">拒绝</span>';
-                        }
-                        temp = '<div>' + text + '</div>'
-                        return temp;
                     }
                 },
                     {
@@ -268,7 +232,7 @@
         layer.confirm('确认要删除吗？', function (index) {
             //捉到所有被选中的，发异步进行删除
             $.ajax({
-                url: "/audit-api/entry/flow/user_delete/" + id,
+                url: "/audit-api/entry/user_delete/" + id,
                 type: "delete",
                 dataType: 'json',
                 async: false,
@@ -278,7 +242,7 @@
                         layui.use("table", function () {
                             layui.table.reload('test')
                         })
-                    }else{
+                    } else {
 
                         layer.msg(resp.msg, {icon: 2})
                     }

@@ -153,7 +153,7 @@
                         result = '词条名称不能超过32个字符！'
                     } else if (value.length > 0) {
                         $.ajax({
-                            url: "/audit-api/entry/flow/checkName",
+                            url: "/audit-api/entry/checkName",
                             type: "get",
                             dataType: 'json',
                             async: false,
@@ -189,7 +189,7 @@
                     formData.name3 = '';
                 }
                 $.ajax({
-                    url: '/audit-api/entry/flow/add',
+                    url: '/audit-api/entry/add',
                     type: 'post',
                     dataType: "json",
                     data: formData,
