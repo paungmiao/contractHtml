@@ -53,15 +53,18 @@ let auditEnum = {
         form: 'delayForm' //延期申请表单
     },
     1009: {
+        agree: 1017,
+    },
+    1017: {
         agree: 1010,
+        reject: 1008
     },
     1010: {
         agree: 1011,
         reject: 1008
     },
     1011: {
-        agree: 1013,
-        reject: 1009
+        agree: 1013
     },
     1014:{
         agree: 1015,
