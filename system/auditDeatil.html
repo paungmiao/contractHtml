@@ -153,7 +153,8 @@
             <li class="completeForm layui-hide">完善信息</li>
             <li class="reportForm layui-hide">整改结果</li>
             <li class="rollbackForm layui-hide">驳回反馈</li>
-            <li class="auditAdminUserForm layui-hide">完善信息（指派负责人）</li>
+            <li class="auditAdminUserForm layui-hide">完善信息（指派实施负责人）</li>
+            <li class="auditUserForm layui-hide">完善信息（指派审计负责人）</li>
             <li class="delayForm layui-hide">延迟整改信息</li>
         </ul>
         <div class="layui-tab-content">
@@ -286,15 +287,6 @@
                 <h2>完善信息</h2>
                 <hr/>
                 <div class="layui-row layui-form-item">
-                    <div class="layui-col-md6">
-                        <label class="layui-form-label">整改负责人：</label>
-                        <div class="layui-input-block">
-                            <select class="layui-select"  name="auditUserId" id="auditUserId">
-                            </select>
-<!--                            <input class="layui-input" name="auditUserId">-->
-
-                        </div>
-                    </div>
                     <div class="layui-col-md6 time">
                         <label class="layui-form-label">计划整改时长：</label>
                         <div class="layui-input-block">
@@ -382,6 +374,26 @@
                     </div>
                 </div>
             </div>
+            <!-- 任务指派  -->
+            <div class="layui-tab-item layui-form auditUserForm  layui-hide" lay-filter="auditUserForm">
+<!--                <h2>完善信息（整改任务指派）</h2>-->
+                <hr/>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">整改负责人：</label>
+                        <div class="layui-input-block">
+                            <select class="layui-select"  name="auditUserId" id="auditUserId">
+                            </select>
+                        </div>
+                        <div class="layui-form-item submit ">
+                            <button class="layui-btn " lay-filter="auditUserSubmit" lay-submit>
+                                <i class="layui-icon">&#xe605;</i>保存
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
             <!-- 驳回反馈  -->
             <div class="layui-tab-item layui-form delayForm  layui-hide" lay-filter="rollbackForm">
                 <div class="layui-form-item">
@@ -432,31 +444,12 @@
         if (auditStatus == 1002) { // 实施领导指派负责人
             // $(".auditAdminUserForm").removeClass("layui-hide")
             // $(".submit").removeClass("layui-hide")
+        }else if (auditStatus == 1004) { // 审计领导指派审计负责人
+            $(".auditUserForm").removeClass("layui-hide")
+            $(".submit").removeClass("layui-hide")
         }else if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
-            layui.use('form',()=>{
-                let form = layui.form;
-                $.ajax({
-                    url:'/audit-api/task/dept/normal/user',
-                    headers:createAuthorizationTokenHeader(),
-                    data:{
-                        bizKey:bizKey,
-                        deptId:userInfo.deptId // 审计部门
-                    },
-                    async:false,
-                    success:(res)=>{
-                        let optionHtml = '<option value="">请选择整改负责人</option>';
-                        if(res.code==0){
-                            for (let i in res.data){
-                                optionHtml+='<option value="'+res.data[i].userId+'">'+res.data[i].username+'</option>'
-                            }
-                            $("#auditUserId").empty().append(optionHtml);
-                            form.render('select')
-                        }
-                    }
-                })
-            })
         }else if (auditStatus == 1006) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
             $(".completeForm").find("input").prop("disabled",true)
@@ -538,7 +531,7 @@
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
                         // deptId:res.data.implementingAgencyId,
-                        roleName:'一般用户'
+                        roleName:'审计对象一般角色'
                     },
                     async:false,
                     success:(data)=>{
@@ -574,7 +567,7 @@
                     data:{
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
-                        roleName:'一般用户'
+                        roleName:'审计对象一般角色'
                     },
                     async:false,
                     success:(data)=>{
@@ -606,7 +599,7 @@
                     data:{
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
-                        roleName:'管理员'
+                        roleName:'审计对象一般角色'
                     },
                     async:false,
                     success:(res)=>{
@@ -781,12 +774,13 @@
         form.on('submit(completeSubmit)', function (res) {
             //提交完善信息
             let completeForm = form.val('completeForm');
-            let auditUserId = completeForm.auditUserId;
+            // let auditUserId = completeForm.auditUserId;
             let planTime = completeForm.planTime;
             let rectifyWay = completeForm.rectifyWay;
-            if(!auditUserId){
-                return top.layer.msg('请选择整改负责人',{icon:2})
-            }if(!planTime){
+            // if(!auditUserId){
+            //     return top.layer.msg('请选择整改负责人',{icon:2})
+            // }
+            if(!planTime){
                 return  top.layer.msg('计划整改时长不能为空',{icon:2})
             }if(!rectifyWay){
                 return top.layer.msg('整改方式不能为空',{icon:2})
@@ -799,6 +793,38 @@
                 url:'/audit-api/task/completePlan',
                 type:'post',
                 data:JSON.stringify(completeForm),
+                headers:createAuthorizationTokenHeader(),
+                contentType:'application/json;charset=utf8',
+                dataType:'json',
+                async: false,
+                success:function (res) {
+                    if(res.code==0 && res.data){
+                        top.layer.msg("操作成功",{icon:1})
+                        $(".submit").addClass("layui-hide");
+                        x_admin_close()
+                    }else{
+                        top.layer.msg(res.msg,{icon:2})
+                    }
+                },
+                error:function () {
+                    layer.msg('请检查网络连接',{icon:2})
+                }
+            })
+            return false;
+        })
+
+        //提交完善信息
+        form.on('submit(auditUserSubmit)', function (res) {
+            //提交完善信息
+            let auditUserForm = form.val('auditUserForm');
+            if(!auditUserForm.auditUserId){
+                return  top.layer.msg('请指派整改负责人',{icon:2})
+            }
+            auditUserForm.id=bizKey;
+            $.ajax({
+                url:'/audit-api/task/completePlan',
+                type:'post',
+                data:JSON.stringify(auditUserForm),
                 headers:createAuthorizationTokenHeader(),
                 contentType:'application/json;charset=utf8',
                 dataType:'json',
