@@ -34,8 +34,7 @@ let auditEnum = {
         reject: 1004,
     },
     1004: {
-        agree: 1002,
-        form: 'editPlan' //修改计划表单
+        agree: 1005
     },
     1005: {
         agree: 1006,

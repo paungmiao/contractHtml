@@ -27,7 +27,7 @@
       <a href="">首页</a>
       <a href="">审计项目管理</a>
       <a>
-        <cite>审核归档</cite></a>
+        <cite>项目清单</cite></a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -52,6 +52,7 @@
             <div class="layui-input-inline">
                 <select id="stateSelect">
                     <option value="">请选择状态</option>
+                    <option value="1001">正在整改</option>
                     <option value="1002">实施结束</option>
                     <option value="1003">归档完成</option>
                     <option value="1004">延期整改</option>
@@ -205,10 +206,14 @@
                     width: 80,
                     templet: (data) => {
                         let text;
-                        if (undefined === data.status || data.status === '' || data.status === '1002') {
+                        if (undefined === data.status || data.status === '' || data.status === '1001') {
+                            text = '<span>正在整改</span>';
+                        } else if (data.status === '1002') {
                             text = '<span>实施结束</span>';
                         } else if (data.status === '1003') {
                             text = '<span>归档完成</span>';
+                        } else if (data.status === '1004') {
+                            text = '<span>延期整改</span>';
                         }
                         return text;
                     }
@@ -219,9 +224,6 @@
                     templet: function (res) {
                         let html = '';
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\')" >详情</span>';
-                        if (res.taskId !== null) {
-                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
-                        }
                         return html;
                     }
                     // sort: true
@@ -243,7 +245,7 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                statuses: "1002,1003"
+                statuses: "1001,1002,1003,1004"
             },
 
             done: function (res, curr, count) {
