@@ -323,6 +323,12 @@
                 <h2>整改结果</h2>
                 <hr/>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">整改情况：</label>
+                    <div class="layui-input-block">
+                        <select class="layui-textarea"  lay-filter="rectifySituationId" lay-verify="required" style="border: none"readonly id="rectifySituationId" name="rectifySituationId"></select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">整改结果：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" name="rectifyResult"></textarea>
@@ -364,7 +370,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">审计对象领导：</label>
                     <div class="layui-input-block">
-                            <select class="layui-select" name="auditAdminId" id="auditAdminId" lay-filter="required">
+                            <select class="layui-select" name="auditAdminId" id="auditAdminId" lay-verify="required">
                             </select>
                     </div>
                     <div class="layui-form-item submit ">
@@ -382,7 +388,7 @@
                     <div class="layui-col-md6">
                         <label class="layui-form-label">整改负责人：</label>
                         <div class="layui-input-block">
-                            <select class="layui-select"  name="auditUserId" id="auditUserId">
+                            <select class="layui-select" lay-verify="required"  name="auditUserId" id="auditUserId">
                             </select>
                         </div>
                         <div class="layui-form-item submit ">
@@ -421,6 +427,7 @@
     let taskId = getQueryString("taskId")
     let auditStatus = getQueryString("auditStatus")
     let opinionStatus = getQueryString("opinionStatus")
+    auditStatus = 1009
     let type = getQueryString("type")
     layui.use(['table', 'element', 'laydate', 'form', 'upload'], function () {
         var element = layui.element;
@@ -458,6 +465,21 @@
         }else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
+            $.ajax({
+                url:'/audit-api/entry/list_by_category/ZGQK',
+                headers:createAuthorizationTokenHeader(),
+                async:false,
+                success:(data)=>{
+                    let optionHtml = '<option value="">请选择整改情况</option>';
+                    if(data.code==0){
+                        for (let i in data.data){
+                            optionHtml+='<option value="'+data.data[i].id+'">'+data.data[i].concatName+'</option>'
+                        }
+                        $("#rectifySituationId").empty().append(optionHtml);
+                        form.render("select")
+                    }
+                }
+            })
         }else if (auditStatus == 1007) { // 被驳回，完善计划
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
