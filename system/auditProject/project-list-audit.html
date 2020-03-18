@@ -231,7 +231,7 @@
                         let status = res.planInfos[0]['statusUser'];
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\''+res.taskId+'\',\''+res.auditStatus+'\',\''+status+'\',\'1\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
-                            if (res.auditStatus === "1009") {
+                            if (res.auditStatus === "1005" || res.auditStatus === "1007" || res.auditStatus === "1009") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >确认整改</span>';

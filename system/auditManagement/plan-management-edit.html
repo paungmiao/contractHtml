@@ -380,7 +380,7 @@
                 form.on('select(one_cate)', function (data) {
                     let deptId = data['value'];
                     $.ajax({
-                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=管理员",
+                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
                         dataType: "json",
                         type: "get",
                         async: false,
@@ -399,7 +399,7 @@
                         }
                     });
                     $.ajax({
-                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=一般用户",
+                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
                         dataType: "json",
                         type: "get",
                         async: false,
@@ -561,7 +561,7 @@
                             //赋值
                             if (implDeptId != undefined && implDeptId != '') {
                                 $.ajax({
-                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=管理员",
+                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施管理员",
                                     dataType: "json",
                                     type: "get",
                                     async: false,
@@ -580,7 +580,7 @@
                                     }
                                 });
                                 $.ajax({
-                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=一般用户",
+                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施一般角色",
                                     dataType: "json",
                                     type: "get",
                                     async: false,
@@ -620,7 +620,7 @@
                             }
                             deleteCookie()
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=管理员",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象管理员",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -639,7 +639,7 @@
                                 }
                             });
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=一般用户",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象一般角色",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
