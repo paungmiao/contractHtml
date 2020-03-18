@@ -10,10 +10,10 @@
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/cookie.js"></script>
     <script type="text/javascript" src="../js/jwt.js"></script>
-    <script type="text/javascript" src="../js/crypto-js-3.1.2/crypto-js.js"></script>
-    <script type="text/javascript" src="../js/crypto-js-3.1.2/aes.js"></script>
-    <script type="text/javascript" src="../js/crypto-js-3.1.2/mode-ecb.js"></script>
-    <script type="text/javascript" src="../js/crypto-js-3.1.2/pad-zeropadding.js"></script>
+    <script type="text/javascript" src="../js/util/aes.js"></script>
+    <script type="text/javascript" src="../js/util/crypto-js.js"></script>
+    <script type="text/javascript" src="../js/util/mode-ecb.js"></script>
+    <script type="text/javascript" src="../js/util/pad-zeropadding.js"></script>
     <style type="text/css">
         .img {
             width: 278px;
@@ -147,7 +147,8 @@
                                     height="40"></canvas>
                         </div>
                     </div>
-                    <input value="登录" lay-submit lay-filter="login" class="btn" id="loginButton" style="width:100%;line-height:18px"
+                    <input value="登录" lay-submit lay-filter="login" class="btn" id="loginButton"
+                           style="width:100%;line-height:18px"
                            type="button">
                     <hr class="hr20">
 
@@ -169,6 +170,18 @@
     }
 </script>
 <script>
+    const encryption = (password) => {
+        var iv = CryptoJS.enc.Latin1.parse('xjwlqpbcpassword')
+        // 加密
+        var encrypted = CryptoJS.AES.encrypt(
+            password,
+            iv, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.ZeroPadding
+            })
+        return encrypted.toString()
+    }
     var code = 0;
     $(function () {
 
@@ -186,7 +199,7 @@
                 layer.msg('请输入验证码', {icon: 2, time: 1000});
             } else if (val == num) {
                 layui.use('form', function () {
-                    
+
                     let form = layui.form;
                     let formData = form.val('loginForm')
                     formData.grant_type = 'password';
@@ -194,40 +207,41 @@
 
                     let data = {
                         username: formData.username,
-                        password: formData.password,
+                        password: encryption(formData.password),
                         grant_type: formData.grant_type,
                         scope: formData.scope
                     }
+                    debugger
                     console.log("data", data)
-                   // return  xhrRequest(data)
+                    // return  xhrRequest(data)
                     try {
-                       let success = $.ajax({
+                        let success = $.ajax({
                             url: '/audit-api/login/token',
                             type: 'get',
-                            async:false,
+                            async: false,
                             data: data,
                             success: function (res) {
-                                if(res.code==0){
+                                if (res.code == 0) {
                                     let data = JSON.parse(res.data);
-                                    for (let i in data){
+                                    for (let i in data) {
                                         window.sessionStorage.setItem(i, JSON.stringify(data[i]));
                                     }
                                     let tokenType = data.token_type
                                     let accessToken = data.access_token;
-                                    if(tokenType && accessToken){
+                                    if (tokenType && accessToken) {
 
-                                        setJwtToken( tokenType+' '+accessToken);
-                                        window.sessionStorage.setItem('Authorization', tokenType+' '+accessToken);
+                                        setJwtToken(tokenType + ' ' + accessToken);
+                                        window.sessionStorage.setItem('Authorization', tokenType + ' ' + accessToken);
                                         $.ajax({
                                             url: '/audit-api/login/user/info',
                                             type: 'get',
-                                            async:false,
-                                            headers:{
-                                                Authorization:window.sessionStorage.getItem('Authorization')
+                                            async: false,
+                                            headers: {
+                                                Authorization: window.sessionStorage.getItem('Authorization')
                                             },
-                                            success:function (res) {
+                                            success: function (res) {
 
-                                                if(res.code==0){
+                                                if (res.code == 0) {
                                                     let userInfo = res.data
                                                     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
                                                     console.log(userInfo['username'])
@@ -240,12 +254,12 @@
 
                                 console.log('res', res)
                             }, complete: function (com) {
-                                
+
                                 console.log('com', com)
                             }
                         })
-                        if(success){
-                            location.href="index.html"
+                        if (success) {
+                            location.href = "index.html"
                         }
                     } catch (e) {
                         console.error(e)
@@ -263,48 +277,43 @@
             }
         })
     })
-    function   xhrRequest(data) {
-        let xhr =new XMLHttpRequest();
+
+    function xhrRequest(data) {
+        let xhr = new XMLHttpRequest();
         xhr.timeout = 3000;
         xhr.ontimeout = function (event) {
             alert("请求超时！");
         }
         let formData = new FormData();
-        for(let key in data){
+        for (let key in data) {
             console.log("属性：" + key + ",值：" + data[key]);
-            formData.append(key,data[key]);
+            formData.append(key, data[key]);
         }
-        xhr.open('POST',  url + '/auth/oauth/token',true); //第三个参数表述异步或者同步（true）
-        for(let key in headers){
+        xhr.open('POST', url + '/auth/oauth/token', true); //第三个参数表述异步或者同步（true）
+        for (let key in headers) {
             console.log("属性：" + key + ",值：" + headers[key]);
-            xhr.setRequestHeader(key,headers[key]);
+            xhr.setRequestHeader(key, headers[key]);
         }
         xhr.send(formData);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log('responseText',xhr.responseText);
-            }
-            else {
-                console.log('statusText',xhr.statusText);
+                console.log('responseText', xhr.responseText);
+            } else {
+                console.log('statusText', xhr.statusText);
             }
         }
-        xhr.onerror = (res)=>{
-            console.log('errorText',res)
+        xhr.onerror = (res) => {
+            console.log('errorText', res)
         }
     }
 
     function createXHR() {
-        let xmlHttp=null;
-        if (window.XMLHttpRequest)
-        {// code for all new browsers
-            xmlHttp=new XMLHttpRequest();
-        }
-        else if (window.ActiveXObject)
-        {// code for IE5 and IE6
-            xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        else
-        {
+        let xmlHttp = null;
+        if (window.XMLHttpRequest) {// code for all new browsers
+            xmlHttp = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {// code for IE5 and IE6
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } else {
             alert("Your browser does not support XMLHTTP.");
         }
         return xmlHttp;
