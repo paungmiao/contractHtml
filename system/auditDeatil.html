@@ -99,13 +99,14 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">实施机构：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" name="implementingAgencyId">
+                    <input class="layui-input" name="implementingAgencyName">
                 </div>
             </div>
             <div class="layui-col-md3">
                 <label class="layui-form-label">审计对象：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" name="auditObjectId">
+<!--                    <input class="layui-input" name="auditObjectId">-->
+                    <input class="layui-input" name="auditObjectName">
                 </div>
             </div>
         </div>
@@ -125,7 +126,7 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">整改情况：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" name="rectifySituationId">
+                    <input class="layui-input" name="rectifySituationName">
                 </div>
             </div>
             <div class="layui-col-md3">
@@ -156,6 +157,7 @@
             <li class="auditAdminUserForm layui-hide">完善信息（指派实施负责人）</li>
             <li class="auditUserForm layui-hide">完善信息（指派审计负责人）</li>
             <li class="delayForm layui-hide">延迟整改信息</li>
+            <li class="rectifyEvaluationForm layui-hide">整改评价</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -286,18 +288,16 @@
             <div class="layui-tab-item layui-form completeForm layui-hide" lay-filter="completeForm">
                 <h2>完善信息</h2>
                 <hr/>
-                <div class="layui-row layui-form-item">
-                    <div class="layui-col-md6 time">
+                <div class="layui-form-item">
                         <label class="layui-form-label">计划整改时长：</label>
                         <div class="layui-input-block">
-                            <input class="layui-input"  id="planTime" placeholder="单位（天）" type="number" min="0.5"  step="0.5" name="planTime">
+                            <input class="layui-input" style="width:60%"  id="planTime" placeholder="单位（天）" type="number" min="0.5"  step="0.5" name="planTime">
                         </div>
-                    </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">整改措施：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea"  name="rectifyWay"></textarea>
+                        <textarea class="layui-textarea" style="width:60%"  name="rectifyWay"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item submit layui-hide layui-file">
@@ -415,6 +415,15 @@
                     </div>
                 </div>
             </div>
+            <!-- 驳回反馈  -->
+            <div class="layui-tab-item layui-form rectifyEvaluationForm  layui-hide" lay-filter="rectifyEvaluationForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改评价：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"  style="border: none"readonly name="rectifyEvaluation"></textarea>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -464,21 +473,6 @@
         }else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
-            $.ajax({
-                url:'/audit-api/entry/list_by_category/ZGQK',
-                headers:createAuthorizationTokenHeader(),
-                async:false,
-                success:(data)=>{
-                    let optionHtml = '<option value="">请选择整改情况</option>';
-                    if(data.code==0){
-                        for (let i in data.data){
-                            optionHtml+='<option value="'+data.data[i].id+'">'+data.data[i].concatName+'</option>'
-                        }
-                        $("#rectifySituationId").empty().append(optionHtml);
-                        form.render("select")
-                    }
-                }
-            })
         }else if (auditStatus == 1007) { // 被驳回，完善计划
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
@@ -493,7 +487,8 @@
         }else if (auditStatus >= 1010 && auditStatus<1014) { // 被驳回，完善整改 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
-        }else if (auditStatus >= 1014) { // 被驳回，完善整改 有提交
+            $(".reportForm select").attr('readonly','readonly')
+        }else if (auditStatus >= 1014&& auditStatus<1017) { // 被驳回，完善整改 有提交
             $(".delayForm").removeClass("layui-hide")
         }
 
@@ -529,6 +524,9 @@
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
                 let status = res.data.status;
+                if(res.data.rectifyEvaluation){
+                    $(".rectifyEvaluationForm").removeClass("layui-hide")
+                }
                 switch(status) {
                     case '1001':
                         $("#statusName").text('正在实施')
@@ -578,6 +576,24 @@
         }).then((res)=>{
             // let opinionStatus=1000
             let opinionUser=userInfo.userId;
+            $.ajax({
+                url:'/audit-api/entry/list_by_category/ZGQK',
+                headers:createAuthorizationTokenHeader(),
+                async:false,
+                success:(data)=>{
+                    let optionHtml = '<option value="">请选择整改情况</option>';
+                    if(data.code==0){
+                        for (let i in data.data){
+                            optionHtml+='<option value="'+data.data[i].id+'">'+data.data[i].concatName+'</option>'
+                        }
+                        $("#rectifySituationId").empty().append(optionHtml);
+                        form.val('allForm',{
+                            rectifySituationId:res.data.rectifySituationId
+                        });
+                        form.render("select")
+                    }
+                }
+            })
             // let type = 0;// 0计划，1项目
             if (auditStatus == 1007) { // 被驳回，完善计划
                 opinionStatus=1005
@@ -663,8 +679,8 @@
                 }
             }
             $.get('/audit-api/planInfo/user/opinion',{
-                userId:opinionUser,
-                type:type,
+                userId:opinionUser==undefined?1:opinionUser,
+                type:type==undefined?1:type,
                 statusUser:opinionStatus,
                 planId:bizKey
             },function (data) {
@@ -679,32 +695,37 @@
                     })
                 }
             })
-            $.ajax({
-                url:'/audit-api/task/user/'+res.data.auditAdminId,
-                headers:createAuthorizationTokenHeader(),
-                type:'get',
-                async:false,
-                success:function (resp) {
-                    if(resp.code==0){
-                        form.val('allForm',{
-                            rectifyAdminMan:resp.data.username
-                        });
+            if(res.data.auditAdminId){
+                $.ajax({
+                    url:'/audit-api/task/user/'+res.data.auditAdminId,
+                    headers:createAuthorizationTokenHeader(),
+                    type:'get',
+                    async:false,
+                    success:function (resp) {
+                        if(resp.code==0){
+                            form.val('allForm',{
+                                rectifyAdminMan:resp.data.username
+                            });
+                        }
                     }
-                }
-            })
-            $.ajax({
-                url:'/audit-api/task/user/'+res.data.auditUserId,
-                headers:createAuthorizationTokenHeader(),
-                type:'get',
-                async:false,
-                success:function (resp) {
-                    if(resp.code==0){
-                        form.val('allForm',{
-                            rectifyMan:resp.data.username
-                        });
+                })
+            }
+
+            if(res.data.auditUserId){
+                $.ajax({
+                    url:'/audit-api/task/user/'+res.data.auditUserId,
+                    headers:createAuthorizationTokenHeader(),
+                    type:'get',
+                    async:false,
+                    success:function (resp) {
+                        if(resp.code==0){
+                            form.val('allForm',{
+                                rectifyMan:resp.data.username
+                            });
+                        }
                     }
-                }
-            })
+                })
+            }
         })
 
         $.ajax({
