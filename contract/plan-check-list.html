@@ -38,7 +38,7 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so" style="" id="filterForm"
+        <form class="layui-form layui-col-md12 x-so" style="" lay-filter="filterForm" id="filterForm"
               method="post" ENCTYPE="application/vnd.ms-excel">
             <div style=" width: calc(100% - 85px) ;height:30px" class="fl">
                 <div class="w25 fl">
@@ -57,11 +57,11 @@
                     <label class="layui-form-label-size">审计年度
                     </label>
                     <div class="w100">
-                        <input autocomplete="off"  class="layui-input w5010" placeholder="开始日" name="createdStart" id="start">
+                        <input autocomplete="off"  class="layui-input w5010" placeholder="起始年度" name="auditYearStart" id="start">
                         <span style="width: 14px;line-height: 30px;color:#efeef0" class="fl">
                                 —
                             </span>
-                        <input autocomplete="off"  class="layui-input w5010 fl" placeholder="截止日" name="createdEnd" id="end">
+                        <input autocomplete="off"  class="layui-input w5010 fl" placeholder="末尾年度" name="auditYearEnd" id="end">
                     </div>
 
 
@@ -134,7 +134,17 @@
                     <label class="layui-form-label-size">整改时常
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="rectifySituationSelect" name="rectifySituationId">
+                        <select id="costTime" name="costTime">
+                            <option value="">未选择</option>
+                            <option value="all">全部条件</option>
+                            <option value="1">一个月</option>
+                            <option value="2">二个月</option>
+                            <option value="3">三个月</option>
+                            <option value="4">四个月</option>
+                            <option value="5">五个月</option>
+                            <option value="6">六个月</option>
+                            <option value="7">六个月以上一年以内</option>
+                            <option value="8">超过一年</option>
                         </select>
                     </div>
 
@@ -143,7 +153,16 @@
                     <label class="layui-form-label-size">超时情况
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="rectifySituationSelect" name="rectifySituationId">
+                        <select id="overTime" name="overTime">
+                            <option value="">未选择</option>
+                            <option value="all">全部条件</option>
+                            <option value="1">一个月</option>
+                            <option value="2">二个月</option>
+                            <option value="3">三个月</option>
+                            <option value="4">四个月</option>
+                            <option value="5">五个月</option>
+                            <option value="6">六个月</option>
+                            <option value="7">六个月以上</option>
                         </select>
                     </div>
 
@@ -363,7 +382,7 @@
         form.render("select")
         table.render({
             elem: '#test',
-            url: '/audit-api/planManage/planList',
+            url: '/audit-api/planManage/search/planList',
             xhrFields: {
                 withCredentials: true
             },
@@ -496,7 +515,6 @@
                 }, {
                     field: '',
                     title: '操作',
-                    width: 240,
                     fixed:"right",
                     templet: function (res) {
                         let auditStatus = res.auditStatus;
@@ -527,17 +545,7 @@
         form.on("submit(search)", function () {
 
             table.reload('test', {
-                where: {
-                    projectName: $("#projectName").val(),
-                    problemDescription: $("#problemDescription").val(),
-                    auditYear: $("#auditYear").val(),
-                    implementingAgencyId: $("#implementingAgencySelect").val(),
-                    auditNatureId: $("#auditNatureSelect").val(),
-                    auditObjectId: $("#auditObjectSelect").val(),
-                    problemSeverityId: $("#problemSeveritySelect").val(),
-                    rectifySituationId: $("#rectifySituationSelect").val(),
-                    projectType: $("#projectTypeSelect").val()
-                },
+                where: form.val('filterForm'),
                 page: 1
             });
             generateEchars();
