@@ -344,7 +344,7 @@
                 data: JSON.stringify(data),
                 success: function (res) {
                     if (!res.data) {
-                        let index = layer.alert("操作失败，请填写整改结果！", {icon: 1}, function () {
+                        let index = layer.alert("操作失败，请完善信息！", {icon: 1}, function () {
                             layer.close(index);
                         });
                     } else {

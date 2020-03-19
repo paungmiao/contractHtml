@@ -55,7 +55,9 @@
                     <option value="1001">待审核</option>
                     <option value="1002">已驳回</option>
                     <option value="1003">已批准</option>
-                    <option value="1004">待完善</option>
+                    <option value="1004">待指派</option>
+                    <option value="1005">被驳回</option>
+                    <option value="1006">已完成</option>
                 </select>
             </div>
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -209,7 +211,7 @@
                         } else if (status === '1003') {
                             text = '<span>已批准</span>';
                         } else if (status === '1004') {
-                            text = '<span>待完善</span>';
+                            text = '<span>待指派</span>';
                         } else if (status === '1005') {
                             text = '<span>被驳回</span>';
                         } else if (status === '1006') {
@@ -236,7 +238,7 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                             }
                         }
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
+                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
                         return html;
                     }
                     // sort: true
@@ -344,7 +346,7 @@
                 data: JSON.stringify(data),
                 success: function (res) {
                     if (!res.data) {
-                        let index = layer.alert("操作失败，请到详情页完善信息！", {icon: 1}, function () {
+                        let index = layer.alert("操作失败，请指派整改人！", {icon: 1}, function () {
                             layer.close(index);
                         });
                     } else {
