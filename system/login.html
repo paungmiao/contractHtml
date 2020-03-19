@@ -136,17 +136,17 @@
                             <hr class="hr15">
                         </div>
                     </div>
-                    <div style="margin-left: -30px;margin-bottom: 25px">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>验证码
-                        </label>
-                        <div class="code">
-                            <input type="text" value="" style="width:190px" placeholder="请输入验证码（不区分大小写）"
-                                   class="input-val" required/>
-                            <canvas id="canvas" width="100" style="margin-left: -20px;margin-top: 5px"
-                                    height="40"></canvas>
-                        </div>
-                    </div>
+<!--                    <div style="margin-left: -30px;margin-bottom: 25px">-->
+<!--                        <label class="layui-form-label">-->
+<!--                            <span class="x-red">*</span>验证码-->
+<!--                        </label>-->
+<!--                        <div class="code">-->
+<!--                            <input type="text" value="" style="width:190px" placeholder="请输入验证码（不区分大小写）"-->
+<!--                                   class="input-val" required/>-->
+<!--                            <canvas id="canvas" width="100" style="margin-left: -20px;margin-top: 5px"-->
+<!--                                    height="40"></canvas>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <input value="登录" lay-submit lay-filter="login" class="btn" id="loginButton"
                            style="width:100%;line-height:18px"
                            type="button">
@@ -193,11 +193,9 @@
             draw(show_num);
         })
         $("#loginButton").on('click', function () {
-            var val = $(".input-val").val().toLowerCase();
-            var num = show_num.join("");
-            if (val == '') {
-                layer.msg('请输入验证码', {icon: 2, time: 1000});
-            } else if (val == num) {
+            // var val = $(".input-val").val().toLowerCase();
+            // var num = show_num.join("");
+            if (1 == 1) {
                 layui.use('form', function () {
 
                     let form = layui.form;
@@ -211,7 +209,6 @@
                         grant_type: formData.grant_type,
                         scope: formData.scope
                     }
-                    debugger
                     console.log("data", data)
                     // return  xhrRequest(data)
                     try {
