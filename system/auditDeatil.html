@@ -609,7 +609,7 @@
                 opinionStatus=1003
                 type=1;
             }
-            else if(auditStatus==1004) { // 计划被驳回
+            else if(auditStatus==1004 ||auditStatus=='1004_reject') { // 计划被驳回
                 type=0;
                 opinionUser=res.data.impUserId;
                 opinionStatus=1004
