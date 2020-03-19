@@ -47,7 +47,7 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock class="audit_entry_operate">
+    <xblock class="audit_entry_operate layui-hide audit_entry_xblock">
         <button class="layui-btn" onclick="x_admin_show('添加词条信息','entry-add.html','500','320')">
             <i class="layui-icon"></i>新增数据
         </button>
@@ -172,7 +172,8 @@
                         width: 200,
                         templet: function (res) {
                             var temp = ``;
-                            temp = `<span name="user"  class="layui-btn layui-btn-normal layui-btn-mini audit_entry_operate layui-hide" onclick="editPage_('编辑词条信息','entry-edit.html','500','320','` + res.id + `')" >编辑</span>
+                            temp = `<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_('查看词条信息','entry-info.html','600','320','` + res.id + `')">详情</span>
+                        <span name="user"  class="layui-btn layui-btn-normal layui-btn-mini audit_entry_operate layui-hide" onclick="editPage_('编辑词条信息','entry-edit.html','600','320','` + res.id + `')" >编辑</span>
                       <span class="layui-btn layui-btn-danger layui-btn-mini audit_entry_operate layui-hide" onclick="delete_('` + res.id + `')">删除</span> `
                             return temp;
                         }

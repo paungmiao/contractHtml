@@ -93,6 +93,7 @@
                 let ids = $("#planId").val();
                 let opinion = $("#opinion").val();
                 let fileUri = $("#fileUri").val();
+                let status = $("#status").val();
                 $.ajax({
                     url: "/audit-api/planCheckList/changePlanStatusByIds",
                     type: 'POST',

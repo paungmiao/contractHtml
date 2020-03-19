@@ -14,167 +14,245 @@
 </head>
 
 <body>
-  <div class="x-body   addMerchant layerBox layui-layer-wrap">
-    <form class="layui-form" lay-filter="entryEditForm" id="entryEditForm">
-      <input id="inputData" name="id" type="hidden">
-      <input id="revision" name="revision" type="hidden">
+<div class="x-body  addMerchant layerBox layui-layer-wrap">
+  <form class="layui-form" lay-filter="entryEditForm" id="entryEditForm">
+    <input id="inputData" name="id" type="hidden">
+    <input id="revision" name="revision" type="hidden">
 
-      <div class="layui-form-item">
-        <label class="layui-form-label">
-          <span>*</span>词条类型
-        </label>
-        <div class="layui-input-block">
-          <select name="categoryFk" lay-verify="" lay-filter="categoryFilter" lay-search id="categorySelect">
-          </select>
-        </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>词条类型
+      </label>
+      <div class="layui-input-block">
+        <select name="categoryFk" lay-verify="" lay-filter="categoryFilter" lay-search id="categorySelect">
+        </select>
       </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">
-          <span>*</span>词条名称
-        </label>
-        <div class="layui-input-block">
-          <input type="text" name="name" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称"
-            autocomplete="off" class="layui-input">
-        </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>词条名称
+      </label>
+      <div class="layui-input-block">
+        <input type="text" name="name" lay-verify="required|name" placeholder="请输入问题名称" autocomplete="off"
+               class="layui-input">
       </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">
-          <span>*</span>增添说明
-        </label>
-        <div class="layui-input-block">
-          <textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea"></textarea>
-        </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>二级词条名称
+      </label>
+      <div class="layui-input-block">
+        <input name="name1" type="text" lay-verify="name" placeholder="请输入二级词条名称" autocomplete="off"
+               class="layui-input" value="">
       </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>三级词条名称
+      </label>
+      <div class="layui-input-block">
+        <input name="name2" type="text" lay-verify="name" placeholder="请输入三级词条名称" autocomplete="off"
+               class="layui-input" value="">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>四词条名称
+      </label>
+      <div class="layui-input-block">
+        <input name="name3" type="text" lay-verify="name" placeholder="请输入四级词条名称" autocomplete="off"
+               class="layui-input" value="">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <span>*</span>增添说明
+      </label>
+      <div class="layui-input-block">
+        <textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea"></textarea>
+      </div>
+    </div>
+    <!-- 词条类型:
+    <div style="width:200px">
+      <select name="categoryFk" lay-verify="" lay-filter="categoryFilter" lay-search id="categorySelect">
+      </select>
+    </div> -->
+    <!-- <br>
+    词条名称:<input type="text" name="name" style="width:200px" lay-verify="required|name" placeholder="请输入问题名称" autocomplete="off" class="layui-input">
+    <br> -->
+    <!-- <div class="layui-form-item level-4 layui-hide" >
+      二级词条名称:<input name="name1" type="text" style="width:200px" lay-verify="name" placeholder="请输入二级词条名称"
+                    autocomplete="off" class="layui-input" value="">
+      <br>
+      三级词条名称:<input name="name2" type="text" style="width:200px" lay-verify="name" placeholder="请输入三级词条名称"
+                    autocomplete="off" class="layui-input" value="">
+      <br>
+      四词条名称:<input name="name3" type="text" style="width:200px" lay-verify="name" placeholder="请输入四级词条名称"
+                   autocomplete="off" class="layui-input" value="">
+      <br>
+    </div>
+    增添说明:<textarea name="remarks" lay-verify="remarks" placeholder="请输入" class="layui-textarea" ></textarea>
+    <br>
+    <br> -->
 
-    </form>
-  </div>
-  <script>
-    layui.use(['form', 'layer'], function () {
-      $ = layui.jquery;
-      let form = layui.form
-        , layer = layui.layer;
-      // 词条分类
+    <div class="layui-input-inline">
+      <label for="L_repass" class="layui-form-label">
+      </label>
+      <button class="layui-btn" lay-filter="update" lay-submit>
+        <i class="layui-icon">&#xe605;</i>确认修改
+      </button>
+    </div>
+    <div class="layui-input-inline">
+      <label for="L_repass" class="layui-form-label">
+      </label>
+      <a class="layui-btn" onclick="off()">
+        <i class="layui-icon">&#x1007;</i>取消
+      </a>
+    </div>
+
+  </form>
+</div>
+<script>
+  layui.use(['form', 'layer'], function () {
+    $ = layui.jquery;
+    let form = layui.form
+            , layer = layui.layer;
+    // 词条分类
+    $.ajax({
+      url: "/audit-api/entry/category/list",
+      dataType: "json",
+      type: "get",
+      async: false,
+      success: function (resp) {
+        if (resp && 0 == resp.code) {
+          let data = resp.data;
+          let options = [];
+          options.push('<option value="" >请选择词条类型</option>')
+          data.forEach((Obj) => {
+            let option = '<option value="' + Obj.id + '"  level="' + Obj.level + '">' + Obj.name + '</option>';
+            options.push(option);
+          })
+          $("#categorySelect").empty().append(options.join(""));
+        }
+      }
+    })
+    form.on('select(categoryFilter)', function (data) {
+      let level = $(data.elem).find(':selected').first().attr('level');
+      if (level == 4) {
+        $("div.level-4").removeClass('layui-hide')
+      }
+    });
+    form.verify({
+      remarks: function (value, dom) {
+        if (value.length > 128) {
+          return '词条说明不能超过128个字符！'
+        }
+      },
+      name: function (value, dom) {
+        let result = '';
+        if (value.length > 32) {
+          result = '词条名称不能超过32个字符！'
+        } else if (value.length > 0) {
+          $.ajax({
+            url: "/audit-api/entry/checkName",
+            type: "get",
+            dataType: 'json',
+            async: false,
+            data: form.val('entryEditForm'),
+            success: function (resp) {
+              if (resp.data) {
+                result = '词条名称重复！'
+              }
+            }, error: function () {
+              result = ("请求失败，请检查网络连接", { icon: 2 })
+            }
+          })
+        }
+        if (result.length > 0) {
+          return result
+        }
+      }
+    })
+    form.render("select")
+
+    //监听提交
+    form.on('submit(update)', function (data) {
+      console.log(data);
+      let formData = form.val("entryEditForm");
+      formData.updatedBy = userInfo.username;
       $.ajax({
-        url: "/audit-api/entry/category/list",
+        url: "/audit-api/entry/update",
         dataType: "json",
-        type: "get",
+        type: "put",
+        data: formData,
         async: false,
         success: function (resp) {
-          if (resp && 0 == resp.code) {
-            let data = resp.data;
-            let options = [];
-            options.push('<option value="" >请选择词条类型</option>')
-            data.forEach((Obj) => {
-              let option = '<option value="' + Obj.id + '"  level="' + Obj.level + '">' + Obj.name + '</option>';
-              options.push(option);
-            })
-            $("#categorySelect").empty().append(options.join(""));
+          if (resp.data) {
+            //发异步，把数据提交给php
+            layer.alert("修改成功", { icon: 6 }, function () {
+              // 获得frame索引
+              let index = parent.layer.getFrameIndex(window.name);
+              //关闭当前frame
+              parent.layer.close(index);
+              // 可以对父窗口进行刷新
+              x_admin_father_reload();
+            });
+          } else {
+            layer.alert(resp.msg, { icon: 1 })
           }
+
         }
       })
-      form.verify({
-        remarks: function (value, dom) {
-          if (value.length > 128) {
-            return '词条说明不能超过128个字符！'
-          }
-        },
-        name: function (value, dom) {
-          let result = '';
-          if (value.length > 32) {
-            result = '词条名称不能超过32个字符！'
-          } else if (value.length > 0) {
-            $.ajax({
-              url: "/audit-api/entry/checkName",
-              type: "get",
-              dataType: 'json',
-              async: false,
-              data: form.val('entryEditForm'),
-              success: function (resp) {
-                if (resp.data) {
-                  result = '词条名称重复！'
-                }
-              }, error: function () {
-                result = ("请求失败，请检查网络连接", { icon: 2 })
-              }
-            })
-          }
-          if (result.length > 0) {
-            return result
-          }
-        }
-      })
-      form.render("select")
 
-      //监听提交
-      form.on('submit(update)', function (data) {
-        console.log(data);
-        $.ajax({
-          url: "/audit-api/entry/update",
-          dataType: "json",
-          type: "put",
-          data: form.val("entryEditForm"),
-          async: false,
-          success: function (resp) {
-            if (resp.data) {
-              //发异步，把数据提交给php
-              layer.alert("修改成功", { icon: 6 }, function () {
-                // 获得frame索引
-                let index = parent.layer.getFrameIndex(window.name);
-                //关闭当前frame
-                parent.layer.close(index);
-                // 可以对父窗口进行刷新
-                x_admin_father_reload();
-              });
-            } else {
-              layer.alert(resp.msg, { icon: 1 })
-            }
+      return false;
+    });
 
-          }
+
+  });
+  layui.use('laydate', function () {
+    let laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#start' //指定元素
+    });
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#start2' //指定元素
+    });
+  });
+</script>
+<script>
+
+  function off() {
+    let index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+    parent.layer.close(index);		//关闭窗口
+  }
+
+  function initEntryInfo() {
+    // 数据回显渲染
+    $.ajax({
+      url: "/audit-api/entry/" + $("#inputData").val(),
+      dataType: "json",
+      type: "get",
+      async: true,
+      success: function (resp) {
+        layui.use('form', function () {
+          layui.form.val('entryEditForm', resp.data)
         })
-
-        return false;
-      });
-
-
-    });
-    layui.use('laydate', function () {
-      let laydate = layui.laydate;
-
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start' //指定元素
-      });
-
-      //执行一个laydate实例
-      laydate.render({
-        elem: '#start2' //指定元素
-      });
-    });
-  </script>
-  <script>
-
-    function off() {
-      let index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-      parent.layer.close(index);		//关闭窗口
-    }
-
-    function initEntryInfo() {
-      // 数据回显渲染
-      $.ajax({
-        url: "/audit-api/entry/" + $("#inputData").val(),
-        dataType: "json",
-        type: "get",
-        async: true,
-        success: function (resp) {
-          layui.use('form', function () {
-            layui.form.val('entryEditForm', resp.data)
-          })
-
+        let level = $("#categorySelect").find(':selected').first().attr('level');
+        if (level == 4) {
+          $("div.level-4").removeClass('layui-hide')
         }
-      })
-
-    }
-  </script>
+      }
+    })
+    layui.$('input').attr('disabled', true);
+    layui.$('select').attr('disabled', true);
+    layui.$('textarea').attr('disabled', true);
+    layui.form.render();
+  }
+</script>
 
 </body>
 
