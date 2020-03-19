@@ -645,6 +645,7 @@
                     },function (res) {
                         if(res.code==0 && res.data){
                             top.layer.msg('提交成功',{icon:1})
+                            x_admin_father_reload()
                             x_admin_close()
                         }else{
                             top.layer.msg(res.msg,{icon:2})
@@ -780,6 +781,7 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                        x_admin_father_reload()
                         x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
@@ -822,6 +824,7 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                        x_admin_father_reload()
                         x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
@@ -854,6 +857,7 @@
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
                         $(".submit").addClass("layui-hide");
+                        x_admin_father_reload()
                         x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})

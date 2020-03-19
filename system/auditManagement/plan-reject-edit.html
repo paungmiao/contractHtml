@@ -36,7 +36,7 @@
                 附件上传:
             </label>
             <div class="layui-input-inline">
-                <input type="hidden" name="fileUri">
+                <input type="hidden" id="fileUri" name="fileUri">
                 <span class="layui-btn file-btn" id="upload" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
                 <span name="uploadName" style="float: left;margin: 8px 0 0 16px;"></span>
             </div>
@@ -92,13 +92,20 @@
                 //type, taskId, auditStatus, bizKey
                 let ids = $("#planId").val();
                 let opinion = $("#opinion").val();
-                let status = $("#status").val();
+                let fileUri = $("#fileUri").val();
                 $.ajax({
                     url: "/audit-api/planCheckList/changePlanStatusByIds",
                     type: 'POST',
                     dataType: "json",
                     async: false,
-                    data: {ids: ids, statusUser: status, userId: userInfo.userId, opinion: opinion},
+                    data: {
+                        ids: ids,
+                        statusUser: status,
+                        userId: userInfo.userId,
+                        opinion: opinion,
+                        uploadUser: userInfo.username,
+                        fileUri:fileUri
+                    },
                     success: function (resp) {
                         // 获得frame索引
                         var index = parent.layer.getFrameIndex(window.name);
