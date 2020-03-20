@@ -493,7 +493,7 @@
         }else if (auditStatus >= 1010 && auditStatus<1014) { // 被驳回，完善整改 有提交
             $(".reportForm").removeClass("layui-hide")
             $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
-            $(".reportForm select").attr('readonly','readonly')
+            $(".reportForm select").attr('disabled','disabled')
         }else if (auditStatus >= 1014&& auditStatus<1017) { // 被驳回，完善整改 有提交
             $(".delayForm").removeClass("layui-hide")
         }
@@ -542,6 +542,7 @@
                         break;
                     case '1003':
                         $("#statusName").text('已归档')
+                        break;
                     case '1004':
                         $("#statusName").text('延期整改')
                         break;
@@ -571,10 +572,6 @@
                     }
                 })
                 form.val('allForm', res.data);
-                if(res.data.resultEnterTime){
-                    $(".reportForm").removeClass("layui-hide")
-                }
-
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
@@ -602,8 +599,9 @@
             })
             // let type = 0;// 0计划，1项目
             if (auditStatus == 1007) { // 被驳回，完善计划
-                opinionStatus=1005
+                opinionStatus=1006
                 type=1;
+                opinionUser=res.data.auditAdminId
                 $.ajax({
                     url:'/audit-api/task/dept/normal/user',
                     headers:createAuthorizationTokenHeader(),
@@ -630,6 +628,10 @@
             }else if (auditStatus == 1009) { // 被驳回，完善整改 有提交
                 opinionStatus=1003
                 type=1;
+            }else if (auditStatus == 1008) { // 被驳回，完善整改 有提交
+                opinionStatus=1003
+                type=1;
+                opinionUser=res.data.auditUserId
             }
             else if(auditStatus==1004 ||auditStatus=='1004_reject') { // 计划被驳回
                 type=0;
@@ -676,11 +678,11 @@
                     })
                 })
             }
-            if(undefined != res.data.rectifyResult){
-                $(".reportForm").removeClass("layui-hide")
+            if(undefined != res.data.resultEnterTime){
                 if(1009 == auditStatus || 1012==auditStatus){
-
+                } else if(auditStatus>=1014 && auditStatus < 1017){
                 }else {
+                    $(".reportForm").removeClass("layui-hide")
                     $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
                 }
             }
