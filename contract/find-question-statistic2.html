@@ -22,6 +22,15 @@
     <script type="text/javascript" src="../js/echarts/echarts.js"></script>
     <script type="text/javascript" src="../js/xm-select.js"></script>
     <script src="/js/JCheck.js"></script>
+    <style>
+        xm-select {
+            min-height: 30px;
+            line-height: 30px;
+        }
+        xm-select * {
+            font-size: 12px;
+        }
+    </style>
 
 </head>
 <body>
@@ -172,11 +181,12 @@
                 <div class="w25 fl audit_find_question_div layui-hide">
                     <label class="layui-form-label-size">实施机构
                     </label>
-                    <div class="fl  search-input-find">
-                        <select id="implementingAgencyId" groupBy="a.implementing_Agency_Id"
-                                name="implementingAgencyId">
-                        </select>
-                    </div>
+<!--                    <div class="fl  search-input-find">-->
+<!--                        <select id="implementingAgencyId" groupBy="a.implementing_Agency_Id"-->
+<!--                                name="implementingAgencyId">-->
+<!--                        </select>-->
+<!--                    </div>-->
+                    <div class="fl  search-input-find" id="demo1" groupBy="a.implementing_Agency_Id"></div>
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -211,7 +221,7 @@
 
 </div>
 <script>
-
+    let ssData = [];
     function generateEchars(subtitle, xData, legendData) {
         if (undefined == xData || xData.length == 0) {
             return;
@@ -303,6 +313,11 @@
                         impData.forEach((Obj) => {
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
+                            let obj = {
+                                name: Obj.area,
+                                value: Obj.deptId
+                            }
+                            ssData.push(obj)
                         })
                         $("#implementingAgencyId").empty().append(options.join(""));
                     }
@@ -392,7 +407,10 @@
             formVal.groupBy = groupByArr.join(",")
             return formVal;
         }
-
+        xmSelect.render({
+            el: '#demo1',
+            data: ssData,
+        })
         form.on("submit(search)", function () {
             let formVal = initForm();
             $.ajax({

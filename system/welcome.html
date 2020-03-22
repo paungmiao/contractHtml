@@ -328,7 +328,7 @@
                         }
                         data1.push(iiitem);
                         legendData.push(item.name);
-                        colors.push(color16());
+                        colors.push(color16(index));
                     });
                     var option1 = {
                             value: 38, //百分比,必填
@@ -352,13 +352,13 @@
                     iiitem1.label = {normal: {show: true}};
                     data1.push(iiitem1);
                     legendData.push("");
-                    colors.push(color16());
+                    colors.push(color16(1));
                     var iiitem2 = {}
                     iiitem2.name = "";
                     iiitem2.value = 0;
                     data1.push(iiitem2);
                     legendData.push("");
-                    colors.push(color16());
+                    colors.push(color16(2));
                     var option1 = {
                             value: 38, //百分比,必填
                             name: '', //必填
@@ -414,13 +414,15 @@
                     iiitem1.label = {normal: {show: true}};
                     data1.push(iiitem1);
                     legendData.push("未超时");
-                    colors.push(color16());
+                    // colors.push(color16());
+                    colors.push('#F77013');
                     var iiitem2 = {}
                     iiitem2.name = "已超时";
                     iiitem2.value = data.timeoutCount;
                     data1.push(iiitem2);
                     legendData.push("已超时");
-                    colors.push(color16());
+                    // colors.push(color16());
+                    colors.push('#909090');
                     var option2 = {
                             value: 20, //百分比,必填
                             name: '123', //必填
@@ -439,12 +441,19 @@
         });
     }
 
-    function color16(){//十六进制颜色随机
-        var r = Math.floor(Math.random()*256);
-        var g = Math.floor(Math.random()*256);
-        var b = Math.floor(Math.random()*256);
-        var color = '#'+r.toString(16)+g.toString(16)+b.toString(16);
-        return color;
+    function color16(index){//十六进制颜色随机
+        // var r = Math.floor(Math.random()*256);
+        // var g = Math.floor(Math.random()*256);
+        // var b = Math.floor(Math.random()*256);
+        // var color = '#'+r.toString(16)+g.toString(16)+b.toString(16);
+        let colors = [];
+        //#B80603  #F77013  #29AE43   #0D8BF0   #909090
+        colors.push('#B80603');
+        colors.push('#F77013');
+        colors.push('#29AE43');
+        colors.push('#0D8BF0');
+        colors.push('#909090');
+        return colors[index];
     }
     function PercentPie(option) {
         this.backgroundColor = option.backgroundColor || '#fff';

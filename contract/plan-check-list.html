@@ -21,6 +21,15 @@
     <script type="text/javascript" src="../js/xm-select.js"></script>
     <script type="text/javascript" src="../../js/jwt.js"></script>
     <script src="/js/JCheck.js"></script>
+    <style>
+        xm-select {
+            min-height: 30px;
+            line-height: 30px;
+        }
+        xm-select * {
+            font-size: 12px;
+        }
+    </style>
 
 </head>
 
@@ -135,7 +144,7 @@
                     </label>
                     <div class="fl  search-input-find">
                         <select id="costTime" name="costTime">
-                            <option value="">未选择</option>
+                            <option value="">请选择</option>
                             <option value="all">全部条件</option>
                             <option value="1">一个月</option>
                             <option value="2">二个月</option>
@@ -154,7 +163,7 @@
                     </label>
                     <div class="fl  search-input-find">
                         <select id="overTime" name="overTime">
-                            <option value="">未选择</option>
+                            <option value="">请选择</option>
                             <option value="all">全部条件</option>
                             <option value="1">一个月</option>
                             <option value="2">二个月</option>
@@ -170,10 +179,11 @@
                 <div class="w25 fl audit_plan_check_div layui-hide">
                     <label class="layui-form-label-size">实施机构
                     </label>
-                    <div class="fl  search-input-find">
-                        <select id="implementingAgencySelect" name="implementingAgencyId" >
-                        </select>
-                    </div>
+<!--                    <div class="fl  search-input-find">-->
+<!--                        <select id="implementingAgencySelect" multiple="" name="implementingAgencyId" >-->
+<!--                        </select>-->
+<!--                    </div>-->
+                    <div class="fl  search-input-find" id="demo1"></div>
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -209,10 +219,7 @@
 
 </div>
 <script>
-    // let roleIdList = userInfo.roleIdList;
-    // if ($.inArray(13, roleIdList) > -1) {
-    //     $("#ssjg").removeClass("layui-hide");
-    // }
+    let ssData = [];
     var echarts;
     function exportData() {
         $("#filterForm").attr("action","/audit-api/export/exportExcel");
@@ -367,6 +374,11 @@
                     data.forEach((Obj) => {
                         let option = '<option value="' + Obj.deptId + '">' + Obj.area + '</option>';
                         options.push(option);
+                        let obj = {
+                            name: Obj.area,
+                            value: Obj.deptId
+                        }
+                        ssData.push(obj)
                     })
                     $("#implementingAgencySelect").empty().append(options.join(""));
                 }
@@ -542,6 +554,13 @@
                 , limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
+        xmSelect.render({
+            el: '#demo1',
+            data: ssData,
+            // template: function (item, arr, name, value) {
+            //     return name + '';
+            // }
+        })
         form.on("submit(search)", function () {
 
             table.reload('test', {
