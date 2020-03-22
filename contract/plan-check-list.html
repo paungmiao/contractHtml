@@ -39,7 +39,7 @@
             <a href="">首页</a>
             <a href="">审计分析</a>
             <a>
-                <cite>审计统计分析</cite></a>
+                <cite>审计查询统计</cite></a>
         </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -140,11 +140,11 @@
                 </div>
                 <!-- 整改时常 超时情况 无逻辑 新加 -->
                 <div class="w25 fl">
-                    <label class="layui-form-label-size">整改时常
+                    <label class="layui-form-label-size">整改时长
                     </label>
                     <div class="fl  search-input-find">
                         <select id="costTime" name="costTime">
-                            <option value="">请选择</option>
+                            <option value="">全部</option>
                             <option value="all">全部条件</option>
                             <option value="1">一个月</option>
                             <option value="2">二个月</option>
@@ -158,12 +158,13 @@
                     </div>
 
                 </div>
+                <input type="hidden" id="auditHeaderAuthorization" name="auditHeaderAuthorization">
                 <div class="w25 fl">
                     <label class="layui-form-label-size">超时情况
                     </label>
                     <div class="fl  search-input-find">
                         <select id="overTime" name="overTime">
-                            <option value="">请选择</option>
+                            <option value="">全部</option>
                             <option value="all">全部条件</option>
                             <option value="1">一个月</option>
                             <option value="2">二个月</option>
@@ -179,6 +180,7 @@
                 <div class="w25 fl audit_plan_check_div layui-hide">
                     <label class="layui-form-label-size">实施机构
                     </label>
+                    <input type="hidden" name="implementingAgencyId">
 <!--                    <div class="fl  search-input-find">-->
 <!--                        <select id="implementingAgencySelect" multiple="" name="implementingAgencyId" >-->
 <!--                        </select>-->
@@ -332,6 +334,50 @@
             }
         });
     }
+
+    function findAllDeptGroup() {
+        $.ajax({
+            url: "/audit-api/planManage/findAllDeptGroup",
+            dataType: "json",
+            type: "get",
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let impData = data.impData;
+                    let auditData = data.auditData;
+                    if (impData) {
+                        let options = [];
+                        options.push('<option value="" >全部</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        impData.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#implementingAgencySelect").empty().append(options.join(""));
+                    }
+                    if (auditData) {
+                        let options = [];
+                        options.push('<option value="" >全部</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        ssData=[];
+                        auditData.forEach((Obj) => {
+                            let data ={
+                                name:Obj.name,
+                                value:Obj.deptId
+                            }
+                            ssData.push(data)
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectSelect").empty().append(options.join(""));
+                    }
+                }
+            }
+        });
+    }
+
     function findEntryByCategory(categoryId, eleId) {
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=" + categoryId,
@@ -360,6 +406,7 @@
         let table = layui.table;
         let form = layui.form;
         echarts = layui.echarts;
+        findAllDeptGroup();
         $.ajax({
             url: "/audit-api/auditPlan/getImplementingAgency",
             dataType: "json",
@@ -374,18 +421,13 @@
                     data.forEach((Obj) => {
                         let option = '<option value="' + Obj.deptId + '">' + Obj.area + '</option>';
                         options.push(option);
-                        let obj = {
-                            name: Obj.area,
-                            value: Obj.deptId
-                        }
-                        ssData.push(obj)
                     })
                     $("#implementingAgencySelect").empty().append(options.join(""));
                 }
             }
         });
         // findEntryByCategory(1,"implementingAgencySelect");
-        findEntryByCategory(2, "auditObjectSelect");
+        // findEntryByCategory(2, "auditObjectSelect");
         findEntryByCategory(3, "projectTypeSelect");
         findEntryByCategory(4, "auditNatureSelect");
         findEntryByCategory(5, "problemSeveritySelect");
@@ -554,7 +596,7 @@
                 , limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
-        xmSelect.render({
+        let demo1=xmSelect.render({
             el: '#demo1',
             data: ssData,
             // template: function (item, arr, name, value) {
@@ -562,7 +604,13 @@
             // }
         })
         form.on("submit(search)", function () {
-
+            let implementingAgencyId = [];
+            demo1.getValue().forEach((elm,i)=>{
+                implementingAgencyId.push(elm.value)
+            })
+            form.val('filterForm',{
+                implementingAgencyId:implementingAgencyId.join(",")
+            })
             table.reload('test', {
                 where: form.val('filterForm'),
                 page: 1

@@ -632,8 +632,23 @@
                 opinionStatus=1003
                 type=1;
                 opinionUser=res.data.auditUserId
+                debugger
+                let result = getOpinion(form,opinionUser)
+                if(!result){
+                   auditStatus+='_reject';
+                }
             }
-            else if(auditStatus==1004 ||auditStatus=='1004_reject') { // 计划被驳回
+            if(auditStatus=='1007_reject') { // 计划被驳回
+                type=1;
+                opinionUser=res.data.auditAdminId;
+                opinionStatus=1006
+            }
+            if(auditStatus=='1008_reject') { // 计划被驳回
+                type=1;
+                opinionUser=res.data.auditAdminId;
+                opinionStatus=1005
+            }
+            if(auditStatus==1004 ||auditStatus=='1004_reject') { // 计划被驳回
                 type=0;
                 opinionUser=res.data.impUserId;
                 opinionStatus=1004
@@ -956,6 +971,30 @@
 function openNewWindow(url) {
     console.log('http://'+url)
     window.open('http://'+url,"_blank ");
+}
+
+function getOpinion(form,user) {
+    let result=false;
+    $.ajax({
+        url:'/audit-api/planInfo/user/opinion',
+        type:'get',
+        async:false,
+        data:{
+            userId:user,
+            type:type,
+            statusUser:opinionStatus,
+            planId:bizKey
+        },
+        success:(data)=>{
+            debugger
+            if(data.code==0&&data.data){
+                if(undefined != data.data.opinion){
+                    result= true
+                }
+            }
+        }
+    })
+    return result;
 }
 </script>
 <style>
