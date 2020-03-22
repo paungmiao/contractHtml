@@ -37,7 +37,7 @@
                class="layui-input">
       </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item level-4 layui-hide">
       <label class="layui-form-label">
         <span>*</span>二级词条名称
       </label>
@@ -46,7 +46,7 @@
                class="layui-input" value="">
       </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item level-4 layui-hide">
       <label class="layui-form-label">
         <span>*</span>三级词条名称
       </label>
@@ -55,7 +55,7 @@
                class="layui-input" value="">
       </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item level-4 layui-hide">
       <label class="layui-form-label">
         <span>*</span>四词条名称
       </label>
@@ -113,6 +113,9 @@
   </form>
 </div>
 <script>
+  let categoryList;
+</script>
+<script>
   layui.use(['form', 'layer'], function () {
     $ = layui.jquery;
     let form = layui.form
@@ -126,6 +129,7 @@
       success: function (resp) {
         if (resp && 0 == resp.code) {
           let data = resp.data;
+          categoryList = resp.data;
           let options = [];
           options.push('<option value="" >请选择词条类型</option>')
           data.forEach((Obj) => {
