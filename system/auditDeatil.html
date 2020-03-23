@@ -986,7 +986,6 @@ function getOpinion(form,user) {
             planId:bizKey
         },
         success:(data)=>{
-            debugger
             if(data.code==0&&data.data){
                 if(undefined != data.data.opinion){
                     result= true
