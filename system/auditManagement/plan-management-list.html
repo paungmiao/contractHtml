@@ -68,15 +68,58 @@
                 class="layui-icon"></i>新增
         </button>
         <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
-
+        <a class="layui-btn plan_export_import_permission layui-hide" href="/audit-api/planCheckList/template/download"><i
+                class="layui-icon"></i>模板下载</a>
+        <button class="layui-btn plan_export_import_permission layui-hide" id="batchImportPlanBtn"><i
+                class="layui-icon"></i>批量导入
+        </button>
+        <div class="layui-progress layui-hide" lay-filter="progress" id="progress" lay-showPercent="no">
+            <div class="layui-progress-bar" lay-percent="20%"></div>
+        </div>
     </xblock>
-    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test"></table>
+    <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
+           lay-filter="test"></table>
 
 </div>
 <script>
     var count = 0;
-    layui.use(['table', 'form'], function () {
-
+    layui.use(['table', 'form', 'upload', 'element'], function () {
+        let element = layui.element;
+        layui.upload.render({
+            elem: '#batchImportPlanBtn', //绑定元素
+            url: '/audit-api/planCheckList/import',//上传接口,
+            filed:'file'
+            ,data: {
+                createdBy: userInfo.userId
+            },
+            headers: createAuthorizationTokenHeader()
+            , accept: 'file' //普通文件
+            , exts: 'xls|xlsx', //只允许上传压缩文件
+            size: 1024 * 50, // 单位kb
+            before:function(obj){
+                $("#progress").removeClass("layui-hide")
+            },
+            done: function (res, index, upload) {
+                //上传成功毕回调
+                if (res.code == 0) {
+                    let data = res.data;
+                    $("[name='uploadName']").text(data.substr(data.lastIndexOf('/') + 1));
+                    $("[name='fileUri']").val(data);
+                    $(".file-btn").text('重新上传');
+                }
+                $("#progress").addClass("layui-hide")
+                console.log(res)
+            }
+            , error: function () {
+                $("#progress").addClass("layui-hide")
+                //请求异常回调
+            }, progress: function (n, elem) {
+                var percent = n + '%' //获取进度百分
+                element.progress('progress', percent); //可配合 layui 进度条元素使用
+                //以下系 layui 2.5.6 新增
+                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+            }
+        });
         let table = layui.table;
         let form = layui.form
         $.ajax({
@@ -142,12 +185,12 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                {type: 'checkbox', fixed: 'left'},
-                {
-                    field: 'projectCode',
-                    title: '项目编号',
-                    width: 160,
-                }, {
+                    {type: 'checkbox', fixed: 'left'},
+                    {
+                        field: 'projectCode',
+                        title: '项目编号',
+                        width: 160,
+                    }, {
                     field: 'projectName',
                     title: '项目名称',
                     width: 120
@@ -165,7 +208,7 @@
                     templet: (data) => {
                         let auditObjectName = "";
                         $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.auditObjectId,
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectId,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
@@ -186,7 +229,7 @@
                     templet: (data) => {
                         let auditObjectName = "";
                         $.ajax({
-                            url: "/audit-api/planManage/selectEntryById?id="+data.auditNatureId,
+                            url: "/audit-api/planManage/selectEntryById?id=" + data.auditNatureId,
                             dataType: "json",
                             type: "get",
                             async: false,
@@ -235,11 +278,11 @@
                         } else if (status === '1002') { //待审核
                         } else if (status === '1003') { //已批准
                         } else if (status === '1004') { //已驳回
-                            auditStatus = status+'_reject';
+                            auditStatus = status + '_reject';
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'编辑问题信息\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\')" >编辑</span>';
                         }
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\'' + res.id + '\',\'' + res.projectName + '\',\'null\',\'' + auditStatus + '\')" >详情</span>';
                         return html;
                     }
                     // sort: true
@@ -262,7 +305,7 @@
             },
             where: {
                 type: 0, //必填
-                userId : userInfo.userId, //必填
+                userId: userInfo.userId, //必填
             },
 
             done: function (res, curr, count) {
@@ -279,10 +322,10 @@
                     }
                 }
 
-                if(state === "1"){
+                if (state === "1") {
                     // 根据条件移除全选 checkbox
                     $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0"><span></span></div>');
-                }else {
+                } else {
                     //翻页显示全选按钮 checkbox
                     $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
                 }
@@ -303,7 +346,7 @@
             return false;
         })
 
-        table.on('checkbox(test)', function(obj){
+        table.on('checkbox(test)', function (obj) {
             console.log(obj);
 
         });
