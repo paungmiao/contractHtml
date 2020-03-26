@@ -90,7 +90,8 @@
             url: '/audit-api/planCheckList/import',//上传接口,
             filed:'file'
             ,data: {
-                createdBy: userInfo.userId
+                createdBy: userInfo.userId,
+                implementingAgencyId: userInfo.deptId
             },
             headers: createAuthorizationTokenHeader()
             , accept: 'file' //普通文件
