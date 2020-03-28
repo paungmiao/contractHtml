@@ -632,7 +632,6 @@
                 opinionStatus=1003
                 type=1;
                 opinionUser=res.data.auditUserId
-                debugger
                 let result = getOpinion(form,opinionUser)
                 if(!result){
                    auditStatus+='_reject';
@@ -693,12 +692,13 @@
                     })
                 })
             }
-            if(undefined != res.data.resultEnterTime){
+            if(undefined != res.data.rectifyResult){
                 if(1009 == auditStatus || 1012==auditStatus){
                 } else if(auditStatus>=1014 && auditStatus < 1017){
                 }else {
                     $(".reportForm").removeClass("layui-hide")
                     $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
+                    $(".reportForm").find("select").prop("disabled",true)
                 }
             }
             $.get('/audit-api/planInfo/user/opinion',{
