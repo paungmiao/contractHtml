@@ -177,7 +177,7 @@
                     </div>
 
                 </div>
-                <div class="w25 fl audit_plan_check_div layui-hide">
+                <div class="w25 fl">
                     <label class="layui-form-label-size">实施机构
                     </label>
                     <input type="hidden" name="implementingAgencyId">
@@ -349,11 +349,17 @@
                     let auditData = data.auditData;
                     if (impData) {
                         let options = [];
+                        ssData = []
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         impData.forEach((Obj) => {
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
+                            let data ={
+                                name:Obj.name,
+                                value:Obj.deptId
+                            }
+                            ssData.push(data)
                         })
                         $("#implementingAgencySelect").empty().append(options.join(""));
                     }
@@ -361,13 +367,11 @@
                         let options = [];
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
-                        ssData=[];
                         auditData.forEach((Obj) => {
                             let data ={
                                 name:Obj.name,
                                 value:Obj.deptId
                             }
-                            ssData.push(data)
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
                         })

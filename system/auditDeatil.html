@@ -700,6 +700,10 @@
                     $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
                     $(".reportForm").find("select").prop("disabled",true)
                 }
+            }if(undefined == auditStatus && undefined != res.data.delayDate && userInfo.userId == res.data.auditUserId){
+                $(".reportForm").removeClass("layui-hide")
+                $(".reportForm").find("textarea").css({"border":"none"}).prop("readonly",true)
+                $(".reportForm").find("select").prop("disabled",true)
             }
             $.get('/audit-api/planInfo/user/opinion',{
                 userId:opinionUser==undefined?1:opinionUser,
