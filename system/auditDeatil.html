@@ -599,9 +599,7 @@
             })
             // let type = 0;// 0计划，1项目
             if (auditStatus == 1007) { // 被驳回，完善计划
-                opinionStatus=1006
                 type=1;
-                opinionUser=res.data.auditAdminId
                 $.ajax({
                     url:'/audit-api/task/dept/normal/user',
                     headers:createAuthorizationTokenHeader(),
@@ -715,6 +713,9 @@
                     if(undefined == data.data.opinion){
                         $(".rollbackForm").addClass("layui-hide")
                         return
+                    }
+                    if(res.data.auditUserId==userInfo.userId&&1014==res.data.auditStatus){
+                        return $(".rollbackForm").addClass("layui-hide");
                     }
                     $(".rollbackForm").removeClass("layui-hide")
                     form.val('rollbackForm',{
