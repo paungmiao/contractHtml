@@ -247,11 +247,12 @@
                             trigger: 'item',
                             // formatter: '{b}<br/>{c} (p / km2)'
                             formatter: function (params) {
+                                let percent = params.data.value<1? '0%': ((params.data.notRectified*100/params.data.total).toFixed(2)+'%');
                                 return (
                                     params.data.name + '<br/>'
                                     + '问题总个数：' + params.data.total + '<br/>'
                                     + '未整改问题总个数：' + params.data.notRectified + '<br/>'
-                                    + '未整改问题总占比：' + params.data.value + '<br/>'
+                                    + '未整改问题总占比：' + percent+ '<br/>'
                                 )
 
                             }
