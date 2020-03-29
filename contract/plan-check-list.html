@@ -224,6 +224,7 @@
     let ssData = [];
     var echarts;
     function exportData() {
+        $("#auditHeaderAuthorization").val(getJwtToken())
         $("#filterForm").attr("action","/audit-api/export/exportExcel");
         $("#filterForm").submit();
     };
@@ -585,6 +586,7 @@
                     // sort: true
                 }]
             ],
+            headers:createAuthorizationTokenHeader(),
             page: true,
             parseData: function (res) { //res 即为原始返回的数据
                 return {
@@ -613,7 +615,8 @@
                 implementingAgencyId.push(elm.value)
             })
             form.val('filterForm',{
-                implementingAgencyId:implementingAgencyId.join(",")
+                implementingAgencyId:implementingAgencyId.join(","),
+                auditHeaderAuthorization:getJwtToken()
             })
             table.reload('test', {
                 where: form.val('filterForm'),
