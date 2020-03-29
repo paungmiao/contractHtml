@@ -15,10 +15,19 @@
     <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/xm-select.js"></script>
     <script type="text/javascript" src="../../js/jwt.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script src="/js/JCheck.js"></script>
-
+    <style>
+        xm-select {
+            min-height: 30px;
+            line-height: 30px;
+        }
+        xm-select * {
+            font-size: 12px;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,10 +64,11 @@
             <div class="w25 fl audit_plan_list_button layui-hide">
                 <label class="layui-form-label-size">实施机构
                 </label>
-                <div class="fl  search-input-find">
-                    <select id="implementingAgencySelect" name="implementingAgencyId" >
-                    </select>
-                </div>
+<!--                <div class="fl  search-input-find">-->
+<!--                    <select id="implementingAgencySelect" name="implementingAgencyId" >-->
+<!--                    </select>-->
+<!--                </div>-->
+                <div class="fl  search-input-find" id="demo1"></div>
             </div>
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
@@ -72,6 +82,7 @@
 
 </div>
 <script>
+    let ssData = [];
     var role = getCookie("role") == undefined ? 1 : getCookie("role");
     let type = GetQueryString('type');
     //实施对象id
@@ -99,6 +110,11 @@
                     data.forEach((Obj) => {
                         let option = '<option value="' + Obj.deptId + '">' + Obj.area + '</option>';
                         options.push(option);
+                        let data ={
+                            name:Obj.name,
+                            value:Obj.deptId
+                        }
+                        ssData.push(data)
                     })
                     $("#implementingAgencySelect").empty().append(options.join(""));
                 }
@@ -287,14 +303,22 @@
                 // $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
             }
         });
+        let demo1=xmSelect.render({
+            el: '#demo1',
+            data: ssData
+        });
         form.on("submit(sreach)", function () {
+            let implementingAgencyId = [];
+            demo1.getValue().forEach((elm,i)=>{
+                implementingAgencyId.push(elm.value)
+            })
             tableIns.reload({
                 where: {
                     projectName: $("#projectName").val(),
                     normalStatus: $("#stateSelect").val(),//状态
                     problemCharacterization: $("#problemCharacterization").val(),//问题定性
                     problemDescription: $("#problemDescription").val(),
-                    deptId:$("#implementingAgencySelect").val(),
+                    deptId:implementingAgencyId.join(","),
                     auditYear:$("#auditYear").val()
                 },//问题描述
                 page: 1
