@@ -67,7 +67,7 @@
         <button class="layui-btn" onclick="x_admin_show('创建问题词条','plan-management-add.html','800','500')"><i
                 class="layui-icon"></i>新增
         </button>
-        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>上报计划</button>
+        <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>提交项目</button>
         <a class="layui-btn plan_export_import_permission layui-hide" href="/audit-api/planCheckList/template/download"><i
                 class="layui-icon"></i>模板下载</a>
         <button class="layui-btn plan_export_import_permission layui-hide" id="batchImportPlanBtn"><i
@@ -385,7 +385,7 @@
     }
 
     function reportPlan() {
-        layer.confirm('确认要上报计划吗？', function (index) {
+        layer.confirm('确认要提交项目吗？', function (index) {
             let table = layui.table;
             var checkStatus = table.checkStatus('test');
             var ids = [];
@@ -403,7 +403,7 @@
                 dataType: "json",
                 data: {ids: ids, statusUser: "1002", userId: userInfo.userId},
                 success: function (resp) {
-                    layer.alert("上报计划成功", {icon: 1}, function () {
+                    layer.alert("提交项目成功", {icon: 1}, function () {
                         location.replace(location.href);
                     });
                 }
