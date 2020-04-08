@@ -126,7 +126,7 @@
             <div class="layui-col-md3">
                 <label class="layui-form-label">整改情况：</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" name="rectifySituationName">
+                    <input class="layui-input" name="rectifySituationName" id="rectifySituation">
                 </div>
             </div>
             <div class="layui-col-md3">
@@ -567,6 +567,7 @@
                     default:
                         $("#statusName").text('正在立项')
                 }
+
                 $("[name='planName']").text(res.data.projectName);
                 $.ajax({
                     url:'/audit-api/task/dept/normal/user',
@@ -590,6 +591,10 @@
                     }
                 })
                 form.val('allForm', res.data);
+                //对整改结果的处理，已完成之后
+                if (status === "1001" || status === "1004") {
+                    $("#rectifySituation").val("未整改");
+                }
             },
             error: function (error) {
                 top.layer.msg('请检查网络连接', {icon: 2})
@@ -983,7 +988,6 @@
                 businessId: bizKey
             }
         });
-
 
         // //时间选择器
         // laydate.render({
