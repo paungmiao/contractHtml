@@ -26,7 +26,7 @@
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item level-1">
                 <label class="layui-form-label">
                     <span>*</span>词条名称
                 </label>
@@ -35,7 +35,7 @@
                         autocomplete="off" class="layui-input" value="">
                 </div>
             </div>
-            <div class="layui-form-item level-4 layui-hide">
+            <div class="layui-form-item level-2 layui-hide">
                 <label class="layui-form-label">
                     <span>*</span>二级词条名称
                 </label>
@@ -44,7 +44,7 @@
                         autocomplete="off" class="layui-input" value="">
                 </div>
             </div>
-            <div class="layui-form-item level-4 layui-hide">
+            <div class="layui-form-item level-3 layui-hide">
                 <label class="layui-form-label">
                     <span>*</span>三级词条名称
                 </label>
@@ -137,11 +137,13 @@
                 console.log(data);
             });
             form.on('select(categoryList)', function (data) {
-                let formVal = form.val('entryFlowAddForm');
-                if (formVal.categoryFk != undefined && formVal.categoryFk == 8) {
-                    $("div.level-4").removeClass('layui-hide')
-                } else {
-                    $("div.level-4").addClass('layui-hide')
+                let level = $(data.elem).find(':selected').first().attr('level');
+                for(var i = 1;i<=level;i++){
+                    $(".level-"+i).removeClass("layui-hide")
+                }
+                for(var j = 4;j>level;j--){
+                    $(".level-"+j).addClass("layui-hide")
+                    $(".level-"+j).children("input").val("")
                 }
             });
             form.verify({
@@ -186,11 +188,6 @@
                 let formData = form.val("entryFlowAddForm");
                 formData.createdBy = userInfo.username;
                 formData.applyUser = userInfo.username;
-                if (formData.categoryFk != 8) {
-                    formData.name1 = '';
-                    formData.name2 = '';
-                    formData.name3 = '';
-                }
                 $.ajax({
                     url: '/audit-api/entry/add',
                     type: 'post',

@@ -28,7 +28,7 @@
           </select>
         </div>
       </div>
-      <div class="layui-form-item">
+      <div class="layui-form-item level-1">
         <label class="layui-form-label">
           <span>*</span>词条名称
         </label>
@@ -37,7 +37,7 @@
             class="layui-input">
         </div>
       </div>
-      <div class="layui-form-item level-4 layui-hide">
+      <div class="layui-form-item level-2 layui-hide">
         <label class="layui-form-label">
           <span>*</span>二级词条名称
         </label>
@@ -46,7 +46,7 @@
                  class="layui-input" value="">
         </div>
       </div>
-      <div class="layui-form-item level-4 layui-hide">
+      <div class="layui-form-item level-3 layui-hide">
         <label class="layui-form-label">
           <span>*</span>三级词条名称
         </label>
@@ -138,8 +138,12 @@
       })
       form.on('select(categoryFilter)', function (data) {
         let level = $(data.elem).find(':selected').first().attr('level');
-        if (level == 4) {
-          $("div.level-4").removeClass('layui-hide')
+        for(var i = 1;i<=level;i++){
+          $(".level-"+i).removeClass("layui-hide")
+        }
+        for(var j = 4;j>level;j--){
+          $(".level-"+j).addClass("layui-hide")
+          $(".level-"+j).children("input").val("")
         }
       });
       form.verify({
