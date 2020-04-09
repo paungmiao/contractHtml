@@ -103,8 +103,9 @@
                 <span class="x-red">*</span>问题词条:
             </label>
             <div class="layui-input-block">
-                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">
-                </select>
+<!--                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">-->
+<!--                </select>-->
+                <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId" lay-verify="required|questionEntryId"/>
             </div>
         </div>
         <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
@@ -361,24 +362,24 @@
                 }
             }
         });
-        $.ajax({
-            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
-            dataType: "json",
-            type: "get",
-            async:false,
-            success: function (resp) {
-                if (resp && 0 == resp.code) {
-                    let data = resp.data;
-                    let options = [];
-                    options.push('<option value="" >请选择问题词条</option>')
-                    data.forEach((Obj) => {
-                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                        options.push(option);
-                    })
-                    $("#questionEntryIdSelect").empty().append(options.join(""));
-                }
-            }
-        });
+        // $.ajax({
+        //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
+        //     dataType: "json",
+        //     type: "get",
+        //     async:false,
+        //     success: function (resp) {
+        //         if (resp && 0 == resp.code) {
+        //             let data = resp.data;
+        //             let options = [];
+        //             options.push('<option value="" >请选择问题词条</option>')
+        //             data.forEach((Obj) => {
+        //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+        //                 options.push(option);
+        //             })
+        //             $("#questionEntryIdSelect").empty().append(options.join(""));
+        //         }
+        //     }
+        // });
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
             dataType: "json",
