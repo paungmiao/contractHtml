@@ -85,42 +85,6 @@
     var count = 0;
     layui.use(['table', 'form', 'upload', 'element'], function () {
         let element = layui.element;
-        layui.upload.render({
-            elem: '#batchImportPlanBtn', //绑定元素
-            url: '/audit-api/planCheckList/import',//上传接口,
-            filed:'file'
-            ,data: {
-                createdBy: userInfo.userId,
-                implementingAgencyId: userInfo.deptId
-            },
-            headers: createAuthorizationTokenHeader()
-            , accept: 'file' //普通文件
-            , exts: 'xls|xlsx', //只允许上传压缩文件
-            size: 1024 * 50, // 单位kb
-            before:function(obj){
-                $("#progress").removeClass("layui-hide")
-            },
-            done: function (res, index, upload) {
-                //上传成功毕回调
-                if (res.code == 0) {
-                    let data = res.data;
-                    $("[name='uploadName']").text(data.substr(data.lastIndexOf('/') + 1));
-                    $("[name='fileUri']").val(data);
-                    $(".file-btn").text('重新上传');
-                }
-                $("#progress").addClass("layui-hide")
-                console.log(res)
-            }
-            , error: function () {
-                $("#progress").addClass("layui-hide")
-                //请求异常回调
-            }, progress: function (n, elem) {
-                var percent = n + '%' //获取进度百分
-                element.progress('progress', percent); //可配合 layui 进度条元素使用
-                //以下系 layui 2.5.6 新增
-                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
-            }
-        });
         let table = layui.table;
         let form = layui.form
         $.ajax({
@@ -330,6 +294,40 @@
                     //翻页显示全选按钮 checkbox
                     $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
                 }
+            }
+        });
+        layui.upload.render({
+            elem: '#batchImportPlanBtn', //绑定元素
+            url: '/audit-api/planCheckList/import',//上传接口,
+            filed:'file'
+            ,data: {
+                createdBy: userInfo.userId,
+                implementingAgencyId: userInfo.deptId
+            },
+            headers: createAuthorizationTokenHeader()
+            , accept: 'file' //普通文件
+            , exts: 'xls|xlsx', //只允许上传压缩文件
+            size: 1024 * 50, // 单位kb
+            before:function(obj){
+                $("#progress").removeClass("layui-hide")
+            },
+            done: function (res, index, upload) {
+                //上传成功毕回调
+                $("#progress").addClass("layui-hide")
+                if(res.data){
+                    layer.alert(res.msg)
+                    $("[lay-filter='search']").trigger("click")
+                }
+                console.log(res)
+            }
+            , error: function () {
+                $("#progress").addClass("layui-hide")
+                //请求异常回调
+            }, progress: function (n, elem) {
+                var percent = n + '%' //获取进度百分
+                element.progress('progress', percent); //可配合 layui 进度条元素使用
+                //以下系 layui 2.5.6 新增
+                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
             }
         });
         form.on("submit(search)", function () {
