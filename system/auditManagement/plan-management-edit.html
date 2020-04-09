@@ -15,669 +15,735 @@
 </head>
 
 <body>
-    <div class="x-body  addMerchant layerBox layui-layer-wrap">
+<div class="x-body  addMerchant layerBox layui-layer-wrap">
 
-        <form class="layui-form" lay-filter="planEditForm">
-            <input id="readOnlyData" type="hidden">
-            <input name="id" type="hidden">
-            <input name="createdBy" type="hidden">
-            <input name="status" type="hidden">
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>项目名称:
-                </label>
-                <div class="layui-input-block">
-                    <input name="projectName" type="text" lay-verify="required|projectName" placeholder="请输入项目名称"
-                        autocomplete="off" class="layui-input" value="">
-                </div>
+    <form class="layui-form" lay-filter="planEditForm">
+        <input id="readOnlyData" type="hidden">
+        <input name="id" type="hidden">
+        <input name="createdBy" type="hidden">
+        <input name="status" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>项目名称:
+            </label>
+            <div class="layui-input-block">
+                <input name="projectName" type="text" lay-verify="required|projectName" placeholder="请输入项目名称"
+                       autocomplete="off" class="layui-input" value="">
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>审计年度:
-                </label>
-                <div class="layui-input-block">
-                    <input name="auditYear" class="layui-input layui-disabled" autocomplete="off" placeholder="请输入审计年度">
-                </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计年度:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditYear" class="layui-input layui-disabled" autocomplete="off" placeholder="请输入审计年度">
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>项目类型:
-                </label>
-                <div class="layui-input-block">
-                    <select id="projectTypeSelect" name="projectType">
-                    </select>
-                </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>项目类型:
+            </label>
+            <div class="layui-input-block">
+                <select id="projectTypeSelect" name="projectType">
+                </select>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>实施机构:
-                    <input name="implementingAgencyId" type="hidden" id="implementingAgencyId">
-                </label>
-                <div class="layui-input-block">
-                    <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                        <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled />
-                    </div>
-
-                    <div style="width:50%; float:left">
-                        <select id="impUserSelect" name="impUserId">
-                        </select>
-                    </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>实施机构:
+                <input name="implementingAgencyId" type="hidden" id="implementingAgencyId">
+            </label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled/>
                 </div>
 
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>审计对象:
-                </label>
-                <div class="layui-input-block">
-
-                    <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                        <select id="auditObjectIdSelect" name="auditObjectId" lay-filter="one_cate">
-                        </select>
-                    </div>
-                    <div style="width:50%; float:left">
-                        <select id="impAdminSelect" name="impAdminId">
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>审计性质:
-                </label>
-                <div class="layui-input-block">
-                    <select id="auditNatureIdSelect" name="auditNatureId">
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>问题词条:
-                </label>
-                <div class="layui-input-block">
-<!--                    <select id="questionEntryIdSelect" name="questionEntryId">-->
-<!--                    </select>-->
-                    <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId" lay-verify="required|questionEntryId"/>
-                </div>
-            </div>
-            <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>严重程度:
-                </label>
-                <div class="layui-input-block">
-                    <select id="problemSeverityIdSelect" name="problemSeverityId">
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>整改情况:
-                </label>
-                <div class="layui-input-block">
-                    <select id="rectifySituationIdSelect" name="rectifySituationId">
+                <div style="width:50%; float:left">
+                    <select id="impUserSelect" name="impUserId">
                     </select>
                 </div>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>问题定性:
-                </label>
-                <div class="layui-input-block">
-                    <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off"
-                        class="layui-input" value="">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>问题描述:
-                </label>
-                <div class="layui-input-block">
-                    <!-- <input name="problemDescription" type="text" placeholder="请输入问题描述" autocomplete="off"
-                        class="layui-input" value=""> -->
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-block">
 
-                    <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea"></textarea>
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <select id="auditObjectIdSelect" name="auditObjectId" lay-filter="one_cate">
+                    </select>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>可能影响:
-                </label>
-                <div class="layui-input-block">
-                    <!-- <input name="mayAffect" type="text" placeholder="请输入可能影响" autocomplete="off" class="layui-input"
-                        value=""> -->
-
-                    <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">
-                    <span class="x-red">*</span>整改建议:
-                </label>
-                <div class="layui-input-block">
-                    <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    审计分类:
-                </label>
-                <div class="layui-input-block">
-                    <select id="auditClassificationIdSelect" name="auditClassificationId">
+                <div style="width:50%; float:left">
+                    <select id="impAdminSelect" name="impAdminId">
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
-                <label class="layui-form-label">
-                    风险评估:
+        </div>
+
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计性质:
+            </label>
+            <div class="layui-input-block">
+                <select id="auditNatureIdSelect" name="auditNatureId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题词条:
+            </label>
+            <div class="layui-input-block">
+                <!--                    <select id="questionEntryIdSelect" name="questionEntryId">-->
+                <!--                    </select>-->
+                <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId"
+                       lay-verify="required|questionEntryId"/>
+            </div>
+        </div>
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>严重程度:
+            </label>
+            <div class="layui-input-block">
+                <select id="problemSeverityIdSelect" name="problemSeverityId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>整改情况:
+            </label>
+            <div class="layui-input-block">
+                <select id="rectifySituationIdSelect" name="rectifySituationId">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题定性:
+            </label>
+            <div class="layui-input-block">
+                <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off"
+                       class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题描述:
+            </label>
+            <div class="layui-input-block">
+                <!-- <input name="problemDescription" type="text" placeholder="请输入问题描述" autocomplete="off"
+                    class="layui-input" value=""> -->
+
+                <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>可能影响:
+            </label>
+            <div class="layui-input-block">
+                <!-- <input name="mayAffect" type="text" placeholder="请输入可能影响" autocomplete="off" class="layui-input"
+                    value=""> -->
+
+                <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>整改建议:
+            </label>
+            <div class="layui-input-block">
+                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
+            <label class="layui-form-label">
+                审计分类:
+            </label>
+            <div class="layui-input-block">
+                <select id="auditClassificationIdSelect" name="auditClassificationId">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item mr16">
+            <label class="layui-form-label">风险评估:</label>
+            <input type="hidden" name="riskAssessmentIdSelect" id="riskAssessmentIdSelect">
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect1" id="riskAssessmentIdSelect1" lay-filter="riskAssessmentIdSelect1" style="float: left">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect2" id="riskAssessmentIdSelect2"  lay-filter="riskAssessmentIdSelect2" style="float: left">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect3" id="riskAssessmentIdSelect3"  lay-filter="riskAssessmentIdSelect3" style="float: left">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect4" id="riskAssessmentIdSelect4"  lay-filter="riskAssessmentIdSelect4" lay-verify="required" style="float: left">
+                </select></div>
+
+        </div>
+<!--        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">-->
+<!--            <label class="layui-form-label">-->
+<!--                风险评估:-->
+<!--            </label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                审计依据:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditBasis" type="text" placeholder="请输入审计依据" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                审计经验:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditingExperience" type="text" placeholder="请输入审计经验" autocomplete="off"
+                       class="layui-input" value="">
+            </div>
+        </div>
+
+
+        <div style="text-align: center;">
+            <div class="layui-input-inline" style="margin-left: -50px;">
+                <label for="L_repass" class="layui-form-label">
                 </label>
-                <div class="layui-input-block">
-                    <select id="riskAssessmentIdSelect" name="riskAssessmentId">
-                    </select>
-                </div>
+                <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+                    <i class="layui-icon">&#xe605;</i>修改
+                </button>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    审计依据:
+            <div class="layui-input-inline">
+                <label for="L_repass" class="layui-form-label">
                 </label>
-                <div class="layui-input-block">
-                    <input name="auditBasis" type="text" placeholder="请输入审计依据" autocomplete="off" class="layui-input"
-                        value="">
-                </div>
+                <a class="layui-btn" onclick="off()">
+                    <i class="layui-icon">&#x1007;</i>取消
+                </a>
             </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">
-                    审计经验:
-                </label>
-                <div class="layui-input-block">
-                    <input name="auditingExperience" type="text" placeholder="请输入审计经验" autocomplete="off"
-                        class="layui-input" value="">
-                </div>
-            </div>
+        </div>
 
 
-            <div style="text-align: center;">
-                <div class="layui-input-inline" style="margin-left: -50px;">
-                    <label for="L_repass" class="layui-form-label">
-                    </label>
-                    <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
-                        <i class="layui-icon">&#xe605;</i>修改
-                    </button>
-                </div>
-                <div class="layui-input-inline">
-                    <label for="L_repass" class="layui-form-label">
-                    </label>
-                    <a class="layui-btn" onclick="off()">
-                        <i class="layui-icon">&#x1007;</i>取消
-                    </a>
-                </div>
-            </div>
-
-
-
-        </form>
-        <script>
+    </form>
+    <script>
+        var nameArr = []
+        function initFXPG(defKey,level,elem,name){
             layui.use(['form', 'layer'], function () {
-                let form = layui.form
-                let layer = layui.layer;
+                var form = layui.form;
+                let nxtLevel = parseInt(level)+1;
+                if(nxtLevel>5){
+                    return;
+                }
                 $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+                    url: "/audit-api/planManage/selectEntryByLevel",
                     dataType: "json",
                     type: "get",
+                    data:{
+                        defKey:defKey,
+                        level:undefined==level?1:level,
+                        name:nameArr[0],
+                        name1:nameArr[1],
+                        name2:nameArr[2],
+                        name3:nameArr[3],
+                    },
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
                             let options = [];
-                            options.push('<option value="" >请选择项目类型</option>')
+                            options.push('<option value="" >请选择</option>')
                             data.forEach((Obj) => {
                                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
                                 options.push(option);
                             })
-                            $("#projectTypeSelect").empty().append(options.join(""));
+                            $("#"+elem+level).empty().append(options.join(""));
                         }
                     }
                 });
+                form.on("select(" + elem + level + ")", function (data) {
+                    let name = $(data.elem).find(':selected')[0].text;
+                    nameArr[level - 1] = name
+                    let val = $(data.elem).find(':selected').first().val();
+                    $("#" + elem).val(val)
+                    initFXPG(defKey, nxtLevel, elem)
+                })
+                form.render("select")
+            })
+        }
+
+        layui.use(['form', 'layer'], function () {
+            let form = layui.form
+            let layer = layui.layer;
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+                dataType: "json",
+                type: "get",
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择项目类型</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#projectTypeSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+                dataType: "json",
+                type: "get",
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计性质</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditNatureIdSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            // $.ajax({
+            //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
+            //     dataType: "json",
+            //     type: "get",
+            //     success: function (resp) {
+            //         if (resp && 0 == resp.code) {
+            //             let data = resp.data;
+            //             let options = [];
+            //             options.push('<option value="" >请选择问题词条</option>')
+            //             data.forEach((Obj) => {
+            //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+            //                 options.push(option);
+            //             })
+            //             $("#questionEntryIdSelect").empty().append(options.join(""));
+            //         }
+            //     }
+            // });
+            initFXPG('FXPG','1','riskAssessmentIdSelect')
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
+                dataType: "json",
+                type: "get",
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择问题严重程度</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#problemSeverityIdSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
+                dataType: "json",
+                type: "get",
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择问题整改情况</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#rectifySituationIdSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
+                dataType: "json",
+                type: "get",
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计分类</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditClassificationIdSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+            // $.ajax({
+            //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
+            //     dataType: "json",
+            //     type: "get",
+            //     success: function (resp) {
+            //         if (resp && 0 == resp.code) {
+            //             let data = resp.data;
+            //             let options = [];
+            //             options.push('<option value="" >请选择风险评估</option>')
+            //             data.forEach((Obj) => {
+            //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+            //                 options.push(option);
+            //             })
+            //             $("#riskAssessmentIdSelect").empty().append(options.join(""));
+            //         }
+            //     }
+            // });
+            form.verify({
+                projectName: function (value, dom) {
+                    if (value.length > 128) {
+                        return '项目名称不能超过128个字符！'
+                    }
+                }
+            })
+
+            //监听提交
+            form.on('submit(addPlanCheckList)', function (data) {
                 $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+                    url: '/audit-api/planCheckList/saveOrEditPlan',
+                    type: 'POST',
                     dataType: "json",
-                    type: "get",
+                    data: form.val("planEditForm"),
                     success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择审计性质</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                options.push(option);
+                        //发异步，把数据提交给php
+                        if (0 == resp.code) {
+                            layer.alert("修改成功", {icon: 6}, function () {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                                // 可以对父窗口进行刷新
+                                x_admin_father_reload();
+                            });
+                        } else {
+                            layer.alert("操作失败 " + resp.msg, {icon: 2}, function () {
+
                             })
-                            $("#auditNatureIdSelect").empty().append(options.join(""));
                         }
-                    }
-                });
-                // $.ajax({
-                //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
-                //     dataType: "json",
-                //     type: "get",
-                //     success: function (resp) {
-                //         if (resp && 0 == resp.code) {
-                //             let data = resp.data;
-                //             let options = [];
-                //             options.push('<option value="" >请选择问题词条</option>')
-                //             data.forEach((Obj) => {
-                //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                //                 options.push(option);
-                //             })
-                //             $("#questionEntryIdSelect").empty().append(options.join(""));
-                //         }
-                //     }
-                // });
-                $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
-                    dataType: "json",
-                    type: "get",
-                    success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择问题严重程度</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                options.push(option);
-                            })
-                            $("#problemSeverityIdSelect").empty().append(options.join(""));
-                        }
-                    }
-                });
-                $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
-                    dataType: "json",
-                    type: "get",
-                    success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择问题整改情况</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                options.push(option);
-                            })
-                            $("#rectifySituationIdSelect").empty().append(options.join(""));
-                        }
-                    }
-                });
-                $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
-                    dataType: "json",
-                    type: "get",
-                    success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择审计分类</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                options.push(option);
-                            })
-                            $("#auditClassificationIdSelect").empty().append(options.join(""));
-                        }
-                    }
-                });
-                $.ajax({
-                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
-                    dataType: "json",
-                    type: "get",
-                    success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择风险评估</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                options.push(option);
-                            })
-                            $("#riskAssessmentIdSelect").empty().append(options.join(""));
-                        }
-                    }
-                });
-                form.verify({
-                    projectName: function (value, dom) {
-                        if (value.length > 128) {
-                            return '项目名称不能超过128个字符！'
-                        }
-                    }
+
+                    },
                 })
 
-                //监听提交
-                form.on('submit(addPlanCheckList)', function (data) {
-                    $.ajax({
-                        url: '/audit-api/planCheckList/saveOrEditPlan',
-                        type: 'POST',
-                        dataType: "json",
-                        data: form.val("planEditForm"),
-                        success: function (resp) {
-                            //发异步，把数据提交给php
-                            if (0 == resp.code) {
-                                layer.alert("修改成功", { icon: 6 }, function () {
-                                    // 获得frame索引
-                                    var index = parent.layer.getFrameIndex(window.name);
-                                    //关闭当前frame
-                                    parent.layer.close(index);
-                                    // 可以对父窗口进行刷新
-                                    x_admin_father_reload();
-                                });
-                            } else {
-                                layer.alert("操作失败 " + resp.msg, { icon: 2 }, function () {
-
-                                })
-                            }
-
-                        },
-                    })
-
-                    return false;
-                });
-                form.on('select(one_cate)', function (data) {
-                    let deptId = data['value'];
-                    $.ajax({
-                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
-                        dataType: "json",
-                        type: "get",
-                        async: false,
-                        headers: createAuthorizationTokenHeader(),
-                        success: function (resp) {
-                            if (resp && 0 == resp.code) {
-                                let data = resp.data;
-                                let options = [];
-                                options.push('<option value="" >请选择审计对象管理员</option>')
-                                data.forEach((Obj) => {
-                                    let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                    options.push(option);
-                                })
-                                $("#auditAdminSelect").empty().append(options.join(""));
-                            }
-                        }
-                    });
-                    $.ajax({
-                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
-                        dataType: "json",
-                        type: "get",
-                        async: false,
-                        headers: createAuthorizationTokenHeader(),
-                        success: function (resp) {
-                            if (resp && 0 == resp.code) {
-                                let data = resp.data;
-                                let options = [];
-                                options.push('<option value="" >请选择审计对象一般用户</option>')
-                                data.forEach((Obj) => {
-                                    let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                    options.push(option);
-                                })
-                                $("#auditUserSelect").empty().append(options.join(""));
-                            }
-                        }
-                    });
-                    form.render("select");
-                });
-
+                return false;
             });
-            layui.use('laydate', function () {
-                var laydate = layui.laydate;
-                //执行一个laydate实例
-                laydate.render({
-                    elem: '#start', //指定元素
-                    type: 'year'
-                });
-            });
-
-            function off() {
-                var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-                parent.layer.close(index);		//关闭窗口
-            }
-        </script>
-        <script>
-            function initEntryInfo() {
-                // 数据回显渲染
+            form.on('select(one_cate)', function (data) {
+                let deptId = data['value'];
                 $.ajax({
-                    url: "/audit-api/planManage/" + $("#implementingAgencyId").val(),
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
                     dataType: "json",
                     type: "get",
                     async: false,
                     headers: createAuthorizationTokenHeader(),
                     success: function (resp) {
-                        layui.use('form', function () {
-
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择审计性质</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#auditNatureIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择问题词条</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#questionEntryIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择问题严重程度</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#problemSeverityIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择问题整改情况</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#rectifySituationIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择审计分类</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#auditClassificationIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择风险评估</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#riskAssessmentIdSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            let form = layui.form;
-                            let implDeptId = resp.data.implementingAgencyId;
-                            let auditObjectId = resp.data.auditObjectId;
-                            //赋值
-                            if (implDeptId != undefined && implDeptId != '') {
-                                $.ajax({
-                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施管理员",
-                                    dataType: "json",
-                                    type: "get",
-                                    async: false,
-                                    headers: createAuthorizationTokenHeader(),
-                                    success: function (resp) {
-                                        if (resp && 0 == resp.code) {
-                                            let data = resp.data;
-                                            let options = [];
-                                            options.push('<option value="" >请选择实施机构管理员</option>')
-                                            data.forEach((Obj) => {
-                                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                                options.push(option);
-                                            })
-                                            $("#impAdminSelect").empty().append(options.join(""));
-                                        }
-                                    }
-                                });
-                                $.ajax({
-                                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施一般角色",
-                                    dataType: "json",
-                                    type: "get",
-                                    async: false,
-                                    headers: createAuthorizationTokenHeader(),
-                                    success: function (resp) {
-                                        if (resp && 0 == resp.code) {
-                                            let data = resp.data;
-                                            let options = [];
-                                            options.push('<option value="" >请选择实施机构一般用户</option>')
-                                            data.forEach((Obj) => {
-                                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                                options.push(option);
-                                            })
-                                            $("#impUserSelect").empty().append(options.join(""));
-                                        }
-                                    }
-                                });
-                                $.ajax({
-                                    url: "/audit-api/planManage/getAuditObject?deptId=" + implDeptId,
-                                    dataType: "json",
-                                    type: "get",
-                                    async: false,
-                                    headers: createAuthorizationTokenHeader(),
-                                    success: function (resp) {
-                                        if (resp && 0 == resp.code) {
-                                            let data = resp.data;
-                                            let options = [];
-                                            options.push('<option value="" >请选择审计对象</option>')
-                                            data.forEach((Obj) => {
-                                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                                                options.push(option);
-                                            })
-                                            $("#auditObjectIdSelect").empty().append(options.join(""));
-                                        }
-                                    }
-                                })
-                            }
-                            deleteCookie()
-                            $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象管理员",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                headers: createAuthorizationTokenHeader(),
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择审计对象管理员</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#auditAdminSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象一般角色",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                headers: createAuthorizationTokenHeader(),
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择审计对象一般用户</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#auditUserSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-
-                            resp.data['implementingAgencyName'] = userInfo.deptName
-                            form.val('planEditForm', resp.data)
-                            form.render(null, 'planEditForm')
-                        })
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象管理员</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditAdminSelect").empty().append(options.join(""));
+                        }
                     }
-                })
+                });
+                $.ajax({
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
+                    dataType: "json",
+                    type: "get",
+                    async: false,
+                    headers: createAuthorizationTokenHeader(),
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象一般用户</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditUserSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                form.render("select");
+            });
 
-                var readOnlyData = $("#readOnlyData").val();
-                if ("readOnly" == readOnlyData) {
-                    layui.$('input').attr('disabled', true);
-                    layui.$('select').attr('disabled', true);
-                    layui.$('textarea').attr('disabled', true);
-                    layui.form.render();
+        });
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start', //指定元素
+                type: 'year'
+            });
+        });
+
+        function off() {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        }
+    </script>
+    <script>
+        function initEntryInfo() {
+            // 数据回显渲染
+            $.ajax({
+                url: "/audit-api/planManage/" + $("#implementingAgencyId").val(),
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    layui.use('form', function () {
+
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计性质</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditNatureIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题词条</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#questionEntryIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题严重程度</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#problemSeverityIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题整改情况</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#rectifySituationIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计分类</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditClassificationIdSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        // $.ajax({
+                        //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
+                        //     dataType: "json",
+                        //     type: "get",
+                        //     async: false,
+                        //     success: function (resp) {
+                        //         if (resp && 0 == resp.code) {
+                        //             let data = resp.data;
+                        //             let options = [];
+                        //             options.push('<option value="" >请选择风险评估</option>')
+                        //             data.forEach((Obj) => {
+                        //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        //                 options.push(option);
+                        //             })
+                        //             $("#riskAssessmentIdSelect").empty().append(options.join(""));
+                        //         }
+                        //     }
+                        // });
+                        let form = layui.form;
+                        let implDeptId = resp.data.implementingAgencyId;
+                        let auditObjectId = resp.data.auditObjectId;
+                        //赋值
+                        if (implDeptId != undefined && implDeptId != '') {
+                            $.ajax({
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施管理员",
+                                dataType: "json",
+                                type: "get",
+                                async: false,
+                                headers: createAuthorizationTokenHeader(),
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        let options = [];
+                                        options.push('<option value="" >请选择实施机构管理员</option>')
+                                        data.forEach((Obj) => {
+                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                            options.push(option);
+                                        })
+                                        $("#impAdminSelect").empty().append(options.join(""));
+                                    }
+                                }
+                            });
+                            $.ajax({
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施一般角色",
+                                dataType: "json",
+                                type: "get",
+                                async: false,
+                                headers: createAuthorizationTokenHeader(),
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        let options = [];
+                                        options.push('<option value="" >请选择实施机构一般用户</option>')
+                                        data.forEach((Obj) => {
+                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                            options.push(option);
+                                        })
+                                        $("#impUserSelect").empty().append(options.join(""));
+                                    }
+                                }
+                            });
+                            $.ajax({
+                                url: "/audit-api/planManage/getAuditObject?deptId=" + implDeptId,
+                                dataType: "json",
+                                type: "get",
+                                async: false,
+                                headers: createAuthorizationTokenHeader(),
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        let options = [];
+                                        options.push('<option value="" >请选择审计对象</option>')
+                                        data.forEach((Obj) => {
+                                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                            options.push(option);
+                                        })
+                                        $("#auditObjectIdSelect").empty().append(options.join(""));
+                                    }
+                                }
+                            })
+                        }
+                        deleteCookie()
+                        $.ajax({
+                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象管理员",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            headers: createAuthorizationTokenHeader(),
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计对象管理员</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditAdminSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
+                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象一般角色",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            headers: createAuthorizationTokenHeader(),
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择审计对象一般用户</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#auditUserSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+
+                        resp.data['implementingAgencyName'] = userInfo.deptName
+                        form.val('planEditForm', resp.data)
+                        form.render(null, 'planEditForm')
+                    })
                 }
+            })
 
+            var readOnlyData = $("#readOnlyData").val();
+            if ("readOnly" == readOnlyData) {
+                layui.$('input').attr('disabled', true);
+                layui.$('select').attr('disabled', true);
+                layui.$('textarea').attr('disabled', true);
+                layui.form.render();
             }
 
-        </script>
-    </div>
+        }
+
+    </script>
+</div>
 
 </body>
 

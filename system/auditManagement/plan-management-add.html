@@ -43,48 +43,49 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
             </label>
-            <div class="layui-input-block" >
+            <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled />
+                    <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled/>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
+                    </select>
+                </div>
             </div>
-            <div style="width:50%; float:left">
-                <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
-                </select>
-            </div>
-            </div>
-            
-<!--            <div class="layui-input-inline">-->
-<!--                <select id="impUserSelect" name="impUserId">-->
-<!--                </select>-->
-<!--            </div>-->
+
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="impUserSelect" name="impUserId">-->
+            <!--                </select>-->
+            <!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
-            
-            <div class="layui-input-block" >
+
+            <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId" lay-filter="one_cate">
-                </select>
-            </div>
-            <div style="width:50%; float:left">
-                <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">
-                </select>
-            </div>
+                    <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId"
+                            lay-filter="one_cate">
+                    </select>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">
+                    </select>
+                </div>
             </div>
 
-<!--            -->
-<!--            <div class="layui-input-inline">-->
-<!--                <select id="auditUserSelect" name="auditUserId">-->
-<!--                </select>-->
-<!--            </div>-->
+            <!--            -->
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="auditUserSelect" name="auditUserId">-->
+            <!--                </select>-->
+            <!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>项目类型:
             </label>
-            <div class="layui-input-block" >
+            <div class="layui-input-block">
                 <select id="projectTypeSelect" name="projectType" lay-verify="required|projectType">
                 </select>
             </div>
@@ -103,9 +104,10 @@
                 <span class="x-red">*</span>问题词条:
             </label>
             <div class="layui-input-block">
-<!--                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">-->
-<!--                </select>-->
-                <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId" lay-verify="required|questionEntryId"/>
+                <!--                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">-->
+                <!--                </select>-->
+                <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId"
+                       lay-verify="required|questionEntryId"/>
             </div>
         </div>
         <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
@@ -122,17 +124,19 @@
                 <span class="x-red">*</span>整改情况:
             </label>
             <div class="layui-input-block">
-                <select id="rectifySituationIdSelect" name="rectifySituationId" lay-verify="required|rectifySituationId">
+                <select id="rectifySituationIdSelect" name="rectifySituationId"
+                        lay-verify="required|rectifySituationId">
                 </select>
             </div>
         </div>
-       
+
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>问题定性:
             </label>
             <div class="layui-input-block">
-                <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off" class="layui-input" lay-verify="required|problemCharacterization">
+                <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off"
+                       class="layui-input" lay-verify="required|problemCharacterization">
             </div>
         </div>
         <div class="layui-form-item">
@@ -140,7 +144,8 @@
                 <span class="x-red">*</span>问题描述:
             </label>
             <div class="layui-input-block">
-                <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea" lay-verify="required|problemDescription"></textarea>
+                <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea"
+                          lay-verify="required|problemDescription"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -148,7 +153,7 @@
                 可能影响:
             </label>
             <div class="layui-input-block">
-                <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea" ></textarea>
+                <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -156,7 +161,7 @@
                 整改建议:
             </label>
             <div class="layui-input-block">
-                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea" ></textarea>
+                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
@@ -172,88 +177,102 @@
             <label class="layui-form-label">风险评估:</label>
             <input type="hidden" name="riskAssessmentIdSelect" id="riskAssessmentIdSelect">
             <div class="layui-input-inline">
-                <select name="riskAssessmentIdSelect1" id="riskAssessmentIdSelect1" lay-filter="riskAssessmentIdSelect1" style="float: left">
+                <select name="riskAssessmentIdSelect1" id="riskAssessmentIdSelect1" lay-filter="riskAssessmentIdSelect1"
+                        style="float: left">
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="riskAssessmentIdSelect2" id="riskAssessmentIdSelect2"  lay-filter="riskAssessmentIdSelect2" style="float: left">
+                <select name="riskAssessmentIdSelect2" id="riskAssessmentIdSelect2" lay-filter="riskAssessmentIdSelect2"
+                        style="float: left">
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="riskAssessmentIdSelect3" id="riskAssessmentIdSelect3"  lay-filter="riskAssessmentIdSelect3" style="float: left">
+                <select name="riskAssessmentIdSelect3" id="riskAssessmentIdSelect3" lay-filter="riskAssessmentIdSelect3"
+                        style="float: left">
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="riskAssessmentIdSelect4" id="riskAssessmentIdSelect4"  lay-filter="riskAssessmentIdSelect4" lay-verify="required" style="float: left">
+                <select name="riskAssessmentIdSelect4" id="riskAssessmentIdSelect4" lay-filter="riskAssessmentIdSelect4"
+                        lay-verify="required" style="float: left">
                 </select></div>
 
         </div>
-<!--            <div class="layui-input-block">-->
-<!--                <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
-<!--                </select>-->
-<!--            </div>-->
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                审计依据:
-            </label>
-            <div class="layui-input-block">
-                <input name="auditBasis" type="text" placeholder="请输入审计依据" autocomplete="off" class="layui-input" value="">
-            </div>
-        </div>
-      
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                审计经验:
-            </label>
-            <div class="layui-input-block">
-                <input name="auditingExperience" type="text" placeholder="请输入审计经验" autocomplete="off" class="layui-input" value="">
-            </div>
-        </div>
-      
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                附件上传:
-            </label>
-            <div class="layui-input-inline">
-                <input type="hidden" name="fileUri">
-                <span class="layui-btn file-btn" id="upload" name="file-btn" style="float: left;"><i class="layui-icon">&#xe681;</i>上传</span>
-                <span name="uploadName" style="float: left;margin: 8px 0 0 16px;"></span>
-            </div>
-        </div>
+        <!--            <div class="layui-input-block">-->
+        <!--                <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
+        <!--                </select>-->
+        <!--            </div>-->
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">
+        审计依据:
+    </label>
+    <div class="layui-input-block">
+        <input name="auditBasis" type="text" placeholder="请输入审计依据" autocomplete="off" class="layui-input" value="">
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">
+        审计经验:
+    </label>
+    <div class="layui-input-block">
+        <input name="auditingExperience" type="text" placeholder="请输入审计经验" autocomplete="off" class="layui-input"
+               value="">
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">
+        附件上传:
+    </label>
+    <div class="layui-input-inline">
+        <input type="hidden" name="fileUri">
+        <span class="layui-btn file-btn" id="upload" name="file-btn" style="float: left;"><i
+                class="layui-icon">&#xe681;</i>上传</span>
+        <span name="uploadName" style="float: left;margin: 8px 0 0 16px;"></span>
+    </div>
+</div>
 
 
-        <div class="layui-input-inline">
-            <label for="L_repass" class="layui-form-label">
-            </label>
-            <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
-                <i class="layui-icon">&#xe605;</i>添加
-            </button>
-        </div>
-        <div class="layui-input-inline">
-            <label for="L_repass" class="layui-form-label">
-            </label>
-            <a class="layui-btn" onclick="off()">
-                <i class="layui-icon">&#x1007;</i>取消
-            </a>
-        </div>
+<div class="layui-input-inline">
+    <label for="L_repass" class="layui-form-label">
+    </label>
+    <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+        <i class="layui-icon">&#xe605;</i>添加
+    </button>
+</div>
+<div class="layui-input-inline">
+    <label for="L_repass" class="layui-form-label">
+    </label>
+    <a class="layui-btn" onclick="off()">
+        <i class="layui-icon">&#x1007;</i>取消
+    </a>
+</div>
 
-    </form>
+</form>
 </div>
 <script>
 
-    function initFXPG(defKey,level,elem,name){
+    var nameArr = [];
+
+    function initFXPG(defKey, level, elem, name) {
         layui.use(['form', 'layer'], function () {
-           var form = layui.form;
-            let nxtLevel = parseInt(level)+1;
+            var form = layui.form;
+            let nxtLevel = parseInt(level) + 1;
+            if(nxtLevel>5){
+                return;
+            }
             $.ajax({
                 url: "/audit-api/planManage/selectEntryByLevel",
                 dataType: "json",
                 type: "get",
-                data:{
-                    defKey:defKey,
-                    level:undefined==level?1:level,
-                    name:name
+                data: {
+                    defKey: defKey,
+                    level: undefined == level ? 1 : level,
+                    name: nameArr[0],
+                    name1: nameArr[1],
+                    name2: nameArr[2],
+                    name3: nameArr[3],
                 },
                 async: false,
                 success: function (resp) {
@@ -265,29 +284,24 @@
                             let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
                             options.push(option);
                         })
-                        $("#"+elem+level).empty().append(options.join(""));
+                        $("#" + elem + level).empty().append(options.join(""));
                     }
                 }
             });
-            if(nxtLevel>4){
-                return;
-            }
-           form.on("select("+elem+level+")",function (data) {
-               let name = $(data.elem).find(':selected').first().text();
-               if(level==4){
-                   let val = $(data.elem).find(':selected').first().val();
-                   debugger
-                   $("#"+elem).val(val)
-               }
-               initFXPG(defKey,nxtLevel,elem,name)
-           })
+            form.on("select(" + elem + level + ")", function (data) {
+                let name = $(data.elem).find(':selected')[0].text;
+                nameArr[level - 1] = name
+                let val = $(data.elem).find(':selected').first().val();
+                $("#" + elem).val(val)
+                initFXPG(defKey, nxtLevel, elem)
+            })
             form.render("select")
-       })
+        })
     }
 
     layui.use(['form', 'layer', 'upload'], function () {
-        if(!userInfo){
-            return top.layer.msg("用户身份信息已失效",{icon:2})
+        if (!userInfo) {
+            return top.layer.msg("用户身份信息已失效", {icon: 2})
         }
         //赋值
         $("#implementingAgencyId").val(userInfo.deptId);
@@ -303,11 +317,11 @@
             elem: '#upload',
             url: '/audit-api/file/upload',
             auto: true,//选完文件后自动上传
-            data:{
-                bizKey:userInfo.username
+            data: {
+                bizKey: userInfo.username
             },
             accept: 'file', //所有文件
-            size: 500*1024, //限制文件大小，单位 KB
+            size: 500 * 1024, //限制文件大小，单位 KB
             done: function (res) {
                 //上传成功毕回调
                 if (res.code == 0) {
@@ -316,8 +330,8 @@
                     $("[name='fileUri']").val(data);
                     $(".file-btn").text('重新上传');
                     console.log(res)
-                }else {
-                    top.layer.msg("上传失败",{icon:1})
+                } else {
+                    top.layer.msg("上传失败", {icon: 1})
                 }
             },
             choose: function (obj) {
@@ -329,8 +343,8 @@
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施管理员",
                 dataType: "json",
                 type: "get",
-                async:false,
-                headers:createAuthorizationTokenHeader(),
+                async: false,
+                headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
                     if (resp && 0 == resp.code) {
                         let data = resp.data;
@@ -348,7 +362,7 @@
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施一般角色",
                 dataType: "json",
                 type: "get",
-                async:false,
+                async: false,
                 headers: {
                     Authorization: window.sessionStorage.getItem('Authorization')
                 },
@@ -367,10 +381,10 @@
             });
         }
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId="+userInfo.deptId,
+            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
             dataType: "json",
             type: "get",
-            async:false,
+            async: false,
             headers: createAuthorizationTokenHeader(),
             success: function (resp) {
                 if (resp && 0 == resp.code) {
@@ -389,7 +403,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
             dataType: "json",
             type: "get",
-            async:false,
+            async: false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -407,7 +421,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
             type: "get",
-            async:false,
+            async: false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -443,7 +457,7 @@
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
             dataType: "json",
             type: "get",
-            async:false,
+            async: false,
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -476,7 +490,7 @@
             }
         });
 
-        initFXPG('FXPG','1','riskAssessmentIdSelect','')
+        initFXPG('FXPG', '1', 'riskAssessmentIdSelect')
 
         form.verify({
             projectName: function (value, dom) {
@@ -489,7 +503,7 @@
         //监听提交
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");
-            formData.createdUsername=userInfo.username
+            formData.createdUsername = userInfo.username
             $.ajax({
                 url: '/audit-api/planCheckList/saveOrEditPlan',
                 type: 'POST',
