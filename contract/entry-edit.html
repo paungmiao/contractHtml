@@ -140,10 +140,12 @@
         let level = $(data.elem).find(':selected').first().attr('level');
         for(var i = 1;i<=level;i++){
           $(".level-"+i).removeClass("layui-hide")
+          $(".level-"+i).find("input").attr("lay-verify","required|name")
         }
         for(var j = 4;j>level;j--){
           $(".level-"+j).addClass("layui-hide")
           $(".level-"+j).children("input").val("")
+          $(".level-"+i).find("input").removeAttr("lay-verify")
         }
       });
       form.verify({

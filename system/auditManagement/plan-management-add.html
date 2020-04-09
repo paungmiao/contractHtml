@@ -168,14 +168,30 @@
                 </select>
             </div>
         </div>
-        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
-            <label class="layui-form-label">
-                风险评估:
-            </label>
-            <div class="layui-input-block">
-                <select id="riskAssessmentIdSelect" name="riskAssessmentId">
+        <div class="layui-form-item mr16">
+            <label class="layui-form-label">风险评估:</label>
+            <input type="hidden" name="riskAssessmentIdSelect" id="riskAssessmentIdSelect">
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect1" id="riskAssessmentIdSelect1" lay-filter="riskAssessmentIdSelect1" style="float: left">
                 </select>
             </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect2" id="riskAssessmentIdSelect2"  lay-filter="riskAssessmentIdSelect2" style="float: left">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect3" id="riskAssessmentIdSelect3"  lay-filter="riskAssessmentIdSelect3" style="float: left">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="riskAssessmentIdSelect4" id="riskAssessmentIdSelect4"  lay-filter="riskAssessmentIdSelect4" lay-verify="required" style="float: left">
+                </select></div>
+
+        </div>
+<!--            <div class="layui-input-block">-->
+<!--                <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
+<!--                </select>-->
+<!--            </div>-->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -225,6 +241,49 @@
     </form>
 </div>
 <script>
+
+    function initFXPG(defKey,level,elem,name){
+        layui.use(['form', 'layer'], function () {
+           var form = layui.form;
+            let nxtLevel = parseInt(level)+1;
+            $.ajax({
+                url: "/audit-api/planManage/selectEntryByLevel",
+                dataType: "json",
+                type: "get",
+                data:{
+                    defKey:defKey,
+                    level:undefined==level?1:level,
+                    name:name
+                },
+                async: false,
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#"+elem+level).empty().append(options.join(""));
+                    }
+                }
+            });
+            if(nxtLevel>4){
+                return;
+            }
+           form.on("select("+elem+level+")",function (data) {
+               let name = $(data.elem).find(':selected').first().text();
+               if(level==4){
+                   let val = $(data.elem).find(':selected').first().val();
+                   debugger
+                   $("#"+elem).val(val)
+               }
+               initFXPG(defKey,nxtLevel,elem,name)
+           })
+            form.render("select")
+       })
+    }
 
     layui.use(['form', 'layer', 'upload'], function () {
         if(!userInfo){
@@ -416,42 +475,9 @@
                 }
             }
         });
-        $.ajax({
-            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
-            dataType: "json",
-            type: "get",
-            async: false,
-            success: function (resp) {
-                if (resp && 0 == resp.code) {
-                    let data = resp.data;
-                    let options = [];
-                    options.push('<option value="" >请选择审计分类</option>')
-                    data.forEach((Obj) => {
-                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                        options.push(option);
-                    })
-                    $("#auditClassificationIdSelect").empty().append(options.join(""));
-                }
-            }
-        });
-        $.ajax({
-            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
-            dataType: "json",
-            type: "get",
-            async: false,
-            success: function (resp) {
-                if (resp && 0 == resp.code) {
-                    let data = resp.data;
-                    let options = [];
-                    options.push('<option value="" >请选择风险评估</option>')
-                    data.forEach((Obj) => {
-                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                        options.push(option);
-                    })
-                    $("#riskAssessmentIdSelect").empty().append(options.join(""));
-                }
-            }
-        });
+
+        initFXPG('FXPG','1','riskAssessmentIdSelect','')
+
         form.verify({
             projectName: function (value, dom) {
                 if (value.length > 128) {

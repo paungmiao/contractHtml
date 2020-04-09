@@ -181,7 +181,9 @@
                             success: function (resp) {
                                 if (resp && 0 == resp.code) {
                                     let data = resp.data;
-                                    auditObjectName = data['name'];
+                                    if(data){
+                                        auditObjectName = (undefined == data['name'])?'':data['name'];
+                                    }
                                 }
                             }
                         });
