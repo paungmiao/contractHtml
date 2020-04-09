@@ -62,6 +62,10 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
+    <xblock>
+        <button class="layui-btn" onclick="dealPlanBatch('', '1002')"><i class="layui-icon"></i>批量审核</button>
+        <button class="layui-btn" onclick="dealPlanBatch('', '1003')"><i class="layui-icon"></i>批量驳回</button>
+    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
            lay-filter="test"></table>
 
@@ -262,10 +266,26 @@
                 userId : userInfo.userId, //必填
             },
             done: function (res, curr, count) {
-                // let roleIdList = userInfo.roleIdList;
-                // if ($.inArray(6, roleIdList) > -1) {
-                //     $("[data-field='deal']").css('display','none');
-                // }
+                let state = "";
+                for (let i in res.data) {
+                    let item = res.data[i];
+                    let status = item.planInfos[0]['statusUser']
+                    if (status === '1001') {// 这里是判断需要禁用的条件（如：状态为0的）
+
+                    } else {
+                        state = "1";
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
+                        form.render();// 重新渲染一下
+                    }
+                }
+
+                if (state === "1") {
+                    // 根据条件移除全选 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0"><span></span></div>');
+                } else {
+                    //翻页显示全选按钮 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
+                }
             }
         });
         form.on("submit(search)", function () {
@@ -336,7 +356,7 @@
                 headers: createAuthorizationTokenHeader(),
                 success: function (resp) {
                     if (!resp.data) {
-                        let index = layer.alert("操作失败，请完善审计对象管理员！", {icon: 1}, function () {
+                        let index = layer.alert("操作失败", {icon: 1}, function () {
                             layer.close(index);
                         });
                     } else {
@@ -347,6 +367,55 @@
                 }
             });
 
+        });
+    }
+
+    function dealPlanBatch(id, status) {
+        layer.confirm('确认操作？', function (index) {
+            let table = layui.table;
+            var checkStatus = table.checkStatus('test');
+            var ids = [];
+            if (id != '') {
+                ids.push(id);
+            }
+            let temp = '';
+            let flag = false;
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                let planInfo = o.planInfos[0];
+                if (temp != '' && temp != planInfo.statusUser) {
+                    flag = true;
+                }
+                ids.push(o.id);
+                temp = planInfo.statusUser;
+            });
+            if (flag) {
+                layer.msg('请选择相同状态的项目');
+                return false;
+            }
+            if (ids.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            ids = ids.join(",");
+            console.log(ids);
+            $.ajax({
+                url: "/audit-api/planCheckList/changePlanStatusByIds",
+                type: 'POST',
+                dataType: "json",
+                data: {ids: ids, statusUser: status, userId: userInfo.userId},
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (!resp.data) {
+                        let index = layer.alert("操作失败", {icon: 1}, function () {
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert("操作成功", {icon: 1}, function () {
+                            location.replace(location.href);
+                        });
+                    }
+                }
+            });
         });
     }
 
