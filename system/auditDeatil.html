@@ -210,6 +210,12 @@
                         <input class="layui-input" name="questionEntryId" value="">
                     </div>
                 </div>
+                <div class="layui-form-item notAuditGroup">
+                    <label class="layui-form-label">问题词条：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="questionType" value="">
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">问题定性：</label>
                     <div class="layui-input-block">
@@ -234,7 +240,7 @@
                         <input class="layui-input" name="auditClassificationId" value="">
                     </div>
                 </div>
-                <div class="layui-form-item ">
+                <div class="layui-form-item notAuditGroup">
                     <label class="layui-form-label">机构层级：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="agencyLevel" value="">
@@ -246,31 +252,31 @@
                         <input class="layui-input" name="enterTime" value="">
                     </div>
                 </div>
-                <div class="layui-form-item ">
+                <div class="layui-form-item notAuditGroup">
                     <label class="layui-form-label">组织形式：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="orgType" value="">
                     </div>
                 </div>
-                <div class="layui-form-item ">
+                <div class="layui-form-item noAuditGroup">
                     <label class="layui-form-label">主要负责人责任类型：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="managerDutyType" value="">
                     </div>
                 </div>
-                <div class="layui-form-item ">
+                <div class="layui-form-item noAuditGroup">
                     <label class="layui-form-label">风险类别：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="riskType" value="">
                     </div>
                 </div>
-                <div class="layui-form-item ">
+                <div class="layui-form-item noAuditGroup">
                     <label class="layui-form-label">主要职能：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="functionType" value="">
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item noAuditGroup">
                     <label class="layui-form-label">审计建议：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="auditSuggestions" value="">
@@ -590,6 +596,7 @@
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
                 let status = res.data.status;
+                debugger
                 //审计部门人员无法看到 notAuditGroup 类的条目
                 if(userInfo.userId==res.data.auditUserId||userInfo.userId==res.data.auditAdminId){
                     $(".notAuditGroup").remove()

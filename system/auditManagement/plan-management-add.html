@@ -17,18 +17,19 @@
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="planAddForm">
-        <input name="implementingAgencyId" type="hidden" id="implementingAgencyId">
-        <input name="createdBy" type="hidden" id="createdBy">
-        <input name="createdUsername" type="hidden" id="createdUsername">
-        <input name="impUserId" type="hidden" id="impUserId">
-        <!--        <div class="layui-form-item">-->
-        <!--            <label class="layui-form-label">-->
-        <!--                <span class="x-red">*</span>审计年度:-->
-        <!--            </label>-->
-        <!--            <div class="layui-input-inline">-->
-        <!--                <input name="auditYear" class="layui-input layui-disabled" style="width:200px" autocomplete="off" placeholder="请输入审计年度" id="start">-->
-        <!--            </div>-->
-        <!--        </div>-->
+        <input id="readOnlyData" type="hidden">
+        <input name="id" type="hidden">
+        <input name="createdBy" type="hidden">
+        <input name="status" type="hidden">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计年度:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditYear" id="start" class="layui-input layui-disabled" autocomplete="off"
+                       placeholder="请输入审计年度">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>项目名称:
@@ -38,76 +39,67 @@
                        autocomplete="off" class="layui-input" value="">
             </div>
         </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>实施机构:
-            </label>
-            <div class="layui-input-block">
-                <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <input class="layui-input" id="implementingAgencyName" name="implementingAgencyName" disabled/>
-                </div>
-                <div style="width:50%; float:left">
-                    <select id="impAdminSelect" name="impAdminId" lay-verify="required|impAdminId">
-                    </select>
-                </div>
-            </div>
-
-            <!--            <div class="layui-input-inline">-->
-            <!--                <select id="impUserSelect" name="impUserId">-->
-            <!--                </select>-->
-            <!--            </div>-->
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>审计对象:
-            </label>
-
-            <div class="layui-input-block">
-                <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <select id="auditObjectIdSelect" name="auditObjectId" lay-verify="required|auditObjectId"
-                            lay-filter="one_cate">
-                    </select>
-                </div>
-                <div style="width:50%; float:left">
-                    <select id="auditAdminSelect" name="auditAdminId" lay-verify="required|auditAdminId">
-                    </select>
-                </div>
-            </div>
-
-            <!--            -->
-            <!--            <div class="layui-input-inline">-->
-            <!--                <select id="auditUserSelect" name="auditUserId">-->
-            <!--                </select>-->
-            <!--            </div>-->
-        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>项目类型:
             </label>
             <div class="layui-input-block">
-                <select id="projectTypeSelect" name="projectType" lay-verify="required|projectType">
+                <select id="projectTypeSelect" lay-verify="required" name="projectType">
                 </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>实施机构:
+                <input name="implementingAgencyId" lay-verify="required" type="hidden" id="implementingAgencyId">
+            </label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <input class="layui-input" lay-verify="required" id="implementingAgencyName"
+                           name="implementingAgencyName" disabled/>
+                </div>
+
+                <div style="width:50%; float:left">
+                    <select id="impUserSelect" lay-verify="required" name="impUserId">
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-block">
+
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <select id="auditObjectIdSelect" lay-verify="required" name="auditObjectId" lay-filter="one_cate">
+                    </select>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="impAdminSelect" lay-verify="required" name="impAdminId">
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计性质:
             </label>
             <div class="layui-input-block">
-                <select id="auditNatureIdSelect" name="auditNatureId" lay-verify="required|auditNatureId">
+                <select id="auditNatureIdSelect" lay-verify="required" name="auditNatureId">
                 </select>
             </div>
         </div>
         <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">
             <label class="layui-form-label">
-                <span class="x-red">*</span>问题词条:
+                <span class="x-red">*</span>问题类型:
             </label>
             <div class="layui-input-block">
-                <!--                <select id="questionEntryIdSelect" name="questionEntryId" lay-verify="required|questionEntryId">-->
-                <!--                </select>-->
-                <input id="questionEntryIdSelect" class="layui-input" name="questionEntryId"
-                       lay-verify="required|questionEntryId"/>
+                <select id="questionTypeSelect" class="layui-input" name="questionType" lay-verify="required">
+
+                </select>
             </div>
         </div>
         <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
@@ -115,7 +107,7 @@
                 <span class="x-red">*</span>严重程度:
             </label>
             <div class="layui-input-block">
-                <select id="problemSeverityIdSelect" name="problemSeverityId" lay-verify="required|problemSeverityId">
+                <select id="problemSeverityIdSelect" lay-verify="required" name="problemSeverityId">
                 </select>
             </div>
         </div>
@@ -124,19 +116,27 @@
                 <span class="x-red">*</span>整改情况:
             </label>
             <div class="layui-input-block">
-                <select id="rectifySituationIdSelect" name="rectifySituationId"
-                        lay-verify="required|rectifySituationId">
+                <select id="rectifySituationIdSelect" lay-verify="required" name="rectifySituationId">
                 </select>
             </div>
         </div>
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>问题词条:
+            </label>
+            <div class="layui-input-block">
+                <input name="questionEntryId" type="text" lay-verify="required" placeholder="请输入问题词条" autocomplete="off"
+                       class="layui-input" value="">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>问题定性:
             </label>
             <div class="layui-input-block">
-                <input name="problemCharacterization" type="text" placeholder="请输入问题定性" autocomplete="off"
-                       class="layui-input" lay-verify="required|problemCharacterization">
+                <input name="problemCharacterization" lay-verify="required" type="text" placeholder="请输入问题定性"
+                       autocomplete="off"
+                       class="layui-input" value="">
             </div>
         </div>
         <div class="layui-form-item">
@@ -144,8 +144,8 @@
                 <span class="x-red">*</span>问题描述:
             </label>
             <div class="layui-input-block">
-                <textarea name="problemDescription" placeholder="请输入问题描述" class="layui-textarea"
-                          lay-verify="required|problemDescription"></textarea>
+                <textarea name="problemDescription" lay-verify="required" placeholder="请输入问题描述"
+                          class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -153,15 +153,18 @@
                 可能影响:
             </label>
             <div class="layui-input-block">
+                <!-- <input name="mayAffect" type="text" placeholder="请输入可能影响" autocomplete="off" class="layui-input"
+                    value=""> -->
+
                 <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">
-                整改建议:
+                审计建议:
             </label>
             <div class="layui-input-block">
-                <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
+                <textarea name="auditSuggestions" placeholder="审计建议" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item mr16">
@@ -269,15 +272,15 @@
                        value="">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                审计建议:
-            </label>
-            <div class="layui-input-block">
-                <input name="auditSuggestions" type="text" placeholder="请输入审计建议" autocomplete="off" class="layui-input"
-                       value="">
-            </div>
-        </div>
+        <!--        <div class="layui-form-item">-->
+        <!--            <label class="layui-form-label">-->
+        <!--                审计建议:-->
+        <!--            </label>-->
+        <!--            <div class="layui-input-block">-->
+        <!--                <input name="auditSuggestions" type="text" placeholder="请输入审计建议" autocomplete="off" class="layui-input"-->
+        <!--                       value="">-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">
                 审计依据:
@@ -312,20 +315,23 @@
         </div>
 
 
-        <div class="layui-input-inline">
-            <label for="L_repass" class="layui-form-label">
-            </label>
-            <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
-                <i class="layui-icon">&#xe605;</i>添加
-            </button>
+        <div style="text-align: center;">
+            <div class="layui-input-inline" style="margin-left: -50px;">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+                    <i class="layui-icon">&#xe605;</i>添加
+                </button>
+            </div>
+            <div class="layui-input-inline">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <a class="layui-btn" onclick="off()">
+                    <i class="layui-icon">&#x1007;</i>取消
+                </a>
+            </div>
         </div>
-        <div class="layui-input-inline">
-            <label for="L_repass" class="layui-form-label">
-            </label>
-            <a class="layui-btn" onclick="off()">
-                <i class="layui-icon">&#x1007;</i>取消
-            </a>
-        </div>
+
 
     </form>
 </div>
@@ -515,24 +521,42 @@
                 }
             }
         });
-        // $.ajax({
-        //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
-        //     dataType: "json",
-        //     type: "get",
-        //     async:false,
-        //     success: function (resp) {
-        //         if (resp && 0 == resp.code) {
-        //             let data = resp.data;
-        //             let options = [];
-        //             options.push('<option value="" >请选择问题词条</option>')
-        //             data.forEach((Obj) => {
-        //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-        //                 options.push(option);
-        //             })
-        //             $("#questionEntryIdSelect").empty().append(options.join(""));
-        //         }
-        //     }
-        // });
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择问题词条</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#questionEntryIdSelect").empty().append(options.join(""));
+                }
+            }
+        });
+        $.ajax({
+            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=10",
+            dataType: "json",
+            type: "get",
+            async: false,
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择问题类型</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#questionTypeSelect").empty().append(options.join(""));
+                }
+            }
+        });
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
             dataType: "json",
@@ -670,10 +694,10 @@
             elem: '#start', //指定元素
             type: "year"
         });
-        //执行一个laydate实例
-        laydate.render({
-            elem: '[name="enterTime"]', //指定元素
-        });
+        // //执行一个laydate实例
+        // laydate.render({
+        //     elem: '[name="enterTime"]', //指定元素
+        // });
 
     });
 </script>
