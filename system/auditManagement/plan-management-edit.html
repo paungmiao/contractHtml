@@ -160,13 +160,24 @@
                 <textarea name="rectificationSuggestions" placeholder="整改建议" class="layui-textarea"></textarea>
             </div>
         </div>
-        <div class="layui-form-item mr16" style="width:calc(50% - 16px);float: left; clear:none">
+        <div class="layui-form-item mr16" >
             <label class="layui-form-label">
                 审计分类:
             </label>
+            <input type="hidden" id="auditClassificationIdSelect" name="auditClassificationId">
             <div class="layui-input-block">
-                <select id="auditClassificationIdSelect" name="auditClassificationId">
-                </select>
+                <div class="layui-input-inline" >
+                    <select name="auditClassificationIdSelect1" id="auditClassificationIdSelect1"
+                            lay-filter="auditClassificationIdSelect1"
+                            style="float: left">
+                    </select>
+                </div>
+                <div class="layui-input-inline" >
+                    <select name="auditClassificationIdSelect2" id="auditClassificationIdSelect2"
+                            lay-filter="auditClassificationIdSelect2"
+                            style="float: left">
+                    </select>
+                </div>
             </div>
         </div>
         <div class="layui-form-item mr16">
@@ -199,15 +210,70 @@
                 </div>
             </div>
         </div>
-        <!--        <div class="layui-form-item ml16" style="width:calc(50% - 16px);float: left; clear:none">-->
-        <!--            <label class="layui-form-label">-->
-        <!--                风险评估:-->
-        <!--            </label>-->
-        <!--            <div class="layui-input-block">-->
-        <!--                <select id="riskAssessmentIdSelect" name="riskAssessmentId">-->
-        <!--                </select>-->
-        <!--            </div>-->
-        <!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                机构层级:
+            </label>
+            <div class="layui-input-block">
+                <input name="agencyLevel" type="text" placeholder="请输入机构层级" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                进点时间:
+            </label>
+            <div class="layui-input-block">
+                <input name="enterTime" type="text" placeholder="请输入进点时间" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                组织形式:
+            </label>
+            <div class="layui-input-block">
+                <input name="orgType" type="text" placeholder="请输入组织形式" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                主要负责人责任类型:
+            </label>
+            <div class="layui-input-block">
+                <input name="managerDutyType" type="text" placeholder="请输入主要负责人责任类型" autocomplete="off"
+                       class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                风险类别:
+            </label>
+            <div class="layui-input-block">
+                <input name="riskType" type="text" placeholder="请输入风险类别" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                所属职能:
+            </label>
+            <div class="layui-input-block">
+                <input name="functionType" type="text" placeholder="请输入所属职能" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                审计建议:
+            </label>
+            <div class="layui-input-block">
+                <input name="auditSuggestions" type="text" placeholder="请输入审计建议" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 审计依据:
@@ -249,13 +315,13 @@
 
     </form>
     <script>
-        var nameArr = []
 
-        function initFXPG(defKey, level, elem, name) {
+
+        function initMultiLevelEntry(defKey, level, elem, maxLevel) {
             layui.use(['form', 'layer'], function () {
                 var form = layui.form;
                 let nxtLevel = parseInt(level) + 1;
-                if (nxtLevel > 5) {
+                if (nxtLevel > (maxLevel + 1)) {
                     return;
                 }
                 $.ajax({
@@ -265,10 +331,10 @@
                     data: {
                         defKey: defKey,
                         level: undefined == level ? 1 : level,
-                        name: nameArr[0],
-                        name1: nameArr[1],
-                        name2: nameArr[2],
-                        name3: nameArr[3],
+                        name: undefined == $("#" + elem + 1 + " :selected").attr("name") ? '' : $("#" + elem + 1 + " :selected").attr("name"),
+                        name1: undefined == $("#" + elem + 2 + " :selected").attr("name") ? '' : $("#" + elem + 2 + " :selected").attr("name"),
+                        name2: undefined == $("#" + elem + 3 + " :selected").attr("name") ? '' : $("#" + elem + 3 + " :selected").attr("name"),
+                        name3: undefined == $("#" + elem + 4 + " :selected").attr("name") ? '' : $("#" + elem + 4 + " :selected").attr("name"),
                     },
                     async: false,
                     success: function (resp) {
@@ -277,7 +343,7 @@
                             let options = [];
                             options.push('<option value="" >请选择</option>')
                             data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                let option = '<option name="' + (undefined == Obj.name ? '默认' : Obj.name) + '"  value="' + Obj.id + ' ">' + (undefined == Obj.name ? '默认' : Obj.name) + '</option>';
                                 options.push(option);
                             })
                             $("#" + elem + level).empty().append(options.join(""));
@@ -286,10 +352,13 @@
                 });
                 form.on("select(" + elem + level + ")", function (data) {
                     let name = $(data.elem).find(':selected')[0].text;
-                    nameArr[level - 1] = name
                     let val = $(data.elem).find(':selected').first().val();
+                    var tempLevel = nxtLevel;
+                    while (tempLevel <= maxLevel) {
+                        $("#" + elem + (tempLevel++)).val('')
+                    }
                     $("#" + elem).val(val)
-                    initFXPG(defKey, nxtLevel, elem)
+                    initMultiLevelEntry(defKey, nxtLevel, elem, maxLevel)
                 })
                 form.render("select")
             })
@@ -332,24 +401,8 @@
                     }
                 }
             });
-            // $.ajax({
-            //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=8",
-            //     dataType: "json",
-            //     type: "get",
-            //     success: function (resp) {
-            //         if (resp && 0 == resp.code) {
-            //             let data = resp.data;
-            //             let options = [];
-            //             options.push('<option value="" >请选择问题词条</option>')
-            //             data.forEach((Obj) => {
-            //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-            //                 options.push(option);
-            //             })
-            //             $("#questionEntryIdSelect").empty().append(options.join(""));
-            //         }
-            //     }
-            // });
-            initFXPG('FXPG', '1', 'riskAssessmentIdSelect')
+            initMultiLevelEntry('FXPG', '1', 'riskAssessmentIdSelect', 4)
+            initMultiLevelEntry('SJFL', '1', 'auditClassificationIdSelect', 2)
             $.ajax({
                 url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
                 dataType: "json",
@@ -598,6 +651,24 @@
                             }
                         });
                         $.ajax({
+                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    let options = [];
+                                    options.push('<option value="" >请选择问题整改情况</option>')
+                                    data.forEach((Obj) => {
+                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                        options.push(option);
+                                    })
+                                    $("#projectTypeSelect").empty().append(options.join(""));
+                                }
+                            }
+                        });
+                        $.ajax({
                             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
                             dataType: "json",
                             type: "get",
@@ -615,24 +686,6 @@
                                 }
                             }
                         });
-                        // $.ajax({
-                        //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
-                        //     dataType: "json",
-                        //     type: "get",
-                        //     async: false,
-                        //     success: function (resp) {
-                        //         if (resp && 0 == resp.code) {
-                        //             let data = resp.data;
-                        //             let options = [];
-                        //             options.push('<option value="" >请选择风险评估</option>')
-                        //             data.forEach((Obj) => {
-                        //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                        //                 options.push(option);
-                        //             })
-                        //             $("#riskAssessmentIdSelect").empty().append(options.join(""));
-                        //         }
-                        //     }
-                        // });
                         let form = layui.form;
                         let implDeptId = resp.data.implementingAgencyId;
                         let auditObjectId = resp.data.auditObjectId;

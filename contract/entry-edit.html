@@ -248,8 +248,8 @@
             layui.form.val('entryEditForm', resp.data)
           })
           let level = $("#categorySelect").find(':selected').first().attr('level');
-          if (level == 4) {
-            $("div.level-4").removeClass('layui-hide')
+          while (level>1){
+            $("div.level-"+(level--)).removeClass('layui-hide')
           }
         }
       })
