@@ -96,7 +96,7 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md4">
                 <div class="layui-card">
-                    <div class="layui-card-header">整改情况</div>
+                    <div class="layui-card-header" style="font-size: 16px;font-weight:bold">整改情况</div>
                     <div class="layui-card-body">
                         <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim=""
                              lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;"
@@ -107,7 +107,7 @@
             </div>
             <div class="layui-col-md4">
                 <div class="layui-card">
-                    <div class="layui-card-header">项目类型</div>
+                    <div class="layui-card-header" style="font-size: 16px;font-weight:bold">基本情况</div>
                     <div class="layui-card-body">
                         <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim=""
                              lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
@@ -115,8 +115,9 @@
                                 <thead>
                                 <tr>
                                     <th>排名</th>
-                                    <th>类型</th>
+                                    <th>实施机构</th>
                                     <th>项目数</th>
+                                    <th>问题数</th>
                                 </tr>
                                 </thead>
                                 <tbody id="projectTypeBody">
@@ -169,7 +170,7 @@
             url: "/audit-api/planStatistic/questionStatistic",
             dataType: "json",
             type: "post",
-            data: {"rectifySituationId": "all", "auditYear": auditYear},
+            data: {"rectifySituationId": "all", "auditYear": auditYear, "implementingAgencyId": gid},
             success: function (res) {
                 var statisticData = res.data.statisticData;
                 var data1 = [], legendData = [], colors = [];
@@ -234,16 +235,32 @@
         });
         //根据项目类型统计
         $.ajax({
-            url: "/audit-api/planStatistic/questionStatistic",
+            url: "/audit-api/planStatistic/questionStatisticBasic",
             dataType: "json",
             type: "post",
-            data: {"projectType": "all", "auditYear": auditYear},
+            data: {"projectType": "all", "auditYear": auditYear, agenceId: gid,},
             success: function (res) {
                 var statisticData = res.data.statisticData;
                 if (statisticData) {
                     var html = "";
                     statisticData.forEach((item, index) => {
-                        html += "<tr><td>" + (index + 1) + "</td><td>" + item.name + "</td><td>" + item.value + "</td></tr>";
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+item.deptId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    implementingAgencyName = data['name'];
+                                }
+                            }
+                        });
+                        // html += "<tr><td>" + (index + 1) + "</td><td>" + item.name + "</td><td>" + item.value + "</td></tr>";
+                        html+="<tr><td>"+(index+1)+"</td><td>"+implementingAgencyName+"</td><td>"+item.proNum+"</td><td>"+item.errorNum+"</td></tr>";
+
                     });
                     $("#projectTypeBody").html(html);
                 }
@@ -254,7 +271,7 @@
             url: "/audit-api/planStatistic/countOfPlan",
             dataType: "json",
             type: "post",
-            data: {auditYear: auditYear},
+            data: {agenceId: gid,auditYear: auditYear},
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -443,6 +460,8 @@
     typeArr['delay'] = '延期';
 
     function openPlanCheckList(type, deptId, auditYear, title) {
+        deptId = getQueryString("gid"), "auditYear"
+        auditYear = getQueryString("auditYear");
         top.layer.open({
             type: 2,
             area: ['80%', '80%'],

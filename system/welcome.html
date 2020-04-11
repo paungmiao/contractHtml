@@ -490,6 +490,7 @@
     typeArr['delay'] = '延期';
 
     function openPlanCheckList(type, deptId, auditYear, title) {
+        auditYear = $("#auditYear").val();
         top.layer.open({
             type: 2,
             area: ['80%', '80%'],

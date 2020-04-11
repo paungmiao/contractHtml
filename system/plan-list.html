@@ -308,10 +308,14 @@
             data: ssData
         });
         form.on("submit(sreach)", function () {
+            debugger
             let implementingAgencyId = [];
             demo1.getValue().forEach((elm,i)=>{
                 implementingAgencyId.push(elm.value)
-            })
+            });
+            if (implementingAgencyId.length < 1 || deptId != 10100) {
+                implementingAgencyId.push(deptId)
+            }
             tableIns.reload({
                 where: {
                     projectName: $("#projectName").val(),
