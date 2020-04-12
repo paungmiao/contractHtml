@@ -197,7 +197,7 @@
         </div>
         <div class="layui-form-item mr16">
             <label class="layui-form-label">风险评估:</label>
-            <input type="hidden" name="riskAssessmentIdSelect" id="riskAssessmentIdSelect">
+            <input type="hidden" name="riskAssessmentId" id="riskAssessmentIdSelect">
             <div class="layui-input-block">
                 <div class="layui-input-inline">
                     <select name="riskAssessmentIdSelect1" id="riskAssessmentIdSelect1"
@@ -350,7 +350,7 @@
                             let options = [];
                             options.push('<option value="" >请选择</option>')
                             data.forEach((Obj) => {
-                                let option = '<option name="' + (undefined == Obj.name ? '默认' : Obj.name) + '"  value="' + Obj.id + ' ">' + (undefined == Obj.name ? '默认' : Obj.name) + '</option>';
+                                let option = '<option name="' + (undefined == Obj.name ? '默认' : Obj.name) + '"  value="' + Obj.id + '">' + (undefined == Obj.name ? '默认' : Obj.name) + '</option>';
                                 options.push(option);
                             })
                             $("#" + elem + level).empty().append(options.join(""));
@@ -369,6 +369,9 @@
                 })
                 form.render("select")
             })
+            if ($("#" + elem + level + " :selected").val()) {
+                initMultiLevelEntry(defKey, level, elem, maxLevel)
+            }
         }
 
         $(document).ready(function () {
@@ -397,7 +400,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
                     dataType: "json",
                     type: "get",
-                    async:false,
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -429,8 +432,6 @@
                         }
                     }
                 });
-                initMultiLevelEntry('FXPG', '1', 'riskAssessmentIdSelect', 4)
-                initMultiLevelEntry('SJFL', '1', 'auditClassificationIdSelect', 2)
                 $.ajax({
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
                     dataType: "json",
@@ -471,7 +472,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
                     dataType: "json",
                     type: "get",
-                    async:false,
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -690,8 +691,10 @@
                                 }
                             });
                             form.val('planEditForm', resp.data);
-                            // loadEntry(resp.data.auditClassificationId, "auditClassificationIdSelect")
-                            // loadEntry(resp.data.riskAssessmentId, "riskAssessmentIdSelect")
+                            initMultiLevelEntry('FXPG', '1', 'riskAssessmentIdSelect', 4)
+                            initMultiLevelEntry('SJFL', '1', 'auditClassificationIdSelect', 2)
+                            loadEntry(resp.data.auditClassificationId, "auditClassificationIdSelect")
+                            loadEntry(resp.data.riskAssessmentId, "riskAssessmentIdSelect")
                             //赋值
                             $("#implementingAgencyId").val(userInfo.deptId);
                             $("#implementingAgencyName").val(userInfo.deptName);
@@ -720,25 +723,23 @@
 
         function loadEntry(entryId, elemEntry) {
             // 数据回显渲染
-            $("#" + elemEntry).val(entryId);
-            $("#" + elemEntry + 1).val(entryId);
-            $("#" + elemEntry + 2).val(entryId);
-            $("#" + elemEntry + 3).val(entryId);
-            $("#" + elemEntry + 4).val(entryId);
-            // $.ajax({
-            //     url: "/audit-api/entry/" + entryId,
-            //     dataType: "json",
-            //     type: "get",
-            //     async: false,
-            //     success: function (resp) {
-            //         var entryInfo = resp.data
-            //         $("#" + elemEntry).val(entryInfo.id);
-            //         $("#" + elemEntry + 1).val(entryInfo.id);
-            //         $("#" + elemEntry + 2).val(entryInfo.id);
-            //         $("#" + elemEntry + 3).val(entryInfo.id);
-            //         $("#" + elemEntry + 4).val(entryInfo.id);
-            //     }
-            // })
+            if (!entryId) {
+                return
+            }
+            $.ajax({
+                url: "/audit-api/entry/" + entryId,
+                dataType: "json",
+                type: "get",
+                async: false,
+                success: function (resp) {
+                    debugger
+                    $("#" + elemEntry).val(resp.data.id);
+                    $("#" + elemEntry + 1).children("option[value='" + resp.data.id + "']").prop("selected", true)
+                    $("#" + elemEntry + 2).empty().append('<option value="entryInfo.id"  selected>' + resp.data.name1 + '</option>');
+                    $("#" + elemEntry + 3).empty().append('<option value="entryInfo.id" selected>' + resp.data.name2 + '</option>');
+                    $("#" + elemEntry + 4).empty().append('<option value="entryInfo.id" selected>' + resp.data.name3 + '</option>');
+                }
+            })
         }
     </script>
     <script>
