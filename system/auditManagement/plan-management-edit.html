@@ -397,6 +397,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
                     dataType: "json",
                     type: "get",
+                    async:false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -414,7 +415,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
                     dataType: "json",
                     type: "get",
-                    async:false,
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -434,7 +435,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
                     dataType: "json",
                     type: "get",
-                    async:false,
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -452,7 +453,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
                     dataType: "json",
                     type: "get",
-                    async:false,
+                    async: false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -470,6 +471,7 @@
                     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
                     dataType: "json",
                     type: "get",
+                    async:false,
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
@@ -688,6 +690,8 @@
                                 }
                             });
                             form.val('planEditForm', resp.data);
+                            // loadEntry(resp.data.auditClassificationId, "auditClassificationIdSelect")
+                            // loadEntry(resp.data.riskAssessmentId, "riskAssessmentIdSelect")
                             //赋值
                             $("#implementingAgencyId").val(userInfo.deptId);
                             $("#implementingAgencyName").val(userInfo.deptName);
@@ -708,9 +712,33 @@
                 });
             });
         })
+
         function off() {
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
             parent.layer.close(index);		//关闭窗口
+        }
+
+        function loadEntry(entryId, elemEntry) {
+            // 数据回显渲染
+            $("#" + elemEntry).val(entryId);
+            $("#" + elemEntry + 1).val(entryId);
+            $("#" + elemEntry + 2).val(entryId);
+            $("#" + elemEntry + 3).val(entryId);
+            $("#" + elemEntry + 4).val(entryId);
+            // $.ajax({
+            //     url: "/audit-api/entry/" + entryId,
+            //     dataType: "json",
+            //     type: "get",
+            //     async: false,
+            //     success: function (resp) {
+            //         var entryInfo = resp.data
+            //         $("#" + elemEntry).val(entryInfo.id);
+            //         $("#" + elemEntry + 1).val(entryInfo.id);
+            //         $("#" + elemEntry + 2).val(entryInfo.id);
+            //         $("#" + elemEntry + 3).val(entryInfo.id);
+            //         $("#" + elemEntry + 4).val(entryInfo.id);
+            //     }
+            // })
         }
     </script>
     <script>
