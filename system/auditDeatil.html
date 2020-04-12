@@ -211,7 +211,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item notAuditGroup">
-                    <label class="layui-form-label">问题词条：</label>
+                    <label class="layui-form-label">问题类型：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="questionType" value="">
                     </div>
@@ -596,7 +596,6 @@
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
                 let status = res.data.status;
-                debugger
                 //审计部门人员无法看到 notAuditGroup 类的条目
                 if(userInfo.userId==res.data.auditUserId||userInfo.userId==res.data.auditAdminId){
                     $(".notAuditGroup").remove()

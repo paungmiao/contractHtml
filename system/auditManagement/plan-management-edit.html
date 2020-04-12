@@ -488,8 +488,9 @@
                 $.ajax({
                     url: '/audit-api/planCheckList/saveOrEditPlan',
                     type: 'POST',
-                    dataType: "json",
-                    data: form.val("planEditForm"),
+                    contentType: 'application/json;charset=utf-8',
+                    async:false,
+                    data: JSON.stringify(form.val("planEditForm")),
                     success: function (resp) {
                         //发异步，把数据提交给php
                         if (0 == resp.code) {
@@ -552,7 +553,7 @@
                         }
                     }
                 });
-                form.render("select");
+                form.render();
             });
 
         });
@@ -795,7 +796,7 @@
 
                         resp.data['implementingAgencyName'] = userInfo.deptName
                         form.val('planEditForm', resp.data)
-                        form.render(null, 'planEditForm')
+                        form.render()
                     })
                 }
             })

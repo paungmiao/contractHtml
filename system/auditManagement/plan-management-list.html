@@ -319,6 +319,8 @@
                 if(res.data){
                     layer.alert(res.msg)
                     $("[lay-filter='search']").trigger("click")
+                }else{
+                    layer.alert(res.msg,{icon:0})
                 }
                 console.log(res)
             }

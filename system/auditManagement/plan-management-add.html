@@ -17,10 +17,6 @@
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="planAddForm">
-        <input id="readOnlyData" type="hidden">
-        <input name="id" type="hidden">
-        <input name="createdBy" type="hidden">
-        <input name="status" type="hidden">
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计年度:
@@ -609,11 +605,13 @@
         form.on('submit(addPlanCheckList)', function (data) {
             let formData = form.val("planAddForm");
             formData.createdUsername = userInfo.username
+            formData.createdBy = userInfo.userId
             $.ajax({
                 url: '/audit-api/planCheckList/saveOrEditPlan',
                 type: 'POST',
-                dataType: "json",
-                data: formData,
+                contentType: 'application/json;charset=utf-8',
+                async:false,
+                data: JSON.stringify(formData),
                 success: function (resp) {
                     //发异步，把数据提交给php
                     if (0 == resp.code) {
