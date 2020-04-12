@@ -498,6 +498,8 @@
     let opinionStatus = getQueryString("opinionStatus")
     let type = getQueryString("type")
 
+    initDays(bizKey);
+
     function activeThisForm(form,element){
         element.tabChange('tab-container',form)
     }
@@ -1074,6 +1076,21 @@ function getOpinion(form,user) {
         }
     })
     return result;
+}
+
+function initDays(planId) {
+    $.ajax({
+        url:'/audit-api/task/days',
+        type:'get',
+        data:{
+            planId: planId
+        },
+        success:(data)=>{
+            if(data){
+                $("#costTime").val(data);
+            }
+        }
+    })
 }
 </script>
 <style>
