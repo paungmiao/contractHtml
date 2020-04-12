@@ -19,7 +19,7 @@
 
     <form class="layui-form" lay-filter="planEditForm">
         <input id="readOnlyData" type="hidden">
-        <input name="id" type="hidden">
+        <input name="id" id="id" type="hidden">
         <input name="createdBy" type="hidden">
         <input name="status" type="hidden">
         <div class="layui-form-item">
@@ -27,7 +27,8 @@
                 <span class="x-red">*</span>审计年度:
             </label>
             <div class="layui-input-block">
-                <input name="auditYear" id="start" class="layui-input layui-disabled" autocomplete="off" placeholder="请输入审计年度">
+                <input name="auditYear" id="start" class="layui-input layui-disabled" autocomplete="off"
+                       placeholder="请输入审计年度">
             </div>
         </div>
         <div class="layui-form-item">
@@ -55,7 +56,8 @@
             </label>
             <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <input class="layui-input" lay-verify="required" id="implementingAgencyName" name="implementingAgencyName" disabled/>
+                    <input class="layui-input" lay-verify="required" id="implementingAgencyName"
+                           name="implementingAgencyName" disabled/>
                 </div>
 
                 <div style="width:50%; float:left">
@@ -96,7 +98,7 @@
                 <span class="x-red">*</span>问题类型:
             </label>
             <div class="layui-input-block">
-                <select id="questionTypeSelect"  class="layui-input" name="questionType"  lay-verify="required">
+                <select id="questionTypeSelect" class="layui-input" name="questionType" lay-verify="required">
 
                 </select>
             </div>
@@ -133,7 +135,8 @@
                 <span class="x-red">*</span>问题定性:
             </label>
             <div class="layui-input-block">
-                <input name="problemCharacterization" lay-verify="required" type="text" placeholder="请输入问题定性" autocomplete="off"
+                <input name="problemCharacterization" lay-verify="required" type="text" placeholder="请输入问题定性"
+                       autocomplete="off"
                        class="layui-input" value="">
             </div>
         </div>
@@ -142,7 +145,8 @@
                 <span class="x-red">*</span>问题描述:
             </label>
             <div class="layui-input-block">
-                <textarea name="problemDescription" lay-verify="required"  placeholder="请输入问题描述" class="layui-textarea"></textarea>
+                <textarea name="problemDescription" lay-verify="required" placeholder="请输入问题描述"
+                          class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -164,19 +168,19 @@
                 <textarea name="auditSuggestions" placeholder="审计建议" class="layui-textarea"></textarea>
             </div>
         </div>
-        <div class="layui-form-item mr16" >
+        <div class="layui-form-item mr16">
             <label class="layui-form-label">
                 审计分类:
             </label>
             <input type="hidden" id="auditClassificationIdSelect" name="auditClassificationId">
             <div class="layui-input-block">
-                <div class="layui-input-inline" >
+                <div class="layui-input-inline">
                     <select name="auditClassificationIdSelect1" id="auditClassificationIdSelect1"
                             lay-filter="auditClassificationIdSelect1"
                             style="float: left">
                     </select>
                 </div>
-                <div class="layui-input-inline" >
+                <div class="layui-input-inline">
                     <select name="auditClassificationIdSelect2" id="auditClassificationIdSelect2"
                             lay-filter="auditClassificationIdSelect2"
                             style="float: left">
@@ -269,15 +273,6 @@
                        value="">
             </div>
         </div>
-<!--        <div class="layui-form-item">-->
-<!--            <label class="layui-form-label">-->
-<!--                审计建议:-->
-<!--            </label>-->
-<!--            <div class="layui-input-block">-->
-<!--                <input name="auditSuggestions" type="text" placeholder="请输入审计建议" autocomplete="off" class="layui-input"-->
-<!--                       value="">-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">
                 审计依据:
@@ -320,6 +315,7 @@
     </form>
     <script>
 
+        var id = getQueryString("id");
 
         function initMultiLevelEntry(defKey, level, elem, maxLevel) {
             layui.use(['form', 'layer'], function () {
@@ -368,336 +364,265 @@
             })
         }
 
-        layui.use(['form', 'layer'], function () {
-            let form = layui.form
-            let layer = layui.layer;
-            $.ajax({
-                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
-                dataType: "json",
-                type: "get",
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择项目类型</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#projectTypeSelect").empty().append(options.join(""));
-                    }
-                }
-            });
-            $.ajax({
-                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
-                dataType: "json",
-                type: "get",
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择审计性质</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#auditNatureIdSelect").empty().append(options.join(""));
-                    }
-                }
-            });
-            initMultiLevelEntry('FXPG', '1', 'riskAssessmentIdSelect', 4)
-            initMultiLevelEntry('SJFL', '1', 'auditClassificationIdSelect', 2)
-            $.ajax({
-                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
-                dataType: "json",
-                type: "get",
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择问题严重程度</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#problemSeverityIdSelect").empty().append(options.join(""));
-                    }
-                }
-            });
-            $.ajax({
-                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
-                dataType: "json",
-                type: "get",
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择问题整改情况</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#rectifySituationIdSelect").empty().append(options.join(""));
-                    }
-                }
-            });
-            $.ajax({
-                url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
-                dataType: "json",
-                type: "get",
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择审计分类</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#auditClassificationIdSelect").empty().append(options.join(""));
-                    }
-                }
-            });
-            // $.ajax({
-            //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
-            //     dataType: "json",
-            //     type: "get",
-            //     success: function (resp) {
-            //         if (resp && 0 == resp.code) {
-            //             let data = resp.data;
-            //             let options = [];
-            //             options.push('<option value="" >请选择风险评估</option>')
-            //             data.forEach((Obj) => {
-            //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-            //                 options.push(option);
-            //             })
-            //             $("#riskAssessmentIdSelect").empty().append(options.join(""));
-            //         }
-            //     }
-            // });
-            form.verify({
-                projectName: function (value, dom) {
-                    if (value.length > 128) {
-                        return '项目名称不能超过128个字符！'
-                    }
-                }
-            })
-
-            //监听提交
-            form.on('submit(addPlanCheckList)', function (data) {
+        $(document).ready(function () {
+            debugger
+            layui.use(['form', 'layer'], function () {
+                let form = layui.form
+                let layer = layui.layer;
                 $.ajax({
-                    url: '/audit-api/planCheckList/saveOrEditPlan',
-                    type: 'POST',
-                    contentType: 'application/json;charset=utf-8',
-                    async:false,
-                    data: JSON.stringify(form.val("planEditForm")),
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=10",
+                    dataType: "json",
+                    type: "get",
+                    async: false,
                     success: function (resp) {
-                        //发异步，把数据提交给php
-                        if (0 == resp.code) {
-                            layer.alert("修改成功", {icon: 6}, function () {
-                                // 获得frame索引
-                                var index = parent.layer.getFrameIndex(window.name);
-                                //关闭当前frame
-                                parent.layer.close(index);
-                                // 可以对父窗口进行刷新
-                                x_admin_father_reload();
-                            });
-                        } else {
-                            layer.alert("操作失败 " + resp.msg, {icon: 2}, function () {
-
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择问题类型</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
                             })
+                            $("#questionTypeSelect").empty().append(options.join(""));
                         }
-
-                    },
+                    }
+                });
+                $.ajax({
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
+                    dataType: "json",
+                    type: "get",
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择项目类型</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#projectTypeSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
+                    dataType: "json",
+                    type: "get",
+                    async:false,
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计性质</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditNatureIdSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                initMultiLevelEntry('FXPG', '1', 'riskAssessmentIdSelect', 4)
+                initMultiLevelEntry('SJFL', '1', 'auditClassificationIdSelect', 2)
+                $.ajax({
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
+                    dataType: "json",
+                    type: "get",
+                    async:false,
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择问题严重程度</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#problemSeverityIdSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
+                    dataType: "json",
+                    type: "get",
+                    async:false,
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择问题整改情况</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#rectifySituationIdSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
+                    dataType: "json",
+                    type: "get",
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计分类</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditClassificationIdSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                // $.ajax({
+                //     url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=9",
+                //     dataType: "json",
+                //     type: "get",
+                //     success: function (resp) {
+                //         if (resp && 0 == resp.code) {
+                //             let data = resp.data;
+                //             let options = [];
+                //             options.push('<option value="" >请选择风险评估</option>')
+                //             data.forEach((Obj) => {
+                //                 let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
+                //                 options.push(option);
+                //             })
+                //             $("#riskAssessmentIdSelect").empty().append(options.join(""));
+                //         }
+                //     }
+                // });
+                form.verify({
+                    projectName: function (value, dom) {
+                        if (value.length > 128) {
+                            return '项目名称不能超过128个字符！'
+                        }
+                    }
                 })
 
-                return false;
-            });
-            form.on('select(one_cate)', function (data) {
-                let deptId = data['value'];
+                //监听提交
+                form.on('submit(addPlanCheckList)', function (data) {
+                    $.ajax({
+                        url: '/audit-api/planCheckList/saveOrEditPlan',
+                        type: 'POST',
+                        contentType: 'application/json;charset=utf-8',
+                        async: false,
+                        data: JSON.stringify(form.val("planEditForm")),
+                        success: function (resp) {
+                            //发异步，把数据提交给php
+                            if (0 == resp.code) {
+                                layer.alert("修改成功", {icon: 6}, function () {
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+                                    // 可以对父窗口进行刷新
+                                    x_admin_father_reload();
+                                });
+                            } else {
+                                layer.alert("操作失败 " + resp.msg, {icon: 2}, function () {
+
+                                })
+                            }
+
+                        },
+                    })
+
+                    return false;
+                });
+                form.on('select(one_cate)', function (data) {
+                    let deptId = data['value'];
+                    $.ajax({
+                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                        dataType: "json",
+                        type: "get",
+                        async: false,
+                        headers: createAuthorizationTokenHeader(),
+                        success: function (resp) {
+                            if (resp && 0 == resp.code) {
+                                let data = resp.data;
+                                let options = [];
+                                options.push('<option value="" >请选择审计对象管理员</option>')
+                                data.forEach((Obj) => {
+                                    let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                    options.push(option);
+                                })
+                                $("#auditAdminSelect").empty().append(options.join(""));
+                            }
+                        }
+                    });
+                    $.ajax({
+                        url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
+                        dataType: "json",
+                        type: "get",
+                        async: false,
+                        headers: createAuthorizationTokenHeader(),
+                        success: function (resp) {
+                            if (resp && 0 == resp.code) {
+                                let data = resp.data;
+                                let options = [];
+                                options.push('<option value="" >请选择审计对象一般用户</option>')
+                                data.forEach((Obj) => {
+                                    let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                    options.push(option);
+                                })
+                                $("#auditUserSelect").empty().append(options.join(""));
+                            }
+                        }
+                    });
+                });
+
                 $.ajax({
-                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                    url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
                     dataType: "json",
                     type: "get",
                     async: false,
-                    headers: createAuthorizationTokenHeader(),
                     success: function (resp) {
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
                             let options = [];
-                            options.push('<option value="" >请选择审计对象管理员</option>')
+                            options.push('<option value="" >请选择项目类型</option>')
                             data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
                                 options.push(option);
                             })
-                            $("#auditAdminSelect").empty().append(options.join(""));
+                            $("#projectTypeSelect").empty().append(options.join(""));
                         }
                     }
                 });
-                $.ajax({
-                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
-                    dataType: "json",
-                    type: "get",
-                    async: false,
-                    headers: createAuthorizationTokenHeader(),
-                    success: function (resp) {
-                        if (resp && 0 == resp.code) {
-                            let data = resp.data;
-                            let options = [];
-                            options.push('<option value="" >请选择审计对象一般用户</option>')
-                            data.forEach((Obj) => {
-                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                options.push(option);
-                            })
-                            $("#auditUserSelect").empty().append(options.join(""));
-                        }
-                    }
-                });
-                form.render();
-            });
-
-        });
-        layui.use('laydate', function () {
-            var laydate = layui.laydate;
-            //执行一个laydate实例
-            laydate.render({
-                elem: '#start', //指定元素
-                type: 'year'
-            });
-        });
-
-        function off() {
-            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
-            parent.layer.close(index);		//关闭窗口
-        }
-    </script>
-    <script>
-        function initEntryInfo() {
-            // 数据回显渲染
-            $.ajax({
-                url: "/audit-api/planManage/" + $("#implementingAgencyId").val(),
-                dataType: "json",
-                type: "get",
-                async: false,
-                headers: createAuthorizationTokenHeader(),
-                success: function (resp) {
-                    layui.use('form', function () {
-
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择审计性质</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#auditNatureIdSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=10",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择问题类型</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#questionTypeSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=5",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择问题严重程度</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#problemSeverityIdSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=6",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择问题整改情况</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#rectifySituationIdSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=3",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择问题整改情况</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#projectTypeSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=7",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择审计分类</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.id + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#auditClassificationIdSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        let form = layui.form;
-                        let implDeptId = resp.data.implementingAgencyId;
-                        let auditObjectId = resp.data.auditObjectId;
-                        //赋值
-                        if (implDeptId != undefined && implDeptId != '') {
+                if (id) {
+                    $.ajax({
+                        url: "/audit-api/planManage/" + id,
+                        dataType: "json",
+                        type: "get",
+                        async: false,
+                        headers: createAuthorizationTokenHeader(),
+                        success: function (resp) {
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施管理员",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyId + "&roleName=审计实施一般角色",
+                                dataType: "json",
+                                type: "get",
+                                async: false,
+                                headers: {
+                                    Authorization: window.sessionStorage.getItem('Authorization')
+                                },
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        let options = [];
+                                        options.push('<option value="" >请选择实施机构一般用户</option>')
+                                        data.forEach((Obj) => {
+                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                            options.push(option);
+                                        })
+                                        $("#impUserSelect").empty().append(options.join(""));
+                                    }
+                                }
+                            });
+                            $.ajax({
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyId + "&roleName=审计实施管理员",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -716,26 +641,7 @@
                                 }
                             });
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施一般角色",
-                                dataType: "json",
-                                type: "get",
-                                async: false,
-                                headers: createAuthorizationTokenHeader(),
-                                success: function (resp) {
-                                    if (resp && 0 == resp.code) {
-                                        let data = resp.data;
-                                        let options = [];
-                                        options.push('<option value="" >请选择实施机构一般用户</option>')
-                                        data.forEach((Obj) => {
-                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                            options.push(option);
-                                        })
-                                        $("#impUserSelect").empty().append(options.join(""));
-                                    }
-                                }
-                            });
-                            $.ajax({
-                                url: "/audit-api/planManage/getAuditObject?deptId=" + implDeptId,
+                                url: "/audit-api/planManage/getAuditObject?deptId=" + resp.data.implementingAgencyId,
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -753,54 +659,30 @@
                                     }
                                 }
                             })
+                            form.val('planEditForm', resp.data);
+                            form.render('select');
                         }
-                        deleteCookie()
-                        $.ajax({
-                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象管理员",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            headers: createAuthorizationTokenHeader(),
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择审计对象管理员</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#auditAdminSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-                        $.ajax({
-                            url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + auditObjectId + "&roleName=审计对象一般角色",
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            headers: createAuthorizationTokenHeader(),
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择审计对象一般用户</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#auditUserSelect").empty().append(options.join(""));
-                                }
-                            }
-                        });
-
-                        resp.data['implementingAgencyName'] = userInfo.deptName
-                        form.val('planEditForm', resp.data)
-                        form.render()
                     })
                 }
-            })
-
+                form.render('select');
+            });
+            layui.use('laydate', function () {
+                var laydate = layui.laydate;
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#start', //指定元素
+                    type: 'year'
+                });
+            });
+        })
+        function off() {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        }
+    </script>
+    <script>
+        function initEntryInfo() {
+            // 数据回显渲染
             var readOnlyData = $("#readOnlyData").val();
             if ("readOnly" == readOnlyData) {
                 layui.$('input').attr('disabled', true);
