@@ -78,7 +78,7 @@
                     </select>
                 </div>
                 <div style="width:50%; float:left">
-                    <select id="impAdminSelect" lay-verify="required" name="impAdminId">
+                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
                     </select>
                 </div>
             </div>
@@ -324,6 +324,7 @@
                 if (nxtLevel > (maxLevel + 1)) {
                     return;
                 }
+
                 $.ajax({
                     url: "/audit-api/planManage/selectEntryByLevel",
                     dataType: "json",
