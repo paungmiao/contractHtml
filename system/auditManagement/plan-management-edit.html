@@ -660,7 +660,12 @@
                                 }
                             })
                             form.val('planEditForm', resp.data);
-                            form.render('select');
+                            //赋值
+                            $("#implementingAgencyId").val(userInfo.deptId);
+                            $("#implementingAgencyName").val(userInfo.deptName);
+                            $("#createdBy").val(userInfo.userId);
+                            $("#impUserId").val(userInfo.userId);
+                            form.render();
                         }
                     })
                 }
