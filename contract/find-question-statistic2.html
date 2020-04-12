@@ -27,6 +27,7 @@
             min-height: 30px;
             line-height: 30px;
         }
+
         xm-select * {
             font-size: 12px;
         }
@@ -124,10 +125,8 @@
                 <div class="w25 fl">
                     <label class="layui-form-label-size">问题词条
                     </label>
-                    <div class="fl  search-input-find">
-                        <select id="questionEntryId" groupBy="a.question_Entry_Id" name="questionEntryId">
-                        </select>
-                    </div>
+                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
+                           class="layui-input search-input-find">
                 </div>
             </div>
 
@@ -186,7 +185,7 @@
                                 name="implementingAgencyId">
                         </select>
                     </div>
-<!--                    <div class="fl  search-input-find" id="demo1" groupBy="a.implementing_Agency_Id"></div>-->
+                    <!--                    <div class="fl  search-input-find" id="demo1" groupBy="a.implementing_Agency_Id"></div>-->
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -222,6 +221,7 @@
 </div>
 <script>
     let ssData = [];
+
     function generateEchars(subtitle, xData, legendData) {
         if (undefined == xData || xData.length == 0) {
             return;
@@ -347,21 +347,21 @@
         findEntryByCategory(4, "auditNatureId");
         findEntryByCategory(5, "problemSeverityId");
         findEntryByCategory(6, "rectifySituationId");
-        findEntryByCategory(8, "questionEntryId");
+        // findEntryByCategory(8, "questionEntryId");
         findAllDeptGroup();
         form.render("select")
 
         $("#exportBtn").off("click.native").on("click.native", (e) => {
             let formVale = initForm();
-            let $hiddenForm = $("<form target='_blank' id='submitForm"+new Date().getTime()+"' class='layui-hide' method='get'></form>")
-            $hiddenForm.attr("action",'/audit-api/planManage/export/groupcount');
-            for (let key in formVale){
-                if(formVale[key]){
-                    let input = "<input type='hidden' name='"+key+"' value='"+formVale[key]+"'/>";
+            let $hiddenForm = $("<form target='_blank' id='submitForm" + new Date().getTime() + "' class='layui-hide' method='get'></form>")
+            $hiddenForm.attr("action", '/audit-api/planManage/export/groupcount');
+            for (let key in formVale) {
+                if (formVale[key]) {
+                    let input = "<input type='hidden' name='" + key + "' value='" + formVale[key] + "'/>";
                     $hiddenForm.append(input)
                 }
             }
-            let auditHeaderAuthorization="<input type='hidden' name='auditHeaderAuthorization' value='"+getJwtToken()+"'/>";
+            let auditHeaderAuthorization = "<input type='hidden' name='auditHeaderAuthorization' value='" + getJwtToken() + "'/>";
             $hiddenForm.append(auditHeaderAuthorization)
             $(document.body).append($hiddenForm);
             $hiddenForm.submit();
@@ -407,6 +407,7 @@
             formVal.groupBy = groupByArr.join(",")
             return formVal;
         }
+
         xmSelect.render({
             el: '#demo1',
             data: ssData,

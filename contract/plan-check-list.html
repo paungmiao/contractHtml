@@ -7,7 +7,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
-          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/xadmin.css">
     <link rel="stylesheet" href="../layui/css/layui.css">
@@ -26,6 +26,7 @@
             min-height: 30px;
             line-height: 30px;
         }
+
         xm-select * {
             font-size: 12px;
         }
@@ -66,11 +67,13 @@
                     <label class="layui-form-label-size">审计年度
                     </label>
                     <div class="w100">
-                        <input autocomplete="off"  class="layui-input w5010" placeholder="起始年度" name="auditYearStart" id="start">
+                        <input autocomplete="off" class="layui-input w5010" placeholder="起始年度" name="auditYearStart"
+                               id="start">
                         <span style="width: 14px;line-height: 30px;color:#efeef0" class="fl">
                                 —
                             </span>
-                        <input autocomplete="off"  class="layui-input w5010 fl" placeholder="末尾年度" name="auditYearEnd" id="end">
+                        <input autocomplete="off" class="layui-input w5010 fl" placeholder="末尾年度" name="auditYearEnd"
+                               id="end">
                     </div>
 
 
@@ -87,8 +90,9 @@
                 </div>
             </div>
             <div>
-                <button class="layui-btn"  lay-submit lay-filter="search"><i
-                        class="layui-icon">&#xe615;</i>搜索</button>
+                <button class="layui-btn" lay-submit lay-filter="search"><i
+                        class="layui-icon">&#xe615;</i>搜索
+                </button>
             </div>
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
                 <div class="w25 fl">
@@ -121,10 +125,8 @@
                 <div class="w25 fl">
                     <label class="layui-form-label-size">问题词条
                     </label>
-                    <div class="fl  search-input-find">
-                        <select id="questionEntryIdSelect" name="questionEntryId" >
-                        </select>
-                    </div>
+                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
+                           class="layui-input search-input-find">
                 </div>
             </div>
 
@@ -181,10 +183,10 @@
                     <label class="layui-form-label-size">实施机构
                     </label>
                     <input type="hidden" name="implementingAgencyId">
-<!--                    <div class="fl  search-input-find">-->
-<!--                        <select id="implementingAgencySelect" multiple="" name="implementingAgencyId" >-->
-<!--                        </select>-->
-<!--                    </div>-->
+                    <!--                    <div class="fl  search-input-find">-->
+                    <!--                        <select id="implementingAgencySelect" multiple="" name="implementingAgencyId" >-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
                     <div class="fl  search-input-find" id="demo1"></div>
                 </div>
             </div>
@@ -196,7 +198,6 @@
                 </div>
             </div>
         </div> -->
-
 
 
         </form>
@@ -223,11 +224,13 @@
 <script>
     let ssData = [];
     var echarts;
+
     function exportData() {
         $("#auditHeaderAuthorization").val(getJwtToken())
-        $("#filterForm").attr("action","/audit-api/export/exportExcel");
+        $("#filterForm").attr("action", "/audit-api/export/exportExcel");
         $("#filterForm").submit();
     };
+
     function generateEchars() {
         $.ajax({
             url: "/audit-api/planStatistic/questionStatistic",
@@ -312,7 +315,8 @@
             }
         });
     }
-    function openAuditDetail(bizKey,bizName,taskId,auditStatus){
+
+    function openAuditDetail(bizKey, bizName, taskId, auditStatus) {
         top.layer.open({
             type: 2,
             area: ['80%', '80%'],
@@ -320,8 +324,8 @@
             maxmin: true,
             shadeClose: true,
             shade: 0.4,
-            title: bizName+'审计项目详情',
-            content: '../system/auditDeatil.html?bizKey='+bizKey+'&bizName='+bizName+'&taskId='+taskId+'&auditStatus='+auditStatus,
+            title: bizName + '审计项目详情',
+            content: '../system/auditDeatil.html?bizKey=' + bizKey + '&bizName=' + bizName + '&taskId=' + taskId + '&auditStatus=' + auditStatus,
             success: function (layero, index) {
                 //窗口加载成功刷新frame
             },
@@ -356,9 +360,9 @@
                         impData.forEach((Obj) => {
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
-                            let data ={
-                                name:Obj.name,
-                                value:Obj.deptId
+                            let data = {
+                                name: Obj.name,
+                                value: Obj.deptId
                             }
                             ssData.push(data)
                         })
@@ -369,9 +373,9 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         auditData.forEach((Obj) => {
-                            let data ={
-                                name:Obj.name,
-                                value:Obj.deptId
+                            let data = {
+                                name: Obj.name,
+                                value: Obj.deptId
                             }
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
@@ -404,6 +408,7 @@
             }
         });
     }
+
     layui.config({
         version: 1,
         base: '../js/echarts/'
@@ -436,9 +441,9 @@
         findEntryByCategory(3, "projectTypeSelect");
         findEntryByCategory(4, "auditNatureSelect");
         findEntryByCategory(5, "problemSeveritySelect");
-        findEntryByCategory(6,"rectifySituationSelect");
-        findEntryByCategory(8,"questionEntryIdSelect");
-        form.render("select")
+        findEntryByCategory(6, "rectifySituationSelect");
+        // findEntryByCategory(8,"questionEntryIdSelect");
+        form.render()
         table.render({
             elem: '#test',
             url: '/audit-api/planManage/search/planList',
@@ -461,21 +466,21 @@
                     templet: (data) => {
                         let status = data.status;
                         let statusName = "正在实施";
-                        switch(status) {
+                        switch (status) {
                             case '1001':
-                                statusName="正在实施";
+                                statusName = "正在实施";
                                 break;
                             case '1002':
-                                statusName="实施结束";
+                                statusName = "实施结束";
                                 break;
                             case '1003':
-                                statusName="已归档";
+                                statusName = "已归档";
                                 break;
                             case '1004':
-                                statusName="延期整改";
+                                statusName = "延期整改";
                                 break;
                             default:
-                                statusName="正在实施";
+                                statusName = "正在实施";
                         }
                         return statusName;
                     }
@@ -498,7 +503,7 @@
                     templet: (data) => {
                         let implementingAgencyName = "";
                         $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.implementingAgencyId,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
@@ -532,7 +537,7 @@
                         let auditObjectName = "";
                         let auditObjectId = data.auditObjectId;
                         $.ajax({
-                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId="+data.implementingAgencyId,
+                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId=" + data.implementingAgencyId,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
@@ -541,7 +546,7 @@
                                 if (resp.AuditObject) {
                                     let data = resp.AuditObject;
                                     data.forEach((Obj) => {
-                                        if(Obj.deptId==auditObjectId){
+                                        if (Obj.deptId == auditObjectId) {
                                             auditObjectName = Obj.area;
                                             return;
                                         }
@@ -574,19 +579,19 @@
                 }, {
                     field: '',
                     title: '操作',
-                    fixed:"right",
+                    fixed: "right",
                     templet: function (res) {
                         let auditStatus = res.auditStatus;
-                        if(undefined != status && status === '1001'){
-                            auditStatus='1002'
+                        if (undefined != status && status === '1001') {
+                            auditStatus = '1002'
                         }
-                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.project_name+'\',\'null\',\''+auditStatus+'\')" >详情</span>';
+                        var temp = '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\'' + res.id + '\',\'' + res.project_name + '\',\'null\',\'' + auditStatus + '\')" >详情</span>';
                         return temp;
                     }
                     // sort: true
                 }]
             ],
-            headers:createAuthorizationTokenHeader(),
+            headers: createAuthorizationTokenHeader(),
             page: true,
             parseData: function (res) { //res 即为原始返回的数据
                 return {
@@ -602,7 +607,7 @@
                 , limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
-        let demo1=xmSelect.render({
+        let demo1 = xmSelect.render({
             el: '#demo1',
             data: ssData,
             // template: function (item, arr, name, value) {
@@ -611,12 +616,13 @@
         })
         form.on("submit(search)", function () {
             let implementingAgencyId = [];
-            demo1.getValue().forEach((elm,i)=>{
+            demo1.getValue().forEach((elm, i) => {
                 implementingAgencyId.push(elm.value)
             })
-            form.val('filterForm',{
-                implementingAgencyId:implementingAgencyId.join(","),
-                auditHeaderAuthorization:getJwtToken()
+            debugger
+            form.val('filterForm', {
+                implementingAgencyId: implementingAgencyId.join(","),
+                auditHeaderAuthorization: getJwtToken()
             })
             table.reload('test', {
                 where: form.val('filterForm'),
