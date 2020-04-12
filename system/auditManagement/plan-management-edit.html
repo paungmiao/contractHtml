@@ -350,7 +350,7 @@
                             let options = [];
                             options.push('<option value="" >请选择</option>')
                             data.forEach((Obj) => {
-                                let option = '<option name="' + (undefined == Obj.name ? '默认' : Obj.name) + '"  value="' + Obj.id + '">' + (undefined == Obj.name ? '默认' : Obj.name) + '</option>';
+                                let option = '<option name="' + (undefined == Obj.name ? '默认' : Obj.name) + '"  value="'+ Obj.id +'">' + (undefined == Obj.name ? '默认' : Obj.name) + '</option>';
                                 options.push(option);
                             })
                             $("#" + elem + level).empty().append(options.join(""));
@@ -732,9 +732,8 @@
                 type: "get",
                 async: false,
                 success: function (resp) {
-                    debugger
                     $("#" + elemEntry).val(resp.data.id);
-                    $("#" + elemEntry + 1).children("option[value='" + resp.data.id + "']").prop("selected", true)
+                    $("#" + elemEntry + 1).children("option[name='" + resp.data.name + "']").prop("selected", true)
                     $("#" + elemEntry + 2).empty().append('<option value="entryInfo.id"  selected>' + resp.data.name1 + '</option>');
                     $("#" + elemEntry + 3).empty().append('<option value="entryInfo.id" selected>' + resp.data.name2 + '</option>');
                     $("#" + elemEntry + 4).empty().append('<option value="entryInfo.id" selected>' + resp.data.name3 + '</option>');
