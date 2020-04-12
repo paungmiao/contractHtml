@@ -346,6 +346,7 @@
     });
 
     function attentionCheck() {
+        let checkList = []
         let userInfo = window.sessionStorage.userInfo;
         let userId = ''
         if (userInfo && JSON.parse(userInfo) && JSON.parse(userInfo).userId) {
@@ -353,7 +354,12 @@
         } else {
             return top.layer.msg('登录信息已失效，请重新登录', {icon: 2})
         }
-        if (checkArr.length == 0) {
+        let table = layui.table;
+        let checkStatus = table.checkStatus('queryList');
+        $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+            checkList.push(o.id);
+        });
+        if (checkList.length == 0) {
             return top.layer.msg('关注信息为空', {icon: 2})
         }
         $.ajax({
@@ -363,7 +369,7 @@
             dataType: 'json',
             data:{
               userId:userId,
-              checkStr:checkArr.join(",")
+              checkStr:checkList.join(",")
             },
             success: (res) => {
                 console.log(res)
