@@ -52,12 +52,14 @@
 
             //监听提交
             form.on('submit(addPlanCheckList)', function (data) {
+                let formData =  form.val("planEditForm");
+                debugger
                 $.ajax({
                     url: '/audit-api/planCheckList/saveOrEditPlan',
                     type: 'POST',
-                    dataType: "json",
-                    async: false,
-                    data: form.val("planEditForm"),
+                    contentType: 'application/json;charset=utf-8',
+                    async:false,
+                    data: JSON.stringify(formData),
                     success: function (resp) {
                         //发异步，把数据提交给php
                         if (0 === resp.code) {

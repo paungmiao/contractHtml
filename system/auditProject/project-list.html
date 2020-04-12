@@ -254,9 +254,9 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'2\')" >驳回</span>';
                             }
                         }
-                        // if (res.status === "1002") {
-                        //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'修改时长\',\'plan-time-edit.html\',\'500\',\'200\',\'' + res.id + '\')" >修改时长</span>';
-                        // }
+                        if (res.status === "1002") {
+                            html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'修改时长\',\'plan-time-edit.html\',\'500\',\'200\',\'' + res.id + '\')" >修改时长</span>';
+                        }
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://39.108.50.114:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
                         return html;
