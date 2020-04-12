@@ -93,6 +93,7 @@
                                 <tr>
                                     <th>排名</th>
                                     <th>实施机构</th>
+                                    <th>项目名称</th>
                                     <th>项目数</th>
                                     <th>问题数</th>
                                 </tr>
@@ -405,7 +406,7 @@
                                 }
                             }
                         });
-                        html+="<tr><td>"+(index+1)+"</td><td>"+implementingAgencyName+"</td><td>"+item.proNum+"</td><td>"+item.errorNum+"</td></tr>";
+                        html+="<tr><td>"+(index+1)+"</td><td>"+implementingAgencyName+"</td><td>"+item.NAME+"</td><td>"+item.proNum+"</td><td>"+item.errorNum+"</td></tr>";
                     });
                     $("#projectTypeBody").html(html);
                 }
@@ -490,6 +491,7 @@
     typeArr['delay'] = '延期';
 
     function openPlanCheckList(type, deptId, auditYear, title) {
+        debugger
         auditYear = $("#auditYear").val();
         top.layer.open({
             type: 2,

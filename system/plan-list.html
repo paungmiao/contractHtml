@@ -316,6 +316,9 @@
             if (implementingAgencyId.length < 1 || deptId != 10100) {
                 implementingAgencyId.push(deptId)
             }
+            if ($("#auditYear").val() != "") {
+                auditYear = $("#auditYear").val();
+            }
             tableIns.reload({
                 where: {
                     projectName: $("#projectName").val(),
@@ -323,7 +326,7 @@
                     problemCharacterization: $("#problemCharacterization").val(),//问题定性
                     problemDescription: $("#problemDescription").val(),
                     deptId:implementingAgencyId.join(","),
-                    auditYear:$("#auditYear").val()
+                    auditYear: auditYear
                 },//问题描述
                 page: 1
             });

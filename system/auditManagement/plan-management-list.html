@@ -388,6 +388,7 @@
 
     function reportPlan() {
         layer.confirm('确认要提交项目吗？', function (index) {
+            debugger
             let table = layui.table;
             var checkStatus = table.checkStatus('test');
             var ids = [];
@@ -405,9 +406,16 @@
                 dataType: "json",
                 data: {ids: ids, statusUser: "1002", userId: userInfo.userId},
                 success: function (resp) {
-                    layer.alert("提交项目成功", {icon: 1}, function () {
-                        location.replace(location.href);
-                    });
+                    if (resp.code == 1002) {
+                        layer.alert(resp.msg, {icon: 2}, function () {
+                            // location.replace(location.href);
+                            layer.close(layer.index);
+                        });
+                    } else {
+                        layer.alert("提交项目成功", {icon: 1}, function () {
+                            location.replace(location.href);
+                        });
+                    }
                 }
             });
         });

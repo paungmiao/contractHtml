@@ -17,6 +17,7 @@
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="planAddForm">
+        <input name="impUserId" type="hidden" id="impUserId" />
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计年度:
@@ -54,9 +55,8 @@
                     <input class="layui-input" lay-verify="required" id="implementingAgencyName"
                            name="implementingAgencyName" disabled/>
                 </div>
-
                 <div style="width:50%; float:left">
-                    <select id="impUserSelect" lay-verify="required" name="impUserId">
+                    <select id="impAdminSelect" lay-verify="required" name="impAdminId">
                     </select>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <select id="auditObjectIdSelect" lay-verify="required" name="auditObjectId" lay-filter="one_cate">
                     </select>
                 </div>
-                <div style="width:50%; float:left">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
                     <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
                     </select>
                 </div>

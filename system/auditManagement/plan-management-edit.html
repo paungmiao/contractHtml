@@ -59,11 +59,14 @@
                     <input class="layui-input" lay-verify="required" id="implementingAgencyName"
                            name="implementingAgencyName" disabled/>
                 </div>
-
                 <div style="width:50%; float:left">
-                    <select id="impUserSelect" lay-verify="required" name="impUserId">
+                    <select id="impAdminSelect" lay-verify="required" name="impAdminId">
                     </select>
                 </div>
+                <!--                <div style="width:50%; float:left">-->
+                <!--                    <select id="impUserSelect" lay-verify="required" name="impUserId">-->
+                <!--                    </select>-->
+                <!--                </div>-->
             </div>
 
         </div>
@@ -81,6 +84,10 @@
                     <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
                     </select>
                 </div>
+                <!--            <div class="layui-input-inline">-->
+                <!--                <select id="auditUserSelect" name="auditUserId">-->
+                <!--                </select>-->
+                <!--            </div>-->
             </div>
         </div>
 
@@ -324,7 +331,6 @@
                 if (nxtLevel > (maxLevel + 1)) {
                     return;
                 }
-
                 $.ajax({
                     url: "/audit-api/planManage/selectEntryByLevel",
                     dataType: "json",
@@ -366,7 +372,6 @@
         }
 
         $(document).ready(function () {
-            debugger
             layui.use(['form', 'layer'], function () {
                 let form = layui.form
                 let layer = layui.layer;
@@ -540,7 +545,9 @@
                         dataType: "json",
                         type: "get",
                         async: false,
-                        headers: createAuthorizationTokenHeader(),
+                        headers: {
+                            Authorization: window.sessionStorage.getItem('Authorization')
+                        },
                         success: function (resp) {
                             if (resp && 0 == resp.code) {
                                 let data = resp.data;
@@ -573,6 +580,7 @@
                             }
                         }
                     });
+                    form.render("select");
                 });
 
                 $.ajax({
@@ -660,6 +668,25 @@
                                     }
                                 }
                             })
+                            $.ajax({
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.auditObjectId + "&roleName=审计对象管理员",
+                                dataType: "json",
+                                type: "get",
+                                async: false,
+                                headers: createAuthorizationTokenHeader(),
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        let options = [];
+                                        options.push('<option value="" >请选择审计对象管理员</option>')
+                                        data.forEach((Obj) => {
+                                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                            options.push(option);
+                                        })
+                                        $("#auditAdminSelect").empty().append(options.join(""));
+                                    }
+                                }
+                            });
                             form.val('planEditForm', resp.data);
                             //赋值
                             $("#implementingAgencyId").val(userInfo.deptId);
