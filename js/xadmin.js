@@ -106,6 +106,22 @@ function deleteCookie(name, path, domain) {
     }
 }
 
+function getDeptParent(id) {
+    var parentId = '0';
+    $.ajax({
+        async:false,
+        url:"/audit-api/common/depts/"+id,
+        headers:{'Authorization':Authorization},
+        type:'get',
+        success:function (res) {
+            if(res && res.code==0){
+                parentId = res.data.parentId;
+            }
+        }
+    })
+    return parentId;
+}
+
 function clearStorage(){
     deleteCookie('tab_list');
     window.sessionStorage.clear();

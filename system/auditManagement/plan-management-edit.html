@@ -704,7 +704,7 @@
                             loadEntry(resp.data.auditClassificationId, "auditClassificationIdSelect")
                             loadEntry(resp.data.riskAssessmentId, "riskAssessmentIdSelect")
                             //赋值
-                            $("#implementingAgencyId").val(userInfo.deptId);
+                            $("#implementingAgencyId").val(getDeptParent(userInfo.deptId));
                             $("#implementingAgencyName").val(userInfo.deptName);
                             $("#createdBy").val(userInfo.userId);
                             $("#impUserId").val(userInfo.userId);

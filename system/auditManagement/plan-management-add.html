@@ -386,7 +386,7 @@
             return top.layer.msg("用户身份信息已失效", {icon: 2})
         }
         //赋值
-        $("#implementingAgencyId").val(userInfo.deptId);
+        $("#implementingAgencyId").val(getDeptParent(userInfo.deptId));
         $("#implementingAgencyName").val(userInfo.deptName);
         $("#createdBy").val(userInfo.userId);
         $("#impUserId").val(userInfo.userId);
@@ -422,7 +422,7 @@
         });
         {
             $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施管理员",
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + getDeptParent(userInfo.deptId) + "&roleName=审计实施管理员",
                 dataType: "json",
                 type: "get",
                 async: false,
@@ -441,7 +441,7 @@
                 }
             });
             $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施一般角色",
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + getDeptParent(userInfo.deptId) + "&roleName=审计实施一般角色",
                 dataType: "json",
                 type: "get",
                 async: false,
@@ -463,7 +463,7 @@
             });
         }
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditObject?deptId=" + getDeptParent(userInfo.deptId),
             dataType: "json",
             type: "get",
             async: false,
