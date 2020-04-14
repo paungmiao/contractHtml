@@ -291,7 +291,7 @@
         form.on("submit(search)", function () {
             tablePlan.reload({
                 where: {
-                    implementingAgencyId: getDeptParent(userInfo.deptId),
+                    implementingAgencyId: userInfo.deptId,
                     projectName: $("#projectName").val(),
                     auditYear: $("#auditYear").val(),
                     status: $("#stateSelect").val(),
