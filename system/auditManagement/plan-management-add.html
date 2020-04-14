@@ -17,7 +17,7 @@
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="planAddForm">
-        <input name="impUserId" type="hidden" id="impUserId" />
+        <input name="impUserId" type="hidden" id="impUserId"/>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计年度:
@@ -155,6 +155,16 @@
                 <textarea name="mayAffect" placeholder="请输入可能影响" class="layui-textarea"></textarea>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                整改建议:
+            </label>
+            <div class="layui-input-block">
+                        <textarea name="rectificationSuggestions" type="text" placeholder="请输入整改建议" autocomplete="off"
+                                  class="layui-input"
+                                  value=""/>
+            </div>
+        </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">
                 审计建议:
@@ -268,15 +278,6 @@
                        value="">
             </div>
         </div>
-        <!--        <div class="layui-form-item">-->
-        <!--            <label class="layui-form-label">-->
-        <!--                审计建议:-->
-        <!--            </label>-->
-        <!--            <div class="layui-input-block">-->
-        <!--                <input name="auditSuggestions" type="text" placeholder="请输入审计建议" autocomplete="off" class="layui-input"-->
-        <!--                       value="">-->
-        <!--            </div>-->
-        <!--        </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">
                 审计依据:
@@ -610,7 +611,7 @@
                 url: '/audit-api/planCheckList/saveOrEditPlan',
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
-                async:false,
+                async: false,
                 data: JSON.stringify(formData),
                 success: function (resp) {
                     //发异步，把数据提交给php
