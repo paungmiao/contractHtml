@@ -65,6 +65,7 @@
     <xblock>
         <button class="layui-btn" onclick="dealPlanBatch('', '1002')"><i class="layui-icon"></i>批量审核</button>
         <button class="layui-btn" onclick="dealPlanBatch('', '1003')"><i class="layui-icon"></i>批量驳回</button>
+        <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量编辑</button>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
            lay-filter="test"></table>
@@ -343,6 +344,38 @@
         });
     }
 
+    function editBatchPage_(title, url, w, h, planIds) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let planIdDate = body.find('#planIds');
+                planIdDate.val(planIds);
+            }
+        });
+    }
+
     function dealPlan(id, status) {
         layer.confirm('确认操作？', function (index) {
             var ids = [];
@@ -416,6 +449,24 @@
                     }
                 }
             });
+        });
+    }
+
+    function editBatch() {
+        layer.confirm('确认操作？', function (index) {
+            let table = layui.table;
+            let checkStatus = table.checkStatus('test');
+            let ids = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            ids = ids.join(",");
+
+            editBatchPage_("批量修改", "batch_edit.html", "600", "350", ids)
         });
     }
 

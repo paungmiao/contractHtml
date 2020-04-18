@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="../../js/JCheck.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+
+    <form class="layui-form" lay-filter="planEditForm">
+        <input id="planIds" type="hidden">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>实施机构:
+                <input name="implementingAgencyId" lay-verify="required" type="hidden" id="implementingAgencyId">
+            </label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <input class="layui-input" lay-verify="required" id="implementingAgencyName"
+                           name="implementingAgencyName" disabled/>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="impAdminSelect" lay-verify="required" name="impAdminId">
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-block">
+
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <select id="auditObjectIdSelect" lay-verify="required" name="auditObjectId" lay-filter="one_cate">
+                    </select>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-submit lay-filter="addPlan">
+                <i class="layui-icon">&#xe605;</i>提交
+            </button>
+        </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <a class="layui-btn" onclick="off()">
+                <i class="layui-icon">&#x1007;</i>取消
+            </a>
+        </div>
+
+    </form>
+    <script>
+        layui.use(['form', 'layer'], function () {
+
+            //赋值
+            $("#implementingAgencyId").val(userInfo.deptId);
+            $("#implementingAgencyName").val(userInfo.deptName);
+
+            let form = layui.form
+            $.ajax({
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施管理员",
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择实施机构管理员</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                            options.push(option);
+                        })
+                        $("#impAdminSelect").empty().append(options.join(""));
+                    }
+                }
+            });
+
+            $.ajax({
+                url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectIdSelect").empty().append(options.join(""));
+                    }
+                }
+            })
+            form.render('select');
+
+            //监听提交
+            form.on('submit(addPlan)', function (data) {
+                //type, taskId, auditStatus, bizKey
+                let ids = $("#planIds").val();
+                let implementingAgencyId = $("#implementingAgencyId").val();
+                let implementingAgencyName = $("#implementingAgencyName").val();
+                let impAdmin = $("#impAdminSelect").val();
+                let auditObjectId = $("#auditObjectIdSelect").val();
+                let auditAdmin = $("#auditAdminSelect").val();
+                $.ajax({
+                    url: "/audit-api/planCheckList/editBatchByIds",
+                    type: 'POST',
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        ids: ids,
+                        implementingAgencyId: implementingAgencyId,
+                        implementingAgencyName: implementingAgencyName,
+                        impAdmin: impAdmin,
+                        auditObjectId: auditObjectId,
+                        auditAdmin: auditAdmin
+                    },
+                    success: function (resp) {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        // 可以对父窗口进行刷新
+                        x_admin_father_reload();
+                    }
+                });
+            });
+
+
+            form.on('select(one_cate)', function (data) {
+                let deptId = data['value'];
+                $.ajax({
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                    dataType: "json",
+                    type: "get",
+                    async: false,
+                    headers: {
+                        Authorization: window.sessionStorage.getItem('Authorization')
+                    },
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象管理员</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditAdminSelect").empty().append(options.join(""));
+                        }
+                    }
+                });
+                form.render("select");
+            });
+        });
+
+        function off() {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        }
+    </script>
+</div>
+
+</body>
+
+</html>

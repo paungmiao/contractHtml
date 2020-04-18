@@ -167,16 +167,16 @@
                         show: true
                     },
                     pieces: [{
-                        max: 0.2,
-                        label: '低于20%',
+                        max: 0.05,
+                        label: '低于5%',
                         color: '#99FF99'
                     }, {
-                        max: 0.5,
-                        label: '低于50%',
+                        max: 0.2,
+                        label: '低于20%',
                         color: '#FF9900'
                     }, {
                         max: 1.1,
-                        label: '高于50%',
+                        label: '高于20%',
                         color: '#FF0033'
                     }],
                 },
@@ -250,12 +250,13 @@
                             trigger: 'item',
                             // formatter: '{b}<br/>{c} (p / km2)'
                             formatter: function (params) {
-                                let percent = params.data.value<1? '0%': ((params.data.notRectified*100/params.data.total).toFixed(2)+'%');
+                                // let percent = params.data.value<1? '0%': ((params.data.notRectified*100/params.data.total).toFixed(2)+'%');
+                                let percent = params.data.value*100;
                                 return (
                                     params.data.name + '<br/>'
                                     + '问题总个数：' + params.data.total + '<br/>'
                                     + '未整改问题总个数：' + params.data.notRectified + '<br/>'
-                                    + '未整改问题总占比：' + percent+ '<br/>'
+                                    + '未整改问题总占比：' + percent + '%<br/>'
                                 )
 
                             }
