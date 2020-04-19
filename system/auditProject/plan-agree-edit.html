@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="../../js/JCheck.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+
+    <form class="layui-form" lay-filter="planEditForm">
+        <input id="taskId" type="hidden">
+        <input id="auditStatus" type="hidden">
+        <input id="planId" type="hidden">
+        <input id="uploadUser" type="hidden">
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>整改评价:
+            </label>
+            <div class="layui-input-block">
+                <textarea name="evaluation" placeholder="整改评价" class="layui-textarea" id="evaluation" lay-verify="required|evaluation"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-submit lay-filter="addPlanCheckList">
+                <i class="layui-icon">&#xe605;</i>提交
+            </button>
+        </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <a class="layui-btn" onclick="off()">
+                <i class="layui-icon">&#x1007;</i>取消
+            </a>
+        </div>
+
+    </form>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            $("#uploadUser").val(userInfo.username)
+            let form = layui.form
+            let layer = layui.layer;
+            //监听提交
+            form.on('submit(addPlanCheckList)', function (data) {
+                let type = "agree";
+                let beforeStatus = $("#auditStatus").val();
+                let bizKey = $("#planId").val();
+                let taskId = $("#taskId").val();
+                let evaluation = $("#evaluation").val();
+                let status = auditEnum[beforeStatus][type];
+                let data1 = {
+                    'auditStatus': status,
+                    'bizKey': bizKey,
+                    "evaluation": evaluation
+                }
+                $.ajax({
+                    url: '/audit-api/task/complete/' + taskId,
+                    type: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    async: false,
+                    headers: createAuthorizationTokenHeader(),
+                    data: JSON.stringify(data1),
+                    success: function (res) {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        // 可以对父窗口进行刷新
+                        x_admin_father_reload();
+                    }
+                })
+            });
+        });
+
+        function off() {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        }
+    </script>
+</div>
+
+</body>
+
+</html>

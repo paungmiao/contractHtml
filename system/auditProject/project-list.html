@@ -249,7 +249,10 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'1\')" >驳回</span>';
                             // } else {
                             //     html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
-                            } else if (res.auditStatus === "1010" || res.auditStatus === "1015") {
+                            } else if (res.auditStatus === "1010") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'审核\',\'plan-agree-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >审核</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'2\')" >驳回</span>';
+                            } else if (res.auditStatus === "1015") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'2\')" >驳回</span>';
                             }
