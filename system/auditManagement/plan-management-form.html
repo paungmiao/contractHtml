@@ -388,7 +388,7 @@
                         if (resp && 0 == resp.code) {
                             let data = resp.data;
                             let options = [];
-                            options.push('<option value="" >请选择审计对象管理员</option>')
+                            options.push('<option value="" >请选择审计对象审批人员</option>')
                             data.forEach((Obj) => {
                                 let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
                                 options.push(option);
@@ -460,7 +460,7 @@
                                     if (resp && 0 == resp.code) {
                                         let data = resp.data;
                                         let options = [];
-                                        options.push('<option value="" >请选择实施机构管理员</option>')
+                                        options.push('<option value="" >请选择实施机构审批人员</option>')
                                         data.forEach((Obj) => {
                                             let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
                                             options.push(option);
