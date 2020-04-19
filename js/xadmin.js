@@ -495,7 +495,7 @@ $(function () {
          
     })
 
-    左侧菜单记忆功能
+    //左侧菜单记忆功能
     if(getCookie('left_menu_father')!=null){
         $('.left-nav #nav li').eq(getCookie('left_menu_father')).click();
     }
