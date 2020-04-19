@@ -358,13 +358,15 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         impData.forEach((Obj) => {
-                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                            options.push(option);
-                            let data = {
-                                name: Obj.name,
-                                value: Obj.deptId
+                            if(Obj&&undefined!=Obj.deptId){
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                                let data = {
+                                    name: Obj.name,
+                                    value: Obj.deptId
+                                }
+                                ssData.push(data)
                             }
-                            ssData.push(data)
                         })
                         $("#implementingAgencySelect").empty().append(options.join(""));
                     }
@@ -373,12 +375,14 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         auditData.forEach((Obj) => {
-                            let data = {
-                                name: Obj.name,
-                                value: Obj.deptId
+                            if(Obj&&undefined!=Obj.deptId){
+                                let data = {
+                                    name: Obj.name,
+                                    value: Obj.deptId
+                                }
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
                             }
-                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                            options.push(option);
                         })
                         $("#auditObjectSelect").empty().append(options.join(""));
                     }
@@ -619,7 +623,7 @@
             demo1.getValue().forEach((elm, i) => {
                 implementingAgencyId.push(elm.value)
             })
-            debugger
+            
             form.val('filterForm', {
                 implementingAgencyId: implementingAgencyId.join(","),
                 auditHeaderAuthorization: getJwtToken()

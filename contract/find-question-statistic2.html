@@ -83,7 +83,7 @@
                     <label class="layui-form-label-size">严重程度
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="problemSeverityId" groupBy="a.question_Entry_Id" name="problemSeverityId">
+                        <select id="problemSeverityId" groupBy="a.problem_Severity_Id" name="problemSeverityId">
                         </select>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                     <label class="layui-form-label-size">项目类型
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="projectType" name="projectType">
+                        <select id="projectType" name="projectType" groupBy="a.project_type">
                         </select>
                     </div>
 
@@ -135,7 +135,7 @@
                     <label class="layui-form-label-size">整改情况
                     </label>
                     <div class="fl  search-input-find">
-                        <select id="rectifySituationId" name="rectifySituationId">
+                        <select id="rectifySituationId" name="rectifySituationId" groupBy="a.rectify_Situation_Id">
                         </select>
                     </div>
 
@@ -311,13 +311,16 @@
                         options.push('<option value="" >未选择</option>')
                         options.push('<option value="all" >全部条件</option>')
                         impData.forEach((Obj) => {
-                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                            options.push(option);
-                            let obj = {
-                                name: Obj.area,
-                                value: Obj.deptId
+                            if(Obj&&undefined!=Obj.deptId){
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                                let obj = {
+                                    name: Obj.area,
+                                    value: Obj.deptId
+                                }
+                                ssData.push(obj)
                             }
-                            ssData.push(obj)
+
                         })
                         $("#implementingAgencyId").empty().append(options.join(""));
                     }
@@ -326,8 +329,10 @@
                         options.push('<option value="" >未选择</option>')
                         options.push('<option value="all" >全部条件</option>')
                         auditData.forEach((Obj) => {
-                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                            options.push(option);
+                            if(Obj&&undefined!=Obj.deptId){
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            }
                         })
                         $("#auditObjectId").empty().append(options.join(""));
                     }
