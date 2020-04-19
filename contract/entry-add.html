@@ -154,35 +154,35 @@
                         return '词条说明不能超过128个字符！'
                     }
                 },
-                name: function (value, dom) {
-                    let result = '';
-                    if (value.length > 32) {
-                        result = '词条名称不能超过32个字符！'
-                    } else if (value.length > 0) {
-                        $.ajax({
-                            url: "/audit-api/entry/checkName",
-                            type: "get",
-                            dataType: 'json',
-                            async: false,
-                            data: form.val('entryFlowAddForm'),
-                            success: function (resp) {
-                                if (0 == resp.code) {
-                                    if (resp.data) {
-                                        result = '词条名称重复！'
-                                    }
-                                } else {
-                                    result = resp.msg
-                                }
-
-                            }, error: function () {
-                                result = ("请求失败，请检查网络连接", { icon: 2 })
-                            }
-                        })
-                    }
-                    if (result.length > 0) {
-                        return result
-                    }
-                }
+                // name: function (value, dom) {
+                //     let result = '';
+                //     if (value.length > 32) {
+                //         result = '词条名称不能超过32个字符！'
+                //     } else if (value.length > 0) {
+                //         $.ajax({
+                //             url: "/audit-api/entry/checkName",
+                //             type: "get",
+                //             dataType: 'json',
+                //             async: false,
+                //             data: form.val('entryFlowAddForm'),
+                //             success: function (resp) {
+                //                 if (0 == resp.code) {
+                //                     if (resp.data) {
+                //                         result = '词条名称重复！'
+                //                     }
+                //                 } else {
+                //                     result = resp.msg
+                //                 }
+                //
+                //             }, error: function () {
+                //                 result = ("请求失败，请检查网络连接", { icon: 2 })
+                //             }
+                //         })
+                //     }
+                //     if (result.length > 0) {
+                //         return result
+                //     }
+                // }
             })
             form.render("select")
             //监听提交

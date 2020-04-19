@@ -477,10 +477,16 @@
             </div>
             <!-- 驳回反馈  -->
             <div class="layui-tab-item layui-form rectifyEvaluationForm  layui-hide" lay-filter="rectifyEvaluationForm">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">整改评价：</label>
+                <div class="layui-form-item rectifyEvaluationForm">
+                    <label class="layui-form-label">实施员工评价：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea"  style="border: none"readonly name="rectifyEvaluation"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item evaluationForm">
+                    <label class="layui-form-label">实施领导评价：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"  style="border: none"readonly name="evaluation"></textarea>
                     </div>
                 </div>
             </div>
@@ -603,8 +609,14 @@
                     $(".notAuditGroup").remove()
                 }
 
-                if(res.data.rectifyEvaluation){
+                if(res.data.rectifyEvaluation||res.data.evaluation){
                     $(".rectifyEvaluationForm").removeClass("layui-hide")
+                    if(res.data.rectifyEvaluation){
+                        $("div.rectifyEvaluationForm layui-form-item rectifyEvaluationForm").removeClass("layui-hide")
+                    }
+                    if(res.data.evaluation){
+                        $("div.rectifyEvaluationForm layui-form-item evaluationForm").removeClass("layui-hide")
+                    }
                 }
                 switch(status) {
                     case '1001':
