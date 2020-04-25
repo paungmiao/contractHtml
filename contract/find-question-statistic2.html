@@ -428,7 +428,8 @@
                     console.log(resp)
                     if (resp.code == 0) {
                         table.render({
-                            elem: '#test'
+                            elem: '#test',
+                            even: true
                             , page: false //开启分页
                             , cols: [baseCols],
                             data: resp.data.tableData

@@ -133,6 +133,7 @@
             elem: '#test',
             url: '/audit-api/task/flow/page',
             id: 'checkTest',
+            even: true,
             xhrFields: {
                 withCredentials: true
             },
@@ -143,7 +144,7 @@
                 {
                     field: 'projectCode',
                     title: '项目编号',
-                    width: 160,
+                    width: 200,
                 }, {
                     field: 'auditYear',
                     title: '年度',
@@ -204,6 +205,10 @@
                     field: 'problemCharacterization',
                     title: '问题定性',
                     width: 160
+                }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
+                    width: 200,
                 }, {
                     field: '',
                     title: '状态',

@@ -59,6 +59,11 @@
                     <option value="1005">已完成</option>
                 </select>
             </div>
+            审计对象：
+            <div class="layui-input-inline">
+                <select id="auditObjectIdSelect">
+                </select>
+            </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -92,6 +97,25 @@
                 }
             }
         });
+        $.ajax({
+            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+            dataType: "json",
+            type: "get",
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计对象</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#auditObjectIdSelect").empty().append(options.join(""));
+                }
+            }
+        })
         $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
@@ -131,6 +155,7 @@
             elem: '#test',
             url: '/audit-api/task/flow/page',
             id: 'test',
+            even: true,
             xhrFields: {
                 withCredentials: true
             },
@@ -141,7 +166,7 @@
                     {
                         field: 'projectCode',
                         title: '项目编号',
-                        width: 160,
+                        width: 200,
                     }, {
                     field: 'auditYear',
                     title: '年度',
@@ -206,6 +231,10 @@
                     field: 'planTime',
                     title: '整改时长',
                     width: 80
+                }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
+                    width: 200,
                 }, {
                     field: '',
                     title: '状态',
@@ -300,6 +329,7 @@
                     status: $("#stateSelect").val(),
                     auditNatureId: $("#auditNatureIdSelect").val(),
                     projectType: $("#projectTypeSelect").val(),
+                    auditObjectId: $("#auditObjectIdSelect").val(),
                 },
                 page: 1
             });

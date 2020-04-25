@@ -132,6 +132,7 @@
             elem: '#test',
             url: '/audit-api/task/statuses',
             id: 'checkTest',
+            even: true,
             align:'center',
             xhrFields: {
                 withCredentials: true
@@ -143,7 +144,7 @@
                     {
                         field: 'projectCode',
                         title: '项目编号',
-                        width: 160,
+                        width: 200,
                         align:'center',
                     }, {
                     field: 'projectName',
@@ -199,6 +200,10 @@
                         return auditObjectName;
                     }
                 }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
+                    width: 200,
+                }, {
                     field: 'auditYear',
                     title: '年度',
                     width: 80,
@@ -225,6 +230,9 @@
                         if (res.taskId !== null) {
                             // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
                             html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="archivePage_(\'整改评价\',\'plan-archive-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >归档</span>';
+                        }
+                        if (res.status === '1003') {
+                            html += '<span class="layui-btn layui-btn-danger layui-btn-mini" onclick="delete_(\'' + res.id + '\')">删除</span>';
                         }
                         return html;
                     }
@@ -420,6 +428,23 @@
                 let paramsDate = body.find('#params');
                 paramsDate.val(params);
             }
+        });
+    }
+
+    function delete_(id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/audit-api/planManage/user_delete/" + id,
+                dataType: "json",
+                type: "delete",
+                success: function (resp) {
+                    layer.alert("删除成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
+
         });
     }
 

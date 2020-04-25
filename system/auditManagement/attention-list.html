@@ -129,6 +129,7 @@
             elem: '#queryList',
             url: '/audit-api/planManage/attention/page',
             id: 'queryList',
+            even: true,
             toolbar: '#toolbarDemo',
             xhrFields: {
                 withCredentials: true
@@ -160,6 +161,9 @@
                 },{
                     field: 'rectifySituationId',
                     title: '整改情况',
+                }, {
+                    field: 'problemDescription',
+                    title: '问题描述',
                 }, {
                     field: 'auditYear',
                     title: '年度',
