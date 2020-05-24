@@ -1,10 +1,44 @@
 let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
-let audit_server='http://127.0.0.1:8666/audit-api/socket/'
+let audit_server='http://audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
 
-let Authorization = window.sessionStorage.getItem('Authorization')
-if (!Authorization || Authorization == '' || Authorization == undefined) {
-    location.href="login.html"
+$(document).ready(function () {
+    let tokenKey = 'Authorization';
+    // let tokenKey = 'pengmiao';
+    let Authorization = window.sessionStorage.getItem(tokenKey)
+    Authorization = Authorization?Authorization: getCookie(tokenKey)
+    if (!Authorization || Authorization == '' || Authorization == undefined) {
+        location.href="login.html"
+    }
+    if(getCookie(tokenKey)){
+        $(".x-admin-sm .container").remove();
+        $(".x-admin-sm .left-nav").remove();
+        $(".x-admin-sm .page-content").css("position","");
+    }
+    setJwtToken(Authorization);
+    initUserInfo();
+
+})
+
+function initUserInfo(){
+    $.ajax({
+        url: '/audit-api/login/user/info',
+        type: 'get',
+        async: false,
+        headers: {
+            Authorization: window.sessionStorage.getItem('Authorization')
+        },
+        success: function (res) {
+
+            if (res.code == 0) {
+                let userInfo = res.data
+                window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+                console.log(userInfo['username'])
+                return true;
+            }
+        }
+    })
 }
+
 let roleIdList = userInfo.roleIdList;
 let rPermissionList;
 $.get('/audit-api/login/getPermission?roleIds='+roleIdList.join(","),{},function (res) {
