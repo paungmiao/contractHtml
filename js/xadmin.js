@@ -1,23 +1,29 @@
 let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
-
 $(document).ready(function () {
-    let tokenKey = 'Authorization';
-    // let tokenKey = 'pengmiao';
+    // let tokenKey = 'Authorization';
+    let tokenKey = 'pengmiao';
     let Authorization = window.sessionStorage.getItem(tokenKey)
     Authorization = Authorization?Authorization: getCookie(tokenKey)
     if (!Authorization || Authorization == '' || Authorization == undefined) {
         location.href="login.html"
     }
     if(getCookie(tokenKey)){
-        $(".x-admin-sm .container").remove();
+        $(".x-admin-sm .page-content").eq(0).css("position",'');
+        $(".x-admin-sm .page-content").eq(0).css("top",'');
+        $(".x-admin-sm .page-content").eq(0).css("left",'0px');
         $(".x-admin-sm .left-nav").remove();
-        $(".x-admin-sm .page-content").css("position","");
+        $(".x-admin-sm ul.layui-tab-title").remove();
     }
     setJwtToken(Authorization);
-    initUserInfo();
-
+    if(Authorization){
+        initUserInfo();
+    }
 })
+
+function setJwtToken(token){
+    window.sessionStorage.setItem(TOKEN_KEY,token);
+}
 
 function initUserInfo(){
     $.ajax({
@@ -30,7 +36,7 @@ function initUserInfo(){
         success: function (res) {
 
             if (res.code == 0) {
-                let userInfo = res.data
+                let userInfo = res.data|{}
                 window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
                 console.log(userInfo['username'])
                 return true;

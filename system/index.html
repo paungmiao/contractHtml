@@ -172,13 +172,13 @@
 					<i class="iconfont nav_right">&#xe697;</i>
 				</a>
 				<ul class="sub-menu">
-					<li>
+					<li class="audit_search_count layui-hide">
 						<a _href="../contract/plan-check-list.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>审计查询统计</cite>
 						</a>
 					</li>
-					<li>
+					<li class="question_num_count layui-hide">
 						<a _href="../contract/find-question-statistic2.html">
 							<i class="iconfont">&#xe6a7;</i>
 							<cite>问题个数统计</cite>
@@ -262,7 +262,6 @@
 		clearStorage();
 		window.location.href='./login.html'
 	}
-
 	let userName = userInfo.username;
 	$("#userName").text(userName);
 	function ding() {
