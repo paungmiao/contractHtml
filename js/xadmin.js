@@ -8,6 +8,7 @@ $(document).ready(function () {
     if (!Authorization || Authorization == '' || Authorization == undefined) {
         location.href="login.html"
     }
+    setJwtToken(Authorization);
     if(getCookie(tokenKey)){
         $(".x-admin-sm .page-content").eq(0).css("position",'');
         $(".x-admin-sm .page-content").eq(0).css("top",'');
@@ -16,7 +17,6 @@ $(document).ready(function () {
         $(".x-admin-sm ul.layui-tab-title").remove();
         initUserInfo();
     }
-    setJwtToken(Authorization);
 })
 
 function setJwtToken(token){
