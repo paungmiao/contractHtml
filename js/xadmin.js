@@ -14,11 +14,9 @@ $(document).ready(function () {
         $(".x-admin-sm .page-content").eq(0).css("left",'0px');
         $(".x-admin-sm .left-nav").remove();
         $(".x-admin-sm ul.layui-tab-title").remove();
-    }
-    setJwtToken(Authorization);
-    if(Authorization){
         initUserInfo();
     }
+    setJwtToken(Authorization);
 })
 
 function setJwtToken(token){
@@ -38,7 +36,6 @@ function initUserInfo(){
             if (res.code == 0) {
                 let userInfo = res.data|{}
                 window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
-                window.userInfo = userInfo;
                 console.log(userInfo['username'])
                 return true;
             }
