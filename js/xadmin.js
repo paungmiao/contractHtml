@@ -1,4 +1,4 @@
-let userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
+window.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
 $(document).ready(function () {
     let tokenKey = 'Authorization';
@@ -38,6 +38,7 @@ function initUserInfo(){
             if (res.code == 0) {
                 let userInfo = res.data|{}
                 window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+                window.userInfo = userInfo;
                 console.log(userInfo['username'])
                 return true;
             }
