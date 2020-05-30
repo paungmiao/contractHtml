@@ -1,5 +1,5 @@
 window.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
-let audit_server='http://audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
+let audit_server='http://xjcloud-audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
 $(document).ready(function () {
     let tokenKey = 'Authorization';
     // let tokenKey = 'pengmiao';
