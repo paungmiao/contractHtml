@@ -36,33 +36,58 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" style="">
-            项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
-            审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" autocomplete="off" class="layui-input">
-            项目类型：
             <div class="layui-input-inline">
-                <select id="projectTypeSelect">
-                </select>
+                项目名称：<input type="text" placeholder="请输入项目名称" id="projectName" autocomplete="off" class="layui-input">
             </div>
-            审计性质：
             <div class="layui-input-inline">
-                <select id="auditNatureIdSelect">
-                </select>
+                审计年度：<input type="text" placeholder="请输入审计年度" id="auditYear" autocomplete="off" class="layui-input">
             </div>
-            状态：
             <div class="layui-input-inline">
-                <select id="stateSelect">
-                    <option value="">请选择状态</option>
-                    <option value="1001">待完善</option>
-                    <option value="1002">待整改</option>
-                    <option value="1003">待审核</option>
-                    <option value="1004">被驳回</option>
-                    <option value="1005">已完成</option>
-                </select>
+                项目类型：
+                <div class="layui-input-inline">
+                    <select id="projectTypeSelect">
+                    </select>
+                </div>
             </div>
-            审计对象：
             <div class="layui-input-inline">
-                <select id="auditObjectIdSelect">
-                </select>
+                审计性质：
+                <div class="layui-input-inline">
+                    <select id="auditNatureIdSelect">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                状态：
+                <div class="layui-input-inline">
+                    <select id="stateSelect">
+                        <option value="">请选择状态</option>
+                        <option value="1001">待完善</option>
+                        <option value="1002">待整改</option>
+                        <option value="1003">待审核</option>
+                        <option value="1004">被驳回</option>
+                        <option value="1005">已完成</option>
+                    </select>
+                </div>
+            </div>
+            <div class="muqi_other layui-hide layui-input-inline">
+                审计对象：
+                <div class="layui-input-inline">
+                    <select id="auditObjectIdSelect">
+                    </select>
+                </div>
+            </div>
+
+            <div class="muqi layui-hide layui-input-inline">
+                实施机构：
+                <div class="layui-input-inline">
+                    <select id="impObjectIdSelect_new" lay-filter="one_cate_new">
+                    </select>
+                </div>
+                审计对象：
+                <div class="layui-input-inline">
+                    <select id="auditObjectIdSelect_new">
+                    </select>
+                </div>
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
@@ -74,6 +99,15 @@
 
 </div>
 <script>
+    //审计对象处理
+    let text = userInfo.deptName;
+    if (text.toString().indexOf("乌鲁木齐") > -1) {
+        $(".muqi").removeClass("layui-hide");
+        $(".muqi_other").remove();
+    } else {
+        $(".muqi_other").removeClass("layui-hide");
+        $(".muqi").remove();
+    }
     var count = 0;
     layui.use(['table', 'form'], function () {
 
@@ -117,6 +151,25 @@
             }
         })
         $.ajax({
+            url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptId,
+            dataType: "json",
+            type: "get",
+            async: false,
+            headers: createAuthorizationTokenHeader(),
+            success: function (resp) {
+                if (resp && 0 == resp.code) {
+                    let data = resp.data;
+                    let options = [];
+                    options.push('<option value="" >请选择审计对象</option>')
+                    data.forEach((Obj) => {
+                        let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                        options.push(option);
+                    })
+                    $("#impObjectIdSelect_new").empty().append(options.join(""));
+                }
+            }
+        })
+        $.ajax({
             url: "/audit-api/planManage/selectEntryByCategoryId?categoryId=4",
             dataType: "json",
             type: "get",
@@ -135,6 +188,29 @@
             }
         });
         form.render();
+        form.on('select(one_cate_new)', function (data) {
+            let deptId = data['value'];
+            $.ajax({
+                url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectIdSelect_new").empty().append(options.join(""));
+                    }
+                }
+            })
+            form.render("select");
+        });
         let stateData = {}
         $.ajax({
             url: "/audit-api/state/list/planState",
@@ -321,6 +397,14 @@
             }
         });
         form.on("submit(search)", function () {
+            let temp;
+            let temp_1 = $("#auditObjectIdSelect").val();
+            let temp_2 = $("#auditObjectIdSelect_new").val();
+            if (temp_1) {
+                temp = temp_1;
+            } else {
+                temp = temp_2;
+            }
             tablePlan.reload({
                 where: {
                     impUserId: userInfo.userId,
@@ -329,7 +413,7 @@
                     status: $("#stateSelect").val(),
                     auditNatureId: $("#auditNatureIdSelect").val(),
                     projectType: $("#projectTypeSelect").val(),
-                    auditObjectId: $("#auditObjectIdSelect").val(),
+                    auditObjectId: temp,
                 },
                 page: 1
             });
