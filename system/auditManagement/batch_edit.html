@@ -20,6 +20,7 @@
     <form class="layui-form" lay-filter="planEditForm">
         <input id="planIds" type="hidden">
 
+
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
@@ -37,7 +38,7 @@
             </div>
 
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item muqi_other layui-hide">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
@@ -49,6 +50,35 @@
                 </div>
                 <div style="width:50%; float:left">
                     <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item muqi layui-hide">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-block">
+
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectIdNew" lay-filter="one_cate_new">
+                    </select>
+                </div>
+                <div style="width:50%; float:left">
+                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item muqi layui-hide">
+            <label class="layui-form-label">
+                <span></span>
+            </label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">
                     </select>
                 </div>
             </div>
@@ -71,6 +101,15 @@
 
     </form>
     <script>
+        //审计对象处理
+        let text = userInfo.deptName;
+        if (text.toString().indexOf("乌鲁木齐") > -1) {
+            $(".muqi").removeClass("layui-hide");
+            $(".muqi_other").remove();
+        } else {
+            $(".muqi_other").removeClass("layui-hide");
+            $(".muqi").remove();
+        }
         layui.use(['form', 'layer'], function () {
 
             //赋值
@@ -97,6 +136,25 @@
                     }
                 }
             });
+            $.ajax({
+                url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptId,
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectIdSelect_new").empty().append(options.join(""));
+                    }
+                }
+            })
 
             $.ajax({
                 url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
@@ -118,16 +176,85 @@
                 }
             })
             form.render('select');
+            form.on('select(one_cate_new)', function (data) {
+                let deptId = data['value'];
+                $.ajax({
+                    url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
+                    dataType: "json",
+                    type: "get",
+                    async: false,
+                    headers: createAuthorizationTokenHeader(),
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditAdminSelect_new").empty().append(options.join(""));
+                        }
+                    }
+                })
+                form.render("select");
+            });
+            form.on('select(two_cate_new)', function (data) {
+                let deptId = data['value'];
+                $.ajax({
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                    dataType: "json",
+                    type: "get",
+                    async: false,
+                    headers: {
+                        Authorization: window.sessionStorage.getItem('Authorization')
+                    },
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象审批人员</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditUserSelect_new").empty().append(options.join(""));
+                        }
+                    }
+                });
+                form.render("select");
+            });
 
             //监听提交
             form.on('submit(addPlan)', function (data) {
                 //type, taskId, auditStatus, bizKey
+                let temp;
+                let temp_1 = $("#auditObjectIdSelect").val();
+                let temp_2 = $("#auditObjectIdSelect_new").val();
+                if (temp_1) {
+                    temp = temp_1;
+                } else {
+                    temp = temp_2;
+                }
+                let ttp;
+                if ($("#auditAdminSelect").val()) {
+                    ttp = $("#auditAdminSelect").val();
+                } else {
+                    ttp = $("#auditAdminSelect_new").val();
+                }
+                let ttt;
+                if (!($("#auditObjectIdSelect_new").val())) {
+                    ttt = "";
+                } else {
+                    ttt = $("#auditObjectIdSelect_new").val();
+                }
                 let ids = $("#planIds").val();
                 let implementingAgencyId = $("#implementingAgencyId").val();
                 let implementingAgencyName = $("#implementingAgencyName").val();
                 let impAdmin = $("#impAdminSelect").val();
-                let auditObjectId = $("#auditObjectIdSelect").val();
-                let auditAdmin = $("#auditAdminSelect").val();
+                let auditObjectId = temp;
+                let auditObjectIdNew = ttt;
+                let auditAdmin = ttp;
                 $.ajax({
                     url: "/audit-api/planCheckList/editBatchByIds",
                     type: 'POST',
@@ -139,6 +266,7 @@
                         implementingAgencyName: implementingAgencyName,
                         impAdmin: impAdmin,
                         auditObjectId: auditObjectId,
+                        auditObjectIdNew: auditObjectIdNew,
                         auditAdmin: auditAdmin
                     },
                     success: function (resp) {

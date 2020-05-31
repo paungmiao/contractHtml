@@ -78,12 +78,12 @@
             </div>
 
             <div class="muqi layui-hide layui-input-inline">
-                实施机构：
+                审计对象：
                 <div class="layui-input-inline">
                     <select id="impObjectIdSelect_new" lay-filter="one_cate_new">
                     </select>
                 </div>
-                审计对象：
+                整改部门：
                 <div class="layui-input-inline">
                     <select id="auditObjectIdSelect_new">
                     </select>
@@ -624,6 +624,15 @@
     }
 
     function editBatchPage_(title, url, w, h, planIds) {
+        //审计对象处理
+        let flag = 1;
+        let text = userInfo.deptName;
+        if (text.toString().indexOf("乌鲁木齐") > -1) {
+
+        } else {
+            flag = 0;
+        }
+
         if (title == null || title == '') {
             title = false;
         }
@@ -650,7 +659,9 @@
                 // location.replace(location.href);
                 let body = layer.getChildFrame('body', index);
                 let planIdDate = body.find('#planIds');
+                let flagDate = body.find('#flag');
                 planIdDate.val(planIds);
+                flagDate.val(flag);
             }
         });
     }
