@@ -62,11 +62,11 @@
             <div class="layui-input-block">
 
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectIdNew" lay-filter="one_cate_new">
+                    <select id="auditObjectIdSelectNew" lay-verify="required" name="auditObjectIdNew" lay-filter="one_cate_new">
                     </select>
                 </div>
                 <div style="width:50%; float:left">
-                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">
+                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">
                     </select>
                 </div>
             </div>
@@ -78,7 +78,7 @@
             </label>
             <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">
+                    <select id="auditAdminSelect_new" lay-verify="required" name="auditAdminId">
                     </select>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                             let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                             options.push(option);
                         })
-                        $("#auditObjectIdSelect_new").empty().append(options.join(""));
+                        $("#auditObjectIdSelectNew").empty().append(options.join(""));
                     }
                 }
             })
@@ -193,7 +193,7 @@
                                 let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                                 options.push(option);
                             })
-                            $("#auditAdminSelect_new").empty().append(options.join(""));
+                            $("#auditObjectIdSelect_new").empty().append(options.join(""));
                         }
                     }
                 })
@@ -218,7 +218,7 @@
                                 let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
                                 options.push(option);
                             })
-                            $("#auditUserSelect_new").empty().append(options.join(""));
+                            $("#auditAdminSelect_new").empty().append(options.join(""));
                         }
                     }
                 });
@@ -243,10 +243,10 @@
                     ttp = $("#auditAdminSelect_new").val();
                 }
                 let ttt;
-                if (!($("#auditObjectIdSelect_new").val())) {
+                if (!($("#auditObjectIdSelectNew").val())) {
                     ttt = "";
                 } else {
-                    ttt = $("#auditObjectIdSelect_new").val();
+                    ttt = $("#auditObjectIdSelectNew").val();
                 }
                 let ids = $("#planIds").val();
                 let implementingAgencyId = $("#implementingAgencyId").val();
