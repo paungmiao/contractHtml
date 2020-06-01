@@ -199,8 +199,14 @@
                     templet: (data) => {
                         let auditObjectName = "";
                         let auditObjectId = data.auditObjectId;
+                        let temp;
+                        if (data.auditObjectIdNew) {
+                            temp = data.auditObjectIdNew;
+                        } else {
+                            temp = data.implementingAgencyId;
+                        }
                         $.ajax({
-                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId="+data.implementingAgencyId,
+                            url: "/audit-api/auditPlan/getAuditObjectByIAId?IAId="+temp,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
