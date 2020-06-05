@@ -2,7 +2,6 @@ window.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'));
 let audit_server='http://xjcloud-audit.xjcloud.wlq.pbc.gov:8666/audit-api/socket/'
 $(document).ready(function () {
     let tokenKey = 'Authorization';
-    // let tokenKey = 'pengmiao';
     let Authorization = window.sessionStorage.getItem(tokenKey)
     Authorization = Authorization?Authorization: getCookie(tokenKey)
     if (!Authorization || Authorization == '' || Authorization == undefined) {
@@ -29,7 +28,7 @@ function initUserInfo(){
         type: 'get',
         async: false,
         headers: {
-            Authorization: window.sessionStorage.getItem('Authorization')
+            Authorization: window.sessionStorage.getItem(TOKEN_KEY)
         },
         success: function (res) {
 
