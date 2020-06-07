@@ -18,7 +18,11 @@ function setJwtToken(token){
  * @returns token
  */
 function getJwtToken(){
-	return window.sessionStorage.getItem(TOKEN_KEY);
+	var item = window.sessionStorage.getItem(TOKEN_KEY);
+	if(item){
+		item=item.replace("/\"/g","")
+	}
+	return item;
 }
 /**
  * 移除token

@@ -19,6 +19,9 @@ $(document).ready(function () {
 })
 
 function setJwtToken(token){
+    if(token){
+        token=token.replace("/\"/g","")
+    }
     window.sessionStorage.setItem(TOKEN_KEY,token);
 }
 
