@@ -238,7 +238,21 @@
                                             success: function (res) {
 
                                                 if (res.code == 0) {
-                                                    let userInfo = res.data
+                                                    let userInfo = res.data;
+                                                    $.ajax({
+                                                        url: "/audit-api/auditPlan/getDeptInfoById?id=" + userInfo.deptId,
+                                                        dataType: "json",
+                                                        type: "get",
+                                                        async: false,
+                                                        headers: createAuthorizationTokenHeader(),
+                                                        success: function (resp) {
+                                                            if (resp && 0 == resp.code) {
+                                                                let data = resp.data;
+                                                                userInfo['deptParentId'] = data.parentId;
+                                                                userInfo['deptParentRegion'] = data.region;
+                                                            }
+                                                        }
+                                                    });
                                                     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
                                                     console.log(userInfo['username'])
                                                     return true;

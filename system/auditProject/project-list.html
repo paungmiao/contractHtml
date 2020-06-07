@@ -100,7 +100,7 @@
 </div>
 <script>
     //审计对象处理
-    let text = userInfo.deptName;
+    let text = userInfo.deptParentRegion;
     if (text.toString().indexOf("乌鲁木齐") > -1) {
         $(".muqi").removeClass("layui-hide");
         $(".muqi_other").remove();
@@ -132,7 +132,7 @@
             }
         });
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptParentId,
             dataType: "json",
             type: "get",
             async: false,
@@ -151,7 +151,7 @@
             }
         })
         $.ajax({
-            url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptParentId,
             dataType: "json",
             type: "get",
             async: false,

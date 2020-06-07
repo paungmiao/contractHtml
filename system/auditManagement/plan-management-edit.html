@@ -53,6 +53,7 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
                 <input name="implementingAgencyId" lay-verify="required" type="hidden" id="implementingAgencyId">
+                <input name="implementingAgencyNewId" lay-verify="required" type="hidden" id="implementingAgencyNewId">
             </label>
             <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
@@ -352,7 +353,7 @@
     </form>
     <script>
         //审计对象处理
-        let text = userInfo.deptName;
+        let text = userInfo.deptParentRegion;
         if (text.toString().indexOf("乌鲁木齐") > -1) {
             $(".muqi").removeClass("layui-hide");
             $(".muqi_other").remove();
@@ -699,7 +700,7 @@
                         headers: createAuthorizationTokenHeader(),
                         success: function (resp) {
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyId + "&roleName=审计实施一般角色",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyNewId + "&roleName=审计实施一般角色",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -720,7 +721,7 @@
                                 }
                             });
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyId + "&roleName=审计实施管理员",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + resp.data.implementingAgencyNewId + "&roleName=审计实施管理员",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -839,7 +840,8 @@
                             loadEntry(resp.data.auditClassificationId, "auditClassificationIdSelect")
                             loadEntry(resp.data.riskAssessmentId, "riskAssessmentIdSelect")
                             //赋值
-                            $("#implementingAgencyId").val(userInfo.deptId);
+                            $("#implementingAgencyId").val(userInfo.deptParentId);
+                            $("#implementingAgencyNewId").val(userInfo.deptId);
                             $("#implementingAgencyName").val(userInfo.deptName);
                             $("#createdBy").val(userInfo.userId);
                             $("#impUserId").val(userInfo.userId);

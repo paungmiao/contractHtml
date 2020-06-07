@@ -25,6 +25,7 @@
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
                 <input name="implementingAgencyId" lay-verify="required" type="hidden" id="implementingAgencyId">
+                <input name="implementingAgencyNewId" lay-verify="required" type="hidden" id="implementingAgencyNewId">
             </label>
             <div class="layui-input-block">
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
@@ -102,7 +103,7 @@
     </form>
     <script>
         //审计对象处理
-        let text = userInfo.deptName;
+        let text = userInfo.deptParentRegion;
         if (text.toString().indexOf("乌鲁木齐") > -1) {
             $(".muqi").removeClass("layui-hide");
             $(".muqi_other").remove();
@@ -113,7 +114,8 @@
         layui.use(['form', 'layer'], function () {
 
             //赋值
-            $("#implementingAgencyId").val(userInfo.deptId);
+            $("#implementingAgencyId").val(userInfo.deptParentId);
+            $("#implementingAgencyNewId").val(userInfo.deptId);
             $("#implementingAgencyName").val(userInfo.deptName);
 
             let form = layui.form
@@ -157,7 +159,7 @@
             })
 
             $.ajax({
-                url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+                url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptParentId,
                 dataType: "json",
                 type: "get",
                 async: false,

@@ -48,6 +48,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>实施机构:
+                <input name="implementingAgencyNewId" lay-verify="required" type="hidden" id="implementingAgencyNewId">
                 <input name="implementingAgencyId" lay-verify="required" type="hidden" id="implementingAgencyId">
             </label>
             <div class="layui-input-block">
@@ -363,7 +364,7 @@
 <script>
 
     //审计对象处理
-    let text = userInfo.deptName;
+    let text = userInfo.deptParentRegion;
     if (text.toString().indexOf("乌鲁木齐") > -1) {
         $(".muqi").removeClass("layui-hide");
         $(".muqi_other").remove();
@@ -424,7 +425,8 @@
             return top.layer.msg("用户身份信息已失效", {icon: 2})
         }
         //赋值
-        $("#implementingAgencyId").val(userInfo.deptId);
+        $("#implementingAgencyId").val(userInfo.deptParentId);
+        $("#implementingAgencyNewId").val(userInfo.deptId);
         $("#implementingAgencyName").val(userInfo.deptName);
         $("#createdBy").val(userInfo.userId);
         $("#impUserId").val(userInfo.userId);
@@ -501,7 +503,7 @@
             });
         }
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptParentId,
             dataType: "json",
             type: "get",
             async: false,
@@ -520,7 +522,7 @@
             }
         })
         $.ajax({
-            url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditAndImpObject?deptId=" + userInfo.deptParentId,
             dataType: "json",
             type: "get",
             async: false,
