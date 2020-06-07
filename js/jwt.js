@@ -4,7 +4,7 @@
  * jwt有关
  */
 const HOST_URL = "http://127.0.0.1:8081/";
-const TOKEN_KEY = "jwtToken";
+const TOKEN_KEY = "Authorization";
 
 /**
  * 将服务器返回的token存储在本地

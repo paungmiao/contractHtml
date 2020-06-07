@@ -21,7 +21,7 @@ function setJwtToken(token){
     if(token){
         token=token.replace("/\"/g","")
     }
-    window.sessionStorage.setItem('jwtToken',token);
+    window.sessionStorage.setItem('Authorization',token);
 }
 
 function initUserInfo(){
