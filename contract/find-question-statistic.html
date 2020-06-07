@@ -186,7 +186,7 @@
 
     </div>
     <script>
-        let roleIdList = userInfo.roleIdList;
+        let roleIdList = userInfo.roleIdList||[];
         if ($.inArray(13, roleIdList) > -1) {
             $("#ssjg").removeClass("layui-hide");
         }

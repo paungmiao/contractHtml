@@ -5,7 +5,7 @@ $(document).ready(function () {
     let Authorization = window.sessionStorage.getItem(tokenKey)
     Authorization = Authorization?Authorization: getCookie(tokenKey)
     if (!Authorization || Authorization == '' || Authorization == undefined) {
-        location.href="login.html"
+        location.href="/system/login.html"
     }
     setJwtToken(Authorization);
     if(getCookie(tokenKey)){
@@ -17,12 +17,11 @@ $(document).ready(function () {
         initUserInfo();
     }
 })
-
 function setJwtToken(token){
     if(token){
         token=token.replace("/\"/g","")
     }
-    window.sessionStorage.setItem(TOKEN_KEY,token);
+    window.sessionStorage.setItem('jwtToken',token);
 }
 
 function initUserInfo(){
@@ -59,7 +58,7 @@ function initUserInfo(){
     })
 }
 
-let roleIdList = userInfo.roleIdList;
+let roleIdList = userInfo.roleIdList||[];
 let rPermissionList;
 $.get('/audit-api/login/getPermission?roleIds='+roleIdList.join(","),{},function (res) {
     if(res.code==0){
