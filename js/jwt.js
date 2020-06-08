@@ -20,7 +20,7 @@ function setJwtToken(token){
 function getJwtToken(){
 	var item = window.sessionStorage.getItem(TOKEN_KEY);
 	if(item){
-		item=item.replace("/\"/g","")
+		item=item.replace(/\"/g,"")
 	}
 	return item;
 }
