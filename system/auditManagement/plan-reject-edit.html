@@ -107,6 +107,9 @@
                         uploadUser: userInfo.username,
                         fileUri:fileUri
                     },
+                    headers: {
+                        Authorization: window.sessionStorage.getItem('Authorization')
+                    },
                     success: function (resp) {
                         // 获得frame索引
                         var index = parent.layer.getFrameIndex(window.name);

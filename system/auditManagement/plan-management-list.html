@@ -524,6 +524,9 @@
                 type: 'POST',
                 dataType: "json",
                 data: {ids: ids, statusUser: "1002", userId: userInfo.userId},
+                headers: {
+                    Authorization: window.sessionStorage.getItem('Authorization')
+                },
                 success: function (resp) {
                     if (resp.code == 1002) {
                         layer.alert(resp.msg, {icon: 2}, function () {

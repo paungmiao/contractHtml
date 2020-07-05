@@ -81,17 +81,17 @@
             </div>
         </div>
 
-        <div class="layui-form-item muqi layui-hide">
-            <label class="layui-form-label">
-                <span></span>
-            </label>
-            <div class="layui-input-block">
-                <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">
-                    </select>
-                </div>
-            </div>
-        </div>
+<!--        <div class="layui-form-item muqi layui-hide">-->
+<!--            <label class="layui-form-label">-->
+<!--                <span></span>-->
+<!--            </label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <div class="layui-input-inline" style="width: calc(50% - 10px)">-->
+<!--                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div class="layui-form-item muqi_other layui-hide">
             <label class="layui-form-label">
@@ -103,10 +103,10 @@
                     <select id="auditObjectIdSelect" lay-verify="required" name="auditObjectId" lay-filter="one_cate">
                     </select>
                 </div>
-                <div style="width:50%; float:left">
-                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">
-                    </select>
-                </div>
+<!--                <div style="width:50%; float:left">-->
+<!--                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">-->
+<!--                    </select>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -697,27 +697,27 @@
         });
         form.on('select(one_cate)', function (data) {
             let deptId = data['value'];
-            $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
-                dataType: "json",
-                type: "get",
-                async: false,
-                headers: {
-                    Authorization: window.sessionStorage.getItem('Authorization')
-                },
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择审计对象审批人员</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                            options.push(option);
-                        })
-                        $("#auditAdminSelect").empty().append(options.join(""));
-                    }
-                }
-            });
+            // $.ajax({
+            //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+            //     dataType: "json",
+            //     type: "get",
+            //     async: false,
+            //     headers: {
+            //         Authorization: window.sessionStorage.getItem('Authorization')
+            //     },
+            //     success: function (resp) {
+            //         if (resp && 0 == resp.code) {
+            //             let data = resp.data;
+            //             let options = [];
+            //             options.push('<option value="" >请选择审计对象审批人员</option>')
+            //             data.forEach((Obj) => {
+            //                 let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+            //                 options.push(option);
+            //             })
+            //             $("#auditAdminSelect").empty().append(options.join(""));
+            //         }
+            //     }
+            // });
             $.ajax({
                 url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
                 dataType: "json",
@@ -765,29 +765,29 @@
             form.render("select");
         });
         form.on('select(two_cate_new)', function (data) {
-            let deptId = data['value'];
-            $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
-                dataType: "json",
-                type: "get",
-                async: false,
-                headers: {
-                    Authorization: window.sessionStorage.getItem('Authorization')
-                },
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择审计对象审批人员</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
-                            options.push(option);
-                        })
-                        $("#auditUserSelect_new").empty().append(options.join(""));
-                    }
-                }
-            });
-            form.render("select");
+            // let deptId = data['value'];
+            // $.ajax({
+            //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+            //     dataType: "json",
+            //     type: "get",
+            //     async: false,
+            //     headers: {
+            //         Authorization: window.sessionStorage.getItem('Authorization')
+            //     },
+            //     success: function (resp) {
+            //         if (resp && 0 == resp.code) {
+            //             let data = resp.data;
+            //             let options = [];
+            //             options.push('<option value="" >请选择审计对象审批人员</option>')
+            //             data.forEach((Obj) => {
+            //                 let option = '<option value="' + Obj.userId + '">' + Obj.username + '</option>';
+            //                 options.push(option);
+            //             })
+            //             $("#auditUserSelect_new").empty().append(options.join(""));
+            //         }
+            //     }
+            // });
+            // form.render("select");
         });
 
     });
