@@ -14,6 +14,8 @@ $(document).ready(function () {
         $(".x-admin-sm .page-content").eq(0).css("left",'0px');
         $(".x-admin-sm .left-nav").remove();
         $(".x-admin-sm ul.layui-tab-title").remove();
+    }
+    if(Authorization){
         initUserInfo();
     }
 })
@@ -51,6 +53,7 @@ function initUserInfo(){
                     }
                 });
                 window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+                window.userInfo = userInfo;
                 console.log(userInfo['username'])
                 return true;
             }
