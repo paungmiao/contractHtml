@@ -240,6 +240,8 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             } else if (res.auditStatus === "1018") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
+                            } else if (res.auditStatus === "1019" || res.auditStatus === "1020" || res.auditStatus === "1021") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提审</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >确认整改</span>';
                                 // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'reject\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改</span>';
