@@ -70,14 +70,15 @@
             </label>
             <div class="layui-input-block">
 
-                <div class="layui-input-inline" style="width: calc(50% - 10px)">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)" id="ns_hide">
                     <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectIdNew" lay-filter="one_cate_new">
                     </select>
                 </div>
-                <div style="width:50%; float:left">
-                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">
-                    </select>
-                </div>
+<!--                <div style="width:50%; float:left">-->
+<!--                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">-->
+<!--                    </select>-->
+<!--                </div>-->
+                <input style="width:50%; float:left" class="layui-input" lay-verify="required" disabled value="请选择"/>
             </div>
         </div>
 
@@ -743,25 +744,38 @@
         });
         form.on('select(one_cate_new)', function (data) {
             let deptId = data['value'];
-            $.ajax({
-                url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
-                dataType: "json",
-                type: "get",
-                async: false,
-                headers: createAuthorizationTokenHeader(),
-                success: function (resp) {
-                    if (resp && 0 == resp.code) {
-                        let data = resp.data;
-                        let options = [];
-                        options.push('<option value="" >请选择审计对象</option>')
-                        data.forEach((Obj) => {
-                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                            options.push(option);
-                        })
-                        $("#auditAdminSelect_new").empty().append(options.join(""));
+            let name = $('#auditObjectIdSelect_new option:selected').text();
+            if (name.indexOf("乌鲁木齐") > -1) {
+                $("#ns_hide").next().remove();
+                let html = '';
+                html += '<div style="width:50%; float:left">';
+                html += '<select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new"></select>';
+                html += '</div>';
+                $("#ns_hide").after(html);
+                $.ajax({
+                    url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
+                    dataType: "json",
+                    type: "get",
+                    async: false,
+                    headers: createAuthorizationTokenHeader(),
+                    success: function (resp) {
+                        if (resp && 0 == resp.code) {
+                            let data = resp.data;
+                            let options = [];
+                            options.push('<option value="" >请选择审计对象</option>')
+                            data.forEach((Obj) => {
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            })
+                            $("#auditAdminSelect_new").empty().append(options.join(""));
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                $("#ns_hide").next().remove();
+                let html = '<input style="width:50%; float:left" class="layui-input" lay-verify="required" disabled value="内审科"/>';
+                $("#ns_hide").after(html);
+            }
             form.render("select");
         });
         form.on('select(two_cate_new)', function (data) {
