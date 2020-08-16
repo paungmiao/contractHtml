@@ -101,17 +101,16 @@
             <label class="layui-form-label">
                 <span class="x-red"></span>
             </label>
-            <div class="layui-input-block" id="ns_hide">
+            <div class="layui-input-block">
 
-                <div class="ns-dev layui-hide layui-input-inline" style="width: calc(50% - 10px)">
+                <div class="layui-input-inline" style="width: calc(50% - 10px)">
                     <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectId" lay-filter="one_cate_new">
                     </select>
                 </div>
-<!--                <div style="width:50%; float:left" class="ns-dev layui-hide">-->
+<!--                <div style="width:50%; float:left">-->
 <!--                    <select id="auditAdminSelect_new" lay-verify="required" name="auditAdminId">-->
 <!--                    </select>-->
 <!--                </div>-->
-                <input style="width:50%; float:left" class="ns-ipt layui-input" lay-verify="required" disabled value="内审科"/>
             </div>
         </div>
 
@@ -362,7 +361,6 @@
             $(".muqi_other").removeClass("layui-hide");
             $(".muqi").remove();
         }
-
         var id = getQueryString("id");
 
         function initMultiLevelEntry(defKey, level, elem, maxLevel) {
@@ -628,39 +626,25 @@
                 });
                 form.on('select(one_cate_new_b)', function (data) {
                     let deptId = data['value'];
-                    let name = $('#auditObjectIdSelectNew option:selected').text();
-                    if (name.indexOf("乌鲁木齐") > -1) {
-                        $("#ns_hide").empty();
-                        let html = "";
-                        html += '<div class="layui-input-inline" style="width: calc(50% - 10px)">';
-                        html += '<select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectId" lay-filter="one_cate_new"></select>';
-                        html += '</div>';
-                        $("#ns_hide").append(html);
-                        $.ajax({
-                            url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            headers: createAuthorizationTokenHeader(),
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    let options = [];
-                                    options.push('<option value="" >请选择审计对象</option>')
-                                    data.forEach((Obj) => {
-                                        let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
-                                        options.push(option);
-                                    })
-                                    $("#auditObjectIdSelect_new").empty().append(options.join(""));
-                                }
+                    $.ajax({
+                        url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
+                        dataType: "json",
+                        type: "get",
+                        async: false,
+                        headers: createAuthorizationTokenHeader(),
+                        success: function (resp) {
+                            if (resp && 0 == resp.code) {
+                                let data = resp.data;
+                                let options = [];
+                                options.push('<option value="" >请选择审计对象</option>')
+                                data.forEach((Obj) => {
+                                    let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                    options.push(option);
+                                })
+                                $("#auditObjectIdSelect_new").empty().append(options.join(""));
                             }
-                        })
-                    } else {
-                        $("#ns_hide").empty();
-                        let html = "";
-                        html += '<input style="width:50%; float:left" class="layui-input" lay-verify="required" disabled value="内审科"/>';
-                        $("#ns_hide").append(html);
-                    }
+                        }
+                    })
                     form.render("select");
                 });
                 form.on('select(one_cate_new)', function (data) {
@@ -866,14 +850,6 @@
                     })
                 }
                 form.render('select');
-                debugger;
-                let ns_name = $('#auditObjectIdSelectNew option:selected').text();
-                if (ns_name.indexOf("乌鲁木齐") > -1) {
-                    $(".ns-dev").removeClass("layui-hide");
-                    $(".ns-ipt").addClass("layui-hide");
-                } else {
-                    $(".ns-ipt").removeClass("layui-hide");
-                }
             });
             layui.use('laydate', function () {
                 var laydate = layui.laydate;

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/JCheck.css">
+    <script type="text/javascript" src="../../js/jqery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <script type="text/javascript" src="../../js/jwt.js"></script>
+    <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script src="../../js/JCheck.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+
+    <form class="layui-form" lay-filter="planEditForm">
+        <input id="auditObjectIdNew" type="text">
+        <input id="type" type="text">
+        <input id="taskId" type="text">
+        <input id="auditStatus" type="text">
+        <input id="bizKey" type="text">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>审计对象:
+            </label>
+            <div class="layui-input-block">
+
+                <div style="width:50%; float:left">
+                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectId">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-submit lay-filter="addPlan">
+                <i class="layui-icon">&#xe605;</i>提交
+            </button>
+        </div>
+        <div class="layui-input-inline">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <a class="layui-btn" onclick="off()">
+                <i class="layui-icon">&#x1007;</i>取消
+            </a>
+        </div>
+
+    </form>
+    <script>
+        layui.use(['form', 'layer'], function () {
+
+            let form = layui.form;
+            let dept = $("#auditObjectIdNew").val();
+            debugger;
+            $.ajax({
+                url: "/audit-api/planManage/getAuditObject?deptId=20000",
+                dataType: "json",
+                type: "get",
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                success: function (resp) {
+                    if (resp && 0 == resp.code) {
+                        let data = resp.data;
+                        let options = [];
+                        options.push('<option value="" >请选择审计对象</option>')
+                        data.forEach((Obj) => {
+                            let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                            options.push(option);
+                        })
+                        $("#auditObjectIdSelect_new").empty().append(options.join(""));
+                    }
+                }
+            })
+            form.render("select");
+
+            //监听提交
+            form.on('submit(addPlan)', function (data) {
+                debugger
+                let ids = $("#bizKey").val();
+                let auditObjectId = $("#auditObjectIdSelect_new").val();
+                let auditAdmin = 0;
+                $.ajax({
+                    url: "/audit-api/planCheckList/editDownDeptById",
+                    type: 'POST',
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        ids: ids,
+                        auditObjectId: auditObjectId,
+                        auditAdmin: auditAdmin
+                    },
+                    success: function (resp) {
+                        debugger
+                        let type = $("#type").val();
+                        let taskId = $("#taskId").val();
+                        let auditStatus = $("#auditStatus").val();
+                        let bizKey = $("#bizKey").val();
+                        completeTask(type, taskId, auditStatus, bizKey);
+                        // 获得frame索引
+                        let index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        // 可以对父窗口进行刷新
+                        x_admin_father_reload();
+                    }
+                });
+            });
+
+
+        });
+
+        function off() {
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        }
+
+        //流程办理
+        function completeTask(type, taskId, auditStatus, bizKey) {
+            debugger;
+            layer.confirm('确认操作吗？', function (index) {
+                let beforeStatus = auditStatus;
+                let status = auditEnum[beforeStatus][type];
+                let data = {
+                    'auditStatus': status,
+                    'bizKey': bizKey
+                }
+                $.ajax({
+                    url: '/audit-api/task/complete/' + taskId,
+                    type: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    async: false,
+                    headers: createAuthorizationTokenHeader(),
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        if (!res.data) {
+                            let index = layer.alert("操作失败，请完善信息！", {icon: 1}, function () {
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.alert("操作成功", {icon: 1}, function () {
+                                location.replace(location.href);
+                            });
+                        }
+                    }
+                })
+            });
+        }
+    </script>
+</div>
+
+</body>
+
+</html>
