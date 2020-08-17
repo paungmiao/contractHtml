@@ -120,7 +120,7 @@
 
             let form = layui.form
             $.ajax({
-                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=审计实施管理员",
+                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + userInfo.deptId + "&roleName=内审负责人员",
                 dataType: "json",
                 type: "get",
                 async: false,
@@ -204,7 +204,7 @@
             form.on('select(two_cate_new)', function (data) {
                 // let deptId = data['value'];
                 // $.ajax({
-                //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象负责人员角色",
                 //     dataType: "json",
                 //     type: "get",
                 //     async: false,
@@ -288,7 +288,7 @@
             form.on('select(one_cate)', function (data) {
                 // let deptId = data['value'];
                 // $.ajax({
-                //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                //     url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象负责人员角色",
                 //     dataType: "json",
                 //     type: "get",
                 //     async: false,

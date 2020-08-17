@@ -157,7 +157,7 @@
             <li lay-id="auditAdminUserForm"  class="auditAdminUserForm layui-hide">完善信息（指派实施负责人）</li>
             <li lay-id="auditUserForm"  class="auditUserForm layui-hide">完善信息（指派审计负责人）</li>
             <li lay-id="delayForm"  class="delayForm layui-hide">延迟整改信息</li>
-            <li lay-id="rectifyEvaluationForm"  class="rectifyEvaluationForm layui-hide">整改评价</li>
+            <li lay-id="rectifyEvaluationForm"  class="rectifyEvaluationForm layui-hide">整改评估</li>
         </ul>
         <div class="layui-tab-content">
             <!-- 基本信息 -->
@@ -346,7 +346,7 @@
             </div>
             <!-- 完善信息  -->
             <div class="layui-tab-item layui-form completeForm layui-hide" lay-filter="completeForm">
-                <h2>完善信息</h2>
+                <h2>整改计划</h2>
                 <hr/>
                 <div class="layui-form-item">
                         <label class="layui-form-label">计划整改时长：</label>
@@ -643,7 +643,7 @@
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
                         // deptId:res.data.implementingAgencyId,
-                        roleName:'审计对象一般角色'
+                        roleName:'审计对象实施人员角色'
                     },
                     async:false,
                     success:(data)=>{
@@ -696,7 +696,7 @@
                     data:{
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
-                        roleName:'审计对象一般角色'
+                        roleName:'审计对象实施人员角色'
                     },
                     async:false,
                     success:(data)=>{
@@ -746,7 +746,7 @@
                     data:{
                         bizKey:bizKey,
                         deptId:res.data.auditObjectId,
-                        roleName:'审计对象一般角色'
+                        roleName:'审计对象实施人员角色'
                     },
                     async:false,
                     success:(res)=>{

@@ -379,7 +379,7 @@
             form.on('select(one_cate)', function (data) {
                 let deptId = data['value'];
                 $.ajax({
-                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象管理员",
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象负责人员角色",
                     dataType: "json",
                     type: "get",
                     async: false,
@@ -398,7 +398,7 @@
                     }
                 });
                 $.ajax({
-                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象一般角色",
+                    url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + deptId + "&roleName=审计对象实施人员角色",
                     dataType: "json",
                     type: "get",
                     async: false,
@@ -451,7 +451,7 @@
                         //赋值
                         if (implDeptId != undefined && implDeptId != '') {
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施管理员",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=内审负责人员",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
@@ -470,7 +470,7 @@
                                 }
                             });
                             $.ajax({
-                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=审计实施一般角色",
+                                url: "/audit-api/planManage/getUsersByRoleNameAndDept?deptId=" + implDeptId + "&roleName=内审实施人员角色",
                                 dataType: "json",
                                 type: "get",
                                 async: false,
