@@ -18,11 +18,11 @@
 <div class="x-body">
 
     <form class="layui-form" lay-filter="planEditForm">
-        <input id="auditObjectIdNew" type="text">
-        <input id="type" type="text">
-        <input id="taskId" type="text">
-        <input id="auditStatus" type="text">
-        <input id="bizKey" type="text">
+        <input id="auditObjectIdNew" type="hidden">
+        <input id="type" type="hidden">
+        <input id="taskId" type="hidden">
+        <input id="auditStatus" type="hidden">
+        <input id="bizKey" type="hidden">
 
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -58,10 +58,10 @@
         layui.use(['form', 'layer'], function () {
 
             let form = layui.form;
-            let dept = $("#auditObjectIdNew").val();
-            debugger;
+            // let dept = $("#auditObjectIdNew").val();
+            let deptId = userInfo.deptParentId;
             $.ajax({
-                url: "/audit-api/planManage/getAuditObject?deptId=20000",
+                url: "/audit-api/planManage/getAuditObject?deptId="+deptId,
                 dataType: "json",
                 type: "get",
                 async: false,
@@ -83,27 +83,25 @@
 
             //监听提交
             form.on('submit(addPlan)', function (data) {
-                debugger
-                let ids = $("#bizKey").val();
                 let auditObjectId = $("#auditObjectIdSelect_new").val();
-                let auditAdmin = 0;
+                let taskId = $("#taskId").val();
+                let auditStatus = $("#auditStatus").val();
+                let type = $("#type").val();
+                let status = auditEnum[auditStatus][type];
+                let bizKey = $("#bizKey").val();
                 $.ajax({
-                    url: "/audit-api/planCheckList/editDownDeptById",
+                    url: "/audit-api/task//editDownDeptById",
                     type: 'POST',
                     dataType: "json",
                     async: false,
+                    headers: createAuthorizationTokenHeader(),
                     data: {
-                        ids: ids,
+                        id: bizKey,
+                        taskId: taskId,
                         auditObjectId: auditObjectId,
-                        auditAdmin: auditAdmin
+                        auditStatus: status
                     },
                     success: function (resp) {
-                        debugger
-                        let type = $("#type").val();
-                        let taskId = $("#taskId").val();
-                        let auditStatus = $("#auditStatus").val();
-                        let bizKey = $("#bizKey").val();
-                        completeTask(type, taskId, auditStatus, bizKey);
                         // 获得frame索引
                         let index = parent.layer.getFrameIndex(window.name);
                         //关闭当前frame
@@ -120,38 +118,6 @@
         function off() {
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
             parent.layer.close(index);		//关闭窗口
-        }
-
-        //流程办理
-        function completeTask(type, taskId, auditStatus, bizKey) {
-            debugger;
-            layer.confirm('确认操作吗？', function (index) {
-                let beforeStatus = auditStatus;
-                let status = auditEnum[beforeStatus][type];
-                let data = {
-                    'auditStatus': status,
-                    'bizKey': bizKey
-                }
-                $.ajax({
-                    url: '/audit-api/task/complete/' + taskId,
-                    type: 'post',
-                    contentType: 'application/json;charset=utf-8',
-                    async: false,
-                    headers: createAuthorizationTokenHeader(),
-                    data: JSON.stringify(data),
-                    success: function (res) {
-                        if (!res.data) {
-                            let index = layer.alert("操作失败，请完善信息！", {icon: 1}, function () {
-                                layer.close(index);
-                            });
-                        } else {
-                            layer.alert("操作成功", {icon: 1}, function () {
-                                location.replace(location.href);
-                            });
-                        }
-                    }
-                })
-            });
         }
     </script>
 </div>

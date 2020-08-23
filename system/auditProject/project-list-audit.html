@@ -239,8 +239,8 @@
                             if (res.auditStatus === "1005" || res.auditStatus === "1007" || res.auditStatus === "1009") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             } else if (res.auditStatus === "1018") {
-                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
+                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
                             } else if (res.auditStatus === "1019" || res.auditStatus === "1020" || res.auditStatus === "1021") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提审</span>';
                             } else {
@@ -370,9 +370,7 @@
 
     //下发
     function downToDept(auditObjectIdNew, type, taskId, auditStatus, bizKey) {
-        layer.confirm('确认操作吗？', function (index) {
-            editBatchPage_("批量修改", "down_dept.html", "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
-        });
+        editBatchPage_("批量修改", "down_dept.html", "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
     }
 
     function editBatchPage_(title, url, w, h, auditObjectIdNew, type, taskId, auditStatus, bizKey) {
