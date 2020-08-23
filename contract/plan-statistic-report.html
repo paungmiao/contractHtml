@@ -85,6 +85,7 @@
                 [ {
                     field: 'implementingAgencyId',
                     title: '实施机构',
+                    width: 160,
                     templet: (data) => {
                         let implementingAgencyName = "";
                         $.ajax({
@@ -103,20 +104,28 @@
                         return implementingAgencyName;
                     }
                 }, {
-                    field: 'projectCount',
+                    field: 'projectSum',
                     title: '总项目数',
                     width: 120
                 }, {
-                    field: 'finishCount',
-                    title: '已完成',
+                    field: 'projectCount',
+                    title: '总问题数',
                     width: 120
+                // }, {
+                //     field: 'finishCount',
+                //     title: '已完成',
+                //     width: 120
                 }, {
                     field: 'noFinishCount',
                     title: '未完成',
                     width: 120,
                 }, {
                     field: 'timeoutCount',
-                    title: '延期项目',
+                    title: '超时问题',
+                    width: 180,
+                }, {
+                    field: 'overTimeNum',
+                    title: '延期问题',
                     width: 180,
                 }, {
                     field: '',

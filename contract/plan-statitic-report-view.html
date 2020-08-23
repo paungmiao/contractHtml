@@ -59,17 +59,25 @@
                                            onclick="openPlanCheckList('all')">
                                             <h5 style="font-size: large;text-align: center;">总项目</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite
-                                                    id="planSum">0</cite></p>
+                                                    id="projectSum">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body"
-                                           onclick="openPlanCheckList('done')">
-                                            <h5 style="font-size: large;text-align: center;">已完成</h5>
+                                           onclick="openPlanCheckList('all')">
+                                            <h5 style="font-size: large;text-align: center;">总问题</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite
-                                                    id="finishCount">0</cite></p>
+                                                    id="planSum">0</cite></p>
                                         </a>
                                     </li>
+<!--                                    <li class="layui-col-xs3">-->
+<!--                                        <a href="javascript:;" class="x-admin-backlog-body"-->
+<!--                                           onclick="openPlanCheckList('done')">-->
+<!--                                            <h5 style="font-size: large;text-align: center;">已完成</h5>-->
+<!--                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite-->
+<!--                                                    id="finishCount">0</cite></p>-->
+<!--                                        </a>-->
+<!--                                    </li>-->
                                     <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('todo')">
@@ -81,7 +89,15 @@
                                     <li class="layui-col-xs3">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('delay')">
-                                            <h5 style="font-size: large;text-align: center;">延期项目</h5>
+                                            <h5 style="font-size: large;text-align: center;">超时问题</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite
+                                                    id="overTimeNum">0</cite></p>
+                                        </a>
+                                    </li>
+                                    <li class="layui-col-xs3">
+                                        <a href="javascript:;" class="x-admin-backlog-body"
+                                           onclick="openPlanCheckList('delay')">
+                                            <h5 style="font-size: large;text-align: center;">延期问题</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite
                                                     id="timeoutCount">0</cite></p>
                                         </a>
@@ -258,9 +274,11 @@
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
+                    $("#projectSum").html(data.projectSum);
                     $("#planSum").html(data.planSum);
                     $("#finishCount").html(data.finishCount);
                     $("#nofinishCount").html(data.nofinishCount);
+                    $("#overTimeNum").html(data.overTimeNum);
                     $("#timeoutCount").html(data.timeoutCount);
                     var data1 = [], legendData = [], colors = [];
                     var iiitem1 = {}
@@ -523,9 +541,11 @@
                     field: 'auditYear',
                     title: '年度',
                 }, {
+                    field: 'auditYear',
+                    title: '超时情况',
+                }, {
                     field: 'status',
                     title: '状态',
-                    width: 200,
                     templet: (data) => {
                         let status = data.status;
                         let statusName = "正在实施";
