@@ -117,7 +117,7 @@
 
     //审计对象处理
     let text = userInfo.deptParentRegion;
-    if (text.toString().indexOf("乌鲁木齐") > -1) {
+    if (text && text.toString().indexOf("乌鲁木齐") > -1) {
         $(".muqi").removeClass("layui-hide");
         $(".muqi_other").remove();
     } else {
@@ -635,7 +635,7 @@
         //审计对象处理
         let flag = 1;
         let text = userInfo.deptName;
-        if (text.toString().indexOf("乌鲁木齐") > -1) {
+        if (text && text.toString().indexOf("乌鲁木齐") > -1) {
 
         } else {
             flag = 0;

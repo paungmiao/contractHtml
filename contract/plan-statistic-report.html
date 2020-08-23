@@ -57,8 +57,16 @@
     </div>
     <script>
         var count = 0;
-        var auditYear = "2020"
+        var auditYear = "2020";
         layui.use(['table', 'form', 'element'], function () {
+            let isSuperAdmin = false;
+            if(userInfo && userInfo.roleList){
+                userInfo.roleList.forEach(e=>{
+                    if(e.roleCode=='AUDIT_SUPER'){
+                        isSuperAdmin = true;
+                    }
+                })
+            }
             let table = layui.table;
             let form = layui.form;
             let element = layui.element;
@@ -66,7 +74,9 @@
                 auditYear=$("#auditYear").val();
                 table.reload('test', {
                     where: {
-                        roleId: '2',"auditYear":auditYear
+                        roleId: '2',"auditYear":auditYear,
+                        "isSuperAdmin":isSuperAdmin,
+                        "currDept":userInfo.deptId
                     },
                     page: 1
                 });
@@ -148,7 +158,7 @@
                 //pageName: 'current', //页码的参数名称，默认：page
                 //limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {deptId: userInfo.deptParentId,"auditYear":auditYear},
+            where: {deptId: userInfo.deptParentId,"auditYear":auditYear,"isSuperAdmin":isSuperAdmin,"currDept":userInfo.deptId},
             done: function (res, curr, count) {
             }
         });

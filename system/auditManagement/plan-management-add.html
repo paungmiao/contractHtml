@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="x-admin-sm" xmlns:th="http://www.w3.org/1999/html">
+<html class="x-admin-sm">
 
 <head>
     <link rel="stylesheet" href="../../css/font.css">
@@ -23,7 +23,8 @@
                 <span class="x-red">*</span>审计年度:
             </label>
             <div class="layui-input-block">
-                <input name="auditYear" id="start" class="layui-input layui-disabled" lay-verify="required|auditYear" autocomplete="off"
+                <input name="auditYear" id="start" class="layui-input layui-disabled" lay-verify="required|auditYear"
+                       autocomplete="off"
                        placeholder="请输入审计年度">
             </div>
         </div>
@@ -71,27 +72,29 @@
             <div class="layui-input-block">
 
                 <div class="layui-input-inline" style="width: calc(50% - 10px)">
-                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectIdNew" lay-filter="one_cate_new">
+                    <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectIdNew"
+                            lay-filter="one_cate_new">
                     </select>
                 </div>
                 <div style="width:50%; float:left">
-                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId" lay-filter="two_cate_new">
+                    <select id="auditAdminSelect_new" lay-verify="required" name="auditObjectId"
+                            lay-filter="two_cate_new">
                     </select>
                 </div>
             </div>
         </div>
 
-<!--        <div class="layui-form-item muqi layui-hide">-->
-<!--            <label class="layui-form-label">-->
-<!--                <span></span>-->
-<!--            </label>-->
-<!--            <div class="layui-input-block">-->
-<!--                <div class="layui-input-inline" style="width: calc(50% - 10px)">-->
-<!--                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="layui-form-item muqi layui-hide">-->
+        <!--            <label class="layui-form-label">-->
+        <!--                <span></span>-->
+        <!--            </label>-->
+        <!--            <div class="layui-input-block">-->
+        <!--                <div class="layui-input-inline" style="width: calc(50% - 10px)">-->
+        <!--                    <select id="auditUserSelect_new" lay-verify="required" name="auditAdminId">-->
+        <!--                    </select>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
         <div class="layui-form-item muqi_other layui-hide">
             <label class="layui-form-label">
@@ -103,10 +106,10 @@
                     <select id="auditObjectIdSelect" lay-verify="required" name="auditObjectId" lay-filter="one_cate">
                     </select>
                 </div>
-<!--                <div style="width:50%; float:left">-->
-<!--                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">-->
-<!--                    </select>-->
-<!--                </div>-->
+                <!--                <div style="width:50%; float:left">-->
+                <!--                    <select id="auditAdminSelect" lay-verify="required" name="auditAdminId">-->
+                <!--                    </select>-->
+                <!--                </div>-->
             </div>
         </div>
 
@@ -365,7 +368,7 @@
 
     //审计对象处理
     let text = userInfo.deptParentRegion;
-    if (text.toString().indexOf("乌鲁木齐") > -1) {
+    if (text && text.toString().indexOf("乌鲁木齐") > -1) {
         $(".muqi").removeClass("layui-hide");
         $(".muqi_other").remove();
     } else {

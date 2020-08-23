@@ -222,7 +222,7 @@
                                     for (let i in data) {
                                         window.sessionStorage.setItem(i, JSON.stringify(data[i]));
                                     }
-                                    let tokenType = data.token_type
+                                    let tokenType = "Bearer"
                                     let accessToken = data.access_token;
                                     if (tokenType && accessToken) {
 
@@ -248,6 +248,7 @@
                                                         success: function (resp) {
                                                             if (resp && 0 == resp.code) {
                                                                 let data = resp.data;
+                                                                debugger
                                                                 userInfo['deptParentId'] = data.parentId;
                                                                 userInfo['deptParentRegion'] = data.region;
                                                             }
