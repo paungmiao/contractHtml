@@ -54,7 +54,7 @@
                              lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                             <div carousel-item="">
                                 <ul class="layui-row layui-col-space10 layui-this">
-                                    <li class="layui-col-xs3">
+                                    <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('all')">
                                             <h5 style="font-size: large;text-align: center;">总项目</h5>
@@ -62,7 +62,7 @@
                                                     id="projectSum">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs3">
+                                    <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('all')">
                                             <h5 style="font-size: large;text-align: center;">总问题</h5>
@@ -78,7 +78,7 @@
 <!--                                                    id="finishCount">0</cite></p>-->
 <!--                                        </a>-->
 <!--                                    </li>-->
-                                    <li class="layui-col-xs3">
+                                    <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('todo')">
                                             <h5 style="font-size: large;text-align: center;">未完成</h5>
@@ -86,15 +86,15 @@
                                                     id="nofinishCount">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs3">
+                                    <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body"
-                                           onclick="openPlanCheckList('delay')">
+                                           onclick="openPlanCheckList('overTimeNum')">
                                             <h5 style="font-size: large;text-align: center;">超时问题</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite
                                                     id="overTimeNum">0</cite></p>
                                         </a>
                                     </li>
-                                    <li class="layui-col-xs3">
+                                    <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body"
                                            onclick="openPlanCheckList('delay')">
                                             <h5 style="font-size: large;text-align: center;">延期问题</h5>
@@ -458,6 +458,7 @@
     typeArr['all'] = '全部';
     typeArr['todo'] = '未完成';
     typeArr['done'] = '已完成';
+    typeArr['overTimeNum'] = '超时';
     typeArr['delay'] = '延期';
 
     function openPlanCheckList(type, deptId, auditYear, title) {
@@ -541,8 +542,19 @@
                     field: 'auditYear',
                     title: '年度',
                 }, {
-                    field: 'auditYear',
+                    field: 'status',
                     title: '超时情况',
+                    templet: (data) => {
+                        let status = data.status;
+                        let statusName = "正在实施";
+                        switch (status) {
+                            case '1005':
+                                statusName = "已超时";
+                            default:
+                                statusName = "未超时";
+                        }
+                        return statusName;
+                    }
                 }, {
                     field: 'status',
                     title: '状态',
@@ -565,20 +577,8 @@
                             default:
                                 statusName = "正在实施";
                         }
-                        /* let  text = '<span style="color:gray">其他</span>';;
-                         if (stateData[data.status]) {
-                             text = '<span>'+stateData[data.status]+'</span>';
-                         }*/
                         return statusName;
-                    }/*,
-                    templet: (data) => {
-                        let text = '<span style="color:gray">其他</span>';
-                        ;
-                        if (stateData[data.status]) {
-                            text = '<span>' + stateData[data.status] + '</span>';
-                        }
-                        return text;
-                    }*/
+                    }
                 }, {
                     field: '',
                     title: '操作',
