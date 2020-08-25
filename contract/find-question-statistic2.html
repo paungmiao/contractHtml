@@ -123,6 +123,14 @@
 
                 </div>
                 <div class="w25 fl">
+                    <label class="layui-form-label-size">审计中支
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="auditObjectIdNew" groupBy="a.audit_Object_Id_new" name="auditObjectIdNew">
+                        </select>
+                    </div>
+                </div>
+                <div class="w25 fl">
                     <label class="layui-form-label-size">问题词条
                     </label>
                     <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
@@ -306,6 +314,7 @@
                     let data = resp.data;
                     let impData = data.impData;
                     let auditData = data.auditData;
+                    let auditParentData = data.auditParentData;
                     if (impData) {
                         let options = [];
                         options.push('<option value="" >未选择</option>')
@@ -336,6 +345,18 @@
                         })
                         $("#auditObjectId").empty().append(options.join(""));
                     }
+                    if (auditParentData) {
+                        let options = [];
+                        options.push('<option value="" >未选择</option>')
+                        options.push('<option value="all" >全部条件</option>')
+                        auditParentData.forEach((Obj) => {
+                            if(Obj&&undefined!=Obj.deptId){
+                                let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
+                                options.push(option);
+                            }
+                        })
+                        $("#auditObjectIdNew").empty().append(options.join(""));
+                    }
                 }
             }
         });
@@ -348,6 +369,17 @@
         let table = layui.table;
         let form = layui.form;
         echarts = layui.echarts;
+        let isSuperAdmin = false;
+        if(userInfo && userInfo.roleList){
+            userInfo.roleList.forEach(e=>{
+                if(e.roleCode=='AUDIT_SUPER'){
+                    isSuperAdmin = true;
+                }
+            })
+        }
+        if(!isSuperAdmin){
+            $("#auditObjectParentSelect").parents("div.w25").remove()
+        }
         findEntryByCategory(3, "projectType");
         findEntryByCategory(4, "auditNatureId");
         findEntryByCategory(5, "problemSeverityId");
