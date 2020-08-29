@@ -135,13 +135,16 @@ let auditEnum = {
         agree: 1004
     },
     1019:{
-        agree: 1006
+        agree: 1006,
+        reject: 1007
     },
     1020:{
-        agree: 1010
+        agree: 1010,
+        reject: 1008
     },
     1021:{
-        agree: 1015
+        agree: 1015,
+        reject: 1008
     }
 
 
