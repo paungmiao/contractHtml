@@ -339,7 +339,7 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >驳回</span>';
                             } else if (res.auditStatus === "1016") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'2\')" >审核</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'2\')" >延期整改审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'3\')" >驳回</span>';
                             }
                         }

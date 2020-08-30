@@ -249,8 +249,11 @@
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >分配</span>';
                             } else if (res.auditStatus === "1007") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
-                            }else if (res.auditStatus === "1014" || res.auditStatus === "1017") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >审核</span>';
+                            }else if (res.auditStatus === "1014") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >延期整改审核</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'1\')" >驳回</span>';
+                            }else if (res.auditStatus === "1017") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改结果审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'1\')" >驳回</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >审核</span>';
