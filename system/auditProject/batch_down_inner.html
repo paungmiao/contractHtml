@@ -18,25 +18,20 @@
 <div class="x-body">
 
     <form class="layui-form" lay-filter="planEditForm">
-        <input id="auditObjectIdNew" type="hidden">
+        <input id="params" type="hidden">
         <input id="type" type="hidden">
-        <input id="taskId" type="hidden">
         <input id="auditStatus" type="hidden">
-        <input id="bizKey" type="hidden">
-
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>审计对象:
             </label>
             <div class="layui-input-block">
-
                 <div style="width:50%; float:left">
                     <select id="auditObjectIdSelect_new" lay-verify="required" name="auditObjectId">
                     </select>
                 </div>
             </div>
         </div>
-
 
         <div class="layui-input-inline">
             <label for="L_repass" class="layui-form-label">
@@ -56,9 +51,7 @@
     </form>
     <script>
         layui.use(['form', 'layer'], function () {
-
             let form = layui.form;
-            // let dept = $("#auditObjectIdNew").val();
             let deptId = userInfo.deptParentId;
             $.ajax({
                 url: "/audit-api/planManage/getAuditObject?deptId="+deptId,
@@ -84,25 +77,23 @@
             //监听提交
             form.on('submit(addPlan)', function (data) {
                 let auditObjectId = $("#auditObjectIdSelect_new").val();
-                let taskId = $("#taskId").val();
-                let auditStatus = $("#auditStatus").val();
+                let params = $("#params").val();
                 let type = $("#type").val();
+                let auditStatus = $("#auditStatus").val();
                 let status = auditEnum[auditStatus][type];
-                let bizKey = $("#bizKey").val();
                 $.ajax({
-                    url: "/audit-api/task//editBatchDownDeptById",
+                    url: "/audit-api/task/editBatchDownDeptById",
                     type: 'POST',
-                    dataType: "json",
                     async: false,
                     headers: createAuthorizationTokenHeader(),
                     data: {
-                        params: bizKey + "_" + taskId,
+                        params: params,
                         auditObjectId: auditObjectId,
                         auditStatus: status
                     },
                     success: function (resp) {
                         // 获得frame索引
-                        let index = parent.layer.getFrameIndex(window.name);
+                        var index = parent.layer.getFrameIndex(window.name);
                         //关闭当前frame
                         parent.layer.close(index);
                         // 可以对父窗口进行刷新
@@ -110,8 +101,6 @@
                     }
                 });
             });
-
-
         });
 
         function off() {

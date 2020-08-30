@@ -61,6 +61,9 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
+    <xblock>
+        <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量下发</button>
+    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
            lay-filter="test"></table>
 
@@ -127,7 +130,7 @@
         let tablePlan = table.render({
             elem: '#test',
             url: '/audit-api/task/flow/page',
-            id: 'test',
+            id: 'checkTest',
             even: true,
             xhrFields: {
                 withCredentials: true
@@ -135,7 +138,7 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                    // {type: 'checkbox', fixed: 'left'},
+                    {type: 'checkbox', fixed: 'left'},
                     {
                         field: 'projectCode',
                         title: '项目编号',
@@ -280,7 +283,26 @@
             },
 
             done: function (res, curr, count) {
+                let state = "";
+                for (let i in res.data) {
+                    let item = res.data[i];
+                    let status = item.auditStatus
+                    if (status === '1018') {// 这里是判断需要禁用的条件（如：状态为0的）
 
+                    } else {
+                        state = "1";
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
+                        form.render();// 重新渲染一下
+                    }
+                }
+
+                if (state === "1") {
+                    // 根据条件移除全选 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0"><span></span></div>');
+                } else {
+                    //翻页显示全选按钮 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
+                }
             }
         });
         form.on("submit(search)", function () {
@@ -373,10 +395,30 @@
 
     //下发
     function downToDept(auditObjectIdNew, type, taskId, auditStatus, bizKey) {
-        editBatchPage_("批量修改", "down_dept.html", "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
+        editBatchPage_("修改", "down_dept.html", "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
     }
 
-    function editBatchPage_(title, url, w, h, auditObjectIdNew, type, taskId, auditStatus, bizKey) {
+    function editBatch() {
+        layer.confirm('确认操作？', function (index) {
+            let table = layui.table;
+            let checkStatus = table.checkStatus('checkTest');
+            let params = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                if (o.auditStatus === "1018") {
+                    params.push(o.id + "_" + o.taskId);
+                }
+            });
+            if (params.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            params = params.join(",");
+
+            editBatchPage_("批量下发", "batch_down_inner.html", "500", "300", "", "agree", "", "1018", "", params)
+        });
+    }
+
+    function editBatchPage_(title, url, w, h, auditObjectIdNew, type, taskId, auditStatus, bizKey, params) {
         if (title == null || title == '') {
             title = false;
         }
@@ -407,11 +449,14 @@
                 let taskIdDate = body.find('#taskId');
                 let auditStatusDate = body.find('#auditStatus');
                 let bizKeyDate = body.find('#bizKey');
+                let paramsDate = body.find('#params');
                 auditObjectIdNewDate.val(auditObjectIdNew);
                 typeDate.val(type);
                 taskIdDate.val(taskId);
                 auditStatusDate.val(auditStatus);
                 bizKeyDate.val(bizKey);
+                paramsDate.val(params);
+
             }
         });
     }
