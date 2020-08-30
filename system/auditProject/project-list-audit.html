@@ -395,7 +395,7 @@
 
     //下发
     function downToDept(auditObjectIdNew, type, taskId, auditStatus, bizKey) {
-        editBatchPage_("修改", "down_dept.html", "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
+        editBatchPage_("修改", "down_dept.html?auditObjectIdNew="+auditObjectIdNew, "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
     }
 
     function editBatch() {

@@ -58,8 +58,10 @@
         layui.use(['form', 'layer'], function () {
 
             let form = layui.form;
-            // let dept = $("#auditObjectIdNew").val();
-            let deptId = userInfo.deptParentId;
+            let deptId = getQueryString("auditObjectIdNew")
+            // let deptId = $("#auditObjectIdNew").val();
+            // let deptId = userInfo.deptParentId;
+            debugger;
             $.ajax({
                 url: "/audit-api/planManage/getAuditObject?deptId="+deptId,
                 dataType: "json",
