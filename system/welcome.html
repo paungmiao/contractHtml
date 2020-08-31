@@ -41,28 +41,40 @@
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="planSum">0</cite></p>
                                         </a>
                                     </li>
-<!--                                    <li class="layui-col-xs3">-->
-<!--                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">-->
-<!--                                            <h5 style="font-size: large;text-align: center;">已完成</h5>-->
-<!--                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="finishCount">0</cite></p>-->
-<!--                                        </a>-->
-                                    </li>
                                     <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
-                                            <h5 style="font-size: large;text-align: center;">未完成</h5>
+                                            <h5 style="font-size: large;text-align: center;">未整改</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="nofinishCount">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('overTime')">
-                                            <h5 style="font-size: large;text-align: center;">超时问题</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="overTimeNum">0</cite></p>
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
+                                            <h5 style="font-size: large;text-align: center;">正在整改</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="rectifyNum">0</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">
-                                            <h5 style="font-size: large;text-align: center;">延期问题</h5>
-                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="timeoutCount">0</cite></p>
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
+                                            <h5 style="font-size: large;text-align: center;">长期改进</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="improveCount">0</cite></p>
+                                        </a>
+                                    </li>
+<!--                                    <li class="layui-col-xs2">-->
+<!--                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('overTime')">-->
+<!--                                            <h5 style="font-size: large;text-align: center;">超时问题</h5>-->
+<!--                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="overTimeNum">0</cite></p>-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+<!--                                    <li class="layui-col-xs2">-->
+<!--                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('delay')">-->
+<!--                                            <h5 style="font-size: large;text-align: center;">延期问题</h5>-->
+<!--                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="timeoutCount">0</cite></p>-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+                                    <li class="layui-col-xs3">
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('done')">
+                                            <h5 style="font-size: large;text-align: center;">已整改</h5>
+                                            <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite  id="finishCount">0</cite></p>
                                         </a>
                                     </li>
                                 </ul>
@@ -445,6 +457,8 @@
                     $("#nofinishCount").html(data.nofinishCount);
                     $("#overTimeNum").html(data.overTimeNum);
                     $("#timeoutCount").html(data.timeoutCount);
+                    $("#rectifyNum").html(data.rectifyNum);
+                    $("#improveCount").html(data.improveCount);
                     var data1 = [], legendData = [],colors = [];
                     var iiitem1 = {}
                     iiitem1.name = "未超时";
