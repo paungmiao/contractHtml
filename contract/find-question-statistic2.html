@@ -114,6 +114,12 @@
 
                 </div>
                 <div class="w25 fl">
+                    <label class="layui-form-label-size">问题词条
+                    </label>
+                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
+                           class="layui-input search-input-find">
+                </div>
+                <div class="w25 fl">
                     <label class="layui-form-label-size">审计对象
                     </label>
                     <div class="fl  search-input-find">
@@ -122,20 +128,7 @@
                     </div>
 
                 </div>
-                <div class="w25 fl">
-                    <label class="layui-form-label-size">审计中支
-                    </label>
-                    <div class="fl  search-input-find">
-                        <select id="auditObjectIdNew" groupBy="a.audit_Object_Id_new" name="auditObjectIdNew">
-                        </select>
-                    </div>
-                </div>
-                <div class="w25 fl">
-                    <label class="layui-form-label-size">问题词条
-                    </label>
-                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
-                           class="layui-input search-input-find">
-                </div>
+
             </div>
 
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
@@ -194,6 +187,14 @@
                         </select>
                     </div>
                     <!--                    <div class="fl  search-input-find" id="demo1" groupBy="a.implementing_Agency_Id"></div>-->
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">整改部门
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="auditObjectIdNew" groupBy="a.audit_Object_Id_new" name="auditObjectIdNew">
+                        </select>
+                    </div>
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -374,6 +375,8 @@
             userInfo.roleList.forEach(e=>{
                 if(e.roleCode=='AUDIT_SUPER'){
                     isSuperAdmin = true;
+                }else if((e.roleCode=='AUDIT_IMP_ADMIN' ||e.roleCode=='AUDIT_IMP_USER'  ) && (userInfo.deptId = 10000 || userInfo.deptParentId==10000)) {
+                isSuperAdmin = true;
                 }
             })
         }

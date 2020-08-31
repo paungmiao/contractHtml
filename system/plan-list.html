@@ -73,7 +73,7 @@
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
+    <xblock class="superButton">
         <button class="layui-btn" onclick="attentionCheck()"><i class="layui-icon"></i>关注</button>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
@@ -91,8 +91,19 @@
     var count = 0;
     let checkArr = [];
     let stateData ={}
-    layui.use(['table', 'form'], function () {
+    let isSuperAdmin = true;
 
+    layui.use(['table', 'form'], function () {
+        if (userInfo && userInfo.roleList) {
+            userInfo.roleList.forEach(e => {
+                if ((e.roleCode == 'AUDIT_IMP_ADMIN' || e.roleCode == 'AUDIT_IMP_USER')) {
+                    isSuperAdmin = false;
+                }
+            })
+        }
+        if(!isSuperAdmin){
+            $(".superButton").remove()
+        }
         let table = layui.table;
         let form = layui.form;
         findEntryByCategory(6,"rectifySituationSelect");

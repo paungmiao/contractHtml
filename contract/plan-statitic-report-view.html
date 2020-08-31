@@ -123,16 +123,17 @@
             </div>
             <div class="layui-col-md4">
                 <div class="layui-card">
-                    <div class="layui-card-header" style="font-size: 16px;font-weight:bold">项目类型</div>
+                    <div class="layui-card-header" style="font-size: 16px;font-weight:bold">基本情况</div>
                     <div class="layui-card-body" style="height:280px;line-height:280px;overflow:auto;overflow-x:hidden;">
                         <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim=""
                              lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
                             <table class="layui-table layuiadmin-page-table" lay-skin="line">
                                 <thead>
                                 <tr>
-                                    <th>排名</th>
-                                    <th>类型</th>
-                                    <th>项目数</th>
+                                    <th>项目名称</th>
+                                    <th>问题数</th>
+                                    <th>未整改问题</th>
+                                    <th>超时问题</th>
                                 </tr>
                                 </thead>
                                 <tbody id="projectTypeBody">
@@ -250,7 +251,7 @@
         });
         //根据项目类型统计
         $.ajax({
-            url: "/audit-api/planStatistic/questionStatisticProType",
+            url: "/audit-api/planStatistic/questionStatisticProName",
             dataType: "json",
             type: "post",
             data: {"projectType": "all", "auditYear": auditYear, "deptId": gid,},
@@ -259,7 +260,7 @@
                 if (statisticData) {
                     var html = "";
                     statisticData.forEach((item, index) => {
-                        html += "<tr><td>" + (index + 1) + "</td><td>" + item.name + "</td><td>" + item.num + "</td></tr>";
+                        html += "<tr><td>" + item.name + "</td><td>" + item.wts  + "</td><td>" + item.wzg + "</td><td>" + item.cs + "</td></tr>";
                     });
                     $("#projectTypeBody").html(html);
                 }
@@ -275,15 +276,15 @@
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
                     $("#projectSum").html(data.projectSum);
-                    $("#planSum").html(data.planSum);
-                    $("#finishCount").html(data.finishCount);
-                    $("#nofinishCount").html(data.nofinishCount);
-                    $("#overTimeNum").html(data.overTimeNum);
-                    $("#timeoutCount").html(data.timeoutCount);
+                    $("#planSum").html(data.planSum);// 总数
+                    $("#finishCount").html(data.finishCount);// 已完成
+                    $("#nofinishCount").html(data.nofinishCount); // 为未完成
+                    $("#overTimeNum").html(data.overTimeNum);  // 超时
+                    $("#timeoutCount").html(data.timeoutCount); // 延期
                     var data1 = [], legendData = [], colors = [];
                     var iiitem1 = {}
                     iiitem1.name = "未超时";
-                    iiitem1.value = data.finishCount + data.nofinishCount;
+                    iiitem1.value = (data.planSum - data.overTimeNum);
                     iiitem1.label = {normal: {show: true}};
                     data1.push(iiitem1);
                     legendData.push("未超时");
@@ -291,7 +292,7 @@
                     colors.push('#F77013');
                     var iiitem2 = {}
                     iiitem2.name = "已超时";
-                    iiitem2.value = data.timeoutCount;
+                    iiitem2.value = data.overTimeNum;
                     data1.push(iiitem2);
                     legendData.push("已超时");
                     // colors.push(color16());
@@ -550,6 +551,7 @@
                         switch (status) {
                             case '1005':
                                 statusName = "已超时";
+                                break
                             default:
                                 statusName = "未超时";
                         }
@@ -573,6 +575,8 @@
                                 break;
                             case '1004':
                                 statusName = "延期整改";
+                            case '1005':
+                                statusName = "整改超时";
                                 break;
                             default:
                                 statusName = "正在实施";
@@ -635,6 +639,9 @@
                     openPlanCheckList('all');
                     break;
                 case 'update':
+                    if(window.userInfo.deptParentRegion==item.implementingAgencyId){
+                        return layer.msg('只能操作所在中支的项目');
+                    }
                     if (data.length === 0) {
                         layer.msg('请选择一行');
                     } else if (data.length > 1) {
@@ -648,13 +655,21 @@
                         layer.msg('请选择一行');
                     } else {
                         var ids = '';
+                        var self = true;
                         data.forEach((item, index) => {
+                            //
+                            if(window.userInfo.deptParentRegion!=item.implementingAgencyId){
+                                self = false;
+                            }
                             if (index == 0) {
                                 ids = item.id;
                             } else {
                                 ids += "," + item.id;
                             }
                         });
+                        if(!self){
+                            return layer.msg("只能操作所属中支的数据")
+                        }
                         let userInfo = window.sessionStorage.userInfo;
                         let userId = ''
                         if (userInfo && JSON.parse(userInfo) && JSON.parse(userInfo).userId) {
@@ -691,6 +706,15 @@
                     });
                     break;
                 case 'editContent':
+                    var self = true
+                    data.forEach((item, index) => {
+                        if(window.userInfo.deptParentRegion!=item.implementingAgencyId){
+                            self=false
+                        }
+                    })
+                    if(!self){
+                        return layer.msg("只能操作所属中支的数据")
+                    }
                     x_admin_show('提交汇总报告', 'plan-statistic-report-content.html?gid=' + gid + '&auditYear=' + auditYear, '600', '460');
                     break;
             }

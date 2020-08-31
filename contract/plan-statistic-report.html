@@ -64,6 +64,8 @@
                 userInfo.roleList.forEach(e=>{
                     if(e.roleCode=='AUDIT_SUPER'){
                         isSuperAdmin = true;
+                    }else if((e.roleCode=='AUDIT_IMP_ADMIN' ||e.roleCode=='AUDIT_IMP_USER'  ) &&  (userInfo.deptId = 10000 || userInfo.deptParentId==10000)) {
+                        isSuperAdmin = true;
                     }
                 })
             }
@@ -131,11 +133,11 @@
                     width: 120,
                 }, {
                     field: 'timeoutCount',
-                    title: '超时问题',
+                    title: '延期问题',
                     width: 180,
                 }, {
                     field: 'overTimeNum',
-                    title: '延期问题',
+                    title: '超时问题',
                     width: 180,
                 }, {
                     field: '',
@@ -158,7 +160,12 @@
                 //pageName: 'current', //页码的参数名称，默认：page
                 //limitName: 'size' //每页数据量的参数名，默认：limit
             },
-            where: {deptId: userInfo.deptParentId,"auditYear":auditYear,"isSuperAdmin":isSuperAdmin,"currDept":userInfo.deptId},
+            where: {
+                deptId: userInfo.deptParentId,
+                "auditYear":auditYear,
+                "isSuperAdmin":isSuperAdmin,
+                "currDept":userInfo.deptId
+            },
             done: function (res, curr, count) {
             }
         });

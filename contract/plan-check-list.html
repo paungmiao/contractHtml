@@ -113,6 +113,14 @@
                     </div>
 
                 </div>
+
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">问题词条
+                    </label>
+                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId"
+                           autocomplete="off"
+                           class="layui-input search-input-find">
+                </div>
                 <div class="w25 fl">
                     <label class="layui-form-label-size">审计对象
                     </label>
@@ -121,21 +129,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="w25 fl">
-                    <label class="layui-form-label-size">审计中支
-                    </label>
-                    <div class="fl  search-input-find">
-                        <select id="auditObjectParentSelect" groupBy="a.audit_Object_Id_new"  name="auditObjectIdNew">
-                        </select>
-                    </div>
-                </div>
 
-                <div class="w25 fl">
-                    <label class="layui-form-label-size">问题词条
-                    </label>
-                    <input type="text" placeholder="请输入问题词条" id="questionEntryId" name="questionEntryId" autocomplete="off"
-                           class="layui-input search-input-find">
-                </div>
+
             </div>
 
             <div style=" width: calc(100% - 85px);margin-top:16px;height:30px">
@@ -196,6 +191,14 @@
                     <!--                        </select>-->
                     <!--                    </div>-->
                     <div class="fl  search-input-find" id="demo1"></div>
+                </div>
+                <div class="w25 fl">
+                    <label class="layui-form-label-size">整改部门
+                    </label>
+                    <div class="fl  search-input-find">
+                        <select id="auditObjectParentSelect" groupBy="a.audit_Object_Id_new" name="auditObjectIdNew">
+                        </select>
+                    </div>
                 </div>
             </div>
             <!-- <div class="layui-collapse" lay-filter="test">
@@ -367,7 +370,7 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         impData.forEach((Obj) => {
-                            if(Obj&&undefined!=Obj.deptId){
+                            if (Obj && undefined != Obj.deptId) {
                                 let option = '<option value="' + Obj.deptId + '">' + Obj.name + '</option>';
                                 options.push(option);
                                 let data = {
@@ -384,7 +387,7 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         auditData.forEach((Obj) => {
-                            if(Obj&&undefined!=Obj.deptId){
+                            if (Obj && undefined != Obj.deptId) {
                                 let data = {
                                     name: Obj.name,
                                     value: Obj.deptId
@@ -400,7 +403,7 @@
                         options.push('<option value="" >全部</option>')
                         options.push('<option value="all" >全部条件</option>')
                         auditParentData.forEach((Obj) => {
-                            if(Obj&&undefined!=Obj.deptId){
+                            if (Obj && undefined != Obj.deptId) {
                                 let data = {
                                     name: Obj.name,
                                     value: Obj.deptId
@@ -446,14 +449,16 @@
         let form = layui.form;
         echarts = layui.echarts;
         let isSuperAdmin = false;
-        if(userInfo && userInfo.roleList){
-            userInfo.roleList.forEach(e=>{
-                if(e.roleCode=='AUDIT_SUPER'){
+        if (userInfo && userInfo.roleList) {
+            userInfo.roleList.forEach(e => {
+                if (e.roleCode == 'AUDIT_SUPER') {
+                    isSuperAdmin = true;
+                } else if ((e.roleCode == 'AUDIT_IMP_ADMIN' || e.roleCode == 'AUDIT_IMP_USER') && (userInfo.deptId = 10000 || userInfo.deptParentId == 10000)) {
                     isSuperAdmin = true;
                 }
             })
         }
-        if(!isSuperAdmin){
+        if (!isSuperAdmin) {
             $("#auditObjectParentSelect").parents("div.w25").remove()
         }
         findAllDeptGroup();
@@ -646,6 +651,9 @@
             request: {
                 pageName: 'current' //页码的参数名称，默认：page
                 , limitName: 'size' //每页数据量的参数名，默认：limit
+            },where: {
+                isSuperAdmin:isSuperAdmin,
+                implementingAgencyIdCurr:userInfo.deptParentId
             }
         });
         let demo1 = xmSelect.render({
@@ -660,13 +668,15 @@
             demo1.getValue().forEach((elm, i) => {
                 implementingAgencyId.push(elm.value)
             })
-            
-            form.val('filterForm', {
+
+            var val = form.val('filterForm', {
                 implementingAgencyId: implementingAgencyId.join(","),
-                auditHeaderAuthorization: getJwtToken()
-            })
+                auditHeaderAuthorization: getJwtToken(),
+                isSuperAdmin:isSuperAdmin,
+                implementingAgencyIdCurr:userInfo.deptParentId
+            });
             table.reload('test', {
-                where: form.val('filterForm'),
+                where: val,
                 page: 1
             });
             generateEchars();
