@@ -462,7 +462,7 @@
                     var data1 = [], legendData = [],colors = [];
                     var iiitem1 = {}
                     iiitem1.name = "未超时";
-                    iiitem1.value = data.finishCount+data.nofinishCount;
+                    iiitem1.value = data.planSum-data.overTimeNum;
                     iiitem1.label = {normal: {show: true}};
                     data1.push(iiitem1);
                     legendData.push("未超时");
@@ -470,7 +470,7 @@
                     colors.push('#F77013');
                     var iiitem2 = {}
                     iiitem2.name = "已超时";
-                    iiitem2.value = data.timeoutCount;
+                    iiitem2.value = data.overTimeNum;
                     data1.push(iiitem2);
                     legendData.push("已超时");
                     // colors.push(color16());

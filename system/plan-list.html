@@ -189,22 +189,28 @@
                     field: 'implementingAgencyId',
                     title: '实施机构',
                     templet: (data) => {
-                        let implementingAgencyName = "";
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
-                            dataType: "json",
-                            type: "get",
-                            headers: createAuthorizationTokenHeader(),
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    implementingAgencyName = data['name'];
-                                }
-                            }
-                        });
-                        return implementingAgencyName;
+                        return data.implementingAgencyName;
                     }
+                // }, {
+                //     field: 'implementingAgencyId',
+                //     title: '实施机构',
+                //     templet: (data) => {
+                //         let implementingAgencyName = "";
+                //         $.ajax({
+                //             url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                //             dataType: "json",
+                //             type: "get",
+                //             headers: createAuthorizationTokenHeader(),
+                //             async: false,
+                //             success: function (resp) {
+                //                 if (resp && 0 == resp.code) {
+                //                     let data = resp.data;
+                //                     implementingAgencyName = data['name'];
+                //                 }
+                //             }
+                //         });
+                //         return implementingAgencyName;
+                //     }
                 }, {
                     field: 'auditObjectId',
                     title: '审计对象',
