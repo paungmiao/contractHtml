@@ -62,7 +62,7 @@
         </form>
     </div>
     <xblock class="layui-hide" id="plxf">
-        <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量下发</button>
+        <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量分发</button>
     </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
            lay-filter="test"></table>
@@ -254,10 +254,10 @@
                             } else if (res.auditStatus === "1009") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改结果提交</span>';
                             } else if (res.auditStatus === "1018") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
-                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >下发</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >分发</span>';
+                                // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >分发</span>';
                             } else if (res.auditStatus === "1019" || res.auditStatus === "1020" || res.auditStatus === "1021") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提审</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划提交</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'4\')" >驳回</span>';
                             } else {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >确认整改</span>';
@@ -266,7 +266,7 @@
                             }
                         }
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://103.45.130.8:9999/act/task/view/auditApply/'+res.id+'\')" >流程图</span>';
-                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://103.45.130.8:9999/act/task/view/auditApply_1/'+res.id+'\')" >流程图（下发）</span>';
+                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://103.45.130.8:9999/act/task/view/auditApply_1/'+res.id+'\')" >流程图（分发）</span>';
                         return html;
                     }
                     // sort: true
@@ -403,7 +403,7 @@
         });
     }
 
-    //下发
+    //分发
     function downToDept(auditObjectIdNew, type, taskId, auditStatus, bizKey) {
         editBatchPage_("修改", "down_dept.html?auditObjectIdNew="+auditObjectIdNew, "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
     }
@@ -424,7 +424,7 @@
             }
             params = params.join(",");
 
-            editBatchPage_("批量下发", "batch_down_inner.html", "500", "300", "", "agree", "", "1018", "", params)
+            editBatchPage_("批量分发", "batch_down_inner.html", "500", "300", "", "agree", "", "1018", "", params)
         });
     }
 
