@@ -506,7 +506,7 @@
             });
         }
         $.ajax({
-            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptId,
+            url: "/audit-api/planManage/getAuditObject?deptId=" + userInfo.deptParentId,
             dataType: "json",
             type: "get",
             async: false,

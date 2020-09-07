@@ -48,7 +48,7 @@
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('todo')" >
+                                        <a href="javascript:;" class="x-admin-backlog-body" onclick="openPlanCheckList('doing')" >
                                             <h5 style="font-size: large;text-align: center;">正在整改</h5>
                                             <p style="margin-left: 5px;margin-top: 10px;text-align: center;"><cite id="rectifyNum">0</cite></p>
                                         </a>
@@ -520,8 +520,9 @@
 
     let typeArr = {};
     typeArr['all'] = '全部';
-    typeArr['todo'] = '未完成';
-    typeArr['done'] = '已完成';
+    typeArr['todo'] = '未整改';
+    typeArr['done'] = '已整改';
+    typeArr['doing'] = '正在整改';
     typeArr['overTime'] = '超时';
     typeArr['delay'] = '延期';
 
