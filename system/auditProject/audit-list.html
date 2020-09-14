@@ -92,6 +92,9 @@
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
+    <xblock class="layui-hide" id="plxf">
+        <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量分发</button>
+    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
            lay-filter="test"></table>
 
@@ -105,6 +108,10 @@
     } else {
         $(".muqi_other").removeClass("layui-hide");
         $(".muqi").remove();
+    }
+    let deptName = userInfo.deptName;
+    if (deptName.indexOf("内审") > -1) {
+        $("#plxf").removeClass("layui-hide");
     }
     var count = 0;
     layui.use(['table', 'form'], function () {
@@ -228,7 +235,7 @@
         let tablePlan = table.render({
             elem: '#test',
             url: '/audit-api/task/flow/page',
-            id: 'test',
+            id: 'checkTest',
             even: true,
             xhrFields: {
                 withCredentials: true
@@ -236,7 +243,7 @@
             headers: createAuthorizationTokenHeader(),
             cols: [
                 [
-                    // {type: 'checkbox', fixed: 'left'},
+                    {type: 'checkbox', fixed: 'left'},
                     {
                         field: 'projectCode',
                         title: '项目编号',
@@ -322,6 +329,10 @@
                             text = '<span>已批准</span>';
                         } else if (status === '1005') {
                             text = '<span>已完成</span>';
+                        } else if (status === '1006') {
+                            text = '<span>待完善</span>';
+                        } else if (status === '1007') {
+                            text = '<span>已驳回</span>';
                         }
                         return text;
                     }
@@ -341,9 +352,15 @@
                             } else if (res.auditStatus === "1016") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'2\')" >延期整改审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\',\'3\')" >驳回</span>';
+                            } else if (res.auditStatus === "1018") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >分发</span>';
+                            } else if (res.auditStatus === "1019") {
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划提交</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'4\')" >驳回</span>';
                             }
                         }
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://localhost:9999/act/task/view/auditApply_1/'+res.id+'\')" >流程图</span>';
+                        // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="x_admin_show(\'流程图\', \'http://103.45.130.8:9999/act/task/view/auditApply_1/'+res.id+'\')" >流程图（下发）</span>';
                         return html;
                     }
                     // sort: true
@@ -370,7 +387,26 @@
             },
 
             done: function (res, curr, count) {
+                let state = "";
+                for (let i in res.data) {
+                    let item = res.data[i];
+                    let status = item.auditStatus
+                    if (status === '1018') {// 这里是判断需要禁用的条件（如：状态为0的）
 
+                    } else {
+                        state = "1";
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
+                        form.render();// 重新渲染一下
+                    }
+                }
+
+                if (state === "1") {
+                    // 根据条件移除全选 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0"><span></span></div>');
+                } else {
+                    //翻页显示全选按钮 checkbox
+                    $('th[data-field=0] div').replaceWith('<div class="layui-table-cell laytable-cell-2-0-0 laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div></div>');
+                }
             }
         });
         form.on("submit(search)", function () {
@@ -531,6 +567,75 @@
             end: function () {
                 //窗口销毁之后刷新frame
                 // location.replace(location.href);
+            }
+        });
+    }
+
+    //分发
+    function downToDept(auditObjectIdNew, type, taskId, auditStatus, bizKey) {
+        debugger
+        editBatchPage_("修改", "down_dept.html?auditObjectIdNew="+auditObjectIdNew, "600", "250", auditObjectIdNew, type, taskId, auditStatus, bizKey)
+    }
+
+    function editBatch() {
+        layer.confirm('确认操作？', function (index) {
+            let table = layui.table;
+            let checkStatus = table.checkStatus('checkTest');
+            let params = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                if (o.auditStatus === "1018") {
+                    params.push(o.id + "_" + o.taskId);
+                }
+            });
+            if (params.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            params = params.join(",");
+
+            editBatchPage_("批量分发", "batch_down_inner.html", "500", "300", "", "agree", "", "1018", "", params)
+        });
+    }
+
+    function editBatchPage_(title, url, w, h, auditObjectIdNew, type, taskId, auditStatus, bizKey, params) {
+        if (title == null || title == '') {
+            title = false;
+        }
+        if (url == null || url == '') {
+            url = "404.html";
+        }
+        if (w == null || w == '') {
+            w = ($(window).width() * 0.9);
+        }
+        if (h == null || h == '') {
+            h = ($(window).height() - 50);
+        }
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let auditObjectIdNewDate = body.find('#auditObjectIdNew');
+                let typeDate = body.find('#type');
+                let taskIdDate = body.find('#taskId');
+                let auditStatusDate = body.find('#auditStatus');
+                let bizKeyDate = body.find('#bizKey');
+                let paramsDate = body.find('#params');
+                auditObjectIdNewDate.val(auditObjectIdNew);
+                typeDate.val(type);
+                taskIdDate.val(taskId);
+                auditStatusDate.val(auditStatus);
+                bizKeyDate.val(bizKey);
+                paramsDate.val(params);
+
             }
         });
     }
