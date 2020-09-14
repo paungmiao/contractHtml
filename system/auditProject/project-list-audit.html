@@ -245,7 +245,7 @@
                         let html = '';
                         // html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="editPage_(\'问题信息详情\',\'plan-management-edit.html\',\'800\',\'500\',\'' + res.id + '\', \'readOnly\')" >详情</span>';
                         let status = res.planInfos[0]['statusUser'];
-                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\''+res.taskId+'\',\''+res.auditStatus+'\',\''+status+'\',\'1\')" >详情</span>';
+                        html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\''+res.taskId+'\',\''+res.auditStatus1+'\',\''+status+'\',\'1\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
                             if (res.auditStatus === "1005") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划提交</span>';
