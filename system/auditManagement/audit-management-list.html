@@ -255,7 +255,21 @@
                     title: '实施机构',
                     width: 120,
                     templet: (data) => {
-                        return userInfo.deptName;
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
                     }
                 }, {
                     field: 'auditObjectId',

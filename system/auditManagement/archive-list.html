@@ -256,7 +256,21 @@
                     title: '实施机构',
                     width: 120,
                     templet: (data) => {
-                        return userInfo.deptName;
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
                     }
                 }, {
                     field: 'auditObjectId',
@@ -357,7 +371,8 @@
                 limitName: 'size' //每页数据量的参数名，默认：limit
             },
             where: {
-                statuses: "1002,1003"
+                statuses: "1002,1003",
+                implementingAgencyId: userInfo.deptParentId
             },
 
             done: function (res, curr, count) {
