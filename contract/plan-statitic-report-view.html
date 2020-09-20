@@ -121,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md4">
+            <div class="layui-col-md4 layui-hide" id="projectTypeBodyDiv">
                 <div class="layui-card">
                     <div class="layui-card-header" style="font-size: 16px;font-weight:bold">基本情况</div>
                     <div class="layui-card-body" style="height:280px;line-height:280px;overflow:auto;overflow-x:hidden;">
@@ -137,6 +137,30 @@
                                 </tr>
                                 </thead>
                                 <tbody id="projectTypeBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4 layui-hide" id="projectTypeBodyAllDiv">
+                <div class="layui-card">
+                    <div class="layui-card-header" style="font-size: 16px;font-weight:bold">基本情况</div>
+                    <div class="layui-card-body" style="height:280px;line-height:280px;overflow:auto;overflow-x:hidden;">
+                        <div class="layui-carousel layadmin-carousel layadmin-shortcut" lay-anim=""
+                             lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+                            <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>实施机构</th>
+                                    <!--                                    <th>项目名称</th>-->
+                                    <th>项目数</th>
+                                    <th>问题数</th>
+                                </tr>
+                                </thead>
+                                <tbody id="projectTypeBodyAll">
+
                                 </tbody>
                             </table>
                         </div>
@@ -177,8 +201,14 @@
 </body>
 
 <script>
-    var gid = getQueryString("gid");
-    var auditYear = getQueryString("auditYear");
+    let gid = getQueryString("gid");
+    let auditYear = getQueryString("auditYear");
+
+    if (parseInt(gid) !== -1) {
+        $("#projectTypeBodyDiv").removeClass("layui-hide");
+    } else {
+        $("#projectTypeBodyAllDiv").removeClass("layui-hide");
+    }
 
     function initView() {
         //根据整改情况统计
@@ -263,6 +293,41 @@
                         html += "<tr><td>" + item.name + "</td><td>" + item.wts  + "</td><td>" + item.wzg + "</td><td>" + item.cs + "</td></tr>";
                     });
                     $("#projectTypeBody").html(html);
+                }
+            }
+        });
+        //新疆总统计单独
+        $.ajax({
+            url: "/audit-api/planStatistic/questionStatisticBasic",
+            dataType: "json",
+            type: "post",
+            data: {"projectType": "all","auditYear": auditYear},
+            success: function (res) {
+                var statisticData = res.data.statisticData;
+                if (statisticData) {
+                    var html = "";
+                    statisticData.forEach((item, index) => {
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id="+item.deptId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    implementingAgencyName = data['name'];
+                                }
+                            }
+                        });
+                        html+="<tr><td>"+(index+1)+"</td>" +
+                            "<td>"+implementingAgencyName+"</td>" +
+                            // "<td>"+item.NAME+"</td>" +
+                            "<td>"+item.proNum+"</td>" +
+                            "<td>"+item.errorNum+"</td></tr>";
+                    });
+                    $("#projectTypeBodyAll").html(html);
                 }
             }
         });

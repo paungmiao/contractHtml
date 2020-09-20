@@ -99,20 +99,22 @@
                     title: '实施机构',
                     width: 160,
                     templet: (data) => {
-                        let implementingAgencyName = "";
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
-                            dataType: "json",
-                            type: "get",
-                            headers: createAuthorizationTokenHeader(),
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    implementingAgencyName = data['name'];
+                        let implementingAgencyName = "新疆";
+                        if (data.implementingAgencyId !== -1) {
+                            $.ajax({
+                                url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
+                                dataType: "json",
+                                type: "get",
+                                headers: createAuthorizationTokenHeader(),
+                                async: false,
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        implementingAgencyName = data['name'];
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                         return implementingAgencyName;
                     }
                 }, {
@@ -175,7 +177,8 @@
                 //     ,content: '内容'+ (Math.random()*1000|0)
                 //     ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
                 // })
-                var id = $(this).attr('data-id');
+                let id = $(this).attr('data-id');
+                let content = 'plan-statitic-report-view.html?gid='+id+'&auditYear='+auditYear;
                 layer.open({
                     type: 2,
                     skin: 'layui-layer-demo', //样式类名
@@ -184,7 +187,7 @@
                     anim: 2,
                     area: ['1300px', '650px'],
                     shadeClose: true, //开启遮罩关闭
-                    content: 'plan-statitic-report-view.html?gid='+id+'&auditYear='+auditYear
+                    content: content
                 });
             });
     });
