@@ -380,8 +380,9 @@
                 }
             })
         }
+        // 别的的中支审计分析：没有审计对象，只有整改部门
         if(!isSuperAdmin){
-            $("#auditObjectParentSelect").parents("div.w25").remove()
+            $("#auditObjectId").parents("div.w25").remove()
         }
         findEntryByCategory(3, "projectType");
         findEntryByCategory(4, "auditNatureId");
