@@ -688,10 +688,12 @@
             },
 
             done: function (res, curr, count) {
-                if (rPermissionList) {
-                    $.each(rPermissionList, function (i, v) {
-                        $("." + v).removeClass("layui-hide");
-                    })
+                if (parseInt(userInfo.deptParentId) === parseInt(gid)) {
+                    if (rPermissionList) {
+                        $.each(rPermissionList, function (i, v) {
+                            $("." + v).removeClass("layui-hide");
+                        })
+                    }
                 }
             }
         });
