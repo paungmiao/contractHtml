@@ -384,6 +384,9 @@
                     <button class="layui-btn " lay-filter="completeSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>保存
                     </button>
+                    <button class="layui-btn " onclick="completeTask('agree')" >
+                        <i class="layui-icon">&#xe605;</i>提交
+                    </button>
                 </div>
             </div>
             <!-- 整改结果  -->
@@ -417,6 +420,9 @@
                 <div class="layui-form-item submit layui-hide ">
                     <button class="layui-btn " lay-filter="reportSubmit" lay-submit>
                         <i class="layui-icon">&#xe605;</i>保存
+                    </button>
+                    <button class="layui-btn " onclick="completeTask('agree')" >
+                        <i class="layui-icon">&#xe605;</i>提交
                     </button>
                 </div>
             </div>
@@ -996,9 +1002,9 @@
                 success:function (res) {
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
-                        $(".submit").addClass("layui-hide");
-                        x_admin_father_reload()
-                        x_admin_close()
+                        // $(".submit").addClass("layui-hide");
+                        // x_admin_father_reload()
+                        // x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
                     }
@@ -1039,9 +1045,9 @@
                 success:function (res) {
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
-                        $(".submit").addClass("layui-hide");
-                        x_admin_father_reload()
-                        x_admin_close()
+                        // $(".submit").addClass("layui-hide");
+                        // x_admin_father_reload()
+                        // x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
                     }
@@ -1181,6 +1187,39 @@ function initDays(planId) {
         }
     })
 }
+
+    //流程办理
+    function completeTask(type) {
+        layer.confirm('确认操作吗？', function (index) {
+            let beforeStatus = auditStatus;
+            let status = auditEnum[beforeStatus][type];
+            let data = {
+                'auditStatus': status,
+                'bizKey': bizKey
+            }
+            $.ajax({
+                url: '/audit-api/task/complete/' + taskId,
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                async: false,
+                headers: createAuthorizationTokenHeader(),
+                data: JSON.stringify(data),
+                success: function (res) {
+                    if (!res.data) {
+                        let index = layer.alert("操作失败，请完善信息！", {icon: 1}, function () {
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert("操作成功", {icon: 1}, function () {
+                            location.replace(location.href);
+                            x_admin_father_reload()
+                            x_admin_close()
+                        });
+                    }
+                }
+            })
+        });
+    }
 </script>
 <style>
     .layui-form-label{
