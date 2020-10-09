@@ -688,7 +688,8 @@
             },
 
             done: function (res, curr, count) {
-                if (parseInt(userInfo.deptParentId) === parseInt(gid)) {
+                debugger;
+                if (parseInt(userInfo.deptParentId) === parseInt(gid) || parseInt(gid) === -1) {
                     if (rPermissionList) {
                         $.each(rPermissionList, function (i, v) {
                             $("." + v).removeClass("layui-hide");

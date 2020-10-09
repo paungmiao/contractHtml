@@ -255,8 +255,26 @@
                     field: 'auditNatureId',
                     title: '审计性质',
                 }, {
+                    field: 'rectifySituationId',
+                    title: '整改情况',
+                }, {
                     field: 'auditYear',
                     title: '年度',
+                }, {
+                    field: 'status',
+                    title: '超时情况',
+                    templet: (data) => {
+                        let status = data.status;
+                        let statusName = "正在实施";
+                        switch (status) {
+                            case '1005':
+                                statusName = "已超时";
+                                break
+                            default:
+                                statusName = "未超时";
+                        }
+                        return statusName;
+                    }
                 }, {
                     field: 'status',
                     title: '项目状态',
