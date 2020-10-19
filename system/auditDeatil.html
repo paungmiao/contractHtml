@@ -470,6 +470,9 @@
                             <button class="layui-btn " lay-filter="auditUserSubmit" lay-submit>
                                 <i class="layui-icon">&#xe605;</i>保存
                             </button>
+                            <button class="layui-btn " onclick="completeTask('agree')" >
+                                <i class="layui-icon">&#xe605;</i>提交
+                            </button>
                         </div>
                     </div>
 
@@ -1079,9 +1082,9 @@
                 success:function (res) {
                     if(res.code==0 && res.data){
                         top.layer.msg("操作成功",{icon:1})
-                        $(".submit").addClass("layui-hide");
-                        x_admin_father_reload()
-                        x_admin_close()
+                        // $(".submit").addClass("layui-hide");
+                        // x_admin_father_reload()
+                        // x_admin_close()
                     }else{
                         top.layer.msg(res.msg,{icon:2})
                     }
