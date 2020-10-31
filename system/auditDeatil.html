@@ -1201,6 +1201,7 @@ function initDays(planId) {
                 'auditStatus': status,
                 'bizKey': bizKey
             }
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             $.ajax({
                 url: '/audit-api/task/complete/' + taskId,
                 type: 'post',
@@ -1220,6 +1221,7 @@ function initDays(planId) {
                             x_admin_close()
                         });
                     }
+                    layui.close(loading);
                 }
             })
         });

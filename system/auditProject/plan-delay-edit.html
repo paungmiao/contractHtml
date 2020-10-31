@@ -80,6 +80,7 @@
                     "mark": mark,
                     "delayDate": delayDate
                 }
+                let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
                 $.ajax({
                     url: '/audit-api/task/complete/' + taskId,
                     type: 'post',
@@ -94,6 +95,7 @@
                         parent.layer.close(index);
                         // 可以对父窗口进行刷新
                         x_admin_father_reload();
+                        layui.close(loading);
                     }
                 })
             });

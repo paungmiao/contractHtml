@@ -511,7 +511,7 @@
 
     function reportPlan() {
         layer.confirm('确认要提交项目吗？', function (index) {
-            debugger
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             let table = layui.table;
             var checkStatus = table.checkStatus('test');
             var ids = [];
@@ -542,6 +542,7 @@
                             location.replace(location.href);
                         });
                     }
+                    layui.close(loading);
                 }
             });
         });

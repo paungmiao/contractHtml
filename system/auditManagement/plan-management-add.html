@@ -667,6 +667,7 @@
             let formData = form.val("planAddForm");
             formData.createdUsername = userInfo.username
             formData.createdBy = userInfo.userId
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             $.ajax({
                 url: '/audit-api/planCheckList/saveOrEditPlan',
                 type: 'POST',
@@ -689,10 +690,11 @@
 
                         })
                     }
-
+                    layer.close(loading);
                 },
                 error: function (error) {
-                    layer.alert(error)
+                    layer.alert(error);
+                    layer.close(loading);
                 }
             })
             return false;

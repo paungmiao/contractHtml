@@ -381,6 +381,7 @@
                 'auditStatus': status,
                 'bizKey': bizKey
             }
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             $.ajax({
                 url: '/audit-api/task/complete/' + taskId,
                 type: 'post',
@@ -398,6 +399,7 @@
                             location.replace(location.href);
                         });
                     }
+                    layui.close(loading);
                 }
             })
         });

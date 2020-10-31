@@ -94,6 +94,7 @@
                 let opinion = $("#opinion").val();
                 let fileUri = $("#fileUri").val();
                 let status = $("#status").val();
+                let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
                 $.ajax({
                     url: "/audit-api/planCheckList/changePlanStatusByIds",
                     type: 'POST',
@@ -117,6 +118,7 @@
                         parent.layer.close(index);
                         // 可以对父窗口进行刷新
                         x_admin_father_reload();
+                        layui.close(loading);
                     }
                 });
             });

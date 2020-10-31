@@ -505,10 +505,10 @@
 
     function dealPlan(id, status) {
         layer.confirm('确认操作？', function (index) {
-            debugger;
             var ids = [];
             ids.push(id);
             ids = ids.join(",");
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             $.ajax({
                 url: "/audit-api/planCheckList/changePlanStatusByIds",
                 type: 'POST',
@@ -525,6 +525,7 @@
                             location.replace(location.href);
                         });
                     }
+                    layui.close(loading);
                 }
             });
 
@@ -559,6 +560,7 @@
             }
             ids = ids.join(",");
             console.log(ids);
+            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
             $.ajax({
                 url: "/audit-api/planCheckList/changePlanStatusByIds",
                 type: 'POST',
@@ -575,6 +577,7 @@
                             location.replace(location.href);
                         });
                     }
+                    layui.close(loading);
                 }
             });
         });

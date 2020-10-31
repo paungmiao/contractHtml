@@ -76,7 +76,8 @@
             //监听提交
             form.on('submit(addPlan)', function (data) {
                 let params = $("#params").val();
-                let auditUser = $("#auditUserSelect").val();
+                let auditUser = $("#auditUserSelect").val();;
+                let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
                 $.ajax({
                     url: "/audit-api/task/editBatchAuditUser",
                     type: 'POST',
@@ -93,6 +94,7 @@
                         parent.layer.close(index);
                         // 可以对父窗口进行刷新
                         x_admin_father_reload();
+                        layui.close(loading);
                     }
                 });
             });
