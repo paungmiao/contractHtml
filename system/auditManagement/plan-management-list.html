@@ -100,6 +100,7 @@
         </button>
         <button class="layui-btn" onclick="reportPlan()"><i class="layui-icon"></i>提交项目</button>
         <button class="layui-btn" onclick="editBatch()"><i class="layui-icon"></i>批量编辑</button>
+        <button class="layui-btn" onclick="deleteBatch()"><i class="layui-icon"></i>批量删除</button>
         <a class="layui-btn audit_plan_export_import layui-hide" href="/audit-api/planCheckList/template/download"><i
                 class="layui-icon"></i>模板下载</a>
         <button class="layui-btn audit_plan_export_import layui-hide" id="batchImportPlanBtn"><i
@@ -629,6 +630,33 @@
             ids = ids.join(",");
 
             editBatchPage_("批量修改", "batch_edit.html", "600", "350", ids)
+        });
+    }
+
+    function deleteBatch() {
+        layer.confirm('确认操作？', function (index) {
+            let table = layui.table;
+            let checkStatus = table.checkStatus('test');
+            let ids = [];
+            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg('无选中项');
+                return false;
+            }
+            ids = ids.join(",");
+            $.ajax({
+                url: "/audit-api/planManage/deleteIds/",
+                dataType: "json",
+                type: "delete",
+                data: {ids: ids},
+                success: function (resp) {
+                    layer.alert("删除成功", {icon: 1}, function () {
+                        location.replace(location.href);
+                    });
+                }
+            });
         });
     }
 
