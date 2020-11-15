@@ -418,8 +418,10 @@
             filed:'file'
             ,data: {
                 createdBy: userInfo.userId,
-                implementingAgencyId: userInfo.deptId,
-                implementingAgencyNewId: userInfo.deptParentId
+                // implementingAgencyId: userInfo.deptId,
+                // implementingAgencyNewId: userInfo.deptParentId,
+                implementingAgencyId: userInfo.deptParentId,
+                implementingAgencyNewId: userInfo.deptId,
             },
             headers: createAuthorizationTokenHeader()
             , accept: 'file' //普通文件
