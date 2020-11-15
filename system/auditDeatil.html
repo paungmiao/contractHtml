@@ -989,6 +989,12 @@
         form.on('submit(reportSubmit)', function (res) {
             //提交完善信息
             let reportForm = form.val('reportForm');
+
+            let rectifySituationName = $("dd[lay-value$='"+reportForm['rectifySituationId']+"']").text();
+            if (rectifySituationName === "未整改") {
+                return top.layer.msg('请重新选择整改情况',{icon:2})
+            }
+
             let rectifyResult = reportForm.rectifyResult
             if(!rectifyResult){
                 return  top.layer.msg('整改结果不能为空',{icon:2})
@@ -1194,7 +1200,15 @@ function initDays(planId) {
 
     //流程办理
     function completeTask(type) {
+        let form = layui.form;
+        let reportForm = form.val('reportForm');
+        let rectifySituationName = $("dd[lay-value$='"+reportForm['rectifySituationId']+"']").text();
+        if (rectifySituationName === "未整改") {
+            return top.layer.msg('请重新选择整改情况',{icon:2})
+        }
+
         layer.confirm('确认操作吗？', function (index) {
+
             let beforeStatus = auditStatus;
             let status = auditEnum[beforeStatus][type];
             let data = {
