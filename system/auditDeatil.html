@@ -875,7 +875,7 @@
             success: function (res) {
                 let days =0;
                 if(res.data!=null){
-                    days=res.data.days==undefined?0:res.data.days
+                    days=(res.data.days||0)<1?0:res.data.days
                 }
                 $("#costTime").val(days)
             },
