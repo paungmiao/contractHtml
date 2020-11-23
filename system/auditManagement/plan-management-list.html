@@ -425,14 +425,15 @@
             },
             headers: createAuthorizationTokenHeader()
             , accept: 'file' //普通文件
-            , exts: 'xls|xlsx', //只允许上传压缩文件
-            size: 1024 * 50, // 单位kb
+            , exts: 'xlsx', //只允许上传压缩文件
+            size: 0, // 单位kb
             before:function(obj){
                 $("#progress").removeClass("layui-hide")
             },
             done: function (res, index, upload) {
                 //上传成功毕回调
                 $("#progress").addClass("layui-hide")
+                debugger
                 if(res.data){
                     layer.alert(res.msg)
                     $("[lay-filter='search']").trigger("click")
