@@ -187,6 +187,7 @@
                 let deptName = this.innerText;
                 if (deptName.indexOf("乌鲁木齐") < 0) {
                     $("#auditObjectIdSelect_new").empty().append('<input readonly class="layui-input layui-disabled" type="text" value="内审科" />');
+                    $("#auditObjectIdSelect_new").val("-1");
                 } else {
                     $.ajax({
                         url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
@@ -196,7 +197,7 @@
                         headers: createAuthorizationTokenHeader(),
                         success: function (resp) {
                             if (resp && 0 == resp.code) {
-                                let html = '<select  lay-verify="required" name="auditObjectId">';
+                                let html = '<select  lay-verify="required" name="auditObjectId" id="auditObjectIdSelect_new_1">';
                                 let data = resp.data;
                                 let options = [];
                                 options.push('<option value="" >请选择审计对象</option>')
@@ -241,21 +242,19 @@
             //监听提交
             form.on('submit(addPlan)', function (data) {
                 debugger;
-                //type, taskId, auditStatus, bizKey
                 let temp;
                 let temp_1 = $("#auditObjectIdSelect").val();
                 let temp_2 = $("#auditObjectIdSelect_new").val();
+                let temp_3 = $("#auditObjectIdSelect_new_1").val();
                 if (temp_1) {
                     temp = temp_1;
                 } else {
-                    temp = temp_2;
+                    if (temp_2 === "-1") {
+                        temp = temp_2;
+                    } else {
+                        temp = temp_3;
+                    }
                 }
-                // let ttp;
-                // if ($("#auditAdminSelect").val()) {
-                //     ttp = $("#auditAdminSelect").val();
-                // } else {
-                //     ttp = $("#auditAdminSelect_new").val();
-                // }
                 let ttt;
                 if (!($("#auditObjectIdSelectNew").val())) {
                     ttt = "";
