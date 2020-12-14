@@ -156,7 +156,7 @@
         //初始化地图start
         myChart = echarts.init(document.getElementById('echarts-xinjiang'));
         myChart.showLoading();
-        $.get('../json/xinjiang.json', function (geoJson) {
+        $.get('../json/xinjiang_new.json', function (geoJson) {
             myChart.hideLoading();
             echarts.registerMap('XJ', geoJson);
             myChart.setOption(option = {
