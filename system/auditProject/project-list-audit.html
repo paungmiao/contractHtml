@@ -250,7 +250,7 @@
                         html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="openAuditDetail(\''+res.id+'\',\''+res.projectName+'\',\''+res.taskId+'\',\''+res.auditStatus+'\',\''+status+'\',\'1\')" >详情</span>';
                         if (res.taskId !== null) { // res.auditStatus
                             if (res.auditStatus === "1005") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划提交</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划审核</span>';
                             } else if (res.auditStatus === "1007") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >提交</span>';
                             } else if (res.auditStatus === "1009") {
