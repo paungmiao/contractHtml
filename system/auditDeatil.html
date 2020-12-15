@@ -496,13 +496,15 @@
             <!-- 驳回反馈  -->
             <div class="layui-tab-item layui-form rectifyEvaluationForm  layui-hide" lay-filter="rectifyEvaluationForm">
                 <div class="layui-form-item rectifyEvaluationForm">
-                    <label class="layui-form-label">实施员工评价：</label>
+<!--                    <label class="layui-form-label">实施员工评价：</label>-->
+                    <label class="layui-form-label">整改评估：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" style="border: none" readonly name="evaluation"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item evaluationForm">
-                    <label class="layui-form-label">实施领导评价：</label>
+<!--                    <label class="layui-form-label">实施领导评价：</label>-->
+                    <label class="layui-form-label">归档评估：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" style="border: none" readonly name="rectifyEvaluation"></textarea>
                     </div>
@@ -586,10 +588,10 @@
             $(".reportForm").find("textarea").css({"border": "none"}).prop("readonly", true)
             $(".reportForm select").attr('disabled', 'disabled')
             activeThisForm('reportForm', element)
-        } else if (auditStatus >= 1014 && auditStatus < 1017) { // 被驳回，完善整改 有提交
+        }/* else if (auditStatus >= 1014 && auditStatus < 1017) { // 被驳回，完善整改 有提交
             $(".delayForm").removeClass("layui-hide")
             activeThisForm('delayForm', element)
-        }
+        }*/
 
         //执行实例
         var uploadInst = upload.render({
@@ -622,7 +624,12 @@
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             headers: createAuthorizationTokenHeader(),
             success: function (res) {
-                let status = res.data.status;
+                let status = res.data.status
+                // 如果有延期数据那么久显示
+                if(res.data.delayDate||res.data.delayRemarks){
+                    $(".delayForm").removeClass("layui-hide")
+                    // activeThisForm('delayForm', element)
+                }
                 //审计部门人员无法看到 notAuditGroup 类的条目
                 if (userInfo.userId == res.data.auditUserId || userInfo.userId == res.data.auditAdminId) {
                     $(".notAuditGroup").remove()
@@ -679,6 +686,10 @@
                         }
                     }
                 })
+                // 有整改内容则始终调到整改内容tab
+                if(res.data.rectifyResult||res.data.rectifySituationId){
+                    activeThisForm('reportForm', element)
+                }
                 form.val('allForm', res.data);
                 //对整改结果的处理，已完成之后
                 if (status === "1001" || status === "1004") {
