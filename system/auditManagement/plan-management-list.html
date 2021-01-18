@@ -270,15 +270,31 @@
                     title: '年度',
                     width: 80,
                 }, {
-                //     field: 'implementingAgencyId',
-                //     title: '实施机构',
-                //     width: 120,
-                //     templet: (data) => {
-                //         return userInfo.deptName;
-                //     }
-                // }, {
-                    field: 'auditObjectId',
+                    field: 'implementingAgencyId',
                     title: '审计对象',
+                    width: 120,
+                    templet: (data) => {
+                        let implementingAgencyName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectIdNew,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    if(data){
+                                        implementingAgencyName = (undefined == data['name'])?'':data['name'];
+                                    }
+                                }
+                            }
+                        });
+                        return implementingAgencyName;
+                    }
+                }, {
+                    field: 'auditObjectId',
+                    title: '整改部门',
                     width: 120,
                     templet: (data) => {
                         let auditObjectName = "";

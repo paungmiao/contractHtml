@@ -148,11 +148,11 @@
 
 <script>
     var myChart;
+    var auditYear ="";
     layui.use(['element','form'], function(){
         var element = layui.element;
         var form = layui.form;
         var  layer = layui.layer;
-        var auditYear ="2020";
         //初始化地图start
         myChart = echarts.init(document.getElementById('echarts-xinjiang'));
         myChart.showLoading();
@@ -236,7 +236,7 @@
         //初始化数据
         initView();
         form.on('select(auditYear)', function (data) {
-            auditYear=$("#auditYear").val();
+            auditYear=auditYear;
             queryXJInfo(auditYear);
             initView();
         });
@@ -344,7 +344,7 @@
             url: "/audit-api/planStatistic/questionStatistic",
             dataType: "json",
             type: "post",
-            data: {"rectifySituationId": "all","auditYear": $("#auditYear").val()},
+            data: {"rectifySituationId": "all","auditYear": auditYear},
             success: function (res) {
                 var statisticData = res.data.statisticData;
                 var data1 = [], legendData = [],colors = [];
@@ -412,7 +412,7 @@
             url: "/audit-api/planStatistic/questionStatisticBasic",
             dataType: "json",
             type: "post",
-            data: {"projectType": "all","auditYear": $("#auditYear").val()},
+            data: {"projectType": "all","auditYear": auditYear},
             success: function (res) {
                 var statisticData = res.data.statisticData;
                 if (statisticData) {
@@ -447,7 +447,7 @@
             url: "/audit-api/planStatistic/countOfPlan",
             dataType: "json",
             type: "post",
-            data: {auditYear: $("#auditYear").val()},
+            data: {auditYear: auditYear},
             success: function (resp) {
                 if (resp && 0 == resp.code) {
                     let data = resp.data;
@@ -528,7 +528,7 @@
 
     function openPlanCheckList(type, deptId, auditYear, title) {
         debugger
-        auditYear = $("#auditYear").val();
+        auditYear = auditYear;
         top.layer.open({
             type: 2,
             area: ['80%', '80%'],
