@@ -266,14 +266,15 @@
                 //     templet: (data) => {
                 //         return userInfo.deptName;
                 //     }
+                // }, {
                 }, {
-                    field: 'auditObjectId',
+                    field: 'implementingAgencyId',
                     title: '审计对象',
                     width: 120,
                     templet: (data) => {
-                        let auditObjectName = "";
+                        let implementingAgencyName = "";
                         $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.auditObjectId,
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectIdNew,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
@@ -281,12 +282,57 @@
                             success: function (resp) {
                                 if (resp && 0 == resp.code) {
                                     let data = resp.data;
-                                    auditObjectName = data['name'];
+                                    if(data){
+                                        implementingAgencyName = (undefined == data['name'])?'':data['name'];
+                                    }
+                                }
+                            }
+                        });
+                        return implementingAgencyName;
+                    }
+                }, {
+                    field: 'auditObjectId',
+                    title: '整改部门',
+                    width: 120,
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectId,
+                            dataType: "json",
+                            type: "get",
+                            headers: createAuthorizationTokenHeader(),
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    if(data){
+                                        auditObjectName = (undefined == data['name'])?'':data['name'];
+                                    }
                                 }
                             }
                         });
                         return auditObjectName;
                     }
+                //     field: 'auditObjectId',
+                //     title: '审计对象',
+                //     width: 120,
+                //     templet: (data) => {
+                //         let auditObjectName = "";
+                //         $.ajax({
+                //             url: "/audit-api/auditPlan/getDeptInfoById?id="+data.auditObjectId,
+                //             dataType: "json",
+                //             type: "get",
+                //             headers: createAuthorizationTokenHeader(),
+                //             async: false,
+                //             success: function (resp) {
+                //                 if (resp && 0 == resp.code) {
+                //                     let data = resp.data;
+                //                     auditObjectName = data['name'];
+                //                 }
+                //             }
+                //         });
+                //         return auditObjectName;
+                //     }
                 // }, {
                 //     field: 'auditNatureId',
                 //     title: '审计性质',
