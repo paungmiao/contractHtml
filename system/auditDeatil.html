@@ -62,20 +62,20 @@
     }
 
     .formShow .layui-form-label {
-        width: 96px;
+        width: 120px;
     }
 
     .formShow .layui-input-block {
-        margin-left: 126px;
+        margin-left: 150px;
     }
 
     .x-admin-sm .layui-input, .x-admin-sm .layui-select, .x-admin-sm .layui-textarea {
         height: 38px;
-    }
+    }z
 
-    h3 {
-        padding-left: 15px;
-    }
+     h3 {
+         padding-left: 15px;
+     }
 </style>
 <body>
 <div class="x-body  layui-form" lay-filter="allForm">
@@ -162,7 +162,7 @@
             <li lay-id="delayForm" class="delayForm layui-hide">延期整改信息</li>
             <li lay-id="rectifyEvaluationForm" class="rectifyEvaluationForm layui-hide">整改评估</li>
         </ul>
-        <div class="layui-tab-content">
+        <div class="layui-tab-content" style="padding-left: 10px;margin-left: -55px;">
             <!-- 基本信息 -->
             <div class="layui-tab-item layui-show formShow layui-form" lay-filter="extendForm">
                 <div class="layui-form-item">
@@ -178,33 +178,33 @@
                     </div>
                 </div>
                 <div class="layui-form-item notAuditGroup">
-                    <label class="layui-form-label">出现频次：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input" name="frequency" value="">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">整改部门负责人：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input" name="rectifyAdminMan" value="">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">整改负责人：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input" name="rectifyMan" value="">
-                    </div>
-                </div>
-                <div class="layui-form-item notAuditGroup">
                     <label class="layui-form-label">项目类型：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="projectType" value="">
                     </div>
                 </div>
                 <div class="layui-form-item notAuditGroup">
-                    <label class="layui-form-label">审计性质：</label>
+                    <label class="layui-form-label">严重程度：</label>
                     <div class="layui-input-block">
-                        <input class="layui-input" name="auditNatureId" value="">
+                        <input class="layui-input" name="problemSeverityId" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">问题定性：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="problemCharacterization" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">问题描述：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" style="padding-top: 8px" name="problemDescription" value=""></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改措施：</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea"  style="padding-top: 8px" name="rectifyWay" value=""></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item notAuditGroup">
@@ -219,22 +219,35 @@
                         <input class="layui-input" name="questionType" value="">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">问题定性：</label>
+                <div class="layui-form-item notAuditGroup">
+                    <label class="layui-form-label">审计性质：</label>
                     <div class="layui-input-block">
-                        <input class="layui-input" name="problemCharacterization" value="">
+                        <input class="layui-input" name="auditNatureId" value="">
                     </div>
                 </div>
+                <div class="layui-form-item notAuditGroup">
+                    <label class="layui-form-label">出现频次：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="frequency" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" >整改部门负责人：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="rectifyAdminMan" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">整改负责人：</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="rectifyMan" value="">
+                    </div>
+                </div>
+
                 <div class="layui-form-item notAuditGroup">
                     <label class="layui-form-label">审计依据：</label>
                     <div class="layui-input-block">
                         <input class="layui-input" name="auditBasis" value="">
-                    </div>
-                </div>
-                <div class="layui-form-item notAuditGroup">
-                    <label class="layui-form-label">严重程度：</label>
-                    <div class="layui-input-block">
-                        <input class="layui-input" name="problemSeverityId" value="">
                     </div>
                 </div>
                 <div class="layui-form-item notAuditGroup">
@@ -297,43 +310,18 @@
                         <input class="layui-input" name="riskAssessmentId" value="">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">问题描述：</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="problemDescription" value=""></textarea>
-                    </div>
-                </div>
                 <div class="layui-form-item notAuditGroup">
                     <label class="layui-form-label">可能影响：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="mayAffect" value=""></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">整改措施：</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rectifyWay" value=""></textarea>
+                        <textarea class="layui-textarea" style="padding-top: 8px" name="mayAffect" value=""></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">整改建议：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rectificationSuggestions" value=""></textarea>
+                        <textarea class="layui-textarea" style="padding-top: 8px" name="rectificationSuggestions" value=""></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item layui-hide">
-                    <label class="layui-form-label">整改措施：</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rectifyWay" value=""></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-hide">
-                    <label class="layui-form-label">整改结果：</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="rectifyResult" value="整改结果整改结果"></textarea>
-                    </div>
-                </div>
-
             </div>
             <!-- 资料清单 -->
             <div class="layui-tab-item">
@@ -496,14 +484,14 @@
             <!-- 驳回反馈  -->
             <div class="layui-tab-item layui-form rectifyEvaluationForm  layui-hide" lay-filter="rectifyEvaluationForm">
                 <div class="layui-form-item rectifyEvaluationForm">
-<!--                    <label class="layui-form-label">实施员工评价：</label>-->
+                    <!--                    <label class="layui-form-label">实施员工评价：</label>-->
                     <label class="layui-form-label">整改评估：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" style="border: none" readonly name="evaluation"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item evaluationForm">
-<!--                    <label class="layui-form-label">实施领导评价：</label>-->
+                    <!--                    <label class="layui-form-label">实施领导评价：</label>-->
                     <label class="layui-form-label">归档评估：</label>
                     <div class="layui-input-block">
                         <textarea class="layui-textarea" style="border: none" readonly name="rectifyEvaluation"></textarea>
@@ -687,7 +675,7 @@
                     }
                 })
                 // 有整改内容则始终调到整改内容tab
-                if(res.data.rectifyResult||res.data.rectifySituationId){
+                if(res.data.rectifyResult && res.data.rectifySituationId){
                     activeThisForm('reportForm', element)
                 }
                 form.val('allForm', res.data);
@@ -835,8 +823,8 @@
             }, function (data) {
                 if (data.code == 0 && data.data) {
                     if (undefined == data.data.opinion) {
-                        $(".rollbackForm").addClass("layui-hide")
-                        return
+                        return $(".rollbackForm").addClass("layui-hide")
+
                     }
                     if (res.data.auditUserId == userInfo.userId && 1014 == res.data.auditStatus) {
                         return $(".rollbackForm").addClass("layui-hide");
@@ -1229,9 +1217,11 @@
                     //     return top.layer.msg('请选择整改负责人',{icon:2})
                     // }
                     if (!planTime) {
+                        layer.close(loading);
                         return top.layer.msg('计划整改时长不能为空', {icon: 2})
                     }
                     if (!rectifyWay) {
+                        layer.close(loading);
                         return top.layer.msg('整改方式不能为空', {icon: 2})
                     }
                     // let nextStatus = auditEnum[auditStatus].agree;
@@ -1360,7 +1350,7 @@
                             layer.close(index);
                         });
                     } else {
-                        layer.alert("操作成功", {icon: 1}, function () {
+                        layer.msg('&nbsp&nbsp&nbsp&nbsp操作成功', {time: 2000, icon:1}, function () {
                             location.replace(location.href);
                             x_admin_father_reload()
                             x_admin_close()
