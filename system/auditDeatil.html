@@ -548,7 +548,7 @@
             $(".completeForm").removeClass("layui-hide")
             $(".submit").removeClass("layui-hide")
             activeThisForm('completeForm', element)
-        } else if (auditStatus == 1006) { // 审核整改计划 没提交
+        } else if (auditStatus == 1006 || auditStatus == 1019) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
             $(".completeForm").find("input").prop("disabled", true)
             $(".completeForm").find("textarea").prop("disabled", true)

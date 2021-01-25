@@ -295,22 +295,24 @@
                     title: '整改部门',
                     width: 120,
                     templet: (data) => {
-                        let auditObjectName = "";
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectId,
-                            dataType: "json",
-                            type: "get",
-                            headers: createAuthorizationTokenHeader(),
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    if(data){
-                                        auditObjectName = (undefined == data['name'])?'':data['name'];
+                        let auditObjectName = "内审科";
+                        if (data.auditObjectId) {
+                            $.ajax({
+                                url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectId,
+                                dataType: "json",
+                                type: "get",
+                                headers: createAuthorizationTokenHeader(),
+                                async: false,
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        if (data) {
+                                            auditObjectName = (undefined == data['name']) ? '' : data['name'];
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                         return auditObjectName;
                     }
                 //     field: 'auditObjectId',
@@ -404,7 +406,7 @@
                             } else if (res.auditStatus === "1018") {
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="downToDept(\''+res.auditObjectIdNew+'\',\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >分发</span>';
                             } else if (res.auditStatus === "1019" || res.auditStatus === "1020" || res.auditStatus === "1021") {
-                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划提交</span>';
+                                html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="completeTask(\'agree\', \'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\')" >整改计划审核</span>';
                                 html += '<span class="layui-btn layui-btn-normal layui-btn-mini" onclick="rejectPage_(\'驳回意见\',\'plan-reject-edit.html\',\'600\',\'300\',\'' + res.taskId + '\', \'' + res.auditStatus + '\', \'' + res.id + '\', \'4\')" >驳回</span>';
                             }
                         }
