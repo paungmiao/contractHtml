@@ -38,7 +38,7 @@
                 <span class="x-red">*</span>延迟说明:
             </label>
             <div class="layui-input-block">
-                <textarea name="opinion" placeholder="延迟说明" lay-verify="required|opinion" class="layui-textarea" id="opinion"></textarea>
+                <textarea name="delayRemarks" placeholder="延迟说明" lay-verify="required|delayRemarks" class="layui-textarea" id="delayRemarks"></textarea>
             </div>
         </div>
 
@@ -69,14 +69,14 @@
                 let beforeStatus = $("#auditStatus").val();
                 let bizKey = $("#planId").val();
                 let taskId = $("#taskId").val();
-                let opinion = $("#opinion").val();
+                let delayRemarks = $("#delayRemarks").val();
                 let mark = $("#mark").val();
                 let delayDate = $("#delayDate").val();
                 let status = auditEnum[beforeStatus][type];
                 let data1 = {
                     'auditStatus': status,
                     'bizKey': bizKey,
-                    "opinion": opinion,
+                    "delayRemarks": delayRemarks,
                     "mark": mark,
                     "delayDate": delayDate
                 }
