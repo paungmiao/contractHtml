@@ -550,9 +550,6 @@
             activeThisForm('completeForm', element)
         } else if (auditStatus == 1006 || auditStatus == 1019) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
-            $(".completeForm").find("input").prop("disabled", true)
-            $(".completeForm").find("textarea").prop("disabled", true)
-            $(".completeForm").find("select").prop("disabled", true)
             activeThisForm('completeForm', element)
         } else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
@@ -577,10 +574,10 @@
             $(".reportForm").find("textarea").css({"border": "none"}).prop("readonly", true)
             $(".reportForm select").attr('disabled', 'disabled')
             activeThisForm('reportForm', element)
-        }/* else if (auditStatus >= 1014 && auditStatus < 1017) { // 被驳回，完善整改 有提交
+        } else if ((auditStatus >= 1014 && auditStatus < 1017) || auditStatus == 1021) { // 被驳回，完善整改 有提交
             $(".delayForm").removeClass("layui-hide")
             activeThisForm('delayForm', element)
-        }*/
+        }
 
         //执行实例
         var uploadInst = upload.render({
@@ -617,6 +614,13 @@
                 // 如果有延期数据那么久显示
                 if(res.data.delayDate||res.data.delayRemarks){
                     $(".delayForm").removeClass("layui-hide")
+                    // activeThisForm('delayForm', element)
+                }// 如果有整改数据那么久显示
+                if(res.data.planTime||res.data.rectifyWay){
+                    $(".completeForm").removeClass("layui-hide")
+                    $(".completeForm").find("input").prop("disabled", true)
+                    $(".completeForm").find("textarea").prop("disabled", true)
+                    $(".completeForm").find("select").prop("disabled", true)
                     // activeThisForm('delayForm', element)
                 }
                 //审计部门人员无法看到 notAuditGroup 类的条目

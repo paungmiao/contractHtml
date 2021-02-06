@@ -245,41 +245,26 @@
                         field: 'projectCode',
                         title: '项目编号',
                         width: 200,
-                        align:'center',
                     }, {
                     field: 'projectName',
                     title: '项目名称',
-                    width: 120,
-                    align:'center',
+                    width: 120
+                }, {
+                    field: 'auditYear',
+                    title: '年度',
+                    width: 80
                 }, {
                     field: 'implementingAgencyId',
-                    title: '实施机构',
-                    width: 120,
-                    templet: (data) => {
-                        let auditObjectName = "";
-                        $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.implementingAgencyId,
-                            dataType: "json",
-                            type: "get",
-                            headers: createAuthorizationTokenHeader(),
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    auditObjectName = data['name'];
-                                }
-                            }
-                        });
-                        return auditObjectName;
-                    }
-                }, {
-                    field: 'auditObjectId',
                     title: '审计对象',
                     width: 120,
                     templet: (data) => {
-                        let auditObjectName = "";
+                        let implementingAgencyName = "";
+                        let flag = data.auditObjectIdNew;
+                        if (!flag) {
+                            flag = data.implementingAgencyId;
+                        }
                         $.ajax({
-                            url: "/audit-api/auditPlan/getDeptInfoById?id="+data.auditObjectId,
+                            url: "/audit-api/auditPlan/getDeptInfoById?id=" + flag,
                             dataType: "json",
                             type: "get",
                             headers: createAuthorizationTokenHeader(),
@@ -287,40 +272,47 @@
                             success: function (resp) {
                                 if (resp && 0 == resp.code) {
                                     let data = resp.data;
-                                    auditObjectName = data['name'];
+                                    if(data){
+                                        implementingAgencyName = (undefined == data['name'])?'':data['name'];
+                                    }
                                 }
                             }
                         });
+                        return implementingAgencyName;
+                    }
+                }, {
+                    field: 'auditObjectId',
+                    title: '整改部门',
+                    width: 120,
+                    templet: (data) => {
+                        let auditObjectName = "内审科";
+                        if (data.auditObjectId) {
+                            $.ajax({
+                                url: "/audit-api/auditPlan/getDeptInfoById?id=" + data.auditObjectId,
+                                dataType: "json",
+                                type: "get",
+                                headers: createAuthorizationTokenHeader(),
+                                async: false,
+                                success: function (resp) {
+                                    if (resp && 0 == resp.code) {
+                                        let data = resp.data;
+                                        if (data) {
+                                            auditObjectName = (undefined == data['name']) ? '' : data['name'];
+                                        }
+                                    }
+                                }
+                            });
+                        }
                         return auditObjectName;
                     }
                 }, {
-                    field: 'auditNatureId',
-                    title: '审计性质',
-                    width: 180,
-                    templet: (data) => {
-                        let auditObjectName = "";
-                        $.ajax({
-                            url: "/audit-api/planManage/selectEntryById?id="+data.auditNatureId,
-                            dataType: "json",
-                            type: "get",
-                            async: false,
-                            success: function (resp) {
-                                if (resp && 0 == resp.code) {
-                                    let data = resp.data;
-                                    auditObjectName = data['name'];
-                                }
-                            }
-                        });
-                        return auditObjectName;
-                    }
+                    field: 'problemCharacterization',
+                    title: '问题定性',
+                    width: 160
                 }, {
                     field: 'problemDescription',
                     title: '问题描述',
                     width: 200,
-                }, {
-                    field: 'auditYear',
-                    title: '年度',
-                    width: 80,
                 }, {
                     field: 'status',
                     title: '状态',
