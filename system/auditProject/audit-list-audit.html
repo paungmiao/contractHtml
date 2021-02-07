@@ -60,7 +60,7 @@
                     <option value="1006">已完成</option>
                 </select>
             </div>
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
@@ -71,6 +71,7 @@
 
 </div>
 <script>
+    issearch = false
     var count = 0;
     layui.use(['table', 'form'], function () {
 
@@ -365,7 +366,7 @@
                     auditNatureId: $("#auditNatureIdSelect").val(),
                     projectType: $("#projectTypeSelect").val(),
                 },
-                page: 1
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1}
             });
             return false;
         })
@@ -435,13 +436,16 @@
                 data: JSON.stringify(data),
                 success: function (res) {
                     if (!res.data) {
-                        let index = layer.alert("操作失败，请指派整改人！", {icon: 1}, function () {
+                        let index = layer.alert("操作失败，请指派整改人！", {icon: 2}, function () {
                             layer.close(index);
                         });
                     } else {
-                        layer.alert("操作成功", {icon: 1}, function () {
-                            location.replace(location.href);
+                        layer.msg("操作成功", {icon: 1,time:2000}, function () {
+                            issearch = true
+                            $('#search').click()
+                            issearch = false
                         });
+
                     }
                     layui.close(loading);
                 }
@@ -459,9 +463,12 @@
                 dataType: "json",
                 type: "delete",
                 success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("操作成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
+
                 }
             });
 

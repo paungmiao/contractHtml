@@ -60,7 +60,7 @@
                     <option value="1006">待完善</option>
                 </select>
             </div>
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock class="layui-hide" id="plxf">
@@ -71,6 +71,7 @@
 
 </div>
 <script>
+    issearch = false
     var count = 0;
 
     let deptName = userInfo.deptName;
@@ -331,7 +332,7 @@
                     auditNatureId: $("#auditNatureIdSelect").val(),
                     projectType: $("#projectTypeSelect").val(),
                 },
-                page: 1
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1}
             });
             return false;
         })
@@ -380,7 +381,7 @@
     }
     //流程办理
     function completeTask(type, taskId, auditStatus, bizKey) {
-        layer.confirm('确认操作吗？', function (index) {
+        // layer.confirm('确认操作吗？', function (index) {
             let beforeStatus = auditStatus;
             let status = auditEnum[beforeStatus][type];
             let data = {
@@ -401,14 +402,17 @@
                             layer.close(index);
                         });
                     } else {
-                        layer.alert("操作成功", {icon: 1}, function () {
-                            location.replace(location.href);
+                        layer.msg("操作成功", {icon: 1,time:2000}, function () {
+                            issearch = true
+                            $('#search').click()
+                            issearch = false
                         });
+
                     }
                     layui.close(loading);
                 }
             })
-        });
+        // });
     }
 
     //分发
@@ -487,9 +491,12 @@
                 dataType: "json",
                 type: "delete",
                 success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("删除成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
+
                 }
             });
 

@@ -44,7 +44,7 @@
             问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">
             问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">
 
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
@@ -54,6 +54,7 @@
 
 </div>
 <script>
+    issearch = false
     var role = getCookie("role")==undefined?3:getCookie("role");
     var count = 0;
     layui.use(['table', 'form'], function () {
@@ -186,7 +187,7 @@
         form.on("submit()", function () {
             table.reload('test', {
                 where: {roleId: role},
-                page: 1
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1}
             });
             return false;
         })
@@ -206,8 +207,10 @@
                 dataType: "json",
                 data: {id: id, roleId: role, status: status},
                 success: function (resp) {
-                    layer.alert("批准计划成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("批准计划成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             });
@@ -224,8 +227,10 @@
                 dataType: "json",
                 data: {id: id, roleId: role},
                 success: function (resp) {
-                    layer.alert("整改项目成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("整改项目成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             });
@@ -241,8 +246,10 @@
                 dataType: "json",
                 type: "delete",
                 success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("删除成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             });

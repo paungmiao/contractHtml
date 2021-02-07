@@ -229,6 +229,9 @@ function openAuditDetail(bizKey,bizName,taskId,auditStatus,opinionStatus,type){
             // location.replace(location.href);
         },
         end: function () {
+            issearch = true
+            $('#search').click()
+            issearch = false
             //窗口销毁之后刷新frame
             // location.replace(location.href);
         }

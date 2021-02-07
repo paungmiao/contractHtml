@@ -44,7 +44,7 @@
                 </select>
             </div>
             词条名称：<input type="text" placeholder="请输入词条名称" id="entryName" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock class="audit_entry_operate layui-hide audit_entry_xblock">
@@ -68,6 +68,7 @@
 
 </div>
 <script>
+    issearch = false
     function downloadTemplate() {
         window.location.href = '/audit-api/entry/template/download'
     }
@@ -207,7 +208,7 @@
                     categoryFk: $("#categorySelect").val(),
                     name: $("#entryName").val()
                 },
-                page: 1,
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1},
                 done: function (res, curr, count) {
                     reloadPermission()
                 }
@@ -240,10 +241,11 @@
                 async: false,
                 success: function (resp) {
                     if (resp.data) {
-                        layer.msg("删除成功", {icon: 1, duration: 1500})
-                        layui.use("table", function () {
-                            layui.table.reload('test')
-                        })
+                        layer.msg("删除成功!", {icon: 1,time:2000}, function () {
+                            issearch = true
+                            $('#search').click()
+                            issearch = false
+                        });
                     } else {
 
                         layer.msg(resp.msg, {icon: 2})

@@ -60,7 +60,7 @@
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}"
@@ -68,6 +68,7 @@
 
 </div>
 <script>
+    issearch = false
     var count = 0;
     layui.use(['table', 'form'], function () {
 
@@ -261,7 +262,7 @@
                     auditNatureId: $("#auditNatureIdSelect").val(),
                     projectType: $("#projectTypeSelect").val(),
                 },
-                page: 1
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1}
             });
             return false;
         })
@@ -290,8 +291,10 @@
                 headers: createAuthorizationTokenHeader(),
                 data: JSON.stringify(data),
                 success: function (res) {
-                    layer.alert("操作成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("操作成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             })

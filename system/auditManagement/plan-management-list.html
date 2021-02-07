@@ -91,7 +91,7 @@
             </div>
             <!--            问题定性：<input type="text" placeholder="请输入问题定性" id="problemCharacterization" autocomplete="off" class="layui-input">-->
             <!--            问题描述：<input type="text" placeholder="请输入问题描述" id="problemDescription" autocomplete="off" class="layui-input">-->
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" id="search" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
@@ -117,6 +117,7 @@
 <script>
 
     //审计对象处理
+    issearch = false
     let text = userInfo.deptParentRegion;
     if (text && text.toString().indexOf("乌鲁木齐") > -1) {
         $(".muqi").removeClass("layui-hide");
@@ -494,7 +495,7 @@
                     projectType: $("#projectTypeSelect").val(),
                     auditObjectId: temp,
                 },
-                page: 1
+                page: {curr:issearch?parseInt($("em")[1].innerHTML):1}
             });
             return false;
         })
@@ -527,8 +528,10 @@
                 dataType: "json",
                 type: "delete",
                 success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("删除成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             });
@@ -565,8 +568,10 @@
                             layer.close(layer.index);
                         });
                     } else {
-                        layer.alert("提交项目成功", {icon: 1}, function () {
-                            location.replace(location.href);
+                        layer.msg("提交项目成功", {icon: 1,time:2000}, function () {
+                            issearch = true
+                            $('#search').click()
+                            issearch = false
                         });
                     }
                     layui.close(loading);
@@ -619,6 +624,9 @@
                 // location.replace(location.href);
             },
             end: function () {
+                issearch = true
+                $('#search').click()
+                issearch = false
                 //窗口销毁之后刷新frame
                 // location.replace(location.href);
             }
@@ -678,8 +686,10 @@
                 type: "delete",
                 data: {ids: ids},
                 success: function (resp) {
-                    layer.alert("删除成功", {icon: 1}, function () {
-                        location.replace(location.href);
+                    layer.msg("删除成功", {icon: 1,time:2000}, function () {
+                        issearch = true
+                        $('#search').click()
+                        issearch = false
                     });
                 }
             });

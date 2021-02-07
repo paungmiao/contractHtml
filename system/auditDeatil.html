@@ -162,9 +162,9 @@
             <li lay-id="delayForm" class="delayForm layui-hide">延期整改信息</li>
             <li lay-id="rectifyEvaluationForm" class="rectifyEvaluationForm layui-hide">整改评估</li>
         </ul>
-        <div class="layui-tab-content" style="padding-left: 10px;margin-left: -55px;">
+        <div class="layui-tab-content" style="padding-left: 10px;">
             <!-- 基本信息 -->
-            <div class="layui-tab-item layui-show formShow layui-form" lay-filter="extendForm">
+            <div class="layui-tab-item layui-show formShow layui-form" style="margin-left: -55px;" lay-filter="extendForm">
                 <div class="layui-form-item">
                     <label class="layui-form-label">开始时间：</label>
                     <div class="layui-input-block">
@@ -797,7 +797,7 @@
                     }, function (res) {
                         if (res.code == 0 && res.data) {
                             top.layer.msg('提交成功', {icon: 1})
-                            x_admin_father_reload()
+                            // x_admin_father_reload()
                             x_admin_close()
                         } else {
                             top.layer.msg(res.msg, {icon: 2})
@@ -1020,7 +1020,7 @@
                         top.layer.msg("操作成功", {icon: 1})
                         // $(".submit").addClass("layui-hide");
                         // x_admin_father_reload()
-                        // x_admin_close()
+                        x_admin_close()
                     } else {
                         top.layer.msg(res.msg, {icon: 2})
                     }
@@ -1045,7 +1045,7 @@
                 return top.layer.msg('计划整改时长不能为空', {icon: 2})
             }
             if (!rectifyWay) {
-                return top.layer.msg('整改方式不能为空', {icon: 2})
+                return top.layer.msg('整改措施不能为空', {icon: 2})
             }
             // let nextStatus = auditEnum[auditStatus].agree;
             // let nextStatus = 1006;
@@ -1064,7 +1064,7 @@
                         top.layer.msg("操作成功", {icon: 1})
                         // $(".submit").addClass("layui-hide");
                         // x_admin_father_reload()
-                        // x_admin_close()
+                        x_admin_close()
                     } else {
                         top.layer.msg(res.msg, {icon: 2})
                     }
@@ -1097,7 +1097,7 @@
                         top.layer.msg("操作成功", {icon: 1})
                         // $(".submit").addClass("layui-hide");
                         // x_admin_father_reload()
-                        // x_admin_close()
+                        x_admin_close()
                     } else {
                         top.layer.msg(res.msg, {icon: 2})
                     }
@@ -1227,7 +1227,7 @@
                     }
                     if (!rectifyWay) {
                         layer.close(loading);
-                        return top.layer.msg('整改方式不能为空', {icon: 2})
+                        return top.layer.msg('整改措施不能为空', {icon: 2})
                     }
                     // let nextStatus = auditEnum[auditStatus].agree;
                     // let nextStatus = 1006;
@@ -1246,7 +1246,7 @@
                                 // top.layer.msg("操作成功", {icon: 1})
                                 // $(".submit").addClass("layui-hide");
                                 // x_admin_father_reload()
-                                // x_admin_close()
+                                x_admin_close()
                             } else {
                                 top.layer.msg(res.msg, {icon: 2})
                             }
@@ -1263,11 +1263,13 @@
 
                     let rectifySituationName = $("dd[lay-value$='" + reportForm['rectifySituationId'] + "']").text();
                     if (rectifySituationName === "未整改") {
+                        layer.close(loading);
                         return top.layer.msg('请重新选择整改情况', {icon: 2})
                     }
 
                     let rectifyResult = reportForm.rectifyResult
                     if (!rectifyResult) {
+                        layer.close(loading);
                         return top.layer.msg('整改结果不能为空', {icon: 2})
                     }
                     reportForm['id'] = bizKey;
@@ -1285,7 +1287,7 @@
                                 // top.layer.msg("操作成功", {icon: 1})
                                 // $(".submit").addClass("layui-hide");
                                 // x_admin_father_reload()
-                                // x_admin_close()
+                                x_admin_close()
                             } else {
                                 top.layer.msg(res.msg, {icon: 2})
                             }
@@ -1300,6 +1302,7 @@
                     //提交完善信息
                     let auditUserForm = form.val('auditUserForm');
                     if (!auditUserForm.auditUserId) {
+                        layer.close(loading);
                         return top.layer.msg('请指派整改负责人', {icon: 2})
                     }
                     auditUserForm.id = bizKey;
@@ -1316,7 +1319,7 @@
                                 // top.layer.msg("操作成功", {icon: 1})
                                 // $(".submit").addClass("layui-hide");
                                 // x_admin_father_reload()
-                                // x_admin_close()
+                                x_admin_close()
                             } else {
                                 top.layer.msg(res.msg, {icon: 2})
                             }
@@ -1332,6 +1335,7 @@
             let reportForm = form.val('reportForm');
             let rectifySituationName = $("dd[lay-value$='" + reportForm['rectifySituationId'] + "']").text();
             if (rectifySituationName === "未整改") {
+                layer.close(loading);
                 return top.layer.msg('请重新选择整改情况', {icon: 2})
             }
 
@@ -1351,13 +1355,14 @@
                 data: JSON.stringify(data),
                 success: function (res) {
                     if (!res.data) {
+                        layer.close(loading);
                         let index = layer.alert("操作失败，请完善信息！", {icon: 1}, function () {
                             layer.close(index);
                         });
                     } else {
                         layer.msg('&nbsp&nbsp&nbsp&nbsp操作成功', {time: 2000, icon:1}, function () {
                             location.replace(location.href);
-                            x_admin_father_reload()
+                            // x_admin_father_reload()
                             x_admin_close()
                         });
                     }
