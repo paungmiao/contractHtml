@@ -126,6 +126,15 @@
         })
         findEntryByCategory(6,"rectifySituationSelect");
         form.render("select");
+
+        let userId = userInfo.userId;
+        let roleList = userInfo.roleList;
+        for (let roleObj of roleList) {
+            if (roleObj['roleCode'].indexOf("roleCode")) {
+                userId = "";
+                break;
+            }
+        }
         table.render({
             elem: '#queryList',
             url: '/audit-api/planManage/attention/page',
@@ -264,7 +273,7 @@
             },
             where: {
                 roleId: role,
-                userId: userInfo.userId
+                userId: userId
             },
 
             done: function (res, curr, count) {
