@@ -273,7 +273,8 @@
             },
             where: {
                 roleId: role,
-                userId: userId
+                userId: userId,
+                deptId: userInfo.deptParentId
             },
 
             done: function (res, curr, count) {

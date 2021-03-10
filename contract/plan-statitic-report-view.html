@@ -601,6 +601,22 @@
                 }, {
                     field: 'auditNatureId',
                     title: '审计性质',
+                    templet: (data) => {
+                        let auditObjectName = "";
+                        $.ajax({
+                            url: "/audit-api/planManage/selectEntryById?id="+data.auditNatureId,
+                            dataType: "json",
+                            type: "get",
+                            async: false,
+                            success: function (resp) {
+                                if (resp && 0 == resp.code) {
+                                    let data = resp.data;
+                                    auditObjectName = data['name'];
+                                }
+                            }
+                        });
+                        return auditObjectName;
+                    }
                 }, {
                     field: 'rectifySituationId',
                     title: '整改情况',
