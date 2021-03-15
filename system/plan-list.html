@@ -73,9 +73,9 @@
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-<!--    <xblock class="superButton">-->
-<!--        <button class="layui-btn" onclick="attentionCheck()"><i class="layui-icon"></i>关注</button>-->
-<!--    </xblock>-->
+    <xblock class="superButton attentionBut">
+        <button class="layui-btn" onclick="attentionCheck()"><i class="layui-icon"></i>关注</button>
+    </xblock>
     <table class="layui-table x-admin" id="test" lay-data="{toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
     </table>
 
@@ -88,6 +88,13 @@
     //实施对象id
     let deptId = GetQueryString('deptId');
     let auditYear = GetQueryString('auditYear');
+    let showAt = GetQueryString('showAt');
+
+    //关注按钮控制
+    if (showAt === '0') {
+        $(".attentionBut").addClass("layui-hide");
+    }
+
     var count = 0;
     let checkArr = [];
     let stateData ={}
@@ -159,6 +166,7 @@
         if (type == 'done') {
             $(".state").hide()
         }
+
         var tableIns = table.render({
             elem: '#test',
             url: '/audit-api/planManage/' + type + '/page',
@@ -344,6 +352,22 @@
                 var index = res.data[0]['LAY_TABLE_INDEX'];
                 // $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
                 // $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+
+                //关注按钮控制
+                if (showAt === '0') {
+                    let table_data = res.data
+                    let trNum = count;
+                    for(let i = 0;i<res.data.length;i++){
+                        let state = res.data[i].status; //根据status状态判断，不为0时，禁止勾选
+                        if(state){
+                            var index = res.data[i]['LAY_TABLE_INDEX'];
+                            $(".layui-table tr[data-index="+index+"] input[type='checkbox']").prop('disabled',true);
+                            $(".layui-table tr[data-index="+index+"] input[type='checkbox']").next().addClass('layui-btn-disabled');
+                            $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('name', 'eee');
+                        }
+                    }
+                }
+
             }
         });
         let demo1=xmSelect.render({
@@ -468,6 +492,8 @@
             }
         });
     }
+
+
 </script>
 
 <script>

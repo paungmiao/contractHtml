@@ -752,9 +752,9 @@
                                 ids += "," + item.id;
                             }
                         });
-                        if(!self){
-                            return layer.msg("只能操作所属中支的数据")
-                        }
+                        // if(!self){
+                        //     return layer.msg("只能操作所属中支的数据")
+                        // }
                         let userInfo = window.sessionStorage.userInfo;
                         let userId = ''
                         if (userInfo && JSON.parse(userInfo) && JSON.parse(userInfo).userId) {

@@ -57,7 +57,7 @@
     </div>
     <script>
         var count = 0;
-        var auditYear = "";
+        var auditYear=$("#auditYear").val();
         layui.use(['table', 'form', 'element'], function () {
             let isSuperAdmin = false;
             if(userInfo && userInfo.roleList){
@@ -73,7 +73,6 @@
             let form = layui.form;
             let element = layui.element;
             form.on('select(auditYear)', function (data) {
-                auditYear=$("#auditYear").val();
                 table.reload('test', {
                     where: {
                         roleId: '2',"auditYear":auditYear,

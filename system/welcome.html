@@ -527,7 +527,6 @@
     typeArr['delay'] = '延期';
 
     function openPlanCheckList(type, deptId, auditYear, title) {
-        debugger
         auditYear = auditYear;
         top.layer.open({
             type: 2,
@@ -537,7 +536,7 @@
             shadeClose: true,
             shade: 0.4,
             title: (title == undefined ? '' : title) + typeArr[type] + '项目',
-            content: './plan-list.html?type=' + type + '&deptId=' + deptId + '&auditYear='+ auditYear,
+            content: './plan-list.html?type=' + type + '&deptId=' + deptId + '&auditYear='+ auditYear + '&showAt=0',
             success: function (layero, index) {
                 //窗口加载成功刷新frame
             },

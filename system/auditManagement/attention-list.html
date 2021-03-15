@@ -135,6 +135,15 @@
                 break;
             }
         }
+
+        let whereDeptId = userInfo.deptParentId;
+        if (userInfo && userInfo.roleList) {
+            userInfo.roleList.forEach(e => {
+                if (e.roleCode == 'AUDIT_SUPER') {
+                    whereDeptId = -1;
+                }
+            })
+        }
         table.render({
             elem: '#queryList',
             url: '/audit-api/planManage/attention/page',
@@ -274,7 +283,7 @@
             where: {
                 roleId: role,
                 userId: userId,
-                deptId: userInfo.deptParentId
+                deptId: whereDeptId
             },
 
             done: function (res, curr, count) {
