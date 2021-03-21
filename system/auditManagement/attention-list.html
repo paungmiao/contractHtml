@@ -137,13 +137,13 @@
         }
 
         let whereDeptId = userInfo.deptParentId;
-        if (userInfo && userInfo.roleList) {
-            userInfo.roleList.forEach(e => {
-                if (e.roleCode == 'AUDIT_SUPER') {
-                    whereDeptId = -1;
-                }
-            })
-        }
+        // if (userInfo && userInfo.roleList) {
+        //     userInfo.roleList.forEach(e => {
+        //         if (e.roleCode == 'AUDIT_SUPER') {
+        //             whereDeptId = -1;
+        //         }
+        //     })
+        // }
         table.render({
             elem: '#queryList',
             url: '/audit-api/planManage/attention/page',
