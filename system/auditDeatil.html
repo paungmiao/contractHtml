@@ -531,6 +531,9 @@
         $('.nav input').attr('disabled', 'disabled');
         $('.formShow input').attr('disabled', 'disabled');
         $('.formShow textarea').attr('disabled', 'disabled');
+        $(".completeForm").find("input").prop("disabled", true);
+        $(".completeForm").find("textarea").prop("disabled", true);
+        $(".completeForm").find("select").prop("disabled", true);
 
         // $(".completeForm").removeClass("layui-hide")
         // $(".reportForm").removeClass("layui-hide")
@@ -546,10 +549,16 @@
             activeThisForm('auditUserForm', element)
         } else if (auditStatus == 1005) { // 通过计划 -> 完善计划 有提交
             $(".completeForm").removeClass("layui-hide")
+            $(".completeForm").find("input").prop("disabled", false);
+            $(".completeForm").find("textarea").prop("disabled", false);
+            $(".completeForm").find("select").prop("disabled", false);
             $(".submit").removeClass("layui-hide")
             activeThisForm('completeForm', element)
         } else if (auditStatus == 1006 || auditStatus == 1019) { // 审核整改计划 没提交
             $(".completeForm").removeClass("layui-hide")
+            $(".completeForm").find("input").prop("disabled", false);
+            $(".completeForm").find("textarea").prop("disabled", false);
+            $(".completeForm").find("select").prop("disabled", false);
             activeThisForm('completeForm', element)
         } else if (auditStatus == 1009) { //提交整改结果 有提交
             $(".reportForm").removeClass("layui-hide")
@@ -559,6 +568,9 @@
             $(".submit").removeClass("layui-hide")
             $(".completeForm").removeClass("layui-hide")
             $(".rollbackForm").removeClass("layui-hide")
+            $(".completeForm").find("input").prop("disabled", false);
+            $(".completeForm").find("textarea").prop("disabled", false);
+            $(".completeForm").find("select").prop("disabled", false);
             activeThisForm('completeForm', element)
         } else if (auditStatus == '1004_reject') { // 被驳回
             activeThisForm('rollbackForm', element)
@@ -618,9 +630,9 @@
                 }// 如果有整改数据那么久显示
                 if(res.data.planTime||res.data.rectifyWay){
                     $(".completeForm").removeClass("layui-hide")
-                    $(".completeForm").find("input").prop("disabled", true)
-                    $(".completeForm").find("textarea").prop("disabled", true)
-                    $(".completeForm").find("select").prop("disabled", true)
+                    // $(".completeForm").find("input").prop("disabled", true)
+                    // $(".completeForm").find("textarea").prop("disabled", true)
+                    // $(".completeForm").find("select").prop("disabled", true)
                     // activeThisForm('delayForm', element)
                 }
                 //审计部门人员无法看到 notAuditGroup 类的条目
