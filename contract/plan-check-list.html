@@ -453,7 +453,7 @@
             userInfo.roleList.forEach(e => {
                 if (e.roleCode == 'AUDIT_SUPER') {
                     isSuperAdmin = true;
-                } else if ((e.roleCode == 'AUDIT_IMP_ADMIN' || e.roleCode == 'AUDIT_IMP_USER') && (userInfo.deptId = 10000 || userInfo.deptParentId == 10000)) {
+                } else if ((userInfo.deptId == 10000 || userInfo.deptParentId == 10000)) {
                     isSuperAdmin = true;
                 }
             })
