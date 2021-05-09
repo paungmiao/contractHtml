@@ -592,57 +592,111 @@
         });
     }
 
+    // function dealPlanBatch(id, status) {
+    //     layer.confirm('确认操作？', function (index) {
+    //         let table = layui.table;
+    //         var checkStatus = table.checkStatus('test');
+    //         var ids = [];
+    //         if (id != '') {
+    //             ids.push(id);
+    //         }
+    //         let temp = '';
+    //         let flag = false;
+    //         $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+    //             let planInfo = o.planInfos[0];
+    //             if (temp != '' && temp != planInfo.statusUser) {
+    //                 flag = true;
+    //             }
+    //             ids.push(o.id);
+    //             temp = planInfo.statusUser;
+    //         });
+    //         if (flag) {
+    //             layer.msg('请选择相同状态的项目');
+    //             return false;
+    //         }
+    //         if (ids.length < 1) {
+    //             layer.msg('无选中项');
+    //             return false;
+    //         }
+    //         ids = ids.join(",");
+    //         console.log(ids);
+    //         let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
+    //         $.ajax({
+    //             url: "/audit-api/planCheckList/changePlanStatusByIds",
+    //             type: 'POST',
+    //             dataType: "json",
+    //             data: {ids: ids, statusUser: status, userId: userInfo.userId},
+    //             headers: createAuthorizationTokenHeader(),
+    //             success: function (resp) {
+    //                 if (!resp.data) {
+    //                     let index = layer.alert("操作失败", {icon: 1}, function () {
+    //                         layer.close(index);
+    //                     });
+    //                 } else {
+    //                     layer.msg("操作成功", {icon: 1,time:2000}, function () {
+    //                         issearch = true
+    //                         $('#search').click()
+    //                         issearch = false
+    //                     });
+    //                 }
+    //                 layui.close(loading);
+    //             }
+    //         });
+    //     });
+    // }
+
     function dealPlanBatch(id, status) {
-        layer.confirm('确认操作？', function (index) {
-            let table = layui.table;
-            var checkStatus = table.checkStatus('test');
-            var ids = [];
-            if (id != '') {
-                ids.push(id);
+        let table = layui.table;
+        let checkStatus = table.checkStatus('test');
+        let ids = [];
+        if (id != '') {
+            ids.push(id);
+        }
+        let temp = '';
+        let flag = false;
+        $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
+            let planInfo = o.planInfos[0];
+            if (temp != '' && temp != planInfo.statusUser) {
+                flag = true;
             }
-            let temp = '';
-            let flag = false;
-            $(checkStatus.data).each(function (i, o) {//o即为表格中一行的数据
-                let planInfo = o.planInfos[0];
-                if (temp != '' && temp != planInfo.statusUser) {
-                    flag = true;
-                }
-                ids.push(o.id);
-                temp = planInfo.statusUser;
-            });
-            if (flag) {
-                layer.msg('请选择相同状态的项目');
-                return false;
-            }
-            if (ids.length < 1) {
-                layer.msg('无选中项');
-                return false;
-            }
-            ids = ids.join(",");
-            console.log(ids);
-            let loading = layer.msg('请稍等......', {icon: 16, shade: 0.3, time:0});
-            $.ajax({
-                url: "/audit-api/planCheckList/changePlanStatusByIds",
-                type: 'POST',
-                dataType: "json",
-                data: {ids: ids, statusUser: status, userId: userInfo.userId},
-                headers: createAuthorizationTokenHeader(),
-                success: function (resp) {
-                    if (!resp.data) {
-                        let index = layer.alert("操作失败", {icon: 1}, function () {
-                            layer.close(index);
-                        });
-                    } else {
-                        layer.msg("操作成功", {icon: 1,time:2000}, function () {
-                            issearch = true
-                            $('#search').click()
-                            issearch = false
-                        });
-                    }
-                    layui.close(loading);
-                }
-            });
+            ids.push(o.id);
+            temp = planInfo.statusUser;
         });
+        if (flag) {
+            layer.msg('请选择相同状态的项目');
+            return false;
+        }
+        if (ids.length < 1) {
+            layer.msg('无选中项');
+            return false;
+        }
+        ids = ids.join(",");
+
+        let title = "批量驳回";
+        let url = "plan-reject-edit.html";
+        let w = 600;
+        let h = 300;
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //窗口加载成功刷新frame
+                // location.replace(location.href);
+                let body = layer.getChildFrame('body', index);
+                let statusDate = body.find('#status');
+                let planIdDate = body.find('#planId');
+                planIdDate.val(ids);
+                statusDate.val(status);
+            }
+        });
+
+
     }
 
     function editBatch() {
