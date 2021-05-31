@@ -376,12 +376,14 @@
     }
 
     function initMultiLevelEntry(defKey, level, elem, maxLevel) {
+        debugger;
         layui.use(['form', 'layer'], function () {
             var form = layui.form;
             let nxtLevel = parseInt(level) + 1;
             if (nxtLevel > (maxLevel + 1)) {
                 return;
             }
+            debugger;
             $.ajax({
                 url: "/audit-api/planManage/selectEntryByLevel",
                 dataType: "json",

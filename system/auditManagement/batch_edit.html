@@ -93,7 +93,7 @@
             <label for="L_repass" class="layui-form-label">
             </label>
             <button class="layui-btn" lay-submit lay-filter="addPlan">
-                <i class="layui-icon">&#xe605;</i>保存
+                <i class="layui-icon">&#xe605;</i>保存111
             </button>
         </div>
         <div class="layui-input-inline">
@@ -187,7 +187,7 @@
                 let deptName = this.innerText;
                 if (deptName.indexOf("乌鲁木齐") < 0) {
                     $("#auditObjectIdSelect_new").empty().append('<input readonly class="layui-input layui-disabled" type="text" value="内审科" />');
-                    $("#auditObjectIdSelect_new").val("-1");
+                    $("#auditObjectIdSelect_new").val("内审科");
                 } else {
                     $.ajax({
                         url: "/audit-api/planManage/getAuditObject?deptId=" + deptId,
