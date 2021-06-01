@@ -93,7 +93,7 @@
             <label for="L_repass" class="layui-form-label">
             </label>
             <button class="layui-btn" lay-submit lay-filter="addPlan">
-                <i class="layui-icon">&#xe605;</i>保存111
+                <i class="layui-icon">&#xe605;</i>保存
             </button>
         </div>
         <div class="layui-input-inline">
@@ -265,7 +265,7 @@
                 let implementingAgencyId = $("#implementingAgencyId").val();
                 let implementingAgencyName = $("#implementingAgencyName").val();
                 let impAdmin = $("#impAdminSelect").val();
-                let auditObjectId = temp;
+                let auditObjectId = temp?temp:"-1";
                 let auditObjectIdNew = ttt;
                 // let auditAdmin = ttp;
                 let auditAdmin = 0;
